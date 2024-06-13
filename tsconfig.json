@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "downlevelIteration": true
+    },
+    "ts-node": {
+        "files": true
+    }
+}

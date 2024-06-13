@@ -1,0 +1,19 @@
+{
+    "database": {
+        "location": "../data.db"
+    },
+    "roles": {
+        "verified": "1250149153695207566",
+        "admin": "1250119278649147474"
+    },
+    "avatar": "https://media.discordapp.net/attachments/1250118105187749911/1250136772793598123/7Xx6XUE.png?format=webp&quality=lossless&width=498&height=544",
+    "embed": {
+        "color": "#FFB6C1"
+    },
+    "hideout": "1250118104521113732",
+    "hideoutInvite": "https://discord.gg/kvRZ8Rntfb",
+    "exceptions": [
+        "957418858866683925"
+    ],
+    "logs": "1250573622284910714"
+}
