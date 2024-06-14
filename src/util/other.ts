@@ -10,7 +10,8 @@ export function createEmbed(): EmbedBuilder {
         .setThumbnail(config.avatar);
 }
 
-export function getRandomImposition(): string {
+export function getRandomImposition(f?: string): string {
+    if (f === "912239071449989120") return "*hugs*";
     const data = fs.readFileSync(__dirname + "/../data/impo.txt", "utf-8").split("\n");
     return data[Math.floor(Math.random() * data.length)];
 }

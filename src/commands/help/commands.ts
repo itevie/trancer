@@ -7,6 +7,7 @@ import config from "../../config.json";
 const comamnd: HypnoCommand = {
     name: "commands",
     aliases: ["cmds"],
+    type: "help",
     description: "Get a list of commands",
 
     handler: async (message, args) => {

@@ -4,6 +4,7 @@ const command: HypnoCommand = {
     name: "invite",
     aliases: ["inv"],
     description: "Invite the bot to your own server",
+    type: "help",
     hideoutOnly: true,
 
     handler: (message, args) => {

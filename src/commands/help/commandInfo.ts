@@ -7,6 +7,7 @@ const command: HypnoCommand = {
     name: "command",
     aliases: ["cmd"],
     description: `Get details on a command`,
+    type: "help",
 
     handler: async (message, args) => {
         // Check if command

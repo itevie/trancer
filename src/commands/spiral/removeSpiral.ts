@@ -4,6 +4,7 @@ import { getServerSettings } from "../../util/actions/settings";
 
 const command: HypnoCommand = {
     name: "removespiral",
+    type: "spirals",
     adminOnly: true,
     hideoutOnly: true,
     allowExceptions: true,

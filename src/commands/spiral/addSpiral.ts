@@ -10,6 +10,7 @@ const command: HypnoCommand = {
     usage: [
         ["addspiral <link>", "Add a link which is after the spiral command"]
     ],
+    type: "spirals",
     adminOnly: true,
     hideoutOnly: true,
     allowExceptions: true,

@@ -3,6 +3,7 @@ import { getRandomSpiral, getSpirals } from "../../util/actions/spirals";
 
 const command: HypnoCommand = {
     name: "spiral",
+    type: "spirals",
     aliases: ["s"],
     description: "Sends a random spiral :cyclone:",
     usage: [

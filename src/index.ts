@@ -2,26 +2,18 @@ import { Client, IntentsBitField, PermissionsBitField } from "discord.js";
 import { HypnoCommand } from "./types/command";
 import getAllFiles from "./util/getAllFiles";
 import config from "./config.json";
-import { connect } from "./util/database";
+import { connect, database } from "./util/database";
 import { getImposition } from "./util/actions/imposition";
 import { getRandomImposition } from "./util/other";
 import { getServerSettings, setupSettingsFor } from "./util/actions/settings";
 import { readFileSync } from "fs";
+import { HypnoMessageHandler } from "./types/messageHandler";
 
-// Load commands
 export const commands: { [key: string]: HypnoCommand } = {};
-const commandFiles = getAllFiles(__dirname + "/commands");
-
-for (const commandFile of commandFiles) {
-    const commandImport = require(commandFile).default as HypnoCommand;
-    commands[commandImport.name] = commandImport;
-    for (const alias of commandImport.aliases || [])
-        commands[alias] = commandImport;
-    console.log(`Loaded command: ${commandImport.name}`);
-}
+export const handlers: HypnoMessageHandler[] = [];
 
 // Setup client shit
-const client = new Client({
+export const client = new Client({
     intents: [
         IntentsBitField.Flags.MessageContent,
         IntentsBitField.Flags.Guilds,
@@ -31,15 +23,40 @@ const client = new Client({
 });
 
 client.on("ready", () => {
-    connect();
     console.log(`${client.user?.username} successfully logged in!`);
+
+    // Load commands
+    const commandFiles = getAllFiles(__dirname + "/commands");
+
+    for (const commandFile of commandFiles) {
+        const commandImport = require(commandFile).default as HypnoCommand;
+        commands[commandImport.name] = commandImport;
+        for (const alias of commandImport.aliases || [])
+            commands[alias] = commandImport;
+        console.log(`Loaded command: ${commandImport.name}`);
+    }
+
+    // Load handlers
+    const handleFiles = getAllFiles(__dirname + "/messageHandlers");
+
+    for (const handleFile of handleFiles) {
+        const handleImport = require(handleFile).default as HypnoMessageHandler;
+        handlers.push(handleImport);
+        console.log(`Loaded handler: ${handleFile}`);
+    }
+
+    connect();
 });
 
 const randomImposition: { [key: string]: number } = {};
 
 client.on("messageCreate", async message => {
+    // German commas go away
+    message.content = message.content.replace(/[’]/g, "'");
+
     // Disallow bots
     if (message.author.bot) return;
+    if (!database) return;
 
     // Setup settings
     await setupSettingsFor(message.guild.id);
@@ -64,6 +81,9 @@ client.on("messageCreate", async message => {
 
         randomImposition[message.channel.id] = Date.now();
     }
+
+    // Check handlers
+    for (const i in handlers) handlers[i].handler(message);
 
     if (!message.content.startsWith(settings.prefix)) return;
 

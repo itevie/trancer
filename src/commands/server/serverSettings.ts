@@ -21,6 +21,7 @@ const command: HypnoCommand = {
     name: "settings",
     aliases: ["server", "serversettings", "sset"],
     description: "Modify settings for your server",
+    type: "admin",
     usage: [
         ["$cmd prefix <prefix>", "Sets the prefix for the bot"],
         ["$cmd subrole <id>", "Sets the subject role for this server"],

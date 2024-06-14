@@ -6,6 +6,7 @@ const command: HypnoCommand = {
     name: "roles",
     aliases: ["subs", "tists"],
     description: "Get the ratio of subs : tists",
+    type: "fun",
 
     handler: async (message, _) => {
         // Collect data
