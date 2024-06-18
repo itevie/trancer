@@ -27,7 +27,7 @@ const command: HypnoCommand = {
                     .setDescription(
                         imposition.length === 0
                             ? "*No imposition registered - will use defaults*"
-                            : imposition.map(x => x.what).join("\n")
+                            : imposition.map(x => `${x.what}${x.is_bombardable ? " (bombard)" : ""}`).join("\n")
                     )
             ]
         })

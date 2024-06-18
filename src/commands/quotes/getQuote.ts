@@ -16,7 +16,7 @@ const command: HypnoCommand = {
         if (["r", "random"].includes(args[0]))
             quote = await randomQuote();
         else {
-            const number = parseInt(args[0].replace(/#/g, "") ?? "");
+            const number = parseInt(args[0]?.replace(/#/g, "") ?? "");
             if (Number.isNaN(number))
                 return message.reply(`Please provide a valid number ID (or "random")!`);
             quote = await getQuote(number);

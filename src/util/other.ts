@@ -16,13 +16,16 @@ export function getRandomImpositionFromFile(): string {
     return data[Math.floor(Math.random() * data.length)];
 }
 
-export async function getRandomImposition(f?: string): Promise<string> {
+export async function getRandomImposition(f?: string, allowBombard: boolean = false): Promise<string> {
     if (!f) return getRandomImpositionFromFile();
 
     // Get for user
-    const impos = (await getImpositionFor(f)).map(x => x.what);
-    if (impos.length === 0) return getRandomImpositionFromFile();
-    return impos[Math.floor(Math.random() * impos.length)];
+    let impos = (await getImpositionFor(f) as UserImposition[]);
+    if (allowBombard === false) impos = impos.filter(x => !x.is_bombardable);
+    let strImpos = impos.map(x => x.what);
+
+    if (strImpos.length === 0) return getRandomImpositionFromFile();
+    return strImpos[Math.floor(Math.random() * strImpos.length)];
 }
 
 export function gcd(a: number, b: number): number {

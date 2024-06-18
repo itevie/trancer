@@ -112,11 +112,11 @@ const command: HypnoCommand = {
                 if (args.includes("noimposition"))
                     await message.channel.send((await getRandomSpiral()).link);
                 else if (args.includes("nospirals"))
-                    await message.channel.send(await getRandomImposition(message.author.id));
+                    await message.channel.send(await getRandomImposition(message.author.id, true));
                 else {
                     // It will pick a random thing to do 
                     if (Math.random() > 0.4)
-                        await message.channel.send(await getRandomImposition(message.author.id));
+                        await message.channel.send(await getRandomImposition(message.author.id, true));
                     else await message.channel.send((await getRandomSpiral()).link);
                 }
 

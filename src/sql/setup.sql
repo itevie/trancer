@@ -29,9 +29,11 @@ CREATE TABLE IF NOT EXISTS quotes (
     last_guessed DATETIME NOT NULL DEFAULT 0 
 );
 
+-- ALTER TABLE user_imposition ADD is_bombardable BOOLEAN NOT NULL DEFAULT FALSE;
 CREATE TABLE IF NOT EXISTS user_imposition (
     user_id TEXT NOT NULL,
-    what TEXT NOT NULL
+    what TEXT NOT NULL,
+    is_bombardable BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS ranks (

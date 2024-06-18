@@ -26,8 +26,8 @@ export async function getImposition(channelId: string): Promise<ChannelImpositio
 }
 
 // ----- User Specific -----
-export async function addImpositionFor(userId: string, what: string): Promise<void> {
-    await database.run(`INSERT INTO user_imposition (user_id, what) VALUES ((?), (?))`, userId, what);
+export async function addImpositionFor(userId: string, what: string, isBombard: boolean): Promise<void> {
+    await database.run(`INSERT INTO user_imposition (user_id, what, is_bombardable) VALUES ((?), (?), (?))`, userId, what, isBombard);
 }
 
 export async function getImpositionFor(userId: string): Promise<UserImposition[]> {

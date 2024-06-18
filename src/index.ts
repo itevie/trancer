@@ -4,7 +4,7 @@ import getAllFiles from "./util/getAllFiles";
 import config from "./config.json";
 import { connect, database } from "./util/database";
 import { getImposition } from "./util/actions/imposition";
-import { getRandomImpositionFromFile } from "./util/other";
+import { createEmbed, getRandomImpositionFromFile } from "./util/other";
 import { getServerSettings, setupSettingsFor } from "./util/actions/settings";
 import { readFileSync } from "fs";
 import { HypnoMessageHandler } from "./types/messageHandler";
@@ -122,3 +122,28 @@ client.on("messageCreate", async message => {
 client.login(
     readFileSync(__dirname + "/../token.txt", "utf-8")
 );
+
+process.on("uncaughtException", async (err) => {
+    console.log(err);
+    try {
+        let channel = await client.channels.fetch("1250573622284910714");
+        if (channel.isTextBased()) {
+            channel.send({
+                embeds: [
+                    createEmbed()
+                        .setTitle(`Oops! I died :(`)
+                        .setDescription(err.message)
+                        .setThumbnail(null)
+                        .addFields([
+                            {
+                                name: `Stacktrace`,
+                                value: "```" + (err.stack ? err.stack.slice(0, 1000) : "*No Stack*") + "```"
+                            }
+                        ])
+                ]
+            })
+        }
+    } catch (err) {
+        console.log(err);
+    }
+});
