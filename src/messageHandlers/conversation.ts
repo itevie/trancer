@@ -31,6 +31,9 @@ let thresholds = {
 };
 
 const handler: HypnoMessageHandler = {
+    name: "conversational",
+    description: "Bot will talk back when spoken to, i.e., asking the bot \"How are you\"",
+
     handler: async message => {
         // Check to add to commandsUsed
         const settings = await getServerSettings(message.guild.id);

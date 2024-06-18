@@ -1,6 +1,7 @@
 import { HypnoCommand } from "../../types/command";
 import { getImposition, impositionSetEnabled, setImpositionChance, setImpositionEvery, setupImposition } from "../../util/actions/imposition";
 import { getServerSettings } from "../../util/actions/settings";
+import { database } from "../../util/database";
 
 const command: HypnoCommand = {
     name: "impositionsettings",
@@ -12,7 +13,8 @@ const command: HypnoCommand = {
         ["$cmd disable", "Disables random imposition in the current channel"],
         ["$cmd chance <number 0-100>", "Sets the chance a random imposition will be sent"],
         ["$cmd every <minutes>", "How many minutes between each random imposition"],
-        ["$cmd details", "Get details on how the randomness will work in this channel (admin exception)"]
+        ["$cmd details", "Get details on how the randomness will work in this channel (admin exception)"],
+        ["$cmd where", "See which channels in this server have imposition enabled"]
     ],
     adminOnly: true,
 
@@ -32,7 +34,7 @@ const command: HypnoCommand = {
                 await impositionSetEnabled(message.channel.id, true);
                 return await message.reply(`Enabled imposition for this channel! Have fun :cyclone:`);
             case "disable":
-                await impositionSetEnabled(message.channel.id, true);
+                await impositionSetEnabled(message.channel.id, false);
                 return await message.reply(`Disabled imposition for this channel!`);
             case "chance":
                 if (!args[1])
@@ -64,6 +66,12 @@ const command: HypnoCommand = {
                 return await message.reply(
                     `Every **${imposition.every} minutes**, I will attempt to send an action, only **${imposition.chance}%** of the time will it succeed`
                 );
+            case "where":
+                const channels = (await message.guild.channels.fetch()).map(x => x.id);
+                const whereResult =
+                    (await database.all(`SELECT * FROM channel_imposition WHERE channel_id IN (${channels.map(x => `'${x}'`).join(", ")}) AND is_enabled = true;`))
+                        .map(x => x.channel_id);
+                return message.reply(`In this server, imposition is in the following channels: ${whereResult.map(x => `<#${x}>`).join(", ")}`)
         }
     }
 }

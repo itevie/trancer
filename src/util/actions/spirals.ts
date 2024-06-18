@@ -5,7 +5,9 @@ export async function getSpirals(): Promise<Spiral[]> {
 }
 
 export async function getRandomSpiral(): Promise<Spiral> {
-    return await database.get(`SELECT * FROM spirals ORDER BY RANDOM() LIMIT 1;`) as Spiral;
+    const spiral = await database.get(`SELECT * FROM spirals ORDER BY RANDOM() LIMIT 1;`) as Spiral;
+    spiral.link = spiral.link.replace(/[<>]/g, "");
+    return spiral;
 }
 
 export async function addSpiral(link: string, author: string): Promise<void> {

@@ -40,6 +40,13 @@ const command: HypnoCommand = {
                             .replace(/\$prefix/g, serverDetails.prefix)
                 },
                 {
+                    name: "Examples",
+                    value: !command.examples
+                        ? "*No Examples*"
+                        : (command.examples.map(x => `\`$prefix${x[0].replace("$cmd", command.name)}\` - ${x[1]}`).join("\n"))
+                            .replace(/\$prefix/g, serverDetails.prefix)
+                },
+                {
                     name: "Aliases",
                     value: !command.aliases ? "*No Aliases*" : command.aliases.map(x => `\`${x}\``).join(", ")
                 },

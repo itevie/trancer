@@ -2,6 +2,7 @@ import { commands } from "../..";
 import { HypnoCommand } from "../../types/command";
 import { getServerSettings } from "../../util/actions/settings";
 import { createEmbed } from "../../util/other";
+import { messages } from "../hideout/sendMessage";
 
 const command: HypnoCommand = {
     name: "help",
@@ -36,6 +37,16 @@ const command: HypnoCommand = {
                         + `*Use \`${serverSettings.prefix}command <commandname>\` to get details on a command*`
                         + `\n\n${text}`
                     )
+                    .addFields([
+                        {
+                            name: "Topics",
+                            value: `Use \`${serverSettings.prefix}topic <topic>\` to learn more about it!\n\n`
+                                + Object.keys(messages)
+                                    .filter(x => x.startsWith("help-"))
+                                    .map(x => x.replace("help-", ""))
+                                    .join(", ")
+                        }
+                    ])
             ]
         });
     }

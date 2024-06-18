@@ -1,13 +1,14 @@
 import { Client, IntentsBitField, PermissionsBitField } from "discord.js";
-import { HypnoCommand } from "./types/command";
+import { HypnoCommand, HypnoCommandDetails } from "./types/command";
 import getAllFiles from "./util/getAllFiles";
 import config from "./config.json";
 import { connect, database } from "./util/database";
 import { getImposition } from "./util/actions/imposition";
-import { getRandomImposition } from "./util/other";
+import { getRandomImpositionFromFile } from "./util/other";
 import { getServerSettings, setupSettingsFor } from "./util/actions/settings";
 import { readFileSync } from "fs";
 import { HypnoMessageHandler } from "./types/messageHandler";
+import "./backend/index";
 
 export const commands: { [key: string]: HypnoCommand } = {};
 export const handlers: HypnoMessageHandler[] = [];
@@ -18,7 +19,8 @@ export const client = new Client({
         IntentsBitField.Flags.MessageContent,
         IntentsBitField.Flags.Guilds,
         IntentsBitField.Flags.GuildMembers,
-        IntentsBitField.Flags.GuildMessages
+        IntentsBitField.Flags.GuildMessages,
+        IntentsBitField.Flags.DirectMessages
     ]
 });
 
@@ -42,7 +44,7 @@ client.on("ready", () => {
     for (const handleFile of handleFiles) {
         const handleImport = require(handleFile).default as HypnoMessageHandler;
         handlers.push(handleImport);
-        console.log(`Loaded handler: ${handleFile}`);
+        console.log(`Loaded handler: ${handleImport.name}`);
     }
 
     connect();
@@ -75,7 +77,7 @@ client.on("messageCreate", async message => {
         // Check if should try send
         if (randomImposition[message.channel.id] - (Date.now() - imposition.every * (1000 * 60)) < 0) {
             if (Math.random() < (imposition.chance / 100)) {
-                await message.channel.send(getRandomImposition());
+                await message.channel.send(getRandomImpositionFromFile());
             }
         }
 
@@ -95,8 +97,11 @@ client.on("messageCreate", async message => {
     // Check command
     if (commands[command]) {
         const cmd = commands[command];
+        const details: HypnoCommandDetails = {
+            serverSettings: settings
+        };
 
-        const execute = () => cmd.handler(message, fullArgs);
+        const execute = () => cmd.handler(message, fullArgs, details);
         const except = () => { if (cmd.except) return cmd.except(message, fullArgs); else return false; };
 
         if (cmd.allowExceptions && config.exceptions.includes(message.author.id))

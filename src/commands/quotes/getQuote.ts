@@ -3,7 +3,7 @@ import { genQuote, getQuote, randomQuote } from "../../util/actions/quotes";
 
 const command: HypnoCommand = {
     name: "getquote",
-    aliases: ["gq"],
+    aliases: ["gq", "getq", "getqoute"],
     description: "Get a quote by ID",
     type: "quotes",
     usage: [

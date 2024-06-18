@@ -1,6 +1,7 @@
 import { DataManager, EmbedBuilder, HexColorString } from "discord.js";
 import config from "../config.json";
 import * as fs from "fs";
+import { getImpositionFor } from "./actions/imposition";
 
 export function createEmbed(): EmbedBuilder {
     return new EmbedBuilder()
@@ -10,12 +11,28 @@ export function createEmbed(): EmbedBuilder {
         .setThumbnail(config.avatar);
 }
 
-export function getRandomImposition(f?: string): string {
-    if (f === "912239071449989120") return "*hugs*";
+export function getRandomImpositionFromFile(): string {
     const data = fs.readFileSync(__dirname + "/../data/impo.txt", "utf-8").split("\n");
     return data[Math.floor(Math.random() * data.length)];
 }
 
+export async function getRandomImposition(f?: string): Promise<string> {
+    if (!f) return getRandomImpositionFromFile();
+
+    // Get for user
+    const impos = (await getImpositionFor(f)).map(x => x.what);
+    if (impos.length === 0) return getRandomImpositionFromFile();
+    return impos[Math.floor(Math.random() * impos.length)];
+}
+
 export function gcd(a: number, b: number): number {
     return (b == 0) ? a : gcd(b, a % b);
+}
+
+const characters = "abcdefghijklmnopqrstuvwxyz".split("");
+export function generateCode(length: number): string {
+    let result = "";
+    for (let i = 0; i != length; i++)
+        result += characters[Math.floor(Math.random() * characters.length)];
+    return result;
 }

@@ -15,15 +15,18 @@ const command: HypnoCommand = {
             return message.reply(`You're already in a game!`);
 
         const quote = await randomQuote(message.guild.id);
+        if (!quote)
+            return message.reply(`Looks like this server has no quotes!`);
+
         const user = await message.client.users.fetch(quote.author_id);
 
         const collector = message.channel.createMessageCollector({
             filter: msg => msg.author.id === message.author.id
-                && msg.content.startsWith(`guess `),
-            time: 30000,
+                && msg.content.toLowerCase().startsWith(`guess `),
+            time: 120000,
         });
 
-        await message.channel.send({
+        await message.reply({
             embeds: [
                 createEmbed()
                     .setTitle(`Who sent the following quote?`)

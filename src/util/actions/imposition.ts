@@ -24,3 +24,12 @@ export async function setImpositionEvery(channelId: string, newValue: number): P
 export async function getImposition(channelId: string): Promise<ChannelImposition | undefined> {
     return await database.get(`SELECT * FROM channel_imposition WHERE channel_id = (?);`, channelId);
 }
+
+// ----- User Specific -----
+export async function addImpositionFor(userId: string, what: string): Promise<void> {
+    await database.run(`INSERT INTO user_imposition (user_id, what) VALUES ((?), (?))`, userId, what);
+}
+
+export async function getImpositionFor(userId: string): Promise<UserImposition[]> {
+    return await database.all(`SELECT * FROM user_imposition WHERE user_id = (?)`, userId);
+}

@@ -13,11 +13,9 @@ const command: HypnoCommand = {
     handler: async (message, args) => {
         if (args[0]) {
             const user = args[0].replace(/[<>@]/g, "");
-            if (user.match(/^([0-9]+)$/))
-                return message.channel.send(`${args.join(" ")} ${getRandomImposition(user)}`);
-            return message.channel.send(`${args.join(" ")} ${getRandomImposition()}`);
+            return message.channel.send(`${args.join(" ")} ${await getRandomImposition(user)}`);
         }
-        return message.reply(getRandomImposition(message.author.id));
+        return message.reply(await getRandomImposition(message.author.id));
     }
 }
 
