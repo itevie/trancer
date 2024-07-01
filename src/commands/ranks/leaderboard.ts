@@ -34,7 +34,8 @@ const command: HypnoCommand = {
         // Sort
         const resultArr: [string, number][] = [];
         for (const i in result) resultArr.push([i, result[i]]);
-        const sortedArr = resultArr.sort((a, b) => b[1] - a[1]).slice(0, 9);
+        let sortedArr = resultArr.sort((a, b) => b[1] - a[1]).slice(0, 9);
+        //sortedArr = [["735109350728663080", Infinity], ["711008204766576660", Infinity], ["517317886260281344", 69420], ["741338267399487509", 42069], ["1067887147216011395", 30000], ["957418858866683925", -Infinity]];
 
         // Create
         let text = `${lb.description ? `*${lb.description}*\n\n` : ""}`;

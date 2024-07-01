@@ -1,3 +1,5 @@
+# ⚠️ Hypno Helper is no longer maintained
+
 # Hypno Helper 🌀
 A hypnotism-oriented Discord Bot, it has many features, such as random imposition, spirals, etc. 
 This is not meant for huge servers, just small hypnosis servers. 
