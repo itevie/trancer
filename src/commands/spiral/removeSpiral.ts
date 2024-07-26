@@ -6,7 +6,7 @@ const command: HypnoCommand = {
     name: "removespiral",
     type: "spirals",
     adminOnly: true,
-    hideoutOnly: true,
+    botServerOnly: true,
     allowExceptions: true,
 
     handler: async (message, args) => {

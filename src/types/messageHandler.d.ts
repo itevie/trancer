@@ -4,6 +4,7 @@ interface HypnoMessageHandler {
     name: string,
     description: string,
     examples?: string[],
+    botsOnly?: boolean,
 
     handler: (message: Message) => void,
 }

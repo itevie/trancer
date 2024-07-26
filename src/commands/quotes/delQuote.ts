@@ -6,7 +6,7 @@ const command: HypnoCommand = {
     description: "Delete a quote",
     type: "quotes",
     adminOnly: true,
-    hideoutOnly: true,
+    botServerOnly: true,
     allowExceptions: true,
 
     handler: async (message, args) => {

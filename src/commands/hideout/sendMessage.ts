@@ -16,7 +16,7 @@ let command: HypnoCommand = {
     aliases: ["sendmsg"],
     description: `Sends one of the preset made messages`,
     adminOnly: true,
-    hideoutOnly: true,
+    botServerOnly: true,
 
     handler: async (message, args) => {
         const type = args[0];

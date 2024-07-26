@@ -27,8 +27,8 @@ const comamnd: HypnoCommand = {
             const text = `\`$prefix${cmd.name}\`: ${cmd.description ?? "*No Description*"}\n`;
 
             if (cmd.adminOnly) {
-                if (cmd.hideoutOnly) {
-                    if (message.guild.id === config.hideout)
+                if (cmd.botServerOnly) {
+                    if (message.guild.id === config.botServer.id)
                         adminOnly += text;
                 } else adminOnly += text;
             }

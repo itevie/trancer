@@ -24,7 +24,7 @@ export const client = new Client({
     ]
 });
 
-client.on("ready", () => {
+client.on("ready", async () => {
     console.log(`${client.user?.username} successfully logged in!`);
 
     // Load commands
@@ -46,7 +46,6 @@ client.on("ready", () => {
         handlers.push(handleImport);
         console.log(`Loaded handler: ${handleImport.name}`);
     }
-
     connect();
 });
 
@@ -55,6 +54,10 @@ const randomImposition: { [key: string]: number } = {};
 client.on("messageCreate", async message => {
     // German commas go away
     message.content = message.content.replace(/[’]/g, "'");
+
+    for (const i in handlers)
+        if (handlers[i].botsOnly)
+            handlers[i].handler(message);
 
     // Disallow bots
     if (message.author.bot) return;
@@ -85,7 +88,9 @@ client.on("messageCreate", async message => {
     }
 
     // Check handlers
-    for (const i in handlers) handlers[i].handler(message);
+    for (const i in handlers)
+        if (!handlers[i].botsOnly)
+            handlers[i].handler(message);
 
     if (!message.content.startsWith(settings.prefix)) return;
 
@@ -111,7 +116,7 @@ client.on("messageCreate", async message => {
         if (cmd.adminOnly)
             if (!message.member.permissions.has(PermissionsBitField.Flags.Administrator) && !except())
                 return message.reply(`You are not administrator :cyclone:`);
-        if (cmd.hideoutOnly && message.guild.id !== config.hideout)
+        if (cmd.botServerOnly && message.guild.id !== config.botServer.id)
             return message.reply(`This command can only be used in Hypno Hideout :cyclone:`);
 
         // Execute
@@ -145,5 +150,6 @@ process.on("uncaughtException", async (err) => {
         }
     } catch (err) {
         console.log(err);
+        process.exit(0);
     }
 });

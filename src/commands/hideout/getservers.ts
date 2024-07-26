@@ -2,7 +2,7 @@ import { HypnoCommand } from "../../types/command";
 
 const command: HypnoCommand = {
     name: "getservers",
-    hideoutOnly: true,
+    botServerOnly: true,
     adminOnly: true,
 
     handler: async (message, _) => {

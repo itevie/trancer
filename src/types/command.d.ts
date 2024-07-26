@@ -18,6 +18,6 @@ interface HypnoCommand {
     handler: (message: Message, args: string[], options: HypnoCommandDetails) => void,
 
     adminOnly?: boolean,
-    hideoutOnly?: boolean,
+    botServerOnly?: boolean,
     allowExceptions?: boolean,
-}
+}   

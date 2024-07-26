@@ -8,7 +8,7 @@ const command: HypnoCommand = {
     usage: [
         ["$cmd ping", "Ping unverified users"],
     ],
-    hideoutOnly: true,
+    botServerOnly: true,
     adminOnly: true,
 
     handler: async (message, args) => {

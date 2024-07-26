@@ -5,7 +5,7 @@ const command: HypnoCommand = {
     aliases: ["inv"],
     description: "Invite the bot to your own server",
     type: "help",
-    hideoutOnly: true,
+    botServerOnly: true,
 
     handler: (message, args) => {
         return message.reply(`Join our server to invite the bot. Use the \`hideout\` command`);

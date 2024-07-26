@@ -20,7 +20,7 @@ const command: HypnoCommand = {
             return message.reply(`That leaderboard does not exist!`)
 
         // Check if owns it
-        if (rank.created_by !== message.author.id && rank.created_by === config.ren)
+        if (rank.created_by !== message.author.id && rank.created_by === config.owner)
             return message.reply(`You need to be the leaderboard creator to delete it!`);
 
         // Check confirm

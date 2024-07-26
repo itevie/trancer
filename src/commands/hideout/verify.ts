@@ -18,7 +18,7 @@ const command: HypnoCommand = {
     },
 
     adminOnly: true,
-    hideoutOnly: true,
+    botServerOnly: true,
 }
 
 export default command;

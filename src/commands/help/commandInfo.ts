@@ -22,7 +22,7 @@ const command: HypnoCommand = {
         let restrictions = [];
         if (command.adminOnly)
             restrictions.push(`Admin Only ${command.except ? `(has exceptions)` : ""}`);
-        if (command.hideoutOnly)
+        if (command.botServerOnly)
             restrictions.push("Hypno Hideout Only");
         if (restrictions.length === 0)
             restrictions.push("*None*");

@@ -1,6 +1,7 @@
 import { client } from "../..";
 import { HypnoCommand } from "../../types/command";
 import { rankExists } from "../../util/actions/ranks";
+import createLeaderboardFromData from "../../util/createLeaderboard";
 import { database } from "../../util/database";
 import { createEmbed } from "../../util/other";
 
@@ -23,32 +24,10 @@ const command: HypnoCommand = {
 
         // Fetch results
         const dbResults = await database.all(`SELECT * FROM votes WHERE rank_name = (?);`, name) as Vote[];
-        const result: { [key: string]: number } = {};
-
-        // Calculate
-        for (const vote of dbResults) {
-            if (!result[vote.votee]) result[vote.votee] = 0;
-            result[vote.votee]++;
-        }
-
-        // Sort
-        const resultArr: [string, number][] = [];
-        for (const i in result) resultArr.push([i, result[i]]);
-        let sortedArr = resultArr.sort((a, b) => b[1] - a[1]).slice(0, 9);
-        //sortedArr = [["735109350728663080", Infinity], ["711008204766576660", Infinity], ["517317886260281344", 69420], ["741338267399487509", 42069], ["1067887147216011395", 30000], ["957418858866683925", -Infinity]];
-
-        // Create
-        let text = `${lb.description ? `*${lb.description}*\n\n` : ""}`;
-
-        for (const i in sortedArr) {
-            text += `**${parseInt(i) + 1}.** ${(await client.users.fetch(sortedArr[i][0])).username} (**${sortedArr[i][1]}** votes)\n`;
-        }
-
         return message.reply({
             embeds: [
-                createEmbed()
+                (await createLeaderboardFromData(dbResults.map(x => x.votee), lb.description))
                     .setTitle(`Leaderboard for ${name}`)
-                    .setDescription(text || "*No votes :(*")
                     .setFooter({ text: `Use ${o.serverSettings.prefix}vote ${name} <user> to vote!` })
             ]
         });

@@ -12,7 +12,7 @@ const command: HypnoCommand = {
     ],
     type: "spirals",
     adminOnly: true,
-    hideoutOnly: true,
+    botServerOnly: true,
     allowExceptions: true,
 
     handler: async (message, args) => {
@@ -43,7 +43,7 @@ const command: HypnoCommand = {
         console.log(`Added spiral: ${content}`);
 
         // Done
-        const channel = (await message.client.channels.fetch(config.logs));
+        const channel = (await message.client.channels.fetch(config.botServer.channels.logs));
         if (channel.isTextBased()) {
             await channel.send(`The following spiral was added by ${message.author.username}`);
             await channel.send(content);

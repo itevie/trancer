@@ -48,3 +48,13 @@ CREATE TABLE IF NOT EXISTS votes (
     votee TEXT NOT NULL,
     voted_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS leaderboards (
+    name TEXT PRIMARY KEY NOT NULL,
+    description TEXT DEFAULT 'A leaderboard'
+);
+
+CREATE TABLE IF NOT EXISTS leaderboard_entries (
+    user TEXT NOT NULL,
+    leaderboard TEXT NOT NULL
+);

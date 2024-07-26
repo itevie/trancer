@@ -1,4 +1,5 @@
 {
+    "owner": "395877903998648322",
     "database": {
         "location": "../data.db"
     },
@@ -10,13 +11,16 @@
     "embed": {
         "color": "#FFB6C1"
     },
-    "hideout": "1250118104521113732",
-    "hideoutInvite": "https://discord.gg/kvRZ8Rntfb",
+    "botServer": {
+        "id": "1257416273520758814",
+        "invite": "https://discord.gg/zBWq29apsy",
+        "channels": {
+            "logs": "1250573622284910714"
+        }
+    },
     "exceptions": [
-        "957418858866683925"
+        "395877903998648322"
     ],
-    "ren": "957418858866683925",
-    "logs": "1250573622284910714",
     "website": {
         "name": "Hypno Site"
     }
