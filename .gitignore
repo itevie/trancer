@@ -2,3 +2,6 @@ data.db
 token.txt
 node_modules/
 src/website/node_modules/
+test/
+src/data/
+src/messages/rules.txt
