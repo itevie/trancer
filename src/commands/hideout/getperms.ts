@@ -3,6 +3,7 @@ import { HypnoCommand } from "../../types/command";
 
 const command: HypnoCommand = {
     name: "getperms",
+    type: "admin",
     adminOnly: true,
 
     handler: async (message, args) => {

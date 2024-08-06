@@ -103,8 +103,12 @@ client.on("messageCreate", async message => {
     if (commands[command]) {
         const cmd = commands[command];
         const details: HypnoCommandDetails = {
-            serverSettings: settings
+            serverSettings: settings,
+            command,
         };
+
+        if (cmd.type === "ai" && !config.ai.enabled)
+            return message.reply(`AI is disabled :cyclone:`);
 
         const execute = () => cmd.handler(message, fullArgs, details);
         const except = () => { if (cmd.except) return cmd.except(message, fullArgs); else return false; };

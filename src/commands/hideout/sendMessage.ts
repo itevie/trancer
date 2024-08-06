@@ -17,6 +17,7 @@ let command: HypnoCommand = {
     description: `Sends one of the preset made messages`,
     adminOnly: true,
     botServerOnly: true,
+    type: "admin",
 
     handler: async (message, args) => {
         const type = args[0];

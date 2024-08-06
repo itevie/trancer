@@ -3,6 +3,10 @@
     "database": {
         "location": "../data.db"
     },
+    "ai": {
+        "enabled": true,
+        "model": "llama3:8b"
+    },
     "roles": {
         "verified": "1250149153695207566",
         "admin": "1250119278649147474"

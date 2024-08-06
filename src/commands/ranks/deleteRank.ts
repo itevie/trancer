@@ -5,6 +5,7 @@ import config from "../../config.json";
 const command: HypnoCommand = {
     name: "deleterank",
     description: "Delete a rank",
+    type: "leaderboards",
 
     handler: async (message, args, o) => {
         // Check for rank

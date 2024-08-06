@@ -1,9 +1,10 @@
 import { Message } from "discord.js"
 
-type HypnoCommandType = "spirals" | "quotes" | "help" | "imposition" | "uncategorised" | "fun" | "admin" | "messages" | "leaderboards";
+type HypnoCommandType = "spirals" | "quotes" | "help" | "imposition" | "uncategorised" | "fun" | "admin" | "messages" | "leaderboards" | "ai";
 
 interface HypnoCommandDetails {
     serverSettings: ServerSettings,
+    command: string
 }
 
 interface HypnoCommand {

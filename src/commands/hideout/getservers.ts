@@ -4,6 +4,7 @@ const command: HypnoCommand = {
     name: "getservers",
     botServerOnly: true,
     adminOnly: true,
+    type: "admin",
 
     handler: async (message, _) => {
         const guilds = await message.client.guilds.fetch();
