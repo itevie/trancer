@@ -3,5 +3,6 @@ token.txt
 node_modules/
 src/website/node_modules/
 test/
-src/data/
+src/data/spirals.txt
+src/data/ecosnapshots
 src/messages/rules.txt

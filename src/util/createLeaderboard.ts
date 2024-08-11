@@ -20,7 +20,7 @@ export function accumlateSortLeaderboardData(data: string[]) {
 }
 
 export default async function createLeaderboardFromData(data: [string, number][], description: string = "Leaderboard Results", entryName: string = "times"): Promise<EmbedBuilder> {
-    data = data.filter(x => x[1] > 0).sort((a, b) => b[1] - a[1]).slice(0, 10);
+    data = data.filter(x => x[1] !== 0).sort((a, b) => b[1] - a[1]).slice(0, 10);
 
     // Create text
     let text = `${description ? `*${description}*\n\n` : ""}`;

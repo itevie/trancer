@@ -36,7 +36,7 @@ const command: HypnoCommand = {
                     x[1] - (
                         oldData.data.find(
                             y => y.user_id == x[0]
-                        )?.balance || 0
+                        )?.balance ?? 0
                     )
                 ]
             );

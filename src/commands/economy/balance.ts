@@ -4,7 +4,7 @@ import config from "../../config.json";
 
 const command: HypnoCommand = {
     name: "balance",
-    aliases: ["bal"],
+    aliases: ["bal", "xp"],
     description: "Get your balance, or someone elses",
     type: "economy",
 

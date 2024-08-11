@@ -1,7 +1,7 @@
 import { HypnoCommand } from "../../types/command";
 import { addQuote, genQuote } from "../../util/actions/quotes";
 import { database } from "../../util/database";
-import { createEmbed } from "../../util/other";
+import config from "../../config.json";
 
 const command: HypnoCommand = {
     name: "quote",
@@ -27,10 +27,22 @@ const command: HypnoCommand = {
         // Add to database
         const quote = await addQuote(ref);
 
+        let embed = await genQuote(quote);
+
+        // Check if should send in quotes channel
+        if (message.guild.id === config.botServer.id) {
+            let server = await message.client.channels.fetch(config.botServer.channels.quotes);
+            if (server.isTextBased()) {
+                await server.send({
+                    embeds: [embed]
+                });
+            }
+        }
+
         // Done
         return message.reply({
             embeds: [
-                await genQuote(quote)
+                embed
             ]
         });
     }
