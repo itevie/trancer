@@ -13,9 +13,9 @@ const command: HypnoCommand = {
 
     handler: async (message, args) => {
         if (!args[0]) {
-            const list = (await database.all(`SELECT 1 FROM quotes;`)).length;
-            const inThis = (await database.all(`SELECT 1 FROM quotes WHERE server_id = (?);`, message.guild.id)).length;
-            return message.reply(`There are **${list}** quotes registered! (**${inThis}** in this server)`);
+            const list = (await database.all(`SELECT id FROM quotes;`));
+            const inThis = (await database.all(`SELECT id FROM quotes WHERE server_id = (?);`, message.guild.id));
+            return message.reply(`There are **${list.length}** quotes registered! (**${inThis.length}** in this server):\n${inThis.map(x => `#${x.id}`).join(", ")}`);
         } else {
             let userId = args[0].replace(/[<@>]/g, "");
             const user = await client.users.fetch(userId);

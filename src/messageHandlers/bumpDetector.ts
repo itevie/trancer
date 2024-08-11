@@ -1,8 +1,12 @@
 import { HypnoMessageHandler } from "../types/messageHandler";
 import { createLeaderboard, insertLeaderboardEntry, leaderboardExists } from "../util/actions/leaderboards";
+import { addBump } from "../util/actions/userData";
+import config from "../config.json";
+import { insertMoneyFor } from "../util/actions/economy";
+import { randomFromRange } from "../util/other";
 
 const handler: HypnoMessageHandler = {
-    name: "Bump Detector",
+    name: "bump-detector",
     description: "Detects /bump and adds to leaderboard",
     botsOnly: true,
 
@@ -12,13 +16,11 @@ const handler: HypnoMessageHandler = {
             // Get the authors ID
             let user = message.interaction.user;
 
-            // Check if the leaderboard exists
-            if (!await leaderboardExists(`bumps-${message.guild.id}`))
-                await createLeaderboard(`bumps-${message.guild.id}`);
+            await addBump(user.id, message.guild.id);
 
-            // Add entry
-            await insertLeaderboardEntry(user.id, `bumps-${message.guild.id}`);
-            console.log(`Added bump entry for ${user.username}`);
+            // Check for bot server
+            if (message.guild.id === config.botServer.id)
+                await insertMoneyFor(user.id, randomFromRange(config.economy.bump.min, config.economy.bump.max));
         }
     }
 }

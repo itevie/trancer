@@ -1,6 +1,7 @@
 import { HypnoCommand } from "../../types/command";
-import { genQuote, randomQuote } from "../../util/actions/quotes";
+import { genQuote, getQuote, randomQuote } from "../../util/actions/quotes";
 import { createEmbed } from "../../util/other";
+import { compareTwoStrings } from "../../util/stringSimilar";
 
 let games = [];
 
@@ -21,19 +22,13 @@ const command: HypnoCommand = {
         const user = await message.client.users.fetch(quote.author_id);
 
         const collector = message.channel.createMessageCollector({
-            filter: msg => msg.author.id === message.author.id
-                && msg.content.toLowerCase().startsWith(`guess `),
+            filter: msg => msg.content.toLowerCase().startsWith(`guess `),
             time: 120000,
         });
 
         await message.reply({
             embeds: [
-                createEmbed()
-                    .setTitle(`Who sent the following quote?`)
-                    .setDescription(`*${quote.content}*`)
-                    .setFooter({
-                        text: `Type "guess (guess)" to guess`
-                    })
+                await genQuote(quote, true)
             ]
         });
 
@@ -42,13 +37,17 @@ const command: HypnoCommand = {
         collector.on("collect", async (m) => {
             collector.stop();
             games = games.filter(x => x !== message.author.id);
-            const response = m.content.replace("guess ", "").replace(/[<@>]/g, "");
+            const response = m.content.replace("guess ", "").replace(/[<@>]/g, "").toLowerCase();
 
             // Check correctness
             let correct = false;
-            if (response.toLowerCase() === user.username)
-                correct = true;
-            else if (response === user.id)
+            if (
+                compareTwoStrings(response, user.username) > 0.8
+                || (user.displayName && compareTwoStrings(response, user.displayName.replace(/[ ]/g, "")) > 0.6)
+                || user.username.toLowerCase().startsWith(response)
+                || user.displayName.toLowerCase().startsWith(response)
+                || response == user.id
+            )
                 correct = true;
 
             // Check what happened
@@ -57,7 +56,7 @@ const command: HypnoCommand = {
 
             // Success
             return m.reply({
-                content: `That's right!`,
+                content: `**${m.author.username}** got it right! Welldone :cyclone:`,
                 embeds: [
                     await genQuote(quote)
                 ]

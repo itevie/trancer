@@ -9,6 +9,8 @@ import { getServerSettings, setupSettingsFor } from "./util/actions/settings";
 import { readFileSync } from "fs";
 import { HypnoMessageHandler } from "./types/messageHandler";
 import "./backend/index";
+import { createUserData, userDataExists } from "./util/actions/userData";
+import { createEconomyFor, economyForUserExists } from "./util/actions/economy";
 
 export const commands: { [key: string]: HypnoCommand } = {};
 export const handlers: HypnoMessageHandler[] = [];
@@ -63,6 +65,14 @@ client.on("messageCreate", async message => {
     if (message.author.bot) return;
     if (!database) return;
 
+    // Check for user_data
+    if (!await userDataExists(message.author.id, message.guild.id))
+        await createUserData(message.author.id, message.guild.id);
+
+    // Check for economy
+    if (!await economyForUserExists(message.author.id))
+        await createEconomyFor(message.author.id);
+
     // Setup settings
     await setupSettingsFor(message.guild.id);
     const settings = await getServerSettings(message.guild.id);
@@ -89,8 +99,13 @@ client.on("messageCreate", async message => {
 
     // Check handlers
     for (const i in handlers)
-        if (!handlers[i].botsOnly)
+        if (!handlers[i].botsOnly) {
+            if (handlers[i].noCommands) {
+                if (message.content.startsWith(settings.prefix))
+                    continue;
+            }
             handlers[i].handler(message);
+        }
 
     if (!message.content.startsWith(settings.prefix)) return;
 
@@ -99,32 +114,37 @@ client.on("messageCreate", async message => {
     const fullArgs = content.split(" ");
     const command = fullArgs.shift().toLowerCase();
 
-    // Check command
-    if (commands[command]) {
-        const cmd = commands[command];
-        const details: HypnoCommandDetails = {
-            serverSettings: settings,
-            command,
-        };
+    try {
+        // Check command
+        if (commands[command]) {
+            const cmd = commands[command];
+            const details: HypnoCommandDetails = {
+                serverSettings: settings,
+                command,
+            };
 
-        if (cmd.type === "ai" && !config.ai.enabled)
-            return message.reply(`AI is disabled :cyclone:`);
+            if (cmd.type === "ai" && !config.modules.ai.enabled)
+                return message.reply(`AI is disabled :cyclone:`);
 
-        const execute = () => cmd.handler(message, fullArgs, details);
-        const except = () => { if (cmd.except) return cmd.except(message, fullArgs); else return false; };
+            const execute = async () => cmd.handler(message, fullArgs, details);
+            const except = () => { if (cmd.except) return cmd.except(message, fullArgs); else return false; };
 
-        if (cmd.allowExceptions && config.exceptions.includes(message.author.id))
-            return execute();
+            if (cmd.allowExceptions && config.exceptions.includes(message.author.id))
+                return await execute();
 
-        // Guards
-        if (cmd.adminOnly)
-            if (!message.member.permissions.has(PermissionsBitField.Flags.Administrator) && !except())
-                return message.reply(`You are not administrator :cyclone:`);
-        if (cmd.botServerOnly && message.guild.id !== config.botServer.id)
-            return message.reply(`This command can only be used in Hypno Hideout :cyclone:`);
+            // Guards
+            if (cmd.adminOnly)
+                if (!message.member.permissions.has(PermissionsBitField.Flags.Administrator) && !except())
+                    return message.reply(`You are not administrator :cyclone:`);
+            if (cmd.botServerOnly && message.guild.id !== config.botServer.id)
+                return message.reply(`This command can only be used in Hypno Hideout :cyclone:`);
 
-        // Execute
-        execute();
+            // Execute
+            await execute();
+        }
+    } catch (err) {
+        await message.reply(`Oops... I ran into an error whilst trying to run that command :(`);
+        throw err;
     }
 });
 
@@ -135,7 +155,7 @@ client.login(
 process.on("uncaughtException", async (err) => {
     console.log(err);
     try {
-        let channel = await client.channels.fetch("1250573622284910714");
+        let channel = await client.channels.fetch(config.botServer.channels.logs);
         if (channel.isTextBased()) {
             channel.send({
                 embeds: [

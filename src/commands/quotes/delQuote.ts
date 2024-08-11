@@ -3,6 +3,7 @@ import { deleteQuote } from "../../util/actions/quotes";
 
 const command: HypnoCommand = {
     name: "deletequote",
+    aliases: ["delquote", "dquote", "dq"],
     description: "Delete a quote",
     type: "quotes",
     adminOnly: true,

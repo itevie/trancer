@@ -24,9 +24,11 @@ CREATE TABLE IF NOT EXISTS quotes (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     content TEXT NOT NULL,
     author_id TEXT NOT NULL,
+    message_id TEXT DEFAULT NULL,
+    channel_id TEXT DEFAULT NULL,
     server_id TEXT NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    last_guessed DATETIME NOT NULL DEFAULT 0 
+    last_guessed DATETIME NOT NULL DEFAULT 0
 );
 
 -- ALTER TABLE user_imposition ADD is_bombardable BOOLEAN NOT NULL DEFAULT FALSE;
@@ -47,6 +49,18 @@ CREATE TABLE IF NOT EXISTS votes (
     voter TEXT NOT NULL,
     votee TEXT NOT NULL,
     voted_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS user_data (
+    user_id TEXT NOT NULL,
+    guild_id TEXT NOT NULL,
+    bumps INT NOT NULL DEFAULT 0,
+    messages_sent INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS economy (
+    user_id TEXT NOT NULL UNIQUE,
+    balance INT NOT NULL DEFAULT 10
 );
 
 CREATE TABLE IF NOT EXISTS leaderboards (

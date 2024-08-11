@@ -2,7 +2,7 @@ import { HypnoCommand } from "../../types/command";
 import config from "../../config.json";
 
 const command: HypnoCommand = {
-    name: "server",
+    name: "invite",
     description: "Join the bot's server",
     type: "help",
 

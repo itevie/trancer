@@ -1,5 +1,6 @@
 import { HypnoCommand } from "../../types/command";
 import { database } from "../../util/database";
+import config from "../../config.json";
 
 const command: HypnoCommand = {
     name: "setleaderboarddescription",
@@ -20,7 +21,7 @@ const command: HypnoCommand = {
         // Checks
         if (!rank)
             return message.reply(`That leaderboard does not exist`);
-        if (rank.created_by !== message.author.id)
+        if (rank.created_by !== message.author.id && !config.exceptions.includes(message.author.id))
             return message.reply(`You did not create this leaderboard!`);
 
         // Update

@@ -1,9 +1,8 @@
 import { client } from "../..";
 import { HypnoCommand } from "../../types/command";
 import { rankExists } from "../../util/actions/ranks";
-import createLeaderboardFromData from "../../util/createLeaderboard";
+import createLeaderboardFromData, { accumlateSortLeaderboardData } from "../../util/createLeaderboard";
 import { database } from "../../util/database";
-import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand = {
     name: "leaderboard",
@@ -26,7 +25,7 @@ const command: HypnoCommand = {
         const dbResults = await database.all(`SELECT * FROM votes WHERE rank_name = (?);`, name) as Vote[];
         return message.reply({
             embeds: [
-                (await createLeaderboardFromData(dbResults.map(x => x.votee), lb.description))
+                (await createLeaderboardFromData(accumlateSortLeaderboardData(dbResults.map(x => x.votee)), lb.description))
                     .setTitle(`Leaderboard for ${name}`)
                     .setFooter({ text: `Use ${o.serverSettings.prefix}vote ${name} <user> to vote!` })
             ]

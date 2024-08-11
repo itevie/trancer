@@ -1,7 +1,7 @@
 import { HypnoMessageHandler } from "../types/messageHandler";
 
 const handler: HypnoMessageHandler = {
-    name: "randomresponder",
+    name: "random-responder",
     description: "Reacts to certain messages with random responses",
 
     handler: message => {

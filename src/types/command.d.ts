@@ -1,6 +1,6 @@
 import { Message } from "discord.js"
 
-type HypnoCommandType = "spirals" | "quotes" | "help" | "imposition" | "uncategorised" | "fun" | "admin" | "messages" | "leaderboards" | "ai";
+type HypnoCommandType = "economy" | "spirals" | "quotes" | "help" | "imposition" | "uncategorised" | "fun" | "admin" | "messages" | "leaderboards" | "ai";
 
 interface HypnoCommandDetails {
     serverSettings: ServerSettings,

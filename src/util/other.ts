@@ -39,3 +39,7 @@ export function generateCode(length: number): string {
         result += characters[Math.floor(Math.random() * characters.length)];
     return result;
 }
+
+export function randomFromRange(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min) + min);
+}

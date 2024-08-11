@@ -2,7 +2,7 @@ import { EmbedBuilder } from "discord.js";
 import { client } from "..";
 import { createEmbed } from "./other";
 
-export default async function createLeaderboardFromData(data: string[], description: string = "Leaderboard Results"): Promise<EmbedBuilder> {
+export function accumlateSortLeaderboardData(data: string[]) {
     const result: { [key: string]: number } = {};
 
     // Accumulate
@@ -15,16 +15,21 @@ export default async function createLeaderboardFromData(data: string[], descript
     // Sort
     const resultArr: [string, number][] = [];
     for (const i in result) resultArr.push([i, result[i]]);
-    let sortedArr = resultArr.sort((a, b) => b[1] - a[1]).slice(0, 9);
+
+    return resultArr;
+}
+
+export default async function createLeaderboardFromData(data: [string, number][], description: string = "Leaderboard Results", entryName: string = "times"): Promise<EmbedBuilder> {
+    data = data.filter(x => x[1] > 0).sort((a, b) => b[1] - a[1]).slice(0, 10);
 
     // Create text
     let text = `${description ? `*${description}*\n\n` : ""}`;
 
-    for (const i in sortedArr) {
-        text += `**${parseInt(i) + 1}.** ${(await client.users.fetch(sortedArr[i][0])).username} (**${sortedArr[i][1]}** entries)\n`;
+    for (const i in data) {
+        text += `**${parseInt(i) + 1}.** ${(await client.users.fetch(data[i][0])).username.replace(/_/g, "\\_")} (**${data[i][1]}** ${entryName})\n`;
     }
 
     // Create embed
     return createEmbed()
-        .setDescription(sortedArr.length === 0 ? "No results :(" : text);
+        .setDescription(data.length === 0 ? "No results :(" : text);
 }

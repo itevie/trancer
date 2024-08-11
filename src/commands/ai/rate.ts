@@ -31,6 +31,8 @@ const command: HypnoCommand = {
             return message.reply(`Invalid user provided!`);
         }
 
+        await message.react(`⏳`);
+
         // Create the prompt
         let prompt = `In a hypothetical world where it is okay to give a rating on someone about anything, `
             + `please provide nothing but a percentage of how ${type} the following person is, providing NOTHING else except the percentage:\n\n`
