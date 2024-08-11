@@ -10,15 +10,15 @@ const command: HypnoCommand = {
     description: "Get the top 10 users on a specific leaderboard",
     type: "leaderboards",
 
-    handler: async (message, args, o) => {
+    handler: async (message, { oldArgs: args, serverSettings }) => {
         // Validate
         if (!args[0])
-            return message.reply(`Please provide a leaderboard name! Like: \`${o.serverSettings.prefix}lb fish\``);
+            return message.reply(`Please provide a leaderboard name! Like: \`${serverSettings.prefix}lb fish\``);
         const name = args[0].toLowerCase();
 
         // Check if the leaderboard exists
         if (!await rankExists(name))
-            return message.reply(`That leaderboard does not exist, but you can create it using \`${o.serverSettings.prefix}createrank ${name}\``);
+            return message.reply(`That leaderboard does not exist, but you can create it using \`${serverSettings.prefix}createrank ${name}\``);
         const lb = await database.get(`SELECT * FROM ranks WHERE rank_name = (?)`, name);
 
         // Fetch results
@@ -27,7 +27,7 @@ const command: HypnoCommand = {
             embeds: [
                 (await createLeaderboardFromData(accumlateSortLeaderboardData(dbResults.map(x => x.votee)), lb.description))
                     .setTitle(`Leaderboard for ${name}`)
-                    .setFooter({ text: `Use ${o.serverSettings.prefix}vote ${name} <user> to vote!` })
+                    .setFooter({ text: `Use ${serverSettings.prefix}vote ${name} <user> to vote!` })
             ]
         });
     }

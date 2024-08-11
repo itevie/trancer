@@ -11,7 +11,7 @@ const command: HypnoCommand = {
         ["$cmd all", "Delete all your imposition"]
     ],
 
-    handler: async (message, args) => {
+    handler: async (message, { oldArgs: args }) => {
         const what = args.join(" ");
 
         // Check if user wants to remove it all

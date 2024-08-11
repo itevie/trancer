@@ -8,7 +8,7 @@ const command: HypnoCommand = {
     description: "Get your balance, or someone elses",
     type: "economy",
 
-    handler: async (message, args) => {
+    handler: async (message, { oldArgs: args }) => {
         let user = message.author;
         let pronoun = "Your";
         if (args[0]) {

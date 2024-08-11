@@ -2,7 +2,7 @@ import { HypnoMessageHandler } from "../types/messageHandler";
 import { createLeaderboard, insertLeaderboardEntry, leaderboardExists } from "../util/actions/leaderboards";
 import { addBump } from "../util/actions/userData";
 import config from "../config.json";
-import { insertMoneyFor } from "../util/actions/economy";
+import { addMoneyFor } from "../util/actions/economy";
 import { randomFromRange } from "../util/other";
 
 const handler: HypnoMessageHandler = {
@@ -20,7 +20,7 @@ const handler: HypnoMessageHandler = {
 
             // Check for bot server
             if (message.guild.id === config.botServer.id)
-                await insertMoneyFor(user.id, randomFromRange(config.economy.bump.min, config.economy.bump.max));
+                await addMoneyFor(user.id, randomFromRange(config.economy.bump.min, config.economy.bump.max));
         }
     }
 }

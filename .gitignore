@@ -4,5 +4,6 @@ node_modules/
 src/website/node_modules/
 test/
 src/data/spirals.txt
-src/data/ecosnapshots
+src/data/ecosnapshotsr
 src/messages/rules.txt
+data_backups/

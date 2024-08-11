@@ -9,7 +9,7 @@ const command: HypnoCommand = {
     type: "quotes",
     description: `Reply to a funny message and it will be saved!`,
 
-    handler: async (message, args) => {
+    handler: async (message) => {
         // Check for ref
         if (!message.reference)
             return message.reply(`Please reply to a message!`);

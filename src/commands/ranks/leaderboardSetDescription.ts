@@ -8,9 +8,9 @@ const command: HypnoCommand = {
     type: "leaderboards",
     description: "Set a leaderboard's description",
 
-    handler: async (message, args, o) => {
+    handler: async (message, { oldArgs: args, serverSettings }) => {
         if (!args[0] || !args[1])
-            return message.reply(`Please provide a leaderboard name and a description, example: \`${o.serverSettings.prefix}slbdesc fish Who is the most fishiest?\``);
+            return message.reply(`Please provide a leaderboard name and a description, example: \`${serverSettings.prefix}slbdesc fish Who is the most fishiest?\``);
         const name = args[0].toLowerCase();
         args.shift();
         const desc = args.join(" ");

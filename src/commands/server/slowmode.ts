@@ -6,7 +6,7 @@ const command: HypnoCommand = {
     adminOnly: true,
     type: "admin",
 
-    handler: async (message, args) => {
+    handler: async (message, { oldArgs: args }) => {
         if (!args[0])
             return message.reply(`Please provide the second argument as the seconds`);
 

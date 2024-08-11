@@ -6,7 +6,7 @@ const command: HypnoCommand = {
     adminOnly: true,
     type: "admin",
 
-    handler: async (message, _) => {
+    handler: async (message) => {
         const guilds = await message.client.guilds.fetch();
         return message.reply(`List of servers I'm in: ${guilds.map(x => x.name).join(", ")}`);
     }

@@ -11,7 +11,7 @@ const command: HypnoCommand = {
     type: "quotes",
     description: `A random quote will be sent, and you must guess who sent it!`,
 
-    handler: async (message, args) => {
+    handler: async (message) => {
         if (games.includes(message.author.id))
             return message.reply(`You're already in a game!`);
 

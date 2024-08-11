@@ -1,15 +1,7 @@
-import { HypnoCommand } from "../../types/command";
-import getAllFiles from "../../util/getAllFiles";
+import { HypnoCommand } from "../types/command";
+import getAllFiles from "../util/getAllFiles";
 import { MessageCreateOptions } from "discord.js";
 
-const messageFiles = getAllFiles(__dirname + "/../../messages");
-export const messages: { [key: string]: MessageCreateOptions } = {};
-for (const messageFile of messageFiles) {
-    const name = messageFile.match(/[a-z\-_]+\.ts/)[0].replace(".ts", "");
-    const messageImport = require(messageFile).default as MessageCreateOptions;
-    messages[name] = messageImport;
-}
-const types = Object.keys(messages).map(x => `\`${x}\``).join(", ");
 
 let command: HypnoCommand = {
     name: "sendmessage",

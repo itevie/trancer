@@ -10,7 +10,7 @@ const command: HypnoCommand = {
         ["$cmd random", "Get a random quote"]
     ],
 
-    handler: async (message, args) => {
+    handler: async (message, { oldArgs: args }) => {
         // Collect quote
         let quote: Quote;
         if (["r", "random"].includes(args[0]))

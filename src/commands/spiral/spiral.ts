@@ -10,7 +10,7 @@ const command: HypnoCommand = {
         ["spiral list", "List the amount of spirals registered"],
     ],
 
-    handler: async (message, args) => {
+    handler: async (message, { oldArgs: args }) => {
         if (args[0] === "list") {
             return message.reply(`There are ${(await getSpirals()).length} spirals registered`);
         }

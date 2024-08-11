@@ -27,7 +27,7 @@ const command: HypnoCommand = {
         ["$cmd 1.5 nospirals dropping confirm", "This will drop you and send ONLY impo for 1 and a half minutes"]
     ],
 
-    handler: async (message, args) => {
+    handler: async (message, { oldArgs: args }) => {
         // Check for minutes
         if (!args[0] || Number.isNaN(parseFloat(args[0])))
             return message.reply(`Please provide length in minutes as the first argument`);

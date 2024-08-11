@@ -6,6 +6,8 @@ export const history: { [key: string]: Message[] } = {};
 const helperMessage =
     "You are the AI, your name is Jenifer. The messages from users will be prefixed by their usernames. Respond to the contents inside the quotes, and you can address users by their usernames if relevant.";
 
+let lastAI = 0;
+
 const command: HypnoCommand = {
     name: "ai",
     aliases: ["gai"],
@@ -15,9 +17,16 @@ const command: HypnoCommand = {
     ],
     description: "Talk to an extremly slow AI :D",
 
-    handler: async (message, args, details) => {
+    handler: async (message, details) => {
+        let time = 10000 - (Date.now() - lastAI);
+        if (time > 0) {
+            return message.reply(`AI is on ratelimit, wait ${time / 1000} seconds`);
+        }
+
+        lastAI = Date.now();
         await message.react(`⏳`);
         await message.channel.sendTyping();
+
 
         let conversationID = details.command === "gai" ? "global" : message.author.id;
 
@@ -32,7 +41,7 @@ const command: HypnoCommand = {
 
         let userRequest: Message = {
             role: "user",
-            content: `${message.member.nickname ?? message.author.displayName} says: "${args.join(" ")}"`
+            content: `${message.member.nickname ?? message.author.displayName} says: "${details.oldArgs.join(" ")}"`
         };
 
         history[conversationID].push(userRequest);

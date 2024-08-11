@@ -8,7 +8,7 @@ const command: HypnoCommand = {
     description: "Get the ratio of subs : tists",
     type: "fun",
 
-    handler: async (message, _) => {
+    handler: async (message) => {
         // Collect data
         const serverSettings = await getServerSettings(message.guild.id);
         const members = await message.guild.members.fetch();

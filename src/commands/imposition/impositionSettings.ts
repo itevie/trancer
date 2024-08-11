@@ -19,7 +19,7 @@ const command: HypnoCommand = {
     adminOnly: true,
 
     except: (_, args) => args[0] === "details",
-    handler: async (message, args) => {
+    handler: async (message, { oldArgs: args }) => {
         // Check if arg
         if (!args[0])
             return message.reply(`Please provide a subcommand, see \`${(await getServerSettings(message.guild.id)).prefix}cmd is\``);

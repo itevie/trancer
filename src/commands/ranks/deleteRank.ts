@@ -7,7 +7,7 @@ const command: HypnoCommand = {
     description: "Delete a rank",
     type: "leaderboards",
 
-    handler: async (message, args, o) => {
+    handler: async (message, { oldArgs: args, serverSettings }) => {
         // Check for rank
         if (!args[0])
             return message.reply(`Please provide a leaderboard to delete.`);
@@ -26,7 +26,7 @@ const command: HypnoCommand = {
 
         // Check confirm
         if (args[1] !== "confirm")
-            return message.reply(`Please provide confirm as the last arguemnt: \`${o.serverSettings.prefix}deleterank ${rankName} confirm\``);
+            return message.reply(`Please provide confirm as the last arguemnt: \`${serverSettings.prefix}deleterank ${rankName} confirm\``);
 
         // Delete
         await database.run(`DELETE FROM votes WHERE rank_name = (?);`, rankName);

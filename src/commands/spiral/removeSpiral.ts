@@ -9,7 +9,7 @@ const command: HypnoCommand = {
     botServerOnly: true,
     allowExceptions: true,
 
-    handler: async (message, args) => {
+    handler: async (message, { oldArgs: args }) => {
         // Get spiral to add
         let content: string = "";
         if (message.reference) {

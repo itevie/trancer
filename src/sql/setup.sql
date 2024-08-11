@@ -60,7 +60,8 @@ CREATE TABLE IF NOT EXISTS user_data (
 
 CREATE TABLE IF NOT EXISTS economy (
     user_id TEXT NOT NULL UNIQUE,
-    balance INT NOT NULL DEFAULT 10
+    balance INT NOT NULL DEFAULT 10,
+    last_fish INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS leaderboards (

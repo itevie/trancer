@@ -7,7 +7,7 @@ const command: HypnoCommand = {
     description: "Make the AI bot forget your conversation",
     aliases: ["forget", "gamnesia"],
 
-    handler: (message, _, details) => {
+    handler: (message, details) => {
         let conversationID = details.command === "gamnesia" ? "global" : message.author.id;
 
         if (history[conversationID])

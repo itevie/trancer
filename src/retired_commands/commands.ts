@@ -1,8 +1,8 @@
-import { HypnoCommand } from "../../types/command";
-import { commands } from "../..";
+import { HypnoCommand } from "../types/command";
+import { commands } from "..";
 import { PermissionsBitField } from "discord.js";
-import { getServerSettings } from "../../util/actions/settings";
-import config from "../../config.json";
+import { getServerSettings } from "../util/actions/settings";
+import config from "../config.json";
 
 const comamnd: HypnoCommand = {
     name: "commands",

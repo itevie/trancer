@@ -18,7 +18,7 @@ const command: HypnoCommand = {
         ["$cmd *hugs*\nb *patpatpat*", "Add multiple at the same time, each impo will be on another line."]
     ],
 
-    handler: async (message, args) => {
+    handler: async (message, { oldArgs: args }) => {
         const what = args.join(" ");
 
         async function add(w: string): Promise<string | null> {

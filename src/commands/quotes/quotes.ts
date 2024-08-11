@@ -11,7 +11,7 @@ const command: HypnoCommand = {
         ["$cmd <user mention>", "Get the list of quotes another user has sent"]
     ],
 
-    handler: async (message, args) => {
+    handler: async (message, { oldArgs: args }) => {
         if (!args[0]) {
             const list = (await database.all(`SELECT id FROM quotes;`));
             const inThis = (await database.all(`SELECT id FROM quotes WHERE server_id = (?);`, message.guild.id));

@@ -30,7 +30,7 @@ const command: HypnoCommand = {
     ],
     adminOnly: true,
 
-    handler: async (message, args) => {
+    handler: async (message, { oldArgs: args }) => {
         const currentSettings = await database.get(`SELECT * FROM server_settings WHERE server_id = (?)`, message.guild.id);
 
         // If there are no settings present, show user the current ones

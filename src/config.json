@@ -28,6 +28,12 @@
             "name": "bumping",
             "min": 20,
             "max": 30
+        },
+        "fish": {
+            "name": "fishing",
+            "min": 10,
+            "max": 20,
+            "limit": 1800000
         }
     },
     "roles": {

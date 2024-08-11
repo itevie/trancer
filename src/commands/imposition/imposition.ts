@@ -10,7 +10,7 @@ const command: HypnoCommand = {
         ["$cmd <user>", "Gives another user the imposition! :)"]
     ],
 
-    handler: async (message, args) => {
+    handler: async (message, { oldArgs: args }) => {
         if (args[0]) {
             const user = args[0].replace(/[<>@]/g, "");
             return message.channel.send(`${args.join(" ")} ${await getRandomImposition(user)}`);

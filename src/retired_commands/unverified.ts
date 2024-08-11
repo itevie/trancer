@@ -1,5 +1,5 @@
-import { HypnoCommand } from "../../types/command";
-import config from "../../config.json";
+//import { HypnoCommand } from "../../types/command";
+//import config from "../../config.json";
 
 const command: HypnoCommand = {
     name: "unverified",

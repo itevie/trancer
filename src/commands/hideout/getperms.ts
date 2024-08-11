@@ -6,7 +6,7 @@ const command: HypnoCommand = {
     type: "admin",
     adminOnly: true,
 
-    handler: async (message, args) => {
+    handler: async (message, { oldArgs: args }) => {
         const roles = await message.guild.roles.fetch();
         let role: Role[] = [];
 

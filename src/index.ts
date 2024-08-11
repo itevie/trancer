@@ -1,4 +1,4 @@
-import { Client, IntentsBitField, PermissionsBitField } from "discord.js";
+import { Client, IntentsBitField, PermissionsBitField, User } from "discord.js";
 import { HypnoCommand, HypnoCommandDetails } from "./types/command";
 import getAllFiles from "./util/getAllFiles";
 import config from "./config.json";
@@ -11,6 +11,7 @@ import { HypnoMessageHandler } from "./types/messageHandler";
 import "./backend/index";
 import { createUserData, userDataExists } from "./util/actions/userData";
 import { createEconomyFor, economyForUserExists } from "./util/actions/economy";
+import { generateCommandCodeBlock } from "./util/args";
 
 export const commands: { [key: string]: HypnoCommand } = {};
 export const handlers: HypnoMessageHandler[] = [];
@@ -23,7 +24,7 @@ export const client = new Client({
         IntentsBitField.Flags.GuildMembers,
         IntentsBitField.Flags.GuildMessages,
         IntentsBitField.Flags.DirectMessages
-    ]
+    ],
 });
 
 client.on("ready", async () => {
@@ -51,8 +52,6 @@ client.on("ready", async () => {
     connect();
 });
 
-const randomImposition: { [key: string]: number } = {};
-
 client.on("messageCreate", async message => {
     // German commas go away
     message.content = message.content.replace(/[’]/g, "'");
@@ -74,28 +73,12 @@ client.on("messageCreate", async message => {
         await createEconomyFor(message.author.id);
 
     // Setup settings
-    await setupSettingsFor(message.guild.id);
+    if (!await getServerSettings(message.guild.id))
+        await setupSettingsFor(message.guild.id);
     const settings = await getServerSettings(message.guild.id);
 
     if (message.content.trim() == `<@${client.user.id}>`)
         return message.reply(`Hey! My prefix is: \`${settings.prefix}\`\nUse \`${settings.prefix}commands\` to view my commands! :cyclone:`);
-
-    // Check random impo
-    const imposition = await getImposition(message.channel.id);
-    if (imposition?.is_enabled) {
-        // Check if not set
-        if (!randomImposition[message.channel.id])
-            randomImposition[message.channel.id] = 0;
-
-        // Check if should try send
-        if (randomImposition[message.channel.id] - (Date.now() - imposition.every * (1000 * 60)) < 0) {
-            if (Math.random() < (imposition.chance / 100)) {
-                await message.channel.send(getRandomImpositionFromFile());
-            }
-        }
-
-        randomImposition[message.channel.id] = Date.now();
-    }
 
     // Check handlers
     for (const i in handlers)
@@ -107,37 +90,87 @@ client.on("messageCreate", async message => {
             handlers[i].handler(message);
         }
 
-    if (!message.content.startsWith(settings.prefix)) return;
+    if (!message.content.startsWith(settings.prefix) && !message.content.startsWith(settings.prefix + " ")) return;
 
     // Extract command
-    const content = message.content.substring(settings.prefix.length, message.content.length);
+    const content = message.content.substring(settings.prefix.length, message.content.length).trim();
     const fullArgs = content.split(" ");
     const command = fullArgs.shift().toLowerCase();
 
     try {
-        // Check command
+        // Check if command was found
         if (commands[command]) {
             const cmd = commands[command];
-            const details: HypnoCommandDetails = {
+            const details: HypnoCommandDetails<any> = {
                 serverSettings: settings,
                 command,
+                args: {},
+                oldArgs: fullArgs,
             };
 
-            if (cmd.type === "ai" && !config.modules.ai.enabled)
-                return message.reply(`AI is disabled :cyclone:`);
+            // Function to actually execute the command if wanted
+            const execute = async () => {
+                // Check if the cmd requires arguments
+                if (cmd.args) {
+                    const codeblock = generateCommandCodeBlock(cmd, settings);
+                    for (let i in cmd.args.args) {
+                        let arg = cmd.args.args[i];
 
-            const execute = async () => cmd.handler(message, fullArgs, details);
+                        // Check if it is there (and required)
+                        if (!fullArgs[i] && cmd.args.requiredArguments > +i)
+                            return message.reply(`The paramter **${arg.name}** is missing!\n${codeblock}`);
+                        if (!fullArgs[i])
+                            continue;
+
+                        // Check type (special ones)
+                        if (arg.type === "user") {
+                            if (!fullArgs[i].match(/<?@[0-9]+?>?/))
+                                return message.reply(`Invalid user format provided, please provide a mention or ID!\n${codeblock}`)
+                            // Try fetch user
+                            let user: User;
+                            try {
+                                user = await client.users.fetch(fullArgs[i].replace(/[<>@]/g, ""));
+                            } catch (err) {
+                                console.log(err);
+                                return message.reply(`Failed to fetch the user: ${fullArgs[i]} :(`);
+                            }
+
+                            // Set argument
+                            details.args[arg.name] = user;
+                        } else {
+                            // Check for numbers
+                            if (arg.type === "number")
+                                if (isNaN(parseInt(fullArgs[i])))
+                                    return message.reply(`Invalid number provided for **${arg.name}**: ${fullArgs[i]}\n${codeblock}`);
+                                else details.args[arg.name] = parseInt(fullArgs[i]);
+                            // If its a string it can just go right through
+                            else if (arg.type === "string")
+                                details.args[arg.name] = fullArgs[i];
+                        }
+                    }
+                }
+
+                // Finally, run it.
+                await cmd.handler(message, details);
+            };
             const except = () => { if (cmd.except) return cmd.except(message, fullArgs); else return false; };
 
+            // Used to ignore guards
             if (cmd.allowExceptions && config.exceptions.includes(message.author.id))
                 return await execute();
 
-            // Guards
+            // Check if AI is turned off
+            if (cmd.type === "ai" && !config.modules.ai.enabled)
+                return message.reply(`AI is disabled! :cyclone:`);
+
+            // Check if command is ai only
             if (cmd.adminOnly)
                 if (!message.member.permissions.has(PermissionsBitField.Flags.Administrator) && !except())
                     return message.reply(`You are not administrator :cyclone:`);
+
+            // Check if commandis bot-server only
             if (cmd.botServerOnly && message.guild.id !== config.botServer.id)
-                return message.reply(`This command can only be used in Hypno Hideout :cyclone:`);
+                return message.reply(`This command can only be used in the bot server :cyclone:`);
 
             // Execute
             await execute();

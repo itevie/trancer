@@ -9,16 +9,16 @@ const command: HypnoCommand = {
     description: "Vote for a user on a leaderboard",
     type: "leaderboards",
 
-    handler: async (message, args, o) => {
+    handler: async (message, { oldArgs: args, serverSettings }) => {
         if (!args[0] || !args[1])
-            return message.reply(`Please provide a leaderboard name, and a user, like: \`${o.serverSettings.prefix}vote <leaderboard> <user mention>\``);
+            return message.reply(`Please provide a leaderboard name, and a user, like: \`${serverSettings.prefix}vote <leaderboard> <user mention>\``);
         const leaderboard = args[0].toLowerCase();
         const userId = args[1]?.replace(/[<>@]/g, "");
         let user: User;
 
         // Check if the rank exists
         if (!await rankExists(leaderboard))
-            return message.reply(`That leaderboard does not exist! But can be created using \`${o.serverSettings.prefix}createrank ${leaderboard}\``);
+            return message.reply(`That leaderboard does not exist! But can be created using \`${serverSettings.prefix}createrank ${leaderboard}\``);
 
         // Try fetch the user to make sure it exists
         try {

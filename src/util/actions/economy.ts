@@ -16,6 +16,14 @@ export async function getAllEconomy(): Promise<Economy[]> {
     return (await database.all(`SELECT * FROM economy`)) as Economy[];
 }
 
-export async function insertMoneyFor(userId: string, amount: number): Promise<void> {
+export async function addMoneyFor(userId: string, amount: number): Promise<void> {
     await database.run(`UPDATE economy SET balance = balance + (?) WHERE user_id = (?)`, amount, userId);
+}
+
+export async function removeMoneyFor(userId: string, amount: number): Promise<void> {
+    await database.run(`UPDATE economy SET balance = balance - (?) WHERE user_id = (?)`, amount, userId);
+}
+
+export async function setLastFish(userId: string): Promise<void> {
+    await database.run(`UPDATE economy SET last_fish = (?) WHERE user_id = (?)`, Date.now(), userId);
 }

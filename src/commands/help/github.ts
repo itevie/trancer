@@ -5,7 +5,7 @@ const command: HypnoCommand = {
     type: "help",
     description: "Get the GitHub link for this bot",
 
-    handler: (message, args) => {
+    handler: (message) => {
         return message.reply(`https://github.com/itevie/hypno-discord-bot`);
     }
 };

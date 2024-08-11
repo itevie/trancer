@@ -5,7 +5,7 @@ const command: HypnoCommand = {
     description: "Get your Discord ID",
     type: "help",
 
-    handler: (message, _) => {
+    handler: (message) => {
         return message.reply(message.author.id);
     }
 }

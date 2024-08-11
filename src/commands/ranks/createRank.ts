@@ -7,7 +7,7 @@ const command: HypnoCommand = {
     description: "Creates a rankable leaderboard",
     type: "leaderboards",
 
-    handler: async (message, args, o) => {
+    handler: async (message, { oldArgs: args, serverSettings }) => {
         // Provide args
         if (!args[0]) return message.reply(`Please provide a rank name`);
         const name = args[0].toLowerCase();
@@ -19,7 +19,7 @@ const command: HypnoCommand = {
         // Create it
         await database.run(`INSERT INTO ranks (rank_name, created_by) VALUES ((?), (?))`, name, message.author.id);
 
-        return message.reply(`Leaderboard created! use \`${o.serverSettings.prefix}vote ${name} <user mention>\` to vote!`)
+        return message.reply(`Leaderboard created! use \`${serverSettings.prefix}vote ${name} <user mention>\` to vote!`)
     }
 }
 

@@ -10,7 +10,7 @@ const command: HypnoCommand = {
     botServerOnly: true,
     allowExceptions: true,
 
-    handler: async (message, args) => {
+    handler: async (message, { oldArgs: args }) => {
         if (!args[0])
             return message.reply(`Please give an ID to delete!`);
         await deleteQuote(parseInt(args[0]))

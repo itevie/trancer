@@ -8,7 +8,7 @@ const command: HypnoCommand = {
     type: "ai",
     description: "Gets the summary of your current AI conversation",
 
-    handler: async (message, _, details) => {
+    handler: async (message, details) => {
         let conversationID = details.command === "gsummary" ? "global" : message.author.id;
 
         // Check if anything has been said yet

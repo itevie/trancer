@@ -6,7 +6,7 @@ const command: HypnoCommand = {
     description: "List the active message handlers",
     type: "messages",
 
-    handler: (message, args) => {
+    handler: (message) => {
         return message.reply(`The following message handlers are enabled:\n${handlers.map(x => `\`${x.name}\``).join(", ")}`);
     }
 }

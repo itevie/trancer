@@ -8,7 +8,7 @@ const command: HypnoCommand = {
     type: "imposition",
     description: "Get your own or someone elses imposition actions",
 
-    handler: async (message, args) => {
+    handler: async (message, { oldArgs: args }) => {
         let imposition = await getImpositionFor(message.author.id);
 
         // Check if another user was provided

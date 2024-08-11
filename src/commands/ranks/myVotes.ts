@@ -8,7 +8,7 @@ const command: HypnoCommand = {
     description: "View the things you have voted for on all the leaderboards",
     type: "leaderboards",
 
-    handler: async (message, args) => {
+    handler: async (message) => {
         const fromUser = await database.all(`SELECT * FROM votes WHERE voter = (?)`, message.author.id) as Vote[];
         let text = "";
 

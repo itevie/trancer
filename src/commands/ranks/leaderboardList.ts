@@ -7,7 +7,7 @@ const command: HypnoCommand = {
     type: "leaderboards",
     description: "Get a list of active leaderboards",
 
-    handler: async (message, args) => {
+    handler: async (message) => {
         const leaderboards = (await database.all(`SELECT rank_name FROM ranks;`)).map(x => x.rank_name);
         return message.reply(`Here are the leaderboards you can vote on: ${leaderboards.map(x => `**${x}**`).join(", ")}`);
     }

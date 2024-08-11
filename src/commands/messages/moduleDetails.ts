@@ -7,7 +7,7 @@ const command: HypnoCommand = {
     description: "Get details on a module",
     type: "messages",
 
-    handler: (message, args) => {
+    handler: (message, { oldArgs: args }) => {
         if (!args[0])
             return message.reply(`Please provide a module name`);
         const arg = args[0].toLowerCase();

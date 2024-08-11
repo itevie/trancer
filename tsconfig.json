@@ -5,9 +5,12 @@
         "downlevelIteration": true,
         "target": "ES2018",
         "module": "NodeNext",
-        "moduleResolution": "NodeNext"
+        "moduleResolution": "NodeNext",
     },
     "ts-node": {
-        "files": true
+        "files": true,
+        "ignore": [
+            "./src/retired_commands"
+        ]
     }
 }

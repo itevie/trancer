@@ -2,21 +2,32 @@ import { HypnoCommand } from "../../types/command";
 import { commands } from "../..";
 import { createEmbed } from "../../util/other";
 import { getServerSettings } from "../../util/actions/settings";
+import { generateCommandCodeBlock } from "../../util/args";
 
-const command: HypnoCommand = {
+const command: HypnoCommand<{ command: string }> = {
     name: "command",
     aliases: ["cmd"],
     description: `Get details on a command`,
     type: "help",
+    args: {
+        requiredArguments: 1,
+        args: [
+            {
+                type: "string",
+                name: "command",
+                description: `The command to get info on`,
+                onMissing: "Please provide the command name to get info on"
+            }
+        ]
+    },
 
-    handler: async (message, args) => {
-        // Check if command
-        if (!commands[args[0]])
-            return message.reply(`That command does not exist`);
+    handler: async (message, { args, serverSettings }) => {
+        // Check if the command exists
+        if (!commands[args.command])
+            return message.reply(`The command **${args.command}** does not exist!`);
 
         // Get command
-        const command = commands[args[0]];
-        const serverDetails = await getServerSettings(message.guild.id);
+        const command = commands[args.command];
 
         // Get list of restrictions
         let restrictions = [];
@@ -24,37 +35,45 @@ const command: HypnoCommand = {
             restrictions.push(`Admin Only ${command.except ? `(has exceptions)` : ""}`);
         if (command.botServerOnly)
             restrictions.push("Bot Server Only");
-        if (restrictions.length === 0)
-            restrictions.push("*None*");
 
-        // Create embed
+        // Construct embed
         const embed = createEmbed()
-            .setTitle(`Command ${command.name}`)
-            .setDescription(command.description ?? "*No Description*")
-            .addFields([
-                {
-                    name: "Other Usage",
-                    value: !command.usage
-                        ? "*None Other*"
-                        : (command.usage.map(x => `\`$prefix${x[0].replace("$cmd", command.name)}\` - ${x[1]}`).join("\n"))
-                            .replace(/\$prefix/g, serverDetails.prefix)
-                },
-                {
-                    name: "Examples",
-                    value: !command.examples
-                        ? "*No Examples*"
-                        : (command.examples.map(x => `\`$prefix${x[0].replace("$cmd", command.name)}\` - ${x[1]}`).join("\n"))
-                            .replace(/\$prefix/g, serverDetails.prefix)
-                },
+            .setTitle(`Command ${command.name}`);
+
+        // Check for description
+        if (command.description)
+            embed.setDescription(command.description);
+
+        // Check for aliases
+        if (command.aliases) {
+            embed.addFields([
                 {
                     name: "Aliases",
-                    value: !command.aliases ? "*No Aliases*" : command.aliases.map(x => `\`${x}\``).join(", ")
-                },
+                    value: command.aliases.map(x => `\`${x}\``).join(", ")
+                }
+            ]);
+        }
+
+        // Check for arguments
+        if (command.args) {
+            embed.addFields([
                 {
-                    name: "Restrictions",
+                    name: "Parameters",
+                    value: `${generateCommandCodeBlock(command, serverSettings)
+                        }\n${command.args.args.map(x => `\`${x.name} - ${x.type}\`: ${x.description || "*No description*"}`).join("\n")}`
+                }
+            ]);
+        }
+
+        // Check fore restrictions
+        if (restrictions.length > 0) {
+            embed.addFields([
+                {
+                    name: `Restrictions`,
                     value: restrictions.join(", ")
                 }
             ]);
+        }
 
         return message.reply({
             embeds: [embed]

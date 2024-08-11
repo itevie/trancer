@@ -13,7 +13,7 @@ const command: HypnoCommand = {
     ],
     type: "economy",
 
-    handler: async (message, args, options) => {
+    handler: async (message, { oldArgs: args, serverSettings }) => {
         let data = await getAllEconomy();
         let organised = data.map(x => [x.user_id, x.balance]) as [string, number][];
         let description = `Who has the most ${config.economy.currency}?`;
@@ -48,7 +48,7 @@ const command: HypnoCommand = {
             embeds: [
                 (await createLeaderboardFromData(organised, description, config.economy.currency))
                     .setTitle(`Economy Leaderboard`)
-                    .setFooter({ text: `Check ${options.serverSettings.prefix}howtogeteco on how to get more!` })
+                    .setFooter({ text: `Check ${serverSettings.prefix}howtogeteco on how to get more!` })
             ]
         })
     }

@@ -12,7 +12,7 @@ const command: HypnoCommand = {
         ["$prefixrate gayness @John", "Rate someone elses's gayness"],
     ],
 
-    handler: async (message, args) => {
+    handler: async (message, { oldArgs: args }) => {
         // Get the type
         let type = args[0];
         if (!type)

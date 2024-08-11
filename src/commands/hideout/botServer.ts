@@ -6,7 +6,7 @@ const command: HypnoCommand = {
     description: "Join the bot's server",
     type: "help",
 
-    handler: (message, args) => {
+    handler: (message) => {
         return message.reply(config.botServer.invite);
     }
 }
