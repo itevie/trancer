@@ -67,6 +67,15 @@ const command: HypnoCommand<{ command: string }> = {
             ]);
         }
 
+        // Check for examples
+        if (command.examples) {
+            embed.addFields([
+                {
+                    name: "Examples",
+                    value: command.examples.map(x => `\`${x[0].replace(/\$cmd/g, `${serverSettings.prefix}${command.name}`)}\`: ${x[1]}`).join("\n")
+                }
+            ]);
+        }
 
         // Check for usage
         if (command.usage) {

@@ -1,6 +1,7 @@
 import { HypnoCommand } from "../../types/command";
 import { addImpositionFor } from "../../util/actions/imposition";
 import { database } from "../../util/database";
+import * as fs from "fs";
 
 const command: HypnoCommand = {
     name: "addimposition",
@@ -9,6 +10,7 @@ const command: HypnoCommand = {
     description: "Add imposition action that the bot can use on you",
     usage: [
         ["$cmd *impo*", "Adds that imposition for the bot to use on you"],
+        ["$cmd defaults", "Adds the default imposition to your list"],
         ["$cmd bombard *impo*", "Adds the imposition for the bot to use on you - as well as in the $prefixbombard command"]
     ],
     examples: [
@@ -42,6 +44,12 @@ const command: HypnoCommand = {
             await addImpositionFor(message.author.id, w, isBombard);
 
             return null;
+        }
+
+        if (args[0] === "defaults") {
+            const data = fs.readFileSync(__dirname + "/../../data/impo.txt", "utf-8").split("\n");
+            for await (const d of data) add(d);
+            return message.reply(`Added them!`);
         }
 
         // Check for many
