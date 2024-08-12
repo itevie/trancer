@@ -81,3 +81,9 @@ CREATE TABLE IF NOT EXISTS leaderboard_entries (
     user TEXT NOT NULL,
     leaderboard TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS aquired_badges (
+    user TEXT NOT NULL,
+    badge_name TEXT NOT NULL,
+    date_aquired DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

@@ -12,6 +12,7 @@ import "./backend/index";
 import { createUserData, userDataExists } from "./util/actions/userData";
 import { createEconomyFor, economyForUserExists } from "./util/actions/economy";
 import { generateCommandCodeBlock } from "./util/args";
+import { checkBadges } from "./util/badges";
 
 export const commands: { [key: string]: HypnoCommand } = {};
 export const handlers: HypnoMessageHandler[] = [];
@@ -49,7 +50,8 @@ client.on("ready", async () => {
         handlers.push(handleImport);
         console.log(`Loaded handler: ${handleImport.name}`);
     }
-    connect();
+    await connect();
+    checkBadges();
 });
 
 client.on("messageCreate", async message => {

@@ -11,7 +11,7 @@ const command: HypnoCommand = {
     usage: [
         ["$cmd *impo*", "Adds that imposition for the bot to use on you"],
         ["$cmd defaults", "Adds the default imposition to your list"],
-        ["$cmd bombard *impo*", "Adds the imposition for the bot to use on you - as well as in the $prefixbombard command"]
+        ["$cmd bombard *impo*", "Adds imposition which can only be used in the bombard command."]
     ],
     examples: [
         ["$cmd *hugs*", "Allows the bot to hug you."],
