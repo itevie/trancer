@@ -41,6 +41,7 @@ const handler: HypnoMessageHandler = {
 
         // Update & add reaction
         await database.run(`UPDATE server_count SET current_count = current_count + 1 WHERE server_id = ?`, message.guild.id);
+        await database.run(`UPDATE server_count SET last_counter = ? WHERE server_id = ?`, message.author.id, message.guild.id);
         await message.react(number < count.highest_count ? `✅` : "☑️");
     }
 };
