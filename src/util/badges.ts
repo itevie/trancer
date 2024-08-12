@@ -1,10 +1,10 @@
-import { client } from "..";
 import { AquiredBadge } from "../types/aquiredBadge";
 import { addBadgeFor, getAllAquiredBadges, removeBadgeFor } from "./actions/badges";
 import { getAllEconomy } from "./actions/economy";
 import { database } from "./database";
+import config from "../config.json";
 
-interface Badge {
+export interface Badge {
     name: string,
     description: string,
     emoji: string,
@@ -54,6 +54,34 @@ const badges: { [key: string]: Badge } = {
             for (const user of users) {
                 if (user.messages_sent > 1000 && !aquired.find(x => x.user === user.user_id && x.badge_name === "yapper"))
                     await addBadgeFor(user.user_id, "yapper")
+            }
+        }
+    },
+    "5kmoney": {
+        name: "Money Maker",
+        description: `Reached 5000${config.economy.currency} at some point`,
+        emoji: ":cyclone:",
+        scan: async () => {
+            const users = await database.all(`SELECT * FROM economy;`) as Economy[];
+            const aquired = await getAllAquiredBadges();
+
+            for (const user of users) {
+                if (user.balance > 5000 && !aquired.find(x => x.user === user.user_id && x.badge_name === "5kmoney"))
+                    await addBadgeFor(user.user_id, "5kmoney")
+            }
+        }
+    },
+    "bumper": {
+        name: "Bumper",
+        description: "Bumped the server 15 times",
+        emoji: ":right_facing_fist:",
+        scan: async () => {
+            const users = await database.all(`SELECT * FROM user_data;`) as UserData[];
+            const aquired = await getAllAquiredBadges();
+
+            for (const user of users) {
+                if (user.bumps > 15 && !aquired.find(x => x.user === user.user_id && x.badge_name === "bumper"))
+                    await addBadgeFor(user.user_id, "bumper")
             }
         }
     },
