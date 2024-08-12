@@ -1,9 +1,20 @@
-ALTER TABLE spirals ADD file_name TEXT DEFAULT NULL;
+CREATE TABLE spirals_new (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    link TEXT NOT NULL,
+    sent_by TEXT DEFAULT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 CREATE TABLE IF NOT EXISTS spirals (
     link TEXT NOT NULL,
     sent_by TEXT DEFAULT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+INSERT INTO spirals_new(link, sent_by)
+SELECT link, sent_by FROM spirals;
+
+DROP TABLE spirals;
+ALTER TABLE spirals_new RENAME TO spirals;
 
 CREATE TABLE IF NOT EXISTS channel_imposition (
     channel_id TEXT NOT NULL,
