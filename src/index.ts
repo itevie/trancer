@@ -51,7 +51,11 @@ client.on("ready", async () => {
         console.log(`Loaded handler: ${handleImport.name}`);
     }
     await connect();
+
     checkBadges();
+    setTimeout(() => {
+        checkBadges();
+    }, 60000);
 });
 
 client.on("messageCreate", async message => {

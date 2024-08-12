@@ -3,6 +3,7 @@ import createLeaderboardFromData from "../../util/createLeaderboard";
 import config from "../../config.json";
 import { getAllEconomy } from "../../util/actions/economy";
 import * as fs from "fs";
+import { checkBadges } from "../../util/badges";
 
 const command: HypnoCommand<{ date?: string }> = {
     name: `moneyleaderboard`,
@@ -28,6 +29,8 @@ const command: HypnoCommand<{ date?: string }> = {
         let data = await getAllEconomy();
         let organised = data.map(x => [x.user_id, x.balance]) as [string, number][];
         let description = `Who has the most ${config.economy.currency}?`;
+
+        checkBadges();
 
         if (args.date) {
             // Check if correct format

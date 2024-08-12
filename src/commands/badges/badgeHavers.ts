@@ -46,7 +46,7 @@ const command: HypnoCommand<{ badge: string }> = {
             return message.reply(`Too many people have this badge to display it.`);
         let usernames: string[] = [];
         for await (const haver of aquired)
-            usernames.push((await message.client.users.fetch(haver.user)).username);
+            usernames.push((await message.client.users.fetch(haver.user)).username.replace(/_/g, "\\_"));
 
         // Send embed
         return message.reply({
