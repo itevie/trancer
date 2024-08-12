@@ -15,11 +15,13 @@ const handler: HypnoMessageHandler = {
         if (!count) return;
         if (message.channel.id !== count.channel_id) return;
         if (client.user.id === config.devBot) return;
-        if (count.last_counter === message.author.id) return;
 
         // Check if it contains a number
         if (!message.content.match(/^([0-9]+)$/)) return;
         let number = parseInt(message.content);
+
+        if (count.last_counter === message.author.id)
+            return message.reply(`You cannot count twice in a row - wait for someone else!`);
 
         // Check if it is expected
         if (number !== count.current_count + 1) {
