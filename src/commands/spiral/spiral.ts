@@ -27,6 +27,10 @@ const command: HypnoCommand = {
 
         sentSpirals[msg.id] = spiral;
 
+        if (Object.keys(sentSpirals).length > 50)
+            for (let i = 0; i != 25; i++)
+                delete sentSpirals[Object.keys(sentSpirals)[i]];
+
         return;
     }
 }

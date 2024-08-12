@@ -6,6 +6,8 @@ import config from "../../config.json";
 const command: HypnoCommand<{ user: User, amount: number }> = {
     name: "-money",
     description: "Remove user money",
+    type: "economy",
+    botOwnerOnly: true,
 
     args: {
         requiredArguments: 2,
