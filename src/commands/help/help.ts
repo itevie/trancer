@@ -20,7 +20,7 @@ const command: HypnoCommand = {
     type: "help",
     description: `Get help on how to use the bot`,
 
-    handler: async (message, args) => {
+    handler: async (message) => {
         const categories: { [key: string]: string[] } = {};
 
         for (const i in commands) {

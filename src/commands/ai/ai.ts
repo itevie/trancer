@@ -18,7 +18,7 @@ const command: HypnoCommand = {
     description: "Talk to an extremly slow AI :D",
 
     handler: async (message, details) => {
-        let time = 10000 - (Date.now() - lastAI);
+        let time = 30000 - (Date.now() - lastAI);
         if (time > 0) {
             return message.reply(`AI is on ratelimit, wait ${time / 1000} seconds`);
         }

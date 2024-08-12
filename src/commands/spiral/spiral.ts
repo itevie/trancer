@@ -15,8 +15,11 @@ const command: HypnoCommand = {
             return message.reply(`There are ${(await getSpirals()).length} spirals registered`);
         }
 
+        let spiral = await getRandomSpiral();
+        console.log(spiral.link);
+
         return message.channel.send(
-            (await getRandomSpiral()).link
+            spiral.link
                 .replace(/^(<)/, "")
                 .replace(/(>)$/, "")
         );

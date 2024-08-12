@@ -163,7 +163,11 @@ client.on("messageCreate", async message => {
             if (cmd.type === "ai" && !config.modules.ai.enabled)
                 return message.reply(`AI is disabled! :cyclone:`);
 
-            // Check if command is ai only
+            // Check if bot owner only
+            if (cmd.botOwnerOnly && message.author.id !== config.owner)
+                return message.reply(`Only the bot owner can run this command!`);
+
+            // Check if command is admin only
             if (cmd.adminOnly)
                 if (!message.member.permissions.has(PermissionsBitField.Flags.Administrator) && !except())
                     return message.reply(`You are not administrator :cyclone:`);
