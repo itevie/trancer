@@ -13,3 +13,8 @@ export async function addBadgeFor(userId: string, badgeName: string): Promise<vo
     console.log(`Added badge ${badgeName} for ${userId}`);
     await database.run(`INSERT INTO aquired_badges (user, badge_name) VALUES (?, ?)`, userId, badgeName);
 }
+
+export async function removeBadgeFor(userId: string, badgeName: string): Promise<void> {
+    console.log(`Removed badge ${badgeName} for ${userId}`);
+    await database.run(`DELETE FROM aquired_badges WHERE user = ? AND badge_name = ?;`, userId, badgeName);
+}
