@@ -40,6 +40,11 @@ CREATE TABLE IF NOT EXISTS user_imposition (
     is_bombardable BOOLEAN NOT NULL DEFAULT FALSE
 );
 
+CREATE TABLE IF NOT EXISTS user_favourite_spirals (
+    id INT REFERENCES spirals(id) NOT NULL,
+    user_id TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS ranks (
     rank_name TEXT NOT NULL UNIQUE,
     created_by TEXT NOT NULL,

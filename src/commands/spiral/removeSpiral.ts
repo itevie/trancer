@@ -1,8 +1,9 @@
 import { HypnoCommand } from "../../types/command";
-import { deleteSpiral, hasSpiral } from "../../util/actions/spirals";
+import { deleteSpiral, getSpiralById, hasSpiral } from "../../util/actions/spirals";
 import { getServerSettings } from "../../util/actions/settings";
+import { sentSpirals } from "./spiral";
 
-const command: HypnoCommand = {
+const command: HypnoCommand<{ id?: number }> = {
     name: "removespiral",
     aliases: ["delspiral", "dspiral"],
     type: "spirals",
@@ -10,27 +11,33 @@ const command: HypnoCommand = {
     botServerOnly: true,
     allowExceptions: true,
 
-    handler: async (message, { oldArgs: args }) => {
-        // Get spiral to add
-        let content: string = "";
-        if (message.reference) {
-            content = (await message.fetchReference()).content;
-        } else if (args[0]) {
-            content = args[0];
+    args: {
+        requiredArguments: 0,
+        args: [
+            {
+                type: "number",
+                name: "id"
+            }
+        ]
+    },
+
+    handler: async (message, args) => {
+        // Get the spiral
+        let spiral: Spiral;
+        if (args.args.id) {
+            spiral = await getSpiralById(args.args.id);
+            if (!spiral)
+                return message.reply(`A spiral with that ID does not exist`);
+        } else if (message.reference) {
+            if (!sentSpirals[message.reference.messageId])
+                return message.reply(`That message does not have a valid spiral`);
+            spiral = sentSpirals[message.reference.messageId];
         } else {
-            return message.reply(
-                `Please reply to a message which contains the spiral, or use \`${(await getServerSettings(message.guild.id)).prefix}removespiral <link>\` :cyclone:`
-            );
+            return message.reply(`Please give an ID, or respond to a spiral message`);
         }
 
-        content = content
-            .replace(/^(<)/, "")
-            .replace(/(>)$/, "");
-
-        if (!await hasSpiral(content))
-            return message.reply(`That spiral does not exist in the database!`);
-
-        await deleteSpiral(content);
+        // Delete the spiral
+        await deleteSpiral(spiral.id);
         return await message.reply(`Removed :cyclone:`);
     }
 }

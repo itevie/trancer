@@ -1,6 +1,8 @@
 import { HypnoCommand } from "../../types/command";
 import { getRandomSpiral, getSpirals } from "../../util/actions/spirals";
 
+export const sentSpirals: { [key: string]: Spiral } = {};
+
 const command: HypnoCommand = {
     name: "spiral",
     type: "spirals",
@@ -16,13 +18,16 @@ const command: HypnoCommand = {
         }
 
         let spiral = await getRandomSpiral();
-        console.log(spiral.link);
 
-        return message.channel.send(
+        let msg = await message.channel.send(
             spiral.link
                 .replace(/^(<)/, "")
                 .replace(/(>)$/, "")
         );
+
+        sentSpirals[msg.id] = spiral;
+
+        return;
     }
 }
 
