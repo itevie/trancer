@@ -26,6 +26,7 @@ interface HypnoCommand<Args extends { [key: string]: any } = {}> {
 
     adminOnly?: boolean,
     botServerOnly?: boolean,
+    botOwnerOnly?: boolean,
     allowExceptions?: boolean,
 }
 

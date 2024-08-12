@@ -4,7 +4,7 @@ import config from "../../config.json";
 import { getAllEconomy } from "../../util/actions/economy";
 import * as fs from "fs";
 
-const command: HypnoCommand = {
+const command: HypnoCommand<{ date?: string }> = {
     name: `moneyleaderboard`,
     aliases: ["moneylb", "ecolb", "elb"],
     description: `See who has the most ${config.economy.currency}`,
@@ -13,18 +13,29 @@ const command: HypnoCommand = {
     ],
     type: "economy",
 
-    handler: async (message, { oldArgs: args, serverSettings }) => {
+    args: {
+        requiredArguments: 0,
+        args: [
+            {
+                name: "date",
+                type: "string",
+                description: `The date of a snapshot to compare against`
+            }
+        ]
+    },
+
+    handler: async (message, { args, serverSettings }) => {
         let data = await getAllEconomy();
         let organised = data.map(x => [x.user_id, x.balance]) as [string, number][];
         let description = `Who has the most ${config.economy.currency}?`;
 
-        if (args[0]) {
+        if (args.date) {
             // Check if correct format
-            if (!args[0].match(/[0-9]{2}-[0-9]{2}-[0-9]{4}/))
+            if (!args.date.match(/[0-9]{2}-[0-9]{2}-[0-9]{4}/))
                 return message.reply(`Please provide a date in dd-mm-yyyy format.`);
 
             // Check if exists
-            let path = __dirname + `/../../data/ecosnapshots/${args[0]}.json`
+            let path = __dirname + `/../../data/ecosnapshots/${args.date}.json`
             if (!fs.existsSync(path))
                 return message.reply(`A snapshot at that date does not exist :(`);
 
@@ -41,7 +52,7 @@ const command: HypnoCommand = {
                 ]
             );
 
-            description = `Who gained the most ${config.economy.currency} since ${args[0]}?`;
+            description = `Who gained the most ${config.economy.currency} since ${args.date}?`;
         }
 
         return message.reply({

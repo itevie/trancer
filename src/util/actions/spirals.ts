@@ -10,8 +10,8 @@ export async function getRandomSpiral(): Promise<Spiral> {
     return spiral;
 }
 
-export async function addSpiral(link: string, author: string): Promise<void> {
-    await database.run(`INSERT INTO spirals (link, sent_by) VALUES (?, ?)`, link, author);
+export async function addSpiral(link: string, author: string, fileName: string): Promise<void> {
+    await database.run(`INSERT INTO spirals (link, sent_by, file_name) VALUES (?, ?, ?)`, link, author, fileName);
 }
 
 export async function deleteSpiral(link: string): Promise<void> {

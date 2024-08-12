@@ -35,6 +35,8 @@ const command: HypnoCommand<{ command: string }> = {
             restrictions.push(`Admin Only ${command.except ? `(has exceptions)` : ""}`);
         if (command.botServerOnly)
             restrictions.push("Bot Server Only");
+        if (command.botOwnerOnly)
+            restrictions.push("Bot Owner Only");
 
         // Construct embed
         const embed = createEmbed()
@@ -61,6 +63,17 @@ const command: HypnoCommand<{ command: string }> = {
                     name: "Parameters",
                     value: `${generateCommandCodeBlock(command, serverSettings)
                         }\n${command.args.args.map(x => `\`${x.name} - ${x.type}\`: ${x.description || "*No description*"}`).join("\n")}`
+                }
+            ]);
+        }
+
+
+        // Check for usage
+        if (command.usage) {
+            embed.addFields([
+                {
+                    name: "Usage",
+                    value: command.usage.map(x => `\`${x[0].replace(/\$cmd/g, `${serverSettings.prefix}${command.name}`)}\`: ${x[1]}`).join("\n")
                 }
             ]);
         }

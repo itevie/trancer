@@ -4,6 +4,7 @@ import { getServerSettings } from "../../util/actions/settings";
 
 const command: HypnoCommand = {
     name: "removespiral",
+    aliases: ["delspiral", "dspiral"],
     type: "spirals",
     adminOnly: true,
     botServerOnly: true,

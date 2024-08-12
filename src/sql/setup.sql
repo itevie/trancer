@@ -1,3 +1,4 @@
+ALTER TABLE spirals ADD file_name TEXT DEFAULT NULL;
 CREATE TABLE IF NOT EXISTS spirals (
     link TEXT NOT NULL,
     sent_by TEXT DEFAULT NULL,

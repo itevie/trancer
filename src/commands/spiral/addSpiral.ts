@@ -2,6 +2,11 @@ import { HypnoCommand } from "../../types/command";
 import { addSpiral, hasSpiral } from "../../util/actions/spirals";
 import { getServerSettings } from "../../util/actions/settings";
 import config from "../../config.json";
+import { Attachment, Message } from "discord.js";
+import axios from "axios";
+import { resolve } from "path";
+import { createWriteStream } from "fs";
+import { addMoneyFor } from "../../util/actions/economy";
 
 const command: HypnoCommand = {
     name: "addspiral",
@@ -16,40 +21,83 @@ const command: HypnoCommand = {
     allowExceptions: true,
 
     handler: async (message, { oldArgs: args }) => {
-        // Get spiral to add
-        let content: string = "";
-        if (message.reference) {
-            content = (await message.fetchReference()).content;
-        } else if (args[0]) {
-            content = args[0];
+        // Get the message
+        let msg: Message = message.reference ? await message.fetchReference() : message;
+
+        // Try get the link
+        let link: string | null;
+
+        // Check for file
+        if (msg.attachments.size !== 0) {
+            // Check the first one
+            let attachment = msg.attachments.entries().next().value[1] as Attachment;
+
+            // Check if correct type
+            if (attachment.contentType !== "image/gif")
+                return message.reply(`Please provide a GIF as the attachment!`);
+
+            // Success
+            link = attachment.proxyURL;
+        } else if (msg.content.startsWith("https://")) {
+            link = msg.content.split(" ")[0];
         } else {
-            return message.reply(
-                `Please reply to a message which contains the spiral, or use \`${(await getServerSettings(message.guild.id)).prefix}spiral <link>\` :cyclone:`
-            );
-        }
-        content = content
-            .replace(/^(<)/, "")
-            .replace(/(>)$/, "");
-
-        // Validate
-        if (!content.match(/^(https:\/\/[^ ]{20,})/))
-            return message.reply(`Please provide an image`);
-
-        // Add it
-        if (await hasSpiral(content))
-            return message.reply(`That spiral already exists in the database!`);
-        await addSpiral(content, message.author.id);
-
-        console.log(`Added spiral: ${content}`);
-
-        // Done
-        const channel = (await message.client.channels.fetch(config.botServer.channels.logs));
-        if (channel.isTextBased()) {
-            await channel.send(`The following spiral was added by ${message.author.username}`);
-            await channel.send(content);
+            return message.reply(`Could not find an attachment or a link!`);
         }
 
-        return await message.reply(`Added, thank you :cyclone:`);
+        // Check if already exists
+        if (await hasSpiral(link))
+            return message.reply(`That spiral has already been added`);
+
+        // Fetch it
+        try {
+            let head = await axios.head(link);
+
+            // Check content-type
+            if (head.headers["content-type"] !== "image/gif")
+                return message.reply(`Expected a gif! Got: ${head.headers["content-type"]}`);
+
+            // Download it
+            let fileName = `${Date.now()}-${message.author.username}.gif`;
+            let path = resolve(__dirname + `/../../data/spirals/${fileName}`);
+
+            const writer = createWriteStream(path);
+
+            axios.get(link, {
+                responseType: "stream"
+            }).then(response => {
+                response.data.pipe(writer);
+
+                writer.on("error", async (err) => {
+                    console.log(err);
+                    await message.reply(`Failed to write the file :(\n(Added anyway, thanks)`);
+                    await addSpiral(link, message.author.id, "");
+                    writer.close();
+                });
+
+                writer.on("finish", async () => {
+                    // Send to the logs and get the created attachment
+                    const channel = (await message.client.channels.fetch(config.botServer.channels.logs));
+                    if (channel.isTextBased()) {
+                        // Send message
+                        await channel.send(`The following spiral was added by ${message.author.username}`);
+                        let createdMessage = await channel.send({ files: [path] });
+
+                        // Extract link
+                        let link = (createdMessage.attachments.entries().next().value[1] as Attachment).url;
+                        await addSpiral(link, message.author.id, fileName);
+                    }
+
+                    await addMoneyFor(msg.author.id, config.economy.spirals.max);
+
+                    // Done
+                    return message.reply(`Sucessfully added the spiral! Thanks, **${msg.author.username}** gained **${config.economy.spirals.min}${config.economy.currency}**!`);
+                });
+            });
+        } catch (err) {
+            console.log(err);
+            await addSpiral(link, message.author.id, "");
+            return message.reply(`Failed to download the spiral :(\nLink added directly`);
+        }
     }
 }
 

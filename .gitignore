@@ -7,3 +7,4 @@ src/data/spirals.txt
 src/data/ecosnapshotsr
 src/messages/rules.txt
 data_backups/
+src/data/spirals/*
