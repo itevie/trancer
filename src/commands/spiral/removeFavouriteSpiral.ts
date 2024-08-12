@@ -4,6 +4,7 @@ import { removeFavouriteSpiral } from "../../util/actions/userFavouriteSpirals";
 const command: HypnoCommand<{ id: number }> = {
     name: "removefavouritespiral",
     aliases: ["rfs"],
+    type: "spirals",
     description: "Remove a favourite spiral",
 
     args: {

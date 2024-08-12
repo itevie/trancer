@@ -84,13 +84,13 @@ const command: HypnoCommand = {
 
                         // Extract link
                         let link = (createdMessage.attachments.entries().next().value[1] as Attachment).url;
-                        await addSpiral(link, message.author.id, fileName);
+                        await addSpiral(link, msg.author.id, fileName);
                     }
 
                     await addMoneyFor(msg.author.id, config.economy.spirals.max);
 
                     // Done
-                    return message.reply(`Sucessfully added the spiral! Thanks, **${msg.author.username}** gained **${config.economy.spirals.min}${config.economy.currency}**!`);
+                    return message.reply(`Thanks! Sucessfully added the spiral! **${msg.author.username}** gained **${config.economy.spirals.min}${config.economy.currency}**!`);
                 });
             });
         } catch (err) {

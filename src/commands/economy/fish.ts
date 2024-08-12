@@ -22,12 +22,20 @@ const command: HypnoCommand = {
             await addMoneyFor(message.author.id, money);
             await setLastFish(message.author.id);
 
+            let fish: string[] = [];
+            for (let i = 0; i < Math.floor(Math.random() * 3) + 1; i++) {
+                let keys = Array.from(message.guild.members.cache.keys());
+                let name = message.guild.members.cache.get(keys[Math.floor(Math.random() * keys.length)]).user.username;
+                if (!fish.includes(name))
+                    fish.push(`**${name}**`);
+            }
+
             // Reply
             return message.reply({
                 embeds: [
                     createEmbed()
                         .setTitle(`You went fishing! 🎣`)
-                        .setDescription(`You caught some fishy people and got **${money}**${config.economy.currency}!`)
+                        .setDescription(`You caught ${fish.join(", ")} and earnt **${money}**${config.economy.currency}!`)
                 ]
             });
         }

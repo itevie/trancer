@@ -7,6 +7,7 @@ import { sentSpirals } from "./spiral";
 const command: HypnoCommand<{ id?: number }> = {
     name: "spiraldetails",
     aliases: ["sdetails", "sdet"],
+    type: "spirals",
     description: "Reply to a spiral the bot sent and get details about it, or send an ID",
 
     args: {
