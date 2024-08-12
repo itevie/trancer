@@ -17,7 +17,7 @@ const command: HypnoCommand = {
         // Check if they can fish
         if (time < 0) {
             // Give money
-            let money = randomFromRange(config.economy.fish.min, config.economy.fish.max);
+            let money = randomFromRange(config.economy.daily.min, config.economy.daily.max);
 
             await addMoneyFor(message.author.id, money);
             await setLastDaily(message.author.id);
