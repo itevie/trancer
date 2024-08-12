@@ -42,19 +42,17 @@ const command: HypnoCommand<{ badge: string }> = {
 
         // Fetch the data
         const aquired = await database.all(`SELECT * FROM aquired_badges WHERE badge_name = ?`, badgeId) as AquiredBadge[];
-        const usernames: string[] = [];
-        for await (const haver of aquired)
-            usernames.push((await message.client.users.fetch(haver.user)).username);
-        let text = usernames.join(", ");
+        if (aquired.length > 20)
+            return message.reply(`Too many people have this badge to display it.`);
 
         // Send embed
         return message.reply({
             embeds: [
                 createEmbed()
                     .setTitle(`Who has ${badge.emoji} ${badge.name}`)
-                    .setDescription(`${text.length > 1900 ? text.substring(0, 1900) : text}${text.length > 1900 ? "\n*There was too many usernames to display them all.*" : ""}`)
+                    .setDescription(`${text}`)
             ]
-        })
+        });
     }
 };
 
