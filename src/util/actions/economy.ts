@@ -27,3 +27,7 @@ export async function removeMoneyFor(userId: string, amount: number): Promise<vo
 export async function setLastFish(userId: string): Promise<void> {
     await database.run(`UPDATE economy SET last_fish = (?) WHERE user_id = (?)`, Date.now(), userId);
 }
+
+export async function setLastDaily(userId: string): Promise<void> {
+    await database.run(`UPDATE economy SET last_daily = (?) WHERE user_id = (?)`, Date.now(), userId);
+}

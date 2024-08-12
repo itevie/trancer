@@ -39,6 +39,11 @@
             "name": "providing spirals",
             "min": 10,
             "max": 10
+        },
+        "daily": {
+            "name": "collecting .daily",
+            "min": 20,
+            "max": 55
         }
     },
     "roles": {
