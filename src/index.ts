@@ -182,7 +182,7 @@ client.on("messageCreate", async message => {
 });
 
 client.login(
-    readFileSync(__dirname + "/../token.txt", "utf-8").trim()
+    readFileSync(__dirname + "/../token.txt", "utf-8")
 );
 
 process.on("uncaughtException", async (err) => {
