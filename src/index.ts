@@ -149,9 +149,18 @@ client.on("messageCreate", async message => {
                                 if (isNaN(parseInt(fullArgs[i])))
                                     return message.reply(`Invalid number provided for **${arg.name}**: ${fullArgs[i]}\n${codeblock}`);
                                 else details.args[arg.name] = parseInt(fullArgs[i]);
+                            else if (arg.type === "wholepositivenumber")
+                                if (isNaN(parseInt(fullArgs[i])) || parseInt(fullArgs[i]) < 0 || parseInt(fullArgs[i]) % 1 !== 0)
+                                    return message.reply(`Expected positive, whole number for **${arg.name}**: ${fullArgs[i]}\n${codeblock}`);
+                                else details.args[arg.name] = parseInt(fullArgs[i]);
                             // If its a string it can just go right through
                             else if (arg.type === "string")
                                 details.args[arg.name] = fullArgs[i];
+
+                            if (arg.mustBe) {
+                                if (details.args[arg.name] !== arg.mustBe)
+                                    return message.reply(`Argument **${arg.name}** must be: **${arg.mustBe}**\n${codeblock}`);
+                            }
                         }
                     }
                 }

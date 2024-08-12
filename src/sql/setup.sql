@@ -13,9 +13,15 @@ CREATE TABLE IF NOT EXISTS channel_imposition (
     every INT NOT NULL DEFAULT 10
 );
 
+ALTER TABLE server_settings add last_bumper TEXT DEFAULT null;
+ALTER TABLE server_settings add last_bump INT NOT NULL DEFAULT 0;
+ALTER TABLE server_settings add bump_reminded BOOLEAN DEFAULT false;
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
+    last_bump INT NOT NULL DEFAULT 0,
+    last_bumper TEXT DEFAULT NULL,
+    bump_reminded BOOLEAN DEFAULT false,
 
     sub_role_id TEXT DEFAULT NULL,
     tist_role_id TEXT DEFAULT NULL,

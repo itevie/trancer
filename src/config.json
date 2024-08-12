@@ -1,5 +1,6 @@
 {
     "owner": "395877903998648322",
+    "devBot": "1272342864004648981",
     "database": {
         "location": "../data.db"
     },
@@ -44,6 +45,9 @@
             "name": "collecting .daily",
             "min": 20,
             "max": 55
+        },
+        "coinflip": {
+            "name": "lipping a rigged coin (.rcf)"
         }
     },
     "roles": {
@@ -59,7 +63,8 @@
         "invite": "https://discord.gg/zBWq29apsy",
         "channels": {
             "logs": "1257425283217096868",
-            "quotes": "1257815880557920307"
+            "quotes": "1257815880557920307",
+            "bumps": "1257429174637826059"
         }
     },
     "exceptions": [

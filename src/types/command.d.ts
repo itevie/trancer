@@ -31,8 +31,9 @@ interface HypnoCommand<Args extends { [key: string]: any } = {}> {
 }
 
 interface Argument {
-    type: "string" | "number" | "user";
+    type: "string" | "number" | "wholepositivenumber" | "user";
     name: string,
     onMissing?: string,
     description?: string,
+    mustBe?: any,
 }
