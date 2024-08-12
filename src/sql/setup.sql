@@ -65,7 +65,6 @@ CREATE TABLE IF NOT EXISTS user_data (
     messages_sent INT NOT NULL DEFAULT 0
 );
 
-ALTER TABLE economy ADD last_daily INT NOT NULL DEFAULT 0;
 CREATE TABLE IF NOT EXISTS economy (
     user_id TEXT NOT NULL UNIQUE,
     balance INT NOT NULL DEFAULT 10,
