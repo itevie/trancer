@@ -27,7 +27,8 @@ const categoryEmojis: { [key: string]: string } = {
     "leaderboards": "📈",
     "messages": "💬",
     "quotes": "🗨️",
-    "spirals": "😵‍💫"
+    "spirals": "😵‍💫",
+    "cards": "🎴"
 };
 
 const command: HypnoCommand = {

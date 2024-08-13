@@ -98,3 +98,39 @@ CREATE TABLE IF NOT EXISTS aquired_badges (
     badge_name TEXT NOT NULL,
     date_aquired DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS decks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    name TEXT UNIQUE NOT NULL,
+    description TEXT NOT NULL DEFAULT "A card deck"
+);
+
+CREATE TABLE IF NOT EXISTS cards (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    deck INT NOT NULL REFERENCES decks(ID),
+    description TEXT DEFAULT NULL,
+    name TEXT NOT NULL,
+    file_name TEXT NOT NULL,
+    link TEXT NOT NULL,
+    rarity TEXT NOT NULL DEFAULT "uncommon",
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS aquired_cards (
+    card_id INTEGER REFERENCES cards(id),
+    user_id TEXT NOT NULL,
+    amount INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    name TEXT NOT NULL,
+    price INT NOT NULL,
+    description TEXT DEFAULT NULL
+);
+
+CREATE TABLE IF NOT EXISTS aquired_items (
+    item_id INTEGER REFERENCES items(id),
+    user_id TEXT NOT NULL,
+    amount INT NOT NULL DEFAULT 0
+);

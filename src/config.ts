@@ -64,6 +64,18 @@ const config = {
         }
     },
 
+    // ----- Card Stuff -----
+    cards: {
+        pullItemID: 1, // Create this using .+item (item name) (price),
+        weights: {
+            common: 0.5,
+            uncommon: 0.3,
+            rare: 0.25,
+            epic: 0.15,
+            mythic: 0.05
+        }
+    },
+
     // ----- Economy Settings -----
     economy: {
         currency: "🌀",
