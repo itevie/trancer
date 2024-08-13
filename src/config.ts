@@ -28,9 +28,11 @@ const config = {
     botServer: {
         id: "1257416273520758814",
         invite: "https://discord.gg/zBWq29apsy",
+
         roles: {
             member: "1257423790212907038"
         },
+
         channels: {
             logs: "1257417773483561031",
             quotes: "1257815880557920307",
@@ -74,6 +76,15 @@ const config = {
             epic: 0.15,
             mythic: 0.05
         }
+    },
+
+    // ----- Item drop settings -----
+    itemDrops: {
+        enabled: true,
+        frequency: 1.8e+6, // 30 minutes
+        channelExclusions: [
+            "1257417603568238684"
+        ]
     },
 
     // ----- Economy Settings -----
