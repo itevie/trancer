@@ -4,6 +4,7 @@ import { createEmbed } from "../util/other";
 
 client.on("guildMemberAdd", async member => {
     const channel = await client.channels.fetch(config.botServer.channels.welcomes);
+    await member.roles.add(config.botServer.roles.member);
     if (channel.isTextBased()) {
         await channel.send({
             content: `<@${member.user.id}>`,

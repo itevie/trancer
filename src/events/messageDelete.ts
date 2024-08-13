@@ -10,7 +10,7 @@ client.on("messageDelete", async message => {
             embeds: [
                 createEmbed()
                     .setTitle(`Message deleted in #${(message.channel as any).name}`)
-                    .setDescription(message.content)
+                    .setDescription(message.content || "*No content*")
                     .setColor("#FF0000")
                     .setAuthor({
                         iconURL: message.author.displayAvatarURL(),

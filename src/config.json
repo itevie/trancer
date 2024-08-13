@@ -61,6 +61,9 @@
     "botServer": {
         "id": "1257416273520758814",
         "invite": "https://discord.gg/zBWq29apsy",
+        "roles": {
+            "member": "1257423790212907038"
+        },
         "channels": {
             "logs": "1257417773483561031",
             "quotes": "1257815880557920307",

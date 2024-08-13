@@ -14,13 +14,29 @@ for (const messageFile of messageFiles) {
 }
 const types = Object.keys(messages).map(x => `\`${x}\``).join(", ");
 
+const categoryEmojis: { [key: string]: string } = {
+    "ai": "🤖",
+    "uncategorised": "❓",
+    "badges": "🥇",
+    "help": "📖",
+    "admin": "🛠️",
+    "fun": "🎮",
+    "counting": "🔢",
+    "economy": "🌀",
+    "imposition": "👉",
+    "leaderboards": "📈",
+    "messages": "💬",
+    "quotes": "🗨️",
+    "spirals": "😵‍💫"
+};
+
 const command: HypnoCommand = {
     name: "help",
     aliases: ["h", "commands", "cmds"],
     type: "help",
     description: `Get help on how to use the bot`,
 
-    handler: async (message) => {
+    handler: async (message, { serverSettings }) => {
         const categories: { [key: string]: string[] } = {};
 
         for (const i in commands) {
@@ -33,10 +49,8 @@ const command: HypnoCommand = {
         let text = "";
 
         for (const cat in categories) {
-            text += `**${cat}**\n${categories[cat].map(x => `\`${x}\``).join(", ")}\n\n`;
+            text += `**${categoryEmojis[cat] || ""} ${cat}**\n${categories[cat].map(x => `\`${x}\``).join(", ")}\n\n`;
         }
-
-        const serverSettings = await getServerSettings(message.guild.id);
 
         return message.reply({
             embeds: [

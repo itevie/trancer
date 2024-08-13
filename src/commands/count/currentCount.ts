@@ -13,7 +13,7 @@ const command: HypnoCommand = {
             return message.reply(`This server does not have counting enabled... but what if it did?`);
         }
 
-        return message.reply(`The **next** expected number is **${count.current_count + 1}**\nThe **highest** count is: **${count.highest_count}`);
+        return message.reply(`The **next** expected number is **${count.current_count + 1}**\nThe **highest** count is: **${count.highest_count}**`);
     }
 };
 
