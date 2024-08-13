@@ -16,6 +16,8 @@ const command: HypnoCommand = {
             text.push(`**${item.name}** - ${item.price}${config.economy.currency}\n- *${item.description ?? "No description"}*`);
         }
 
+        if (text.length === 0) text.push(`*No Items*`)
+
         return message.reply({
             embeds: [
                 createEmbed()
