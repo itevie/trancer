@@ -1,12 +1,15 @@
 import { HypnoCommand } from "../../types/command";
 import { addSpiral, hasSpiral } from "../../util/actions/spirals";
 import { getServerSettings } from "../../util/actions/settings";
-import config from "../../config.json";
+import config from "../../config";
 import { Attachment, Message } from "discord.js";
 import axios from "axios";
 import { resolve } from "path";
 import { createWriteStream } from "fs";
 import { addMoneyFor } from "../../util/actions/economy";
+import Logger from "../../util/Logger";
+
+let spiralLogger = new Logger("spirals");
 
 const command: HypnoCommand = {
     name: "addspiral",
@@ -75,6 +78,8 @@ const command: HypnoCommand = {
                 });
 
                 writer.on("finish", async () => {
+                    spiralLogger.log(`Sucessfully downloaded spiral ${link} to ${path}`);
+
                     // Send to the logs and get the created attachment
                     const channel = (await message.client.channels.fetch(config.botServer.channels.logs));
                     if (channel.isTextBased()) {

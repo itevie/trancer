@@ -1,6 +1,6 @@
 import { HypnoCommand } from "../../types/command";
 import createLeaderboardFromData from "../../util/createLeaderboard";
-import config from "../../config.json";
+import config from "../../config";
 import { getAllEconomy } from "../../util/actions/economy";
 import * as fs from "fs";
 import { checkBadges } from "../../util/badges";

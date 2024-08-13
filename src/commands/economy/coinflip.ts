@@ -1,6 +1,6 @@
 import { HypnoCommand } from "../../types/command";
 import { addMoneyFor, getEconomyFor, removeMoneyFor } from "../../util/actions/economy";
-import config from "../../config.json";
+import config from "../../config";
 
 const command: HypnoCommand<{ amount: number, confirm?: string }> = {
     name: "riggedcoinflip",

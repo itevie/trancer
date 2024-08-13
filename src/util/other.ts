@@ -1,5 +1,5 @@
 import { DataManager, EmbedBuilder, HexColorString } from "discord.js";
-import config from "../config.json";
+import config from "../config";
 import * as fs from "fs";
 import { getImpositionFor } from "./actions/imposition";
 
@@ -7,8 +7,7 @@ export function createEmbed(): EmbedBuilder {
     return new EmbedBuilder()
         .setColor(config.embed.color as HexColorString)
         .setTimestamp()
-        .setColor("#630091")
-        .setThumbnail(config.avatar);
+        .setColor("#630091");
 }
 
 export function getRandomImpositionFromFile(): string {

@@ -6,7 +6,7 @@ import { getAllAquiredBadgesFor } from "../../util/actions/badges";
 import badges from "../../util/badges";
 import { database } from "../../util/database";
 import { getAllEconomy, getEconomyFor } from "../../util/actions/economy";
-import config from "../../config.json";
+import config from "../../config";
 import { getUserData } from "../../util/actions/userData";
 
 const command: HypnoCommand<{ user?: User }> = {

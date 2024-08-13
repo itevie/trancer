@@ -1,3 +1,4 @@
+import config from "../../config";
 import { HypnoCommand } from "../../types/command";
 
 const command: HypnoCommand = {
@@ -6,7 +7,7 @@ const command: HypnoCommand = {
     description: "Get the GitHub link for this bot",
 
     handler: (message) => {
-        return message.reply(`https://github.com/itevie/hypno-discord-bot`);
+        return message.reply(`${config.credits.github}`);
     }
 };
 

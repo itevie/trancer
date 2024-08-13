@@ -1,5 +1,5 @@
 import { HypnoCommand } from "../../types/command";
-import config from "../../config.json";
+import config from "../../config";
 import { getEconomyFor, addMoneyFor, setLastFish } from "../../util/actions/economy";
 import { createEmbed, randomFromRange } from "../../util/other";
 

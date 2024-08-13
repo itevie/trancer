@@ -3,7 +3,7 @@ import { HypnoMessageHandler } from "../types/messageHandler";
 import { getServerCount } from "../util/actions/serverCount";
 import { database } from "../util/database";
 import { createEmbed } from "../util/other";
-import config from "../config.json";
+import config from "../config";
 
 const handler: HypnoMessageHandler = {
     name: "counter",

@@ -1,5 +1,5 @@
 import { HypnoMessageHandler } from "../types/messageHandler";
-import config from "../config.json";
+import config from "../config";
 import { randomFromRange } from "../util/other";
 import { addMoneyFor } from "../util/actions/economy";
 

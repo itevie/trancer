@@ -1,6 +1,6 @@
 import { HypnoCommand } from "../../types/command";
 import { getEconomyFor } from "../../util/actions/economy";
-import config from "../../config.json";
+import config from "../../config";
 import { User } from "discord.js";
 
 const command: HypnoCommand<{ user?: User }> = {

@@ -6,7 +6,7 @@ import { getServerSettings, setupSettingsFor } from "../util/actions/settings";
 import { createUserData, userDataExists } from "../util/actions/userData";
 import { generateCommandCodeBlock } from "../util/args";
 import { database } from "../util/database";
-import config from "../config.json";
+import config from "../config";
 
 client.on("messageCreate", async message => {
     // German commas go away
@@ -34,7 +34,7 @@ client.on("messageCreate", async message => {
     const settings = await getServerSettings(message.guild.id);
 
     if (message.content.trim() == `<@${client.user.id}>`)
-        return message.reply(`Hey! My prefix is: \`${settings.prefix}\`\nUse \`${settings.prefix}commands\` to view my commands! :cyclone:`);
+        return message.reply(`Hey! My prefix is: \`${settings.prefix}\`\nUse \`${settings.prefix}commands\` to view my commands!\nAnd use \`${settings.prefix}about\` to learn about me! :cyclone:`);
 
     // Check handlers
     for (const i in handlers)

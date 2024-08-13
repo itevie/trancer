@@ -1,7 +1,7 @@
 import { HypnoCommand } from "../../types/command";
 import { addQuote, genQuote } from "../../util/actions/quotes";
 import { database } from "../../util/database";
-import config from "../../config.json";
+import config from "../../config";
 
 const command: HypnoCommand = {
     name: "quote",

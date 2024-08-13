@@ -1,6 +1,6 @@
 import { HypnoMessageHandler } from "../types/messageHandler";
 import { addMessageSent } from "../util/actions/userData";
-import config from "../config.json";
+import config from "../config";
 
 const handler: HypnoMessageHandler = {
     name: "message-sent",

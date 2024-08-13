@@ -1,5 +1,5 @@
 import { HypnoCommand } from "../../types/command";
-import config from "../../config.json";
+import config from "../../config";
 
 const command: HypnoCommand = {
     name: "invite",

@@ -1,13 +1,13 @@
 import { Client, IntentsBitField, } from "discord.js";
 import { HypnoCommand } from "./types/command";
 import getAllFiles from "./util/getAllFiles";
-import config from "./config.json";
 import { connect } from "./util/database";
 import { createEmbed } from "./util/other";
 import { readFileSync } from "fs";
 import { HypnoMessageHandler } from "./types/messageHandler";
-import "./backend/index";
 import { checkBadges } from "./util/badges";
+import Logger from "./util/Logger";
+import config from "./config";
 
 export const commands: { [key: string]: HypnoCommand } = {};
 export const handlers: HypnoMessageHandler[] = [];
@@ -23,14 +23,14 @@ export const client = new Client({
     ],
 });
 
-client.on("ready", async () => {
-    console.log(`${client.user?.username} successfully logged in!`);
+const logger = new Logger("loader");
 
+client.on("ready", async () => {
     // Load events
     const eventFiles = getAllFiles(__dirname + "/events");
     for (const eventFile of eventFiles) {
         require(eventFile);
-        console.log(`Loaded event ${eventFile}`);
+        logger.log(`Loaded event: ${eventFile}`);
     }
 
     // Load commands
@@ -41,7 +41,7 @@ client.on("ready", async () => {
         commands[commandImport.name] = commandImport;
         for (const alias of commandImport.aliases || [])
             commands[alias] = commandImport;
-        console.log(`Loaded command: ${commandImport.name}`);
+        logger.log(`Loaded command: ${commandImport.name}`);
     }
 
     // Load handlers
@@ -50,7 +50,7 @@ client.on("ready", async () => {
     for (const handleFile of handleFiles) {
         const handleImport = require(handleFile).default as HypnoMessageHandler;
         handlers.push(handleImport);
-        console.log(`Loaded handler: ${handleImport.name}`);
+        logger.log(`Loaded handler: ${handleImport.name}`);
     }
     await connect();
 
@@ -58,6 +58,8 @@ client.on("ready", async () => {
     setTimeout(() => {
         checkBadges();
     }, 60000);
+
+    logger.log(`${client.user?.username} successfully logged in!`);
 });
 
 client.login(

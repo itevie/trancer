@@ -1,7 +1,7 @@
 import { HypnoMessageHandler } from "../types/messageHandler";
 import { createLeaderboard, insertLeaderboardEntry, leaderboardExists } from "../util/actions/leaderboards";
 import { addBump } from "../util/actions/userData";
-import config from "../config.json";
+import config from "../config";
 import { addMoneyFor } from "../util/actions/economy";
 import { createEmbed, randomFromRange } from "../util/other";
 import { database } from "../util/database";

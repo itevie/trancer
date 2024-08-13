@@ -1,6 +1,6 @@
 import { TextBasedChannel } from "discord.js";
 import { client } from "..";
-import config from "../config.json";
+import config from "../config";
 import { createEmbed } from "../util/other";
 
 client.on("messageDelete", async message => {

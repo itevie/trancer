@@ -1,7 +1,7 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/command";
 import { economyForUserExists, setMoneyFor } from "../../util/actions/economy";
-import config from "../../config.json";
+import config from "../../config";
 
 const command: HypnoCommand<{ user: User, amount: number }> = {
     name: "=money",

@@ -1,6 +1,6 @@
 import { HypnoCommand } from "../../types/command";
 import { database } from "../../util/database";
-import config from "../../config.json";
+import config from "../../config";
 
 const command: HypnoCommand = {
     name: "setleaderboarddescription",

@@ -2,7 +2,7 @@ import { AquiredBadge } from "../types/aquiredBadge";
 import { addBadgeFor, getAllAquiredBadges, removeBadgeFor } from "./actions/badges";
 import { getAllEconomy } from "./actions/economy";
 import { database } from "./database";
-import config from "../config.json";
+import config from "../config";
 
 export interface Badge {
     name: string,

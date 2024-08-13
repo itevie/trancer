@@ -1,5 +1,5 @@
 import { client } from "..";
-import config from "../config.json";
+import config from "../config";
 
 client.on("guildMemberRemove", async member => {
     const channel = await client.channels.fetch(config.botServer.channels.welcomes);
