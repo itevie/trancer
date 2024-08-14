@@ -1,4 +1,4 @@
-import { DataManager, EmbedBuilder, HexColorString } from "discord.js";
+import { DataManager, EmbedBuilder, EmbedData, HexColorString } from "discord.js";
 import config from "../config";
 import * as fs from "fs";
 import { getImpositionFor } from "./actions/imposition";
@@ -41,4 +41,18 @@ export function generateCode(length: number): string {
 
 export function randomFromRange(min: number, max: number) {
     return Math.floor(Math.random() * (max - min) + min);
+}
+
+export function fixMagicVariablesInEmbed(embed: EmbedBuilder, serverSettings: ServerSettings): EmbedBuilder {
+    // Base stuff
+    for (const i in embed) {
+        if (typeof embed[i] === "string")
+            embed[i] = embed[i].replace(/\$prefix/g, serverSettings.prefix);
+    }
+
+    // Fields
+    for (const i in embed.data.fields)
+        embed.data.fields[i].value = embed.data.fields[i].value.replace(/\$prefix/g, serverSettings.prefix);
+
+    return embed;
 }

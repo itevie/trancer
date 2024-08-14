@@ -2,6 +2,7 @@ import { User } from "discord.js";
 import { HypnoCommand } from "../../types/command";
 import { createEmbed } from "../../util/other";
 import config from "../../config";
+import { commands } from "../..";
 
 const command: HypnoCommand = {
     name: "about",
@@ -15,6 +16,12 @@ const command: HypnoCommand = {
             username = (await message.client.users.fetch(config.credits.creatorId)).username;
         } catch { }
 
+        let cmds: string[] = []
+        for (const i in commands) {
+            if (!cmds.includes(commands[i].name))
+                cmds.push(commands[i].name);
+        }
+
         return message.reply({
             embeds: [
                 createEmbed()
@@ -25,6 +32,7 @@ const command: HypnoCommand = {
                             name: "Details",
                             value: [
                                 ["Server Count", `${message.client.guilds.cache.size}`],
+                                ["Command Count", `${cmds.length}`]
                             ].map(x => `**${x[0]}**: ${x[1]}`).join("\n")
                         },
                         {
