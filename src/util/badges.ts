@@ -93,6 +93,20 @@ const badges: { [key: string]: Badge } = {
             return;
         }
     },
+    "mythiccard": {
+        name: "Mythic Card",
+        description: "Got a mythic card at some point",
+        emoji: ":flower_playing_cards:",
+        scan: async () => {
+            const cards = await database.all(`SELECT * FROM aquired_cards WHERE card_id IN (SELECT id FROM cards WHERE rarity = 'mythic');`) as AquiredCard[];
+            const aquired = await getAllAquiredBadges();
+
+            for (const card of cards) {
+                if (!aquired.find(x => x.user === card.user_id && x.badge_name === "mythiccard"))
+                    await addBadgeFor(card.user_id, "mythiccard")
+            }
+        }
+    },
     "eco#1": {
         name: "Economy #1",
         description: "At economy position #1",
