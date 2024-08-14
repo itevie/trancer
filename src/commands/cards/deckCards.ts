@@ -23,11 +23,12 @@ const command: HypnoCommand<{ deckName: string, rarity?: Rarity }> = {
     },
 
     handler: async (message, { args }) => {
-        if (!rarities.includes(args.rarity))
-            return message.reply("Invalid rarity!");
-
         let cards = await database.all(`SELECT * FROM cards WHERE deck IN (SELECT id FROM decks WHERE LOWER(NAME) = LOWER(?))`, args.deckName) as Card[];
-        if (args.rarity) cards = cards.filter(x => x.rarity === args.rarity);
+        if (args.rarity)
+            if (!rarities.includes(args.rarity))
+                return message.reply(`Invalid rarity`)
+            else
+                cards = cards.filter(x => x.rarity === args.rarity);
 
         return message.reply(`Here are the cards:\n\n${cards.map(x => `**${x.name}** (${x.id})`).join(", ")}`);
     }
