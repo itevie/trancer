@@ -55,7 +55,7 @@ const command: HypnoCommand<{ id: number, amount?: number, confirm?: string }> =
         await database.run(`UPDATE aquired_cards SET amount = amount - ? WHERE user_id = ? AND card_id = ?`, amount, message.author.id, card.id);
         await addMoneyFor(message.author.id, price);
 
-        return message.reply(`You sold **${card.name}** for **${price}${config.economy.currency}**!`);
+        return message.reply(`You sold **${amount} ${card.name}**(s) for **$${price}${config.economy.currency}**!`);
     }
 };
 

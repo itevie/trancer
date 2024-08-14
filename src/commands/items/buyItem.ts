@@ -35,7 +35,7 @@ const command: HypnoCommand<{ name: string, amount?: number }> = {
         let price = item.price * amount;
 
         // Check if user has enough money
-        if (item.price > eco.balance)
+        if (price > eco.balance)
             return message.reply(`You do not have **${price}${config.economy.currency}**`);
 
         // Give the user the item
