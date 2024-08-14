@@ -1,6 +1,6 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/command";
-import { getAllAquiredCardsFor, getCard } from "../../util/actions/cards";
+import { getAllAquiredCardsFor, getCardById } from "../../util/actions/cards";
 import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand<{ user?: User }> = {
@@ -33,7 +33,7 @@ const command: HypnoCommand<{ user?: User }> = {
         else {
             let text: string[] = [];
             for await (const card of cards) {
-                let actualCard = await getCard(card.card_id);
+                let actualCard = await getCardById(card.card_id);
                 text.push(`**${actualCard.name}** *${actualCard.rarity}*: ${card.amount}`);
             }
             embed.setDescription(text.join("\n"));

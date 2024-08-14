@@ -1,5 +1,5 @@
 import { HypnoCommand } from "../../types/command";
-import { getCard } from "../../util/actions/cards";
+import { getCardById } from "../../util/actions/cards";
 import { generateCardEmbed } from "../../util/cards";
 
 const command: HypnoCommand<{ id: number }> = {
@@ -18,7 +18,7 @@ const command: HypnoCommand<{ id: number }> = {
     },
 
     handler: async (message, { args }) => {
-        let card = await getCard(args.id);
+        let card = await getCardById(args.id);
         if (!card)
             return message.reply(`A card with that ID does not exist`);
 

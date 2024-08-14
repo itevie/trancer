@@ -12,7 +12,7 @@ export async function addCard(name: string, deckID: number, rarity: string, file
     return await database.get(`INSERT INTO cards (name, deck, rarity, file_name, link) VALUES (?, ?, ?, ?, ?) RETURNING *`, name, deckID, rarity, fileName, link);
 }
 
-export async function getCard(id: number): Promise<Card> {
+export async function getCardById(id: number): Promise<Card | undefined> {
     return await database.get(`SELECT * FROM cards WHERE id = ?`, id);
 }
 
