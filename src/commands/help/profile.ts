@@ -46,9 +46,9 @@ const command: HypnoCommand<{ user?: User }> = {
                     ["ID", user.id],
                     ["Imposition Registered", imposition.length],
                     ["Spirals Registered", spiralsGiven],
-                    ["Messages", userData.messages_sent],
-                    ["Bumps", userData.bumps],
-                    ["Balance", `${economy.balance}${config.economy.currency}`],
+                    ["Messages", userData?.messages_sent],
+                    ["Bumps", userData?.bumps],
+                    ["Balance", `${economy?.balance}${config.economy.currency}`],
                     ["Economy Position", `#${ecoPosition + 1}`],
                 ].map(x => `**${x[0]}**: ${x[1]}`).join("\n")
             );

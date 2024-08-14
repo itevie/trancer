@@ -120,8 +120,8 @@ const config = {
 
         daily: {
             name: "collecting .daily",
-            min: 20,
-            max: 55,
+            min: 75,
+            max: 150,
         },
 
         coinflip: {

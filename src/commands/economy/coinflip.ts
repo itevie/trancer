@@ -6,7 +6,7 @@ const command: HypnoCommand<{ amount: number, confirm?: string }> = {
     name: "riggedcoinflip",
     type: "economy",
     aliases: ["rcf"],
-    description: "Flip a ***RIGGED*** coin (30% chance of winning)",
+    description: "Flip a ***RIGGED*** coin (40% chance of winning)",
 
     args: {
         requiredArguments: 1,
@@ -35,7 +35,7 @@ const command: HypnoCommand<{ amount: number, confirm?: string }> = {
             if (!args.args.confirm)
                 return message.reply(`Please provide the confirm option when coinflipping large amounts of money.`);
 
-        let win = Math.random() < 0.3;
+        let win = Math.random() < 0.4;
 
         if (win) {
             await addMoneyFor(message.author.id, args.args.amount);
