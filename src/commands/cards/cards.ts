@@ -34,7 +34,7 @@ const command: HypnoCommand<{ user?: User }> = {
             let text: string[] = [];
             for await (const card of cards) {
                 let actualCard = await getCardById(card.card_id);
-                text.push(`**${actualCard.name}** *${actualCard.rarity}*: ${card.amount}`);
+                text.push(`**${actualCard.name}** *${actualCard.rarity} [${actualCard.id}]*: ${card.amount}`);
             }
             embed.setDescription(text.join("\n"));
         }
