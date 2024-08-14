@@ -29,10 +29,17 @@ export async function generateCardEmbed(card: Card): Promise<EmbedBuilder> {
     return embed;
 }
 
-export async function computeCardPrice(card: Card): Promise<number> {
-    let basePrice = 20;
-    let rarityMultiplier = rarities.indexOf(card.rarity) + 1;
-    let exist = (await getAllAquiredCards()).filter(x => x.card_id === card.id).length;
+const rarityBasePrices = {
+    "common": 20,
+    "uncommon": 40,
+    "rare": 100,
+    "epic": 200,
+    "mythic": 600
+};
 
-    return Math.round(Math.max((basePrice * (rarityMultiplier * 0.2)) / (exist / 20), basePrice));
-}
+export async function computeCardPrice(card: Card): Promise<number> {
+    let basePrice = rarityBasePrices[card.rarity];
+    //let exist = (await getAllAquiredCards()).filter(x => x.card_id === card.id).length;
+
+    return Math.round(basePrice);
+}   
