@@ -4,12 +4,14 @@ export async function economyForUserExists(userId: string): Promise<boolean> {
     return (await database.all(`SELECT * FROM economy WHERE user_id = (?)`, userId)).length !== 0;
 }
 
-export async function createEconomyFor(userId: string): Promise<void> {
-    await database.run(`INSERT INTO economy (user_id) VALUES ((?))`, userId);
+export async function createEconomyFor(userId: string): Promise<Economy> {
+    return await database.get(`INSERT INTO economy (user_id) VALUES ((?)) RETURNING *`, userId);
 }
 
 export async function getEconomyFor(userId: string): Promise<Economy> {
-    return (await database.all(`SELECT * FROM economy WHERE user_id = (?);`, userId))[0] as Economy;
+    let result = (await database.all(`SELECT * FROM economy WHERE user_id = (?);`, userId))[0] as Economy | undefined;
+    if (!result) result = await createEconomyFor(userId);
+    return result;
 }
 
 export async function getAllEconomy(): Promise<Economy[]> {

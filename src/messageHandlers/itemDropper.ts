@@ -1,4 +1,4 @@
-import { User } from "discord.js";
+import { Message, User } from "discord.js";
 import config from "../config";
 import { HypnoCommand } from "../types/command";
 import { HypnoMessageHandler } from "../types/messageHandler";

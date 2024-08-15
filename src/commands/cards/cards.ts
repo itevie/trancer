@@ -21,7 +21,7 @@ const command: HypnoCommand<{ user?: User }> = {
     handler: async (message, { args }) => {
         // Get details
         let user = args.user ? args.user : message.author;
-        let cards = await getAllAquiredCardsFor(user.id);
+        let cards = (await getAllAquiredCardsFor(user.id)).filter(x => x.amount > 0);
 
         // Create embed
         let embed = createEmbed()

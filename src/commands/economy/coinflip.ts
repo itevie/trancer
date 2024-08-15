@@ -1,50 +1,108 @@
+import { ActionRow, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageActionRowComponentBuilder, User } from "discord.js";
 import { HypnoCommand } from "../../types/command";
 import { addMoneyFor, getEconomyFor, removeMoneyFor } from "../../util/actions/economy";
 import config from "../../config";
+import { createEmbed } from "../../util/other";
 
-const command: HypnoCommand<{ amount: number, confirm?: string }> = {
-    name: "riggedcoinflip",
+const command: HypnoCommand<{ user: User, amount: number }> = {
+    name: "coinflip",
+    aliases: ["cf"],
+    description: "Coinflip with another user",
     type: "economy",
-    aliases: ["rcf"],
-    description: "Flip a ***RIGGED*** coin (40% chance of winning)",
 
     args: {
-        requiredArguments: 1,
+        requiredArguments: 2,
         args: [
+            {
+                name: "user",
+                type: "user"
+            },
             {
                 name: "amount",
                 type: "wholepositivenumber"
-            },
-            {
-                name: "confirm",
-                type: "string",
-                mustBe: "confirm"
             }
         ]
     },
 
-    handler: async (message, args) => {
-        let eco = await getEconomyFor(message.author.id);
+    handler: async (message, { args }) => {
+        let amount = args.amount;
 
-        // Check if has enough
-        if (args.args.amount > eco.balance)
-            return message.reply(`You do not have ${args.args.amount}${config.economy.currency}`);
+        if (message.author.id === args.user.id)
+            return message.reply(`You cannot coinflip yourself!`);
 
-        // Check if requires confirm
-        if (args.args.amount > 1000 || (eco.balance > 100 && args.args.amount > eco.balance / 2))
-            if (!args.args.confirm)
-                return message.reply(`Please provide the confirm option when coinflipping large amounts of money.`);
+        // Get the users ecos
+        let requesterEco = await getEconomyFor(message.author.id);
+        let requesteeEco = await getEconomyFor(args.user.id);
 
-        let win = Math.random() < 0.4;
+        // Check if both users have enough
+        if (requesterEco.balance < amount)
+            return message.reply(`You do not have enough to coinflip **${amount}${config.economy.currency}**!`);
+        if (requesteeEco.balance < amount)
+            return message.reply(`The other person does not have enough to coinflip **${amount}${config.economy.currency}**!`);
 
-        if (win) {
-            await addMoneyFor(message.author.id, args.args.amount);
-            return message.reply(`:green_circle: The coin landed in your favour! Your earnt ${args.args.amount}${config.economy.currency}!`);
-        } else {
-            await removeMoneyFor(message.author.id, args.args.amount);
-            return message.reply(`:red_circle: The coin did not land in your favour, you lost ${args.args.amount}${config.economy.currency} :(`);
-        }
+        // Send duel message
+        let msg = await message.reply({
+            content: `<@${args.user.id}>`,
+            embeds: [
+                createEmbed()
+                    .setTitle(`${args.user.username}, ${message.author.username} has requested a coinflip!`)
+                    .setDescription(`The coinflip is worth **${args.amount}${config.economy.currency}**!\n\n` +
+                        `Press the green button to accept this coinflip.\nClick the red button to cancel this`)
+            ],
+            components: [
+                // @ts-ignore
+                new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setLabel("Accept")
+                            .setStyle(ButtonStyle.Success)
+                            .setCustomId("accept"),
+
+                        new ButtonBuilder()
+                            .setLabel("Cancel")
+                            .setStyle(ButtonStyle.Danger)
+                            .setCustomId("cancel")
+                    )
+            ]
+        });
+
+        let collector = msg.createMessageComponentCollector()
+        collector.on("collect", async data => {
+            // Check if cancel
+            if (data.customId === "cancel") {
+                // Check if author
+                if (data.user.id !== message.author.id || data.user.id === args.user.id)
+                    return data.reply({
+                        content: `You are not the author of this coinflip!`,
+                        ephemeral: true,
+                    });
+                await msg.edit({
+                    embeds: [],
+                    content: `The coinflip between **${message.author.username}** and **${args.user.username}** was cancelled! `
+                });
+                collector.stop();
+            } else if (data.customId === "accept") {
+                // Check if right person
+                if (data.user.id !== args.user.id)
+                    return data.reply({
+                        content: "You are cannot accept a coinflip which isn't for you",
+                        ephemeral: true
+                    });
+                collector.stop();
+
+                let win = Math.random() < 0.5;
+
+                // Send init message
+                let m = await message.channel.send(`Flipping the coin between **${message.author.username}** and **${args.user.username}**...`);
+
+                setTimeout(async () => {
+                    let winner = win ? message.author : args.user;
+                    await m.edit(`**${winner.username}** won the coinflip for **${args.amount}${config.economy.currency}**!`);
+                    await addMoneyFor(winner.id, args.amount);
+                    await removeMoneyFor(message.author.id === winner.id ? args.user.id : message.author.id, args.amount);
+                }, 1000);
+            }
+        });
     }
 };
-
 export default command;
