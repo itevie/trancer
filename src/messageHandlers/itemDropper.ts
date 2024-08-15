@@ -47,7 +47,7 @@ const handler: HypnoMessageHandler = {
                 caughtBy = msg.author;
                 collector.stop();
                 await addItemFor(msg.author.id, item.id);
-                return message.reply(`Welldone! You got the **${item.name}**, it has been added to your inventory!`);
+                return msg.reply(`Welldone! You got the **${item.name}**, it has been added to your inventory!`);
             });
 
             collector.on("end", () => {

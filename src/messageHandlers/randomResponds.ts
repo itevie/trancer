@@ -5,9 +5,9 @@ const handler: HypnoMessageHandler = {
     description: "Reacts to certain messages with random responses",
 
     handler: message => {
-        if (message.content.match(/you['’]?re welcome/gi))
-            message.channel.send("smiles");
-        else if (message.content.match(/(kys)|(kill ?y?o?urself)/i))
+        //if (message.content.match(/you['’]?re welcome/gi))
+        //    message.channel.send("smiles");
+        if (message.content.match(/(kys)|(kill ?y?o?urself)/i))
             return message.reply(`Hey, that's not very nice!`);
     }
 }
