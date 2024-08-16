@@ -6,10 +6,11 @@ import config from "../../config";
 const command: HypnoCommand = {
     name: "globalmoneyfromwhat",
     aliases: ["gmfw", "gmoneyfromwhat"],
-    description: "Check where you got your money from",
+    description: "Check where everyone got money from",
     type: "economy",
 
     handler: async (message, { args }) => {
+        // Create an eco to add onto
         let currentEco: Economy = {
             from_commands: 0,
             from_gambling: 0,
@@ -24,6 +25,7 @@ const command: HypnoCommand = {
 
         let ecos = await getAllEconomy();
 
+        // Add all the shit to it
         for (const eco of ecos) {
             currentEco.from_commands += eco.from_commands;
             currentEco.from_gambling += eco.from_gambling;
@@ -32,6 +34,7 @@ const command: HypnoCommand = {
             currentEco.from_vc += eco.from_vc;
         }
 
+        // Done
         return message.reply({
             embeds: [
                 createEmbed()

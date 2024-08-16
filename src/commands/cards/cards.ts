@@ -2,6 +2,7 @@ import { User } from "discord.js";
 import { HypnoCommand } from "../../types/command";
 import { getAllAquiredCardsFor, getCardById } from "../../util/actions/cards";
 import { createEmbed } from "../../util/other";
+import { rarities } from "../../util/cards";
 
 const command: HypnoCommand<{ user?: User }> = {
     name: "cards",
@@ -21,7 +22,9 @@ const command: HypnoCommand<{ user?: User }> = {
     handler: async (message, { args }) => {
         // Get details
         let user = args.user ? args.user : message.author;
-        let cards = (await getAllAquiredCardsFor(user.id)).filter(x => x.amount > 0);
+        let cards = (await getAllAquiredCardsFor(user.id))
+            .filter(x => x.amount > 0)
+            .sort((a, b) => a.card_id - b.card_id);
 
         // Create embed
         let embed = createEmbed()
