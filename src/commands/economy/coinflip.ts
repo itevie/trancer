@@ -77,13 +77,14 @@ const command: HypnoCommand<{ user: User, amount: number }> = {
             // Check if cancel
             if (data.customId === "cancel") {
                 // Check if author
-                if (data.user.id !== message.author.id || data.user.id === args.user.id)
+                if (data.user.id !== message.author.id && data.user.id !== args.user.id)
                     return data.reply({
                         content: `You are not the author of this coinflip!`,
                         ephemeral: true,
                     });
                 await msg.edit({
                     embeds: [],
+                    components: [],
                     content: `The coinflip between **${message.author.username}** and **${args.user.username}** was cancelled! `
                 });
                 collector.stop();
@@ -103,11 +104,18 @@ const command: HypnoCommand<{ user: User, amount: number }> = {
                 // Send init message
                 let m = await message.channel.send(`Flipping the coin between **${message.author.username}** and **${args.user.username}**...`);
 
+                // Check if the person goes into negatives
+                let winner = win ? message.author : args.user;
+                let loser = message.author.id === winner.id ? args.user : message.author;
+
+                // Check if the loser would go into debt
+                if (((await getEconomyFor(loser.id)).balance - args.amount) < 0)
+                    return await m.edit(`Could not complete the coinflip, as the loser would go into negatives.`);
+
                 setTimeout(async () => {
-                    let winner = win ? message.author : args.user;
                     await m.edit(`**${winner.username}** won the coinflip for **${args.amount}${config.economy.currency}**!`);
                     await addMoneyFor(winner.id, args.amount, "gambling");
-                    await removeMoneyFor(message.author.id === winner.id ? args.user.id : message.author.id, args.amount, true);
+                    await removeMoneyFor(loser.id, args.amount, true);
                 }, 1000);
             }
         });
