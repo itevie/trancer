@@ -24,7 +24,7 @@ const handler: HypnoMessageHandler = {
             lastDrop = Date.now();
 
             // Get the item to give
-            let items = await database.all(`SELECT * FROM items;`) as Item[];
+            let items = await database.all(`SELECT * FROM items WHERE droppable = true;`) as Item[];
             if (items.length === 0) return;
             let item = items[Math.floor(Math.random() * items.length)];
 

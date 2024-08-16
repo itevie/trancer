@@ -130,11 +130,13 @@ CREATE TABLE IF NOT EXISTS aquired_cards (
     amount INT NOT NULL DEFAULT 0
 );
 
+ALTER TABLE items ADD droppable BOOLEAN NOT NULL DEFAULT true;
 CREATE TABLE IF NOT EXISTS items (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     name TEXT NOT NULL,
     price INT NOT NULL,
-    description TEXT DEFAULT NULL
+    description TEXT DEFAULT NULL,
+    droppable BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE TABLE IF NOT EXISTS aquired_items (

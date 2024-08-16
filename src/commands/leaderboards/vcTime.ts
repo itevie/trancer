@@ -13,7 +13,7 @@ const command: HypnoCommand = {
 
         return message.reply({
             embeds: [
-                (await createLeaderboardFromData(organised, "Who has yapped the most in VC?"))
+                (await createLeaderboardFromData(organised, "Who has yapped the most in VC?", "minutes"))
                     .setTitle(`Most VC time!`)
             ]
         })
