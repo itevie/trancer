@@ -47,6 +47,7 @@ const command: HypnoCommand<{ user?: User }> = {
                     ["Imposition Registered", imposition.length],
                     ["Spirals Registered", spiralsGiven],
                     ["Messages", userData?.messages_sent],
+                    ["VC Time", ("" + userData?.vc_time) + " minutes"],
                     ["Bumps", userData?.bumps],
                     ["Balance", `${economy?.balance}${config.economy.currency}`],
                     ["Economy Position", `#${ecoPosition + 1}`],

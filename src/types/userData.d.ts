@@ -3,4 +3,5 @@ interface UserData {
     guild_id: string,
     bumps: number,
     messages_sent: number,
+    vc_time: number,
 }

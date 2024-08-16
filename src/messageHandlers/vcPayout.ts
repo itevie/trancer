@@ -2,6 +2,7 @@ import { client } from "..";
 import config from "../config";
 import { HypnoMessageHandler } from "../types/messageHandler";
 import { addMoneyFor } from "../util/actions/economy";
+import { database } from "../util/database";
 import { randomFromRange } from "../util/other";
 
 let pastVC: string[] = [];
@@ -19,8 +20,10 @@ setInterval(async () => {
 
     // Award people who are still in it
     for await (const id of inVCrightNow)
-        if (pastVC.includes(id))
+        if (pastVC.includes(id)) {
             await addMoneyFor(id, randomFromRange(config.economy.vcPayout.min, config.economy.vcPayout.max), "vc");
+            await database.run(`UPDATE user_data SET vc_time = vc_time + 1 WHERE user_id = ?`, id);
+        }
 
     // Reset
     pastVC = inVCrightNow;

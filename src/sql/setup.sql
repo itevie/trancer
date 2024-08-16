@@ -69,11 +69,14 @@ CREATE TABLE IF NOT EXISTS votes (
     voted_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+    
+ALTER TABLE user_data ADD vc_time INT NOT NULL DEFAULT 0;
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,
     guild_id TEXT NOT NULL,
     bumps INT NOT NULL DEFAULT 0,
-    messages_sent INT NOT NULL DEFAULT 0
+    messages_sent INT NOT NULL DEFAULT 0,
+    vc_time INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS economy (
