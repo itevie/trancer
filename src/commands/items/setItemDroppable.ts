@@ -4,8 +4,7 @@ import { database } from "../../util/database";
 
 const command: HypnoCommand<{ itemId: number, value: boolean }> = {
     name: "=itemdroppable",
-    aliases: ["=itemdesc"],
-    description: "Sets an items description",
+    description: "Sets an items as droppable",
     type: "economy",
 
     botOwnerOnly: true,
