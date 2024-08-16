@@ -5,9 +5,10 @@ import { addMoneyFor } from "../util/actions/economy";
 import { database } from "../util/database";
 import { randomFromRange } from "../util/other";
 
-let pastVC: string[] = [];
+let pastVC1m: string[] = [];
+let pastVCactual: string[] = [];
 
-setInterval(async () => {
+async function getCurrentVC() {
     // Compute current
     let inVCrightNow: string[] = [];
     for await (const vcChannel of config.botServer.vcChannels) {
@@ -18,16 +19,32 @@ setInterval(async () => {
         }
     }
 
+    return inVCrightNow;
+
+}
+
+setInterval(async () => {
+    let inVCrightNow = await getCurrentVC();
+
     // Award people who are still in it
     for await (const id of inVCrightNow)
-        if (pastVC.includes(id)) {
+        if (pastVCactual.includes(id))
             await addMoneyFor(id, randomFromRange(config.economy.vcPayout.min, config.economy.vcPayout.max), "vc");
-            await database.run(`UPDATE user_data SET vc_time = vc_time + 1 WHERE user_id = ?`, id);
-        }
 
     // Reset
-    pastVC = inVCrightNow;
+    pastVCactual = inVCrightNow;
 }, config.economy.vcPayout.limit);
+
+setInterval(async () => {
+    let inVCrightNow = await getCurrentVC();
+
+    // Award people who are still in it
+    for await (const id of inVCrightNow)
+        if (pastVCactual.includes(id))
+            await database.run(`UPDATE user_data SET vc_time = vc_time + 1 WHERE user_id = ?`, id);
+
+    pastVC1m = inVCrightNow;
+}, 1000);
 
 const handler: HypnoMessageHandler = {
     name: "vc-handler",
