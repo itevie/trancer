@@ -73,6 +73,7 @@ const config = {
 
     // ----- Dawnagotchi -----
     dawnagotchi: {
+        hairDyeItemID: 2,
         actions: {
             feed: {
                 timeAdd: 3.6e+6 * 8

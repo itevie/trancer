@@ -30,7 +30,7 @@ const command: HypnoCommand<{ name: string, price: number }> = {
 
         // Create item
         let item = await database.get(`INSERT INTO items (name, price) VALUES (?, ?) RETURNING *`, args.name, args.price) as Item;
-        return message.reply(`Item created! ID: ${item.id}`);
+        return message.reply(`Item created! ID: **${item.id}**`);
     }
 };
 
