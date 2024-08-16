@@ -36,4 +36,5 @@ interface Argument {
     onMissing?: string,
     description?: string,
     mustBe?: any,
+    oneOf?: any[],
 }

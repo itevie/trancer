@@ -4,6 +4,8 @@ import { addMoneyFor, getEconomyFor, removeMoneyFor } from "../../util/actions/e
 import config from "../../config";
 import { createEmbed } from "../../util/other";
 
+const existingGames: { [key: string]: string } = {};
+
 const command: HypnoCommand<{ user: User, amount: number }> = {
     name: "coinflip",
     aliases: ["cf"],
@@ -39,6 +41,10 @@ const command: HypnoCommand<{ user: User, amount: number }> = {
             return message.reply(`You do not have enough to coinflip **${amount}${config.economy.currency}**!`);
         if (requesteeEco.balance < amount)
             return message.reply(`The other person does not have enough to coinflip **${amount}${config.economy.currency}**!`);
+
+        if (existingGames[message.author.id])
+            return message.reply(`You have already requested a coinflip!`);
+        existingGames[message.author.id] = args.user.id;
 
         // Send duel message
         let msg = await message.reply({
@@ -81,6 +87,7 @@ const command: HypnoCommand<{ user: User, amount: number }> = {
                     content: `The coinflip between **${message.author.username}** and **${args.user.username}** was cancelled! `
                 });
                 collector.stop();
+                delete existingGames[message.author.id];
             } else if (data.customId === "accept") {
                 // Check if right person
                 if (data.user.id !== args.user.id)
@@ -89,6 +96,7 @@ const command: HypnoCommand<{ user: User, amount: number }> = {
                         ephemeral: true
                     });
                 collector.stop();
+                delete existingGames[message.author.id];
 
                 let win = Math.random() < 0.5;
 

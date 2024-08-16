@@ -42,7 +42,7 @@ const command: HypnoCommand<{ deckId: number }> = {
         if (!rarity) rarity = Math.random() < 0.6 ? "common" : "uncommon";
 
         // Get the card
-        let cards = await database.all(`SELECT * FROM cards WHERE rarity = ? AND deck_id = ?`, rarity, args.deckId) as Card[];
+        let cards = await database.all(`SELECT * FROM cards WHERE rarity = ? AND deck = ?`, rarity, args.deckId) as Card[];
 
         // Check if there was any
         if (cards.length === 0)

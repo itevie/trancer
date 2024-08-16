@@ -1,4 +1,4 @@
-import { PermissionsBitField, User } from "discord.js";
+import { AutoModerationRuleTriggerType, PermissionsBitField, User } from "discord.js";
 import { client, commands, handlers } from "..";
 import { HypnoCommandDetails } from "../types/command";
 import { createEconomyFor, economyForUserExists } from "../util/actions/economy";
@@ -114,6 +114,15 @@ client.on("messageCreate", async message => {
                             if (arg.mustBe) {
                                 if (details.args[arg.name] !== arg.mustBe)
                                     return message.reply(`Argument **${arg.name}** must be: **${arg.mustBe}**\n${codeblock}`);
+                            }
+
+                            if (arg.oneOf) {
+                                let success = false;
+                                for (const i of arg.oneOf)
+                                    if (details.args[arg.name] === i)
+                                        success = true;
+                                if (!success)
+                                    return message.reply(`Parameter **${arg.name}** must be one of: ${arg.oneOf.join(", ")}\n${codeblock}`);
                             }
                         }
                     }

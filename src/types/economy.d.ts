@@ -3,6 +3,7 @@ interface Economy {
     balance: number,
     last_fish: number,
     last_daily: number,
+    last_dawn_care: number,
     from_messaging: number,
     from_vc: number,
     from_commands: number,

@@ -71,6 +71,21 @@ const config = {
         }
     },
 
+    // ----- Dawnagotchi -----
+    dawnagotchi: {
+        actions: {
+            feed: {
+                timeAdd: 3.6e+6 * 8
+            },
+            water: {
+                timeAdd: 3.6e+6 * 6
+            },
+            play: {
+                timeAdd: 3.6e+6 * 4
+            }
+        }
+    },
+
     // ----- Card Stuff -----
     cards: {
         pullItemID: 1, // Create this using .+item (item name) (price),
@@ -113,8 +128,15 @@ const config = {
 
         bump: {
             name: "bumping",
+            min: 40,
+            max: 60
+        },
+
+        dawn: {
+            name: "caring for dawn",
             min: 20,
-            max: 30
+            max: 40,
+            limit: 3.6e+6 * 2,
         },
 
         inviting: {

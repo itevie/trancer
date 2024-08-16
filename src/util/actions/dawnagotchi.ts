@@ -5,6 +5,8 @@ export async function getDawnagotchi(userId: string): Promise<Dawnagotchi | unde
     let result = await database.get(`SELECT * FROM dawnagotchi WHERE owner_id = ?`, userId) as Dawnagotchi | undefined;
     if (!result) return undefined;
 
+    console.log(result);
+
     // Validify dates
     result.next_drink = new Date(result.next_drink);
     result.next_feed = new Date(result.next_feed);
