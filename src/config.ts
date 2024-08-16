@@ -117,6 +117,12 @@ const config = {
             max: 30
         },
 
+        inviting: {
+            name: "inviting people",
+            min: 150,
+            max: 150,
+        },
+
         fish: {
             name: "fishing",
             min: 10,

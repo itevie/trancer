@@ -1,8 +1,11 @@
 import { client } from "..";
 import config from "../config";
+import { addMoneyFor } from "../util/actions/economy";
+import getInviteDetails from "../util/getInviteDetails";
 import { createEmbed } from "../util/other";
 
 client.on("guildMemberAdd", async member => {
+    // Add default role & send message
     const channel = await client.channels.fetch(config.botServer.channels.welcomes);
     await member.roles.add(config.botServer.roles.member);
     if (channel.isTextBased()) {
@@ -21,4 +24,19 @@ client.on("guildMemberAdd", async member => {
             ]
         });
     }
+
+    // Check if the invter can be fetched
+    setTimeout(async () => {
+        let inviteDetails = await getInviteDetails(member.client, member.guild.id, member.id);
+
+        // Check if suceeded
+        if (inviteDetails.inviterId) {
+            // Guards
+            let user = await client.users.fetch(inviteDetails.inviterId);
+            if (user.bot) return;
+
+            // Add money
+            await addMoneyFor(user.id, config.economy.inviting.min);
+        }
+    }, 1000);
 });
