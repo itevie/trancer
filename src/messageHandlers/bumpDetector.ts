@@ -60,7 +60,7 @@ const handler: HypnoMessageHandler = {
                 await message.reply({
                     embeds: [
                         createEmbed()
-                            .setTitle("Thanks for bumping our server!")
+                            .setTitle(`${user.username}, thanks for bumping our server!`)
                             .setDescription(`You have been awarded **${money}${config.economy.currency}**\n\nI will remind you again in **2 hours**!`)
                     ]
                 });
