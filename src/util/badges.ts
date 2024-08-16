@@ -108,7 +108,7 @@ const badges: { [key: string]: Badge } = {
             const aquired = await getAllAquiredBadges();
 
             for (const user of users) {
-                if (user.bumps > 15 && !aquired.find(x => x.user === user.user_id && x.badge_name === "bumper"))
+                if (user.bumps >= 15 && !aquired.find(x => x.user === user.user_id && x.badge_name === "bumper"))
                     await addBadgeFor(user.user_id, "bumper")
             }
         }
