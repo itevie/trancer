@@ -109,8 +109,8 @@ const command: HypnoCommand<{ user: User, amount: number }> = {
                 let loser = message.author.id === winner.id ? args.user : message.author;
 
                 // Check if the loser would go into debt
-                if (((await getEconomyFor(loser.id)).balance - args.amount) < 0)
-                    return await m.edit(`Could not complete the coinflip, as the loser would go into negatives.`);
+                if (((await getEconomyFor(loser.id)).balance) < args.amount)
+                    return await m.edit(`Could not complete the coinflip, as the loser no longer has **${args.amount}${config.economy.currency}**`);
 
                 setTimeout(async () => {
                     await m.edit(`**${winner.username}** won the coinflip for **${args.amount}${config.economy.currency}**!`);
