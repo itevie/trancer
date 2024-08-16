@@ -76,11 +76,21 @@ CREATE TABLE IF NOT EXISTS user_data (
     messages_sent INT NOT NULL DEFAULT 0
 );
 
+ALTER TABLE economy ADD from_helping INT NOT NULL DEFAULT 0;
+ALTER TABLE economy ADD from_messaging INT NOT NULL DEFAULT 0;
+ALTER TABLE economy ADD from_vc INT NOT NULL DEFAULT 0;
+ALTER TABLE economy ADD from_commands INT NOT NULL DEFAULT 0;
+ALTER TABLE economy ADD from_gambling INT NOT NULL DEFAULT 0;
 CREATE TABLE IF NOT EXISTS economy (
     user_id TEXT NOT NULL UNIQUE,
     balance INT NOT NULL DEFAULT 10,
     last_fish INT NOT NULL DEFAULT 0,
-    last_daily INT NOT NULL DEFAULT 0
+    last_daily INT NOT NULL DEFAULT 0,
+    from_messaging INT NOT NULL DEFAULT 0,
+    from_vc INT NOT NULL DEFAULT 0,
+    from_commands INT NOT NULL DEFAULT 0,
+    from_helping INT NOT NULL DEFAULT 0,
+    from_gambling INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS leaderboards (

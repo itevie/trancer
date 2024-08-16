@@ -1,5 +1,7 @@
 import { database } from "../database";
 
+type moneyAddReasons = "gambling" | "commands" | "messaging" | "vc" | "helping";
+
 export async function economyForUserExists(userId: string): Promise<boolean> {
     return (await database.all(`SELECT * FROM economy WHERE user_id = (?)`, userId)).length !== 0;
 }
@@ -18,8 +20,11 @@ export async function getAllEconomy(): Promise<Economy[]> {
     return (await database.all(`SELECT * FROM economy`)) as Economy[];
 }
 
-export async function addMoneyFor(userId: string, amount: number): Promise<void> {
+export async function addMoneyFor(userId: string, amount: number, reason?: moneyAddReasons): Promise<void> {
     await database.run(`UPDATE economy SET balance = balance + (?) WHERE user_id = (?)`, amount, userId);
+    if (reason) {
+        await database.run(`UPDATE economy SET from_${reason} = from_${reason} + ? WHERE User_id = ?`, amount, userId);
+    }
 }
 
 export async function removeMoneyFor(userId: string, amount: number): Promise<void> {

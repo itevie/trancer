@@ -64,7 +64,7 @@ const handler: HypnoMessageHandler = {
                             .setDescription(`You have been awarded **${money}${config.economy.currency}**\n\nI will remind you again in **2 hours**!`)
                     ]
                 });
-                await addMoneyFor(user.id, money);
+                await addMoneyFor(user.id, money, "helping");
             }
         }
     }

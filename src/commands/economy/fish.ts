@@ -19,7 +19,7 @@ const command: HypnoCommand = {
             // Give money
             let money = randomFromRange(config.economy.fish.min, config.economy.fish.max);
 
-            await addMoneyFor(message.author.id, money);
+            await addMoneyFor(message.author.id, money, "commands");
             await setLastFish(message.author.id);
 
             let fish: string[] = [];

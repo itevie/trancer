@@ -50,7 +50,7 @@ client.on("messageCreate", async message => {
 
     // Extract command
     const content = message.content.substring(settings.prefix.length, message.content.length).trim();
-    const fullArgs = content.split(" ");
+    const fullArgs = content.replace(/ {2,}/g, ' ').split(" ");
     const command = fullArgs.shift().toLowerCase();
 
     try {

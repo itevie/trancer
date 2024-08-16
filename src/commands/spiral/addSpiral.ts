@@ -92,7 +92,7 @@ const command: HypnoCommand = {
                         await addSpiral(link, msg.author.id, fileName);
                     }
 
-                    await addMoneyFor(msg.author.id, config.economy.spirals.max);
+                    await addMoneyFor(msg.author.id, config.economy.spirals.max, "helping");
 
                     // Done
                     return message.reply(`Thanks! Sucessfully added the spiral! **${msg.author.username}** gained **${config.economy.spirals.min}${config.economy.currency}**!`);

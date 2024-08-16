@@ -13,7 +13,7 @@ const handler: HypnoMessageHandler = {
     handler: async (message) => {
         if (config.economy.messagePayout.limit - (Date.now() - (timeouts[message.author.id] ?? 0)) < 0) {
             let money = randomFromRange(config.economy.messagePayout.min, config.economy.messagePayout.max);
-            await addMoneyFor(message.author.id, money);
+            await addMoneyFor(message.author.id, money, "messaging");
             timeouts[message.author.id] = Date.now();
         }
     }

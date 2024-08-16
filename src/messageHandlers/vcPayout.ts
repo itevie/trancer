@@ -20,7 +20,7 @@ setInterval(async () => {
     // Award people who are still in it
     for await (const id of inVCrightNow)
         if (pastVC.includes(id))
-            await addMoneyFor(id, randomFromRange(config.economy.vcPayout.min, config.economy.vcPayout.max));
+            await addMoneyFor(id, randomFromRange(config.economy.vcPayout.min, config.economy.vcPayout.max), "vc");
 
     // Reset
     pastVC = inVCrightNow;

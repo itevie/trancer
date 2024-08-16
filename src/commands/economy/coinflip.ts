@@ -98,7 +98,7 @@ const command: HypnoCommand<{ user: User, amount: number }> = {
                 setTimeout(async () => {
                     let winner = win ? message.author : args.user;
                     await m.edit(`**${winner.username}** won the coinflip for **${args.amount}${config.economy.currency}**!`);
-                    await addMoneyFor(winner.id, args.amount);
+                    await addMoneyFor(winner.id, args.amount, "gambling");
                     await removeMoneyFor(message.author.id === winner.id ? args.user.id : message.author.id, args.amount);
                 }, 1000);
             }

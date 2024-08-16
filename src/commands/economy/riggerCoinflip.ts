@@ -38,7 +38,7 @@ const command: HypnoCommand<{ amount: number, confirm?: string }> = {
         let win = Math.random() < 0.4;
 
         if (win) {
-            await addMoneyFor(message.author.id, args.args.amount);
+            await addMoneyFor(message.author.id, args.args.amount, "gambling");
             return message.reply(`:green_circle: The coin landed in your favour! Your earnt ${args.args.amount}${config.economy.currency}!`);
         } else {
             await removeMoneyFor(message.author.id, args.args.amount);

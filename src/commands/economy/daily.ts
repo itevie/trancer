@@ -19,7 +19,7 @@ const command: HypnoCommand = {
             // Give money
             let money = randomFromRange(config.economy.daily.min, config.economy.daily.max);
 
-            await addMoneyFor(message.author.id, money);
+            await addMoneyFor(message.author.id, money, "commands");
             await setLastDaily(message.author.id);
 
             // Reply
