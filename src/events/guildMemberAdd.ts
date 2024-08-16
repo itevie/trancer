@@ -6,6 +6,7 @@ import { createEmbed } from "../util/other";
 
 client.on("guildMemberAdd", async member => {
     if (client.user.id === config.devBot) return;
+    if (member.guild.id !== config.botServer.id) return;
 
     // Add default role & send message
     const channel = await client.channels.fetch(config.botServer.channels.welcomes);

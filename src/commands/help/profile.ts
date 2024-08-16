@@ -27,6 +27,7 @@ const command: HypnoCommand<{ user?: User }> = {
     handler: async (message, args) => {
         // Get user
         let user = args.args.user ? args.args.user : message.author;
+        let member = await message.guild.members.fetch(user.id);
 
         // Get details
         const economy = await getEconomyFor(user.id);
@@ -44,6 +45,7 @@ const command: HypnoCommand<{ user?: User }> = {
                 [
                     ["Username", user.username],
                     ["ID", user.id],
+                    ["Joined Server", member.joinedAt.toDateString()],
                     ["Imposition Registered", imposition.length],
                     ["Spirals Registered", spiralsGiven],
                     ["Messages", userData?.messages_sent],

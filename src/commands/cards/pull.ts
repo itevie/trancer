@@ -5,12 +5,22 @@ import { getAquiredItem, getItem, removeItemFor } from "../../util/actions/items
 import { generateCardEmbed } from "../../util/cards";
 import { database } from "../../util/database";
 
-const command: HypnoCommand = {
+const command: HypnoCommand<{ deckId: number }> = {
     name: "pull",
     type: "cards",
     description: "Get a new card, check command `rarities` to see chances, requires the card-pull item",
 
-    handler: async (message, args) => {
+    args: {
+        requiredArguments: 1,
+        args: [
+            {
+                name: "deckId",
+                type: "wholepositivenumber"
+            }
+        ]
+    },
+
+    handler: async (message, { args }) => {
         // Check if user has the pull item
         let item = await getAquiredItem(config.cards.pullItemID, message.author.id);
         let shopItem = await getItem(config.cards.pullItemID);
@@ -32,7 +42,7 @@ const command: HypnoCommand = {
         if (!rarity) rarity = Math.random() < 0.6 ? "common" : "uncommon";
 
         // Get the card
-        let cards = await database.all(`SELECT * FROM cards WHERE rarity = ?`, rarity) as Card[];
+        let cards = await database.all(`SELECT * FROM cards WHERE rarity = ? AND deck_id = ?`, rarity, args.deckId) as Card[];
 
         // Check if there was any
         if (cards.length === 0)
