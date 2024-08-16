@@ -78,7 +78,6 @@ CREATE TABLE IF NOT EXISTS user_data (
     vc_time INT NOT NULL DEFAULT 0
 );
 
-ALTER TABLE economy ADD last_dawn_care INT NOT NULL DEFAULT 0;
 CREATE TABLE IF NOT EXISTS economy (
     user_id TEXT NOT NULL UNIQUE,
     balance INT NOT NULL DEFAULT 10,
@@ -144,7 +143,6 @@ CREATE TABLE IF NOT EXISTS aquired_items (
     amount INT NOT NULL DEFAULT 0
 );
 
-DROP TABLE dawnagotchi;
 CREATE TABLE IF NOT EXISTS dawnagotchi (
     id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
     owner_id TEXT NOT NULL,
@@ -152,7 +150,7 @@ CREATE TABLE IF NOT EXISTS dawnagotchi (
 
     hair_color_hex TEXT NOT NULL DEFAULT '#FFB6C1',
 
-    next_feed INT NOT NULL DEFAULT unixepoch_ms(),
-    next_drink INT NOT NULL DEFAULT unixepoch_ms(),
-    next_play INT NOT NULL DEFAULT unixepoch_ms()
+    next_feed INT NOT NULL DEFAULT 0,
+    next_drink INT NOT NULL DEFAULT 0,
+    next_play INT NOT NULL DEFAULT 0
 );

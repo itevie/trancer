@@ -18,7 +18,6 @@ export default async function getInviteDetails(client: Client, serverId: string,
             }
         }
     }) as any).members[0] as { source_invite_code: string | null, inviter_id: string | null } | undefined;
-    console.log(result);
 
     if (!result) return null;
 

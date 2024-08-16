@@ -37,7 +37,7 @@ const command: HypnoCommand<{ type?: string }> = {
         // Get details
         let timeAdd = config.dawnagotchi.actions[action].timeAdd;
         let dbAction = { feed: "next_feed", water: "next_drink", play: "next_play" }[action];
-        let englishAction = { feed: "eat", water: "drink", play: "play"[action] };
+        let englishAction = { feed: "eat", water: "drink", play: "play"[action] }[action];
         let current = dawn[dbAction] as Date;
         let requirement = calculateRequirementFromDate(current);
 
@@ -49,13 +49,16 @@ const command: HypnoCommand<{ type?: string }> = {
         await database.run(`UPDATE dawnagotchi SET ${dbAction} = ? WHERE owner_id = ?`, current.getTime() + timeAdd, message.author.id);
 
         // Check if should give money
+        let moneyAwarded: number | null = null;
         if (config.economy.dawn.limit - (Date.now() - economy.last_dawn_care) < 0) {
+            moneyAwarded = randomFromRange(config.economy.dawn.min, config.economy.dawn.max);
             await database.run(`UPDATE economy SET last_dawn_care = ? WHERE user_id = ?`, Date.now(), message.author.id);
-            await addMoneyFor(message.author.id, randomFromRange(config.economy.dawn.min, config.economy.dawn.max), "commands");
+            await addMoneyFor(message.author.id, moneyAwarded, "commands");
         }
 
         // Done
         return message.reply({
+            content: moneyAwarded ? `You got **${moneyAwarded}${config.economy.currency}**!` : "",
             embeds: [
                 generateDawnagotchiEmbed(await getDawnagotchi(message.author.id))
             ]
