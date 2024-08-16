@@ -24,7 +24,7 @@ export function generateDawnagotchiEmbed(dawn: Dawnagotchi): EmbedBuilder {
             },
             {
                 name: "Details",
-                value: `**Created At**: ${dawn.created_at.toDateString()}`
+                value: `**Obtained At**: ${dawn.created_at.toDateString()}`
             }
         ])
         .setColor(dawn.hair_color_hex as any);

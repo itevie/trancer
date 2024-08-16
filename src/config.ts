@@ -134,10 +134,10 @@ const config = {
         },
 
         dawn: {
-            name: "caring for dawn",
+            name: "caring for your Dawn",
             min: 20,
             max: 40,
-            limit: 3.6e+6 * 2,
+            limit: 60000 * 30,
         },
 
         inviting: {

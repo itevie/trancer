@@ -5,6 +5,7 @@ import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand = {
     name: "shop",
+    aliases: ["store"],
     description: "Get a list of items you can buy",
     type: "economy",
 

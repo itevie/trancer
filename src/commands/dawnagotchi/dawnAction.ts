@@ -17,7 +17,7 @@ const command: HypnoCommand<{ type?: string }> = {
             {
                 name: "type",
                 type: "string",
-                oneOf: ["feed", "water", "play"]
+                oneOf: ["feed", "water", "play"],
             }
         ]
     },
@@ -50,6 +50,7 @@ const command: HypnoCommand<{ type?: string }> = {
 
         // Check if should give money
         let moneyAwarded: number | null = null;
+        console.log(economy);
         if (config.economy.dawn.limit - (Date.now() - economy.last_dawn_care) < 0) {
             moneyAwarded = randomFromRange(config.economy.dawn.min, config.economy.dawn.max);
             await database.run(`UPDATE economy SET last_dawn_care = ? WHERE user_id = ?`, Date.now(), message.author.id);

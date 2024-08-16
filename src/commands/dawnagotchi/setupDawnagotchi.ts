@@ -1,9 +1,10 @@
 import { HypnoCommand } from "../../types/command";
 import { getDawnagotchi, setupDawnagotchi } from "../../util/actions/dawnagotchi";
+import { generateDawnagotchiEmbed } from "../../util/dawnagotchi";
 
 const command: HypnoCommand = {
-    name: "setupdawnagotchi",
-    aliases: ["setupdawn"],
+    name: "obtaindawnagotchi",
+    aliases: ["setupdawn", "setupdawnagotchi", "obtaindawn"],
     description: "Setup your new adventure with Dawn!",
     type: "dawnagotchi",
 
@@ -14,9 +15,14 @@ const command: HypnoCommand = {
             return message.reply(`You already have a Dawnagotchi!`);
 
         // Setup
-        await setupDawnagotchi(message.author.id);
+        let dawn = await setupDawnagotchi(message.author.id);
 
-        return message.reply(`It has been setup!`);
+        return message.reply({
+            content: `A Dawn came up to you! And you obtained it! This must be the start of an amazing adventure`,
+            embeds: [
+                generateDawnagotchiEmbed(dawn)
+            ]
+        });
     }
 };
 
