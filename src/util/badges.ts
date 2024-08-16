@@ -71,6 +71,20 @@ const badges: { [key: string]: Badge } = {
                         await addBadgeFor(user.user_id, "botfuckerupper")
         }
     },
+    "500vcminutes": {
+        name: "500 VC Minutes",
+        description: "Been in a VC for 500 minutes (about 8 hours)",
+        emoji: ":telephone_receiver:",
+        scan: async () => {
+            const users = await database.all(`SELECT * FROM user_data;`) as UserData[];
+            const aquired = await getAllAquiredBadges();
+
+            for (const user of users) {
+                if (user.vc_time > 500 && !aquired.find(x => x.user === user.user_id && x.badge_name === "500vcminutes"))
+                    await addBadgeFor(user.user_id, "500vcminutes")
+            }
+        }
+    },
     "5kmoney": {
         name: "Money Maker",
         description: `Reached 5000${config.economy.currency} at some point`,
