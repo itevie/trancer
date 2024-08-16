@@ -40,7 +40,7 @@ setInterval(async () => {
 
     // Award people who are still in it
     for await (const id of inVCrightNow)
-        if (pastVCactual.includes(id))
+        if (pastVC1m.includes(id))
             await database.run(`UPDATE user_data SET vc_time = vc_time + 1 WHERE user_id = ?`, id);
 
     pastVC1m = inVCrightNow;
