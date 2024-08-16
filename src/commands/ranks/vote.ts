@@ -13,13 +13,13 @@ const command: HypnoCommand<{ user: User, leaderboard: string }> = {
         requiredArguments: 2,
         args: [
             {
+                name: "leaderboard",
+                type: "string"
+            },
+            {
                 name: "user",
                 type: "user"
             },
-            {
-                name: "leaderboard",
-                type: "string"
-            }
         ]
     },
 
