@@ -38,7 +38,12 @@ const config = {
             quotes: "1257815880557920307",
             bumps: "1257429174637826059",
             welcomes: "1257417250395263036"
-        }
+        },
+
+        vcChannels: [
+            "1257437016296263751",
+            "1257437054283808838"
+        ]
     },
 
     // ----- Embed Defaults -----
@@ -99,6 +104,13 @@ const config = {
             limit: 60000 // 1 minute
         },
 
+        vcPayout: {
+            name: "voicechatting",
+            min: 0,
+            max: 3,
+            limit: 60000 * 2 // 2 minutes
+        },
+
         bump: {
             name: "bumping",
             min: 20,
@@ -109,7 +121,7 @@ const config = {
             name: "fishing",
             min: 10,
             max: 20,
-            limit: 1800000 // 30 seconds
+            limit: 1800000 // 30 minutes
         },
 
         spirals: {
