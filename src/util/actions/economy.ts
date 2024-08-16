@@ -23,12 +23,15 @@ export async function getAllEconomy(): Promise<Economy[]> {
 export async function addMoneyFor(userId: string, amount: number, reason?: moneyAddReasons): Promise<void> {
     await database.run(`UPDATE economy SET balance = balance + (?) WHERE user_id = (?)`, amount, userId);
     if (reason) {
-        await database.run(`UPDATE economy SET from_${reason} = from_${reason} + ? WHERE User_id = ?`, amount, userId);
+        await database.run(`UPDATE economy SET from_${reason} = from_${reason} + ? WHERE user_id = ?`, amount, userId);
     }
 }
 
-export async function removeMoneyFor(userId: string, amount: number): Promise<void> {
+export async function removeMoneyFor(userId: string, amount: number, gamblingRelated?: boolean): Promise<void> {
     await database.run(`UPDATE economy SET balance = balance - (?) WHERE user_id = (?)`, amount, userId);
+    if (gamblingRelated) {
+        await database.run(`UPDATE economy SET from_gambling_lost = from_gambling_lost + ? WHERE user_id = ?`, amount, userId);
+    }
 }
 
 export async function setMoneyFor(userId: string, amount: number): Promise<void> {

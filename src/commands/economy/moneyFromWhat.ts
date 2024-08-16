@@ -6,6 +6,7 @@ import config from "../../config";
 
 const command: HypnoCommand<{ user?: User }> = {
     name: "moneyfromwhat",
+    aliases: ["mfw"],
     description: "Check where you got your money from",
     type: "economy",
 
@@ -31,6 +32,7 @@ const command: HypnoCommand<{ user?: User }> = {
                         [
                             ["Commands", eco.from_commands],
                             ["Gambling", eco.from_gambling],
+                            ["Gambling Lost", eco.from_gambling_lost],
                             ["Messaging", eco.from_messaging],
                             ["VC", eco.from_vc],
                             ["Helping", eco.from_helping]

@@ -70,7 +70,6 @@ CREATE TABLE IF NOT EXISTS votes (
 );
 
     
-ALTER TABLE user_data ADD vc_time INT NOT NULL DEFAULT 0;
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,
     guild_id TEXT NOT NULL,
@@ -79,6 +78,7 @@ CREATE TABLE IF NOT EXISTS user_data (
     vc_time INT NOT NULL DEFAULT 0
 );
 
+ALTER TABLE economy ADD from_gambling_lost INT NOT NULL DEFAULT 0; 
 CREATE TABLE IF NOT EXISTS economy (
     user_id TEXT NOT NULL UNIQUE,
     balance INT NOT NULL DEFAULT 10,

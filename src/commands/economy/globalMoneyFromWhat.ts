@@ -16,6 +16,7 @@ const command: HypnoCommand = {
             from_gambling: 0,
             from_helping: 0,
             from_messaging: 0,
+            from_gambling_lost: 0,
             from_vc: 0,
             balance: 0,
             user_id: "0",
@@ -31,6 +32,7 @@ const command: HypnoCommand = {
             currentEco.from_gambling += eco.from_gambling;
             currentEco.from_helping += eco.from_helping;
             currentEco.from_messaging += eco.from_messaging;
+            currentEco.from_gambling_lost += eco.from_gambling_lost
             currentEco.from_vc += eco.from_vc;
         }
 
@@ -43,6 +45,7 @@ const command: HypnoCommand = {
                         [
                             ["Commands", currentEco.from_commands],
                             ["Gambling", currentEco.from_gambling],
+                            ["Gambling Lost", currentEco.from_gambling_lost],
                             ["Messaging", currentEco.from_messaging],
                             ["VC", currentEco.from_vc],
                             ["Helping", currentEco.from_helping]

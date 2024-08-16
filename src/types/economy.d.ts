@@ -7,5 +7,6 @@ interface Economy {
     from_vc: number,
     from_commands: number,
     from_gambling: number,
+    from_gambling_lost: number,
     from_helping: number,
 }
