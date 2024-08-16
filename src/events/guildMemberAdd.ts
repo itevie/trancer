@@ -5,6 +5,8 @@ import getInviteDetails from "../util/getInviteDetails";
 import { createEmbed } from "../util/other";
 
 client.on("guildMemberAdd", async member => {
+    if (client.user.id === config.devBot) return;
+
     // Add default role & send message
     const channel = await client.channels.fetch(config.botServer.channels.welcomes);
     await member.roles.add(config.botServer.roles.member);
@@ -38,5 +40,5 @@ client.on("guildMemberAdd", async member => {
             // Add money
             await addMoneyFor(user.id, config.economy.inviting.min);
         }
-    }, 1000);
+    }, 30000);
 });
