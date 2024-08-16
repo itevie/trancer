@@ -4,17 +4,25 @@ import { rankExists } from "../../util/actions/ranks";
 import createLeaderboardFromData, { accumlateSortLeaderboardData } from "../../util/createLeaderboard";
 import { database } from "../../util/database";
 
-const command: HypnoCommand = {
+const command: HypnoCommand<{ name: string }> = {
     name: "leaderboard",
     aliases: ["lb"],
     description: "Get the top 10 users on a specific leaderboard",
-    type: "leaderboards",
+    type: "ranks",
 
-    handler: async (message, { oldArgs: args, serverSettings }) => {
+    args: {
+        requiredArguments: 1,
+        args: [
+            {
+                name: "name",
+                type: "string"
+            }
+        ]
+    },
+
+    handler: async (message, { args, serverSettings }) => {
         // Validate
-        if (!args[0])
-            return message.reply(`Please provide a leaderboard name! Like: \`${serverSettings.prefix}lb fish\``);
-        const name = args[0].toLowerCase();
+        const name = args.name.toLowerCase();
 
         // Check if the leaderboard exists
         if (!await rankExists(name))

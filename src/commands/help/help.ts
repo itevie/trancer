@@ -1,9 +1,10 @@
-import { MessageCreateOptions } from "discord.js";
+import { MessageCreateOptions, PermissionFlagsBits } from "discord.js";
 import { commands } from "../..";
 import { HypnoCommand } from "../../types/command";
 import { getServerSettings } from "../../util/actions/settings";
 import getAllFiles from "../../util/getAllFiles";
 import { createEmbed } from "../../util/other";
+import config from "../../config";
 
 const messageFiles = getAllFiles(__dirname + "/../../messages");
 export const messages: { [key: string]: MessageCreateOptions } = {};
@@ -28,23 +29,54 @@ const categoryEmojis: { [key: string]: string } = {
     "messages": "💬",
     "quotes": "🗨️",
     "spirals": "😵‍💫",
-    "cards": "🎴"
+    "cards": "🎴",
+    "ranks": "🌭"
 };
 
-const command: HypnoCommand = {
+const command: HypnoCommand<{ ignoreGuards: boolean }> = {
     name: "help",
     aliases: ["h", "commands", "cmds"],
     type: "help",
     description: `Get help on how to use the bot`,
 
-    handler: async (message, { serverSettings }) => {
+    args: {
+        requiredArguments: 0,
+        args: [
+            {
+                name: "ignoreGuards",
+                type: "boolean",
+                description: "Also shows commands you don't have access too"
+            }
+        ]
+    },
+
+    handler: async (message, { serverSettings, args }) => {
         const categories: { [key: string]: string[] } = {};
 
         for (const i in commands) {
             const cat = commands[i].type ?? "uncategorised";
-            if (!categories[cat]) categories[cat] = [];
-            if (!categories[cat].includes(commands[i].name))
-                categories[cat].push(commands[i].name);
+            let cmd = commands[i];
+
+            const add = () => {
+                if (!categories[cat]) categories[cat] = [];
+                if (!categories[cat].includes(cmd.name)) {
+                    categories[cat].push(cmd.name);
+                }
+            }
+
+            // Check guards
+            if (args.ignoreGuards)
+                if (args.ignoreGuards) {
+                    add();
+                    continue;
+                }
+            if (cmd.botOwnerOnly && message.author.id !== config.owner)
+                continue;
+            if (cmd.botServerOnly && message.guild.id !== config.botServer.id)
+                continue;
+            if (cmd.adminOnly && !message.member.permissions.has(PermissionFlagsBits.Administrator))
+                continue;
+            add();
         }
 
         let text = "";

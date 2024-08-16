@@ -4,7 +4,7 @@ import { database } from "../../util/database";
 const command: HypnoCommand = {
     name: "leaderboardlist",
     aliases: ["lbl"],
-    type: "leaderboards",
+    type: "ranks",
     description: "Get a list of active leaderboards",
 
     handler: async (message) => {

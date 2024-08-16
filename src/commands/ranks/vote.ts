@@ -4,28 +4,32 @@ import { HypnoCommand } from "../../types/command";
 import { database } from "../../util/database";
 import { rankExists } from "../../util/actions/ranks";
 
-const command: HypnoCommand = {
+const command: HypnoCommand<{ user: User, leaderboard: string }> = {
     name: "vote",
     description: "Vote for a user on a leaderboard",
-    type: "leaderboards",
+    type: "ranks",
 
-    handler: async (message, { oldArgs: args, serverSettings }) => {
-        if (!args[0] || !args[1])
-            return message.reply(`Please provide a leaderboard name, and a user, like: \`${serverSettings.prefix}vote <leaderboard> <user mention>\``);
-        const leaderboard = args[0].toLowerCase();
-        const userId = args[1]?.replace(/[<>@]/g, "");
-        let user: User;
+    args: {
+        requiredArguments: 2,
+        args: [
+            {
+                name: "user",
+                type: "user"
+            },
+            {
+                name: "leaderboard",
+                type: "string"
+            }
+        ]
+    },
+
+    handler: async (message, { args, serverSettings }) => {
+        const leaderboard = args.leaderboard.toLowerCase();
+        const user = args.user;
 
         // Check if the rank exists
         if (!await rankExists(leaderboard))
             return message.reply(`That leaderboard does not exist! But can be created using \`${serverSettings.prefix}createrank ${leaderboard}\``);
-
-        // Try fetch the user to make sure it exists
-        try {
-            user = await client.users.fetch(userId);
-        } catch {
-            return message.reply(`That user does not exist!`);
-        }
 
         // Check if self
         if (user.id === message.author.id)

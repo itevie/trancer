@@ -5,7 +5,7 @@ import config from "../../config";
 const command: HypnoCommand = {
     name: "setleaderboarddescription",
     aliases: ["slbdesc", "setlbdesc"],
-    type: "leaderboards",
+    type: "ranks",
     description: "Set a leaderboard's description",
 
     handler: async (message, { oldArgs: args, serverSettings }) => {

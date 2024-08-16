@@ -103,6 +103,10 @@ client.on("messageCreate", async message => {
                                 if (isNaN(parseInt(fullArgs[i])) || parseInt(fullArgs[i]) < 0 || parseInt(fullArgs[i]) % 1 !== 0)
                                     return message.reply(`Expected positive, whole number for **${arg.name}**: ${fullArgs[i]}\n${codeblock}`);
                                 else details.args[arg.name] = parseInt(fullArgs[i]);
+                            else if (arg.type === "boolean")
+                                if (["true", "false", "yes", "no", "t", "f"].includes(fullArgs[i]))
+                                    details.args[arg.name] = { true: true, false: false, yes: true, no: false, t: true, f: false }[fullArgs[i].toLowerCase()]
+                                else return message.reply(`Expected true or false for parameter **${arg.name}**\n${codeblock}`)
                             // If its a string it can just go right through
                             else if (arg.type === "string")
                                 details.args[arg.name] = fullArgs[i];

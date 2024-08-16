@@ -2,15 +2,24 @@ import { HypnoCommand } from "../../types/command";
 import { rankExists } from "../../util/actions/ranks";
 import { database } from "../../util/database";
 
-const command: HypnoCommand = {
+const command: HypnoCommand<{ name: string }> = {
     name: "createrank",
     description: "Creates a rankable leaderboard",
-    type: "leaderboards",
+    type: "ranks",
 
-    handler: async (message, { oldArgs: args, serverSettings }) => {
+    args: {
+        requiredArguments: 1,
+        args: [
+            {
+                name: "name",
+                type: "string",
+            }
+        ]
+    },
+
+    handler: async (message, { args, serverSettings }) => {
         // Provide args
-        if (!args[0]) return message.reply(`Please provide a rank name`);
-        const name = args[0].toLowerCase();
+        const name = args.name.toLowerCase();
 
         // Check if it already exists
         if (await rankExists(name))

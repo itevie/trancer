@@ -1,6 +1,6 @@
 import { Message } from "discord.js"
 
-type HypnoCommandType = "economy" | "cards" | "badges" | "counting" | "spirals" | "quotes" | "help" | "imposition" | "uncategorised" | "fun" | "admin" | "messages" | "leaderboards" | "ai";
+type HypnoCommandType = "ranks" | "economy" | "cards" | "badges" | "counting" | "spirals" | "quotes" | "help" | "imposition" | "uncategorised" | "fun" | "admin" | "messages" | "leaderboards" | "ai";
 
 interface HypnoCommandDetails<Args extends { [key: string]: any } = {}> {
     serverSettings: ServerSettings,
@@ -31,7 +31,7 @@ interface HypnoCommand<Args extends { [key: string]: any } = {}> {
 }
 
 interface Argument {
-    type: "string" | "number" | "wholepositivenumber" | "user";
+    type: "string" | "number" | "wholepositivenumber" | "user" | "boolean";
     name: string,
     onMissing?: string,
     description?: string,
