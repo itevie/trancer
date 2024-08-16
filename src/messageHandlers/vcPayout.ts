@@ -44,7 +44,7 @@ setInterval(async () => {
             await database.run(`UPDATE user_data SET vc_time = vc_time + 1 WHERE user_id = ?`, id);
 
     pastVC1m = inVCrightNow;
-}, 1000);
+}, 60000);
 
 const handler: HypnoMessageHandler = {
     name: "vc-handler",
