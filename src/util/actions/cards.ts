@@ -1,7 +1,7 @@
 import { database } from "../database";
 
 export async function getDeckByName(name: string): Promise<Deck> {
-    return (await database.get(`SELECT * FROM decks WHERE name = ?`, name)) as Deck;
+    return (await database.get(`SELECT * FROM decks WHERE LOWER(name) = LOWER(?)`, name)) as Deck;
 }
 
 export async function getDeckById(id: number): Promise<Deck> {

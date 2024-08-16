@@ -110,6 +110,8 @@ client.on("messageCreate", async message => {
                             // If its a string it can just go right through
                             else if (arg.type === "string")
                                 details.args[arg.name] = fullArgs[i];
+                            else if (arg.type === "any")
+                                details.args[arg.name] = fullArgs[i];
 
                             if (arg.mustBe) {
                                 if (details.args[arg.name] !== arg.mustBe)
