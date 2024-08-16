@@ -106,9 +106,9 @@ const config = {
 
         vcPayout: {
             name: "voicechatting",
-            min: 0,
-            max: 3,
-            limit: 60000 * 2 // 2 minutes
+            min: 5,
+            max: 15,
+            limit: 60000 * 5 // 5 minutes
         },
 
         bump: {
