@@ -1,3 +1,4 @@
+import { addMoneyTransaction } from "../analytics";
 import { database } from "../database";
 
 type moneyAddReasons = "gambling" | "commands" | "messaging" | "vc" | "helping";
@@ -21,21 +22,26 @@ export async function getAllEconomy(): Promise<Economy[]> {
 }
 
 export async function addMoneyFor(userId: string, amount: number, reason?: moneyAddReasons): Promise<void> {
-    await database.run(`UPDATE economy SET balance = balance + (?) WHERE user_id = (?)`, amount, userId);
+    let eco = await database.get(`UPDATE economy SET balance = balance + ? WHERE user_id = ? RETURNING *`, amount, userId) as Economy;
     if (reason) {
         await database.run(`UPDATE economy SET from_${reason} = from_${reason} + ? WHERE user_id = ?`, amount, userId);
     }
+
+    await addMoneyTransaction(userId, eco.balance);
 }
 
 export async function removeMoneyFor(userId: string, amount: number, gamblingRelated?: boolean): Promise<void> {
-    await database.run(`UPDATE economy SET balance = balance - (?) WHERE user_id = (?)`, amount, userId);
+    let eco = await database.get(`UPDATE economy SET balance = balance - (?) WHERE user_id = (?) RETURNING *`, amount, userId) as Economy;
     if (gamblingRelated) {
         await database.run(`UPDATE economy SET from_gambling_lost = from_gambling_lost + ? WHERE user_id = ?`, amount, userId);
     }
+
+    await addMoneyTransaction(userId, eco.balance);
 }
 
 export async function setMoneyFor(userId: string, amount: number): Promise<void> {
-    await database.run(`UPDATE economy SET balance = (?) WHERE user_id = (?)`, amount, userId);
+    let eco = await database.get(`UPDATE economy SET balance = (?) WHERE user_id = (?) RETURNING *`, amount, userId) as Economy;
+    await addMoneyTransaction(userId, eco.balance);
 }
 
 export async function setLastFish(userId: string): Promise<void> {

@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS money_transactions (
+    id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
+    user_id TEXT NOT NULL,
+    balance INTEGER NOT NULL,
+    added_at INT NOT NULL DEFAULT 0
+);

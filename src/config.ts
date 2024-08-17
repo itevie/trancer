@@ -16,6 +16,14 @@ const config = {
         location: path.resolve(
             // This is where the database is located
             __dirname + "/../data.db"
+        ),
+    },
+
+    analytics: {
+        enabled: true,
+        location: path.resolve(
+            // This is where the ANALYTICS database is located
+            __dirname + "/../analytics_data.db",
         )
     },
 

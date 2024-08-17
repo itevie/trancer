@@ -8,6 +8,7 @@ import { HypnoMessageHandler } from "./types/messageHandler";
 import { checkBadges } from "./util/badges";
 import Logger from "./util/Logger";
 import config from "./config";
+import { connectAnalytic } from "./util/analytics";
 
 export const commands: { [key: string]: HypnoCommand } = {};
 export const handlers: HypnoMessageHandler[] = [];
@@ -55,6 +56,7 @@ client.on("ready", async () => {
         logger.log(`Loaded handler: ${handleImport.name}`);
     }
     await connect();
+    await connectAnalytic();
 
     checkBadges();
     setTimeout(() => {
