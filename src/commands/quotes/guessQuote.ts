@@ -52,7 +52,12 @@ const command: HypnoCommand = {
 
             // Check what happened
             if (!correct)
-                return m.reply(`You got it wrong! :cyclone:`);
+                return m.reply({
+                    content: "You got it wrong! :cyclone:",
+                    embeds: [
+                        await genQuote(quote)
+                    ]
+                });
 
             // Success
             return m.reply({
