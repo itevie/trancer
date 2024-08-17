@@ -14,6 +14,7 @@ const command: HypnoCommand = {
 
     handler: async (message, args) => {
         const transations = await getMoneyTransations(message.author.id);
+        console.log(transations);
 
         const configuration: ChartConfiguration = {
             type: 'line',
