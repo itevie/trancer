@@ -31,7 +31,6 @@ export async function connectAnalytic(): Promise<void> {
 // ----- Analytical SQL Functions -----
 export async function addMoneyTransaction(userId: string, balance: number): Promise<void> {
     if (!config.analytics.enabled) return;
-    analyticDatabaseLogger.log(`Added: ${userId}: ${balance}`);
     await analyticDatabase.run(`INSERT INTO money_transactions (user_id, balance, added_at) VALUES (?, ?, ?)`, userId, balance, Date.now());
     return;
 }

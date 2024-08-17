@@ -1,6 +1,6 @@
 import { Message } from "discord.js"
 
-type HypnoCommandType = "dawnagotchi" | "ranks" | "economy" | "cards" | "badges" | "counting" | "spirals" | "quotes" | "help" | "imposition" | "uncategorised" | "fun" | "admin" | "messages" | "leaderboards" | "ai";
+type HypnoCommandType = "analytics" | "dawnagotchi" | "ranks" | "economy" | "cards" | "badges" | "counting" | "spirals" | "quotes" | "help" | "imposition" | "uncategorised" | "fun" | "admin" | "messages" | "leaderboards" | "ai";
 
 interface HypnoCommandDetails<Args extends { [key: string]: any } = {}> {
     serverSettings: ServerSettings,
