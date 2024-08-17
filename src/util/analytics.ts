@@ -39,3 +39,8 @@ export async function getMoneyTransations(userId: string): Promise<MoneyTransact
     if (!config.analytics.enabled) return [];
     return await analyticDatabase.all(`SELECT * FROM money_transactions WHERE user_id = ?`, userId) as MoneyTransaction[];
 }
+
+export async function getAllMoneyTransations(): Promise<MoneyTransaction[]> {
+    if (!config.analytics.enabled) return [];
+    return await analyticDatabase.all(`SELECT * FROM money_transactions `) as MoneyTransaction[];
+}
