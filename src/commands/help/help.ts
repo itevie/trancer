@@ -25,12 +25,14 @@ const categoryEmojis: { [key: string]: string } = {
     "counting": "🔢",
     "economy": "🌀",
     "imposition": "👉",
-    "leaderboards": "📈",
+    "leaderboards": "🏆",
     "messages": "💬",
     "quotes": "🗨️",
     "spirals": "😵‍💫",
     "cards": "🎴",
-    "ranks": "🌭"
+    "ranks": "🌭",
+    "analytics": "📈",
+    "dawnagotchi": "🏳‍🌈"
 };
 
 const command: HypnoCommand<{ ignoreGuards: boolean }> = {
