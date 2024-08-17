@@ -45,6 +45,7 @@ const command: HypnoCommand = {
                 compareTwoStrings(response, user.username) > 0.8
                 || (user.displayName && compareTwoStrings(response, user.displayName.replace(/[ ]/g, "")) > 0.6)
                 || user.username.toLowerCase().startsWith(response)
+                || user.username.toLowerCase() === response
                 || user.displayName.toLowerCase().startsWith(response)
                 || response == user.id
             )
