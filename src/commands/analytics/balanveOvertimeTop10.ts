@@ -27,7 +27,7 @@ const command: HypnoCommand<{ user?: User }> = {
     },
 
     handler: async (message, { args }) => {
-        const users = (await getAllEconomy()).sort((a, b) => b.balance - a.balance).slice(0, 9);
+        const users = (await getAllEconomy()).sort((a, b) => b.balance - a.balance).slice(0, 15);
         const userIDs = users.map(x => x.user_id);
         const usernames: { [key: string]: string } = {};
         for await (const id of userIDs)
@@ -76,7 +76,7 @@ const command: HypnoCommand<{ user?: User }> = {
         }
 
         const chartData: ChartDataset[] = [];
-        const colors = "FF0000,00FF00,0000FF,FFFF00,00FFFF,FF00FF,BDB5D5,FFB6C1,AA336A,CF9FFF".split(",").map(x => `#${x}`);
+        const colors = "FF0000,00FF00,0000FF,FFFF00,00FFFF,FF00FF,BDB5D5,FFB6C1,AA336A,CF9FFF,00A36C,CC5500,C9CC3F,FF00FF,F28C28".split(",").map(x => `#${x}`);
         let index = 0;
 
         for (const d in data) {
