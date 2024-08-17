@@ -1,4 +1,5 @@
 data.db
+analytics_data.db
 token.txt
 node_modules/
 src/website/node_modules/
