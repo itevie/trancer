@@ -22,7 +22,8 @@ const command: HypnoCommand<{ useMessagesSent?: boolean }> = {
         args: [
             {
                 name: "useMessagesSent",
-                type: "boolean"
+                type: "boolean",
+                description: "Base the top 15 off of messages instead of economy"
             }
         ]
     },
@@ -111,6 +112,7 @@ const command: HypnoCommand<{ useMessagesSent?: boolean }> = {
 
         // Done
         return message.reply({
+            content: `Showing top 15 users in **${args.useMessagesSent ? "messages" : "economy"}** leaderboard`,
             files: [attachment]
         });
     }
