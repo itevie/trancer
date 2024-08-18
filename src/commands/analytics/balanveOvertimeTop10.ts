@@ -4,13 +4,14 @@ import { ChartJSNodeCanvas } from "chartjs-node-canvas";
 import { AttachmentBuilder, User } from "discord.js";
 import { getAllMoneyTransations } from "../../util/analytics";
 import { getAllEconomy } from "../../util/actions/economy";
+import { getAllGuildsUserData } from "../../util/actions/userData";
 
 const width = 1000;
 const height = 600;
 const backgroundColour = "#111111";
 const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height, backgroundColour });
 
-const command: HypnoCommand<{ user?: User }> = {
+const command: HypnoCommand<{ useMessagesSent?: boolean }> = {
     name: "balanceovertimetop10",
     aliases: ["balovertop10", "bott"],
     type: "analytics",
@@ -20,14 +21,21 @@ const command: HypnoCommand<{ user?: User }> = {
         requiredArguments: 0,
         args: [
             {
-                name: "user",
-                type: "user"
+                name: "useMessagesSent",
+                type: "boolean"
             }
         ]
     },
 
     handler: async (message, { args }) => {
-        const users = (await getAllEconomy()).sort((a, b) => b.balance - a.balance).slice(0, 15);
+        const eco = (await getAllEconomy()).sort((a, b) => b.balance - a.balance)
+        const userData = (await getAllGuildsUserData(message.guild.id)).sort((a, b) => b.messages_sent - a.messages_sent).slice(0, 15);
+        let users: Economy[] = [];
+        if (args.useMessagesSent) {
+            for (const ud of userData)
+                users.push(eco.find(x => x.user_id === ud.user_id));
+        } else users = eco.slice(0, 15);
+
         const userIDs = users.map(x => x.user_id);
         const usernames: { [key: string]: string } = {};
         for await (const id of userIDs)
