@@ -11,7 +11,7 @@ interface DawnagotchiRequirements {
     play: number,
 }
 
-export function generateDawnagotchiEmbed(dawn: Dawnagotchi): EmbedBuilder {
+export function generateDawnagotchiEmbed(dawn: Dawnagotchi, moreDetails: boolean = false): EmbedBuilder {
     let requirements = getDawnagotchiRequirements(dawn);
 
     return createEmbed()
@@ -20,10 +20,11 @@ export function generateDawnagotchiEmbed(dawn: Dawnagotchi): EmbedBuilder {
             {
                 name: "Things",
                 value: [
-                    ["Food", requirements.feed],
-                    ["Water", requirements.drink],
-                    ["Play", requirements.play],
-                ].map(x => `**${x[0]}** (${x[1]}%)\n${makePercentageASCII(x[1] as number, 20)}`).join("\n")
+                    ["Food", dawn.next_feed],
+                    ["Water", dawn.next_drink],
+                    ["Play", dawn.next_play],
+                ].map(x => `**${x[0]}** (${calculateRequirementFromDate(new Date(x[1]))}%)\n${makePercentageASCII(calculateRequirementFromDate(new Date(x[1])), 20)
+                    }${moreDetails ? `\n(${new Date(x[1]).toLocaleString()})` : ""}`).join("\n")
             },
             {
                 name: "Details",

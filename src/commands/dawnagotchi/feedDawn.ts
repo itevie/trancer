@@ -25,7 +25,7 @@ const command: HypnoCommand = {
         let powerFood = await getAquiredItem(config.dawnagotchi.powerFoodItemID, message.author.id);
         let timeAdd = config.dawnagotchi.actions.feed.timeAdd;
         if (powerFood && powerFood.amount > 0) {
-            timeAdd = timeAdd * 5;
+            timeAdd = timeAdd * 3;
             await removeItemFor(message.author.id, config.dawnagotchi.powerFoodItemID);
         }
 
