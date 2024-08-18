@@ -7,6 +7,7 @@ import { createUserData, userDataExists } from "../util/actions/userData";
 import { generateCommandCodeBlock } from "../util/args";
 import { database } from "../util/database";
 import config from "../config";
+import { addCommandUsage } from "../util/analytics";
 
 client.on("messageCreate", async message => {
     // German commas go away
@@ -134,6 +135,8 @@ client.on("messageCreate", async message => {
                         }
                     }
                 }
+
+                await addCommandUsage(cmd.name);
 
                 // Finally, run it.
                 await cmd.handler(message, details);

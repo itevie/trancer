@@ -4,3 +4,8 @@ CREATE TABLE IF NOT EXISTS money_transactions (
     balance INTEGER NOT NULL,
     added_at INT NOT NULL DEFAULT 0
 );
+
+CREATE TABLE IF NOT EXISTS command_usage (
+    command_name TEXT UNIQUE NOT NULL,
+    used INT NOT NULL DEFAULT 0
+);

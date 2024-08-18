@@ -44,3 +44,16 @@ export async function getAllMoneyTransations(): Promise<MoneyTransaction[]> {
     if (!config.analytics.enabled) return [];
     return await analyticDatabase.all(`SELECT * FROM money_transactions `) as MoneyTransaction[];
 }
+
+export async function addCommandUsage(name: string): Promise<void> {
+    if (!config.analytics.enabled) return;
+    if (!(await analyticDatabase.get(`SELECT * FROM command_usage WHERE command_name = ?`, name))) {
+        await analyticDatabase.run(`INSERT INTO command_usage (command_name) VALUES (?)`, name);
+    }
+    await analyticDatabase.run(`UPDATE command_usage SET used = used + 1 WHERE command_name = ?`, name);
+}
+
+export async function getAllCommandUsage(): Promise<CommandUsage[]> {
+    if (!config.analytics.enabled) return [];
+    return await analyticDatabase.all(`SELECT * FROM command_usage `) as CommandUsage[];
+}

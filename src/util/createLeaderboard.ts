@@ -19,14 +19,14 @@ export function accumlateSortLeaderboardData(data: string[]) {
     return resultArr;
 }
 
-export default async function createLeaderboardFromData(data: [string, number][], description: string = "Leaderboard Results", entryName: string = "times"): Promise<EmbedBuilder> {
+export default async function createLeaderboardFromData(data: [string, number][], description: string = "Leaderboard Results", entryName: string = "times", rawName: boolean = false): Promise<EmbedBuilder> {
     data = data.filter(x => x[1] !== 0).sort((a, b) => b[1] - a[1]).slice(0, 10);
 
     // Create text
     let text = `${description ? `*${description}*\n\n` : ""}`;
 
     for (const i in data) {
-        text += `**${parseInt(i) + 1}.** ${(await client.users.fetch(data[i][0])).username.replace(/_/g, "\\_")} (**${data[i][1]}** ${entryName})\n`;
+        text += `**${parseInt(i) + 1}.** ${rawName ? data[i][0] : (await client.users.fetch(data[i][0])).username.replace(/_/g, "\\_")} (**${data[i][1]}** ${entryName})\n`;
     }
 
     // Create embed
