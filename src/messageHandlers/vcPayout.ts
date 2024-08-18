@@ -19,6 +19,9 @@ async function getCurrentVC() {
         }
     }
 
+    // Don't allow only one person at a time
+    if (inVCrightNow.length === 1) return [];
+
     return inVCrightNow;
 
 }

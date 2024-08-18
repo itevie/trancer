@@ -28,10 +28,6 @@ const command: HypnoCommand<{ user: User, amount: number }> = {
         if (!await economyForUserExists(options.args.user.id))
             return message.reply(`Sorry, that user hasn't been set up with the economy!`);
 
-        // Check if negative
-        if (options.args.amount < 0 || options.args.amount % 1 !== 0)
-            return message.reply(`Please provide a non-negative whole number to give!`);
-
         // Add money
         await addMoneyFor(options.args.user.id, options.args.amount);
 
