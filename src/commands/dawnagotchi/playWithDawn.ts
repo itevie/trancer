@@ -31,7 +31,7 @@ const command: HypnoCommand = {
 
         // Done
         return message.reply({
-            content: money ? `You got **${money}${config.economy.spirals}** ` : "",
+            content: money ? `You got **${money}${config.economy.currency}** ` : "",
             embeds: [
                 generateDawnagotchiEmbed(await getDawnagotchi(message.author.id))
             ]

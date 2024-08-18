@@ -80,6 +80,11 @@ client.on("messageCreate", async message => {
 
                         // Check type (special ones)
                         if (arg.type === "user") {
+                            if (fullArgs[i].toLowerCase() === "me") {
+                                details.args[arg.name] = message.author;
+                                continue;
+                            }
+
                             if (!fullArgs[i].match(/<?@?[0-9]+>?/))
                                 return message.reply(`Invalid user format provided, please provide a mention or ID!\n${codeblock}`)
                             // Try fetch user
