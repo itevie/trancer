@@ -13,7 +13,8 @@ const command: HypnoCommand = {
 
         return message.reply({
             embeds: [
-                await createLeaderboardFromData(usages, "What commands have been used the most", "times", true)
+                (await createLeaderboardFromData(usages, "What commands have been used the most", "times", true))
+                    .setTitle("Command Usage")
             ]
         })
     }
