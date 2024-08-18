@@ -3,7 +3,7 @@ import { getItem } from "../../util/actions/items";
 import { database } from "../../util/database";
 
 const command: HypnoCommand<{ itemId: number, newPrice: number }> = {
-    name: "=itemprice",
+    name: "setitemprice",
     description: "Sets an items price",
     type: "economy",
 

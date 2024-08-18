@@ -3,8 +3,8 @@ import { getItem } from "../../util/actions/items";
 import { database } from "../../util/database";
 
 const command: HypnoCommand<{ itemId: number, }> = {
-    name: "=itemdescription",
-    aliases: ["=itemdesc"],
+    name: "setitemdescription",
+    aliases: ["setitemdesc"],
     description: "Sets an items description",
     type: "economy",
 

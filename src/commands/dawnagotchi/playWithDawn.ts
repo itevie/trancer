@@ -1,14 +1,13 @@
 import config from "../../config";
 import { HypnoCommand } from "../../types/command";
 import { getDawnagotchi } from "../../util/actions/dawnagotchi";
-import { getAquiredItem, removeItemFor } from "../../util/actions/items";
 import { database } from "../../util/database";
 import { awardMoneyForCaringForDawn, calculateRequirementFromDate, generateDawnagotchiEmbed } from "../../util/dawnagotchi";
 
 const command: HypnoCommand = {
-    name: "feed",
+    name: "play",
     type: "dawnagotchi",
-    description: "Feed your Dawn",
+    description: "Play with your Dawn",
 
     handler: async (message) => {
         // Check if they have a Dawn
@@ -16,23 +15,15 @@ const command: HypnoCommand = {
         if (!dawn) return message.reply(`You don't have a Dawn!`);
 
         // Check if allowed to feed
-        let requirement = calculateRequirementFromDate(dawn.next_feed);
+        let requirement = calculateRequirementFromDate(dawn.next_play);
 
         if (requirement >= 100)
-            return message.reply(`Your Dawn is not hungry!`);
-
-        // Check if they have the power food
-        let powerFood = await getAquiredItem(config.dawnagotchi.powerFoodItemID, message.author.id);
-        let timeAdd = config.dawnagotchi.actions.feed.timeAdd;
-        if (powerFood && powerFood.amount > 0) {
-            timeAdd = timeAdd * 5;
-            await removeItemFor(message.author.id, config.dawnagotchi.powerFoodItemID);
-        }
+            return message.reply(`Your Dawn does not require your attention right now >:(`);
 
         // Add the stuff
         await database.run(
-            `UPDATE dawnagotchi SET next_feed = next_feed + ? WHERE owner_id = ?`,
-            timeAdd,
+            `UPDATE dawnagotchi SET next_play = next_play + ? WHERE owner_id = ?`,
+            config.dawnagotchi.actions.play.timeAdd,
             message.author.id
         );;
 

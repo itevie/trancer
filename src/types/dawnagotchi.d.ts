@@ -1,6 +1,6 @@
 interface Dawnagotchi {
     id: number,
-    owner_id: number,
+    owner_id: string,
     created_at: Date,
 
     hair_color_hex: string,

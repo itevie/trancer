@@ -1,6 +1,9 @@
 import { EmbedBuilder } from "discord.js";
-import { createEmbed } from "./other";
+import { createEmbed, randomFromRange } from "./other";
 import makePercentageASCII from "./percentageMaker";
+import { addMoneyFor, getEconomyFor } from "./actions/economy";
+import config from "../config";
+import { database } from "./database";
 
 interface DawnagotchiRequirements {
     feed: number,
@@ -31,10 +34,6 @@ export function generateDawnagotchiEmbed(dawn: Dawnagotchi): EmbedBuilder {
 }
 
 export function getDawnagotchiRequirements(dawn: Dawnagotchi): DawnagotchiRequirements {
-    // If the next date = current date the requirement is half
-    // If it is in the future it is >50
-    // If it is below it is <50
-
     return {
         feed: calculateRequirementFromDate(dawn.next_feed),
         play: calculateRequirementFromDate(dawn.next_play),
@@ -44,5 +43,19 @@ export function getDawnagotchiRequirements(dawn: Dawnagotchi): DawnagotchiRequir
 
 export function calculateRequirementFromDate(expected: Date): number {
     let distance = ((expected.getTime() - Date.now()) / 3.6e+6);
-    return Math.round(50 + distance);
+    return Math.min(100, Math.max(0, Math.round(50 + distance)));
+}
+
+export async function awardMoneyForCaringForDawn(dawn: Dawnagotchi): Promise<number | null> {
+    let eco = await getEconomyFor(dawn.owner_id);
+
+    let moneyAwarded: number | null = null;
+
+    if (config.economy.dawn.limit - (Date.now() - eco.last_dawn_care) < 0) {
+        moneyAwarded = randomFromRange(config.economy.dawn.min, config.economy.dawn.max);
+        await database.run(`UPDATE economy SET last_dawn_care = ? WHERE user_id = ?`, Date.now(), dawn.owner_id);
+        await addMoneyFor(dawn.owner_id, moneyAwarded, "commands");
+    }
+
+    return moneyAwarded;
 }

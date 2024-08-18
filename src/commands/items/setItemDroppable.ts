@@ -3,7 +3,7 @@ import { getItem } from "../../util/actions/items";
 import { database } from "../../util/database";
 
 const command: HypnoCommand<{ itemId: number, value: boolean }> = {
-    name: "=itemdroppable",
+    name: "setitemdroppable",
     description: "Sets an items as droppable",
     type: "economy",
 
