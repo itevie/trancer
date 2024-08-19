@@ -10,6 +10,7 @@ const handler: HypnoMessageHandler = {
     description: "Checks the message author's Dawn's requirements",
 
     handler: async message => {
+        await database.run(`UPDATE dawnagotchi SET next_feed = ?, next_drink = ?, next_play = ?`, (Date.now() + (3.6e+6 * 12)), (Date.now() + (3.6e+6 * 12)), (Date.now() + (3.6e+6 * 12)))
         // Fetch and check if they have a Dawn
         let dawn = await getDawnagotchi(message.author.id);
         if (!dawn) return;
