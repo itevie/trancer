@@ -14,7 +14,7 @@ export const rarityColors: { [key: string]: ColorResolvable } = {
 export async function generateCardEmbed(card: Card): Promise<EmbedBuilder> {
     let aquired = await getAllAquiredCards();
     let userAmount: string[] = [];
-    let exist = aquired.filter(x => x.card_id === card.id);
+    let exist = aquired.filter(x => x.card_id === card.id).filter(x => x.amount !== 0);
     for (let a of exist) if (!userAmount.includes(a.user_id)) userAmount.push(a.user_id);
 
     let embed = createEmbed()
