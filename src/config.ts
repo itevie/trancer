@@ -177,6 +177,13 @@ const config = {
 
         coinflip: {
             name: "flipping a rigged coin (.rcf)"
+        },
+
+        guessNumber: {
+            name: "guessing a number with .guessnumber",
+            min: 10,
+            max: 20,
+            punishment: 10,
         }
     },
 

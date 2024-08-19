@@ -12,8 +12,12 @@ for (let i in config.economy) {
     embed.addFields([
         {
             name: `For ${config.economy[i].name}`,
-            value: config.economy[i].min !== undefined ? `Min: \`${config.economy[i].min}\`${symbol} Max: \`${config.economy[i].max}\`${symbol}`
-                + `${config.economy[i].limit ? `\nEvery: **${config.economy[i].limit / 60000} minutes**` : ""}` : "*No other details*"
+            value: config.economy[i].min !== undefined
+                ? (
+                    `Min: \`${config.economy[i].min}\`${symbol} Max: \`${config.economy[i].max}\`${symbol}`
+                    + `${config.economy[i].limit ? `\nEvery: **${config.economy[i].limit / 60000} minutes**` : ""}`
+                    + `${config.economy[i].punishment ? `\nPunishment: **${config.economy[i].punishment}${config.economy.spirals}**` : ""}`
+                ) : "*No other details*"
         }
     ]);
 }

@@ -7,7 +7,7 @@ let games = [];
 
 const command: HypnoCommand = {
     name: "guessquote",
-    aliases: ["guess", "guessq", "quotegame", "qgame"],
+    aliases: ["guessq", "quotegame", "qgame"],
     type: "quotes",
     description: `A random quote will be sent, and you must guess who sent it!`,
 

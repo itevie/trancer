@@ -40,7 +40,7 @@ export function generateCode(length: number): string {
 }
 
 export function randomFromRange(min: number, max: number) {
-    return Math.floor(Math.random() * (max - min) + min);
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 export function fixMagicVariablesInEmbed(embed: EmbedBuilder, serverSettings: ServerSettings): EmbedBuilder {

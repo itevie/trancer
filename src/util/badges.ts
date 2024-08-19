@@ -62,13 +62,13 @@ const badges: { [key: string]: Badge } = {
         description: "Broke the bot (like found a glitch)",
         emoji: ":sob:",
         scan: async () => {
-            const users = await getAllEconomy();
+            /*const users = await getAllEconomy();
             const aquired = await getAllAquiredBadges();
 
             for (const user of users)
                 if (user.balance < 0 || user.balance % 1 !== 0)
                     if (!aquired.find(x => x.user === user.user_id && x.badge_name === "botfuckerupper"))
-                        await addBadgeFor(user.user_id, "botfuckerupper")
+                        await addBadgeFor(user.user_id, "botfuckerupper")*/
         }
     },
     "500vcminutes": {
