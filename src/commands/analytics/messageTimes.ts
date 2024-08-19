@@ -34,7 +34,7 @@ const command: HypnoCommand<{ unit?: "hours" | "days" }> = {
 
         for (const msg of messages) {
             let part: string;
-            if (unit === "hours") msg.time.match(/[0-9]+\/[0-9]+\/[0-9]+ ([0-9]+)/)[1];
+            if (unit === "hours") part = msg.time.match(/[0-9]+\/[0-9]+\/[0-9]+ ([0-9]+)/)[1];
             if (unit === "days") {
                 let date = new Date(msg.time);
                 part = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][date.getDay()];
