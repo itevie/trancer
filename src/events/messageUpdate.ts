@@ -3,6 +3,8 @@ import config from "../config";
 import { createEmbed } from "../util/other";
 
 client.on("messageUpdate", async (old, newMsg) => {
+    if (newMsg.author.bot) return;
+
     const channel = await client.channels.fetch(config.botServer.channels.logs);
     if (channel.isTextBased()) {
         await channel.send({
