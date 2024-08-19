@@ -2,6 +2,7 @@ import { HypnoCommand } from "../../types/command";
 import config from "../../config";
 import { getEconomyFor, addMoneyFor, setLastDaily } from "../../util/actions/economy";
 import { createEmbed, randomFromRange } from "../../util/other";
+import { msToHowLong } from "../../util/ms";
 
 const command: HypnoCommand = {
     name: "daily",
@@ -37,7 +38,7 @@ const command: HypnoCommand = {
             embeds: [
                 createEmbed()
                     .setTitle(`You have already collected your daily!`)
-                    .setDescription(`Come back in ${(time / 60000).toFixed(0)} minutes!`)
+                    .setDescription(`Come back in ${msToHowLong(time)}!`)
                     .setColor("#FF0000")
             ]
         });

@@ -2,6 +2,7 @@ import { HypnoCommand } from "../../types/command";
 import config from "../../config";
 import { getEconomyFor, addMoneyFor, setLastFish } from "../../util/actions/economy";
 import { createEmbed, randomFromRange } from "../../util/other";
+import { msToHowLong } from "../../util/ms";
 
 const command: HypnoCommand = {
     name: "fish",
@@ -45,7 +46,7 @@ const command: HypnoCommand = {
             embeds: [
                 createEmbed()
                     .setTitle(`You have already fished :(`)
-                    .setDescription(`Come back in ${(time / 60000).toFixed(0)} minutes!`)
+                    .setDescription(`Come back in ${msToHowLong(time)}!`)
                     .setColor("#FF0000")
             ]
         });
