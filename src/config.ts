@@ -148,6 +148,7 @@ const config = {
             min: 20,
             max: 40,
             limit: 60000 * 30,
+            punishment: 350,
         },
 
         inviting: {

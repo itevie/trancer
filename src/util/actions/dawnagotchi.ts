@@ -2,7 +2,7 @@ import { database } from "../database";
 
 export async function getDawnagotchi(userId: string): Promise<Dawnagotchi | undefined> {
     // Fetch the thign
-    let result = await database.get(`SELECT * FROM dawnagotchi WHERE owner_id = ?`, userId) as Dawnagotchi | undefined;
+    let result = await database.get(`SELECT * FROM dawnagotchi WHERE owner_id = ? AND alive = true`, userId) as Dawnagotchi | undefined;
     if (!result) return undefined;
 
     // Validify dates
@@ -19,4 +19,8 @@ export async function setupDawnagotchi(userId: string): Promise<Dawnagotchi> {
         `INSERT INTO dawnagotchi (owner_id, next_feed, next_drink, next_play) VALUES (?, ?, ?, ?)`,
         userId, Date.now(), Date.now(), Date.now()
     ) as Dawnagotchi;
+}
+
+export async function removeDawnagotchi(userId: string): Promise<void> {
+    await database.run(`UPDATE dawnagotchi SET alive = false WHERE owner_id = ?`, userId);
 }

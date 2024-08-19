@@ -5,6 +5,8 @@ interface Dawnagotchi {
 
     hair_color_hex: string,
 
+    alive: boolean,
+
     next_feed: Date,
     next_drink: Date,
     next_play: Date

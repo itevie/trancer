@@ -5,7 +5,7 @@ import { generateDawnagotchiEmbed } from "../../util/dawnagotchi";
 
 const command: HypnoCommand<{ user?: User, extraDetails?: boolean }> = {
     name: "dawngotchidetails",
-    aliases: ["dawndetails", "dawndet"],
+    aliases: ["dawndetails", "dwandet", "dawndet"],
     description: "Get details on your Dawn!",
     type: "dawnagotchi",
 

@@ -81,7 +81,7 @@ const command: HypnoCommand<{ cancel?: string }> = {
             ];
         }
 
-        let baseDescription = `I have a number from **0 to 11**, you have 3 tries to guess it correct to win ${config.economy.currency}!`;
+        let baseDescription = `I have a number from **0 to 10**, you have 3 tries to guess it correct to win ${config.economy.currency}!`;
 
         // Create message
         let botMsg = await message.reply({
