@@ -4,7 +4,6 @@ import makePercentageASCII from "./percentageMaker";
 import { addMoneyFor, getEconomyFor } from "./actions/economy";
 import config from "../config";
 import { database } from "./database";
-import { msToHowLong } from "./ms";
 
 interface DawnagotchiRequirements {
     feed: number,
@@ -42,8 +41,9 @@ export function getDawnagotchiRequirements(dawn: Dawnagotchi): DawnagotchiRequir
 }
 
 export function calculateRequirementFromDate(expected: Date): number {
-    let distance = ((expected.getTime() - Date.now()) / (3.6e+6 * 2));
-    return Math.min(100, Math.max(0, Math.round(50 + distance)));
+    const hoursUntilExpected = (expected.getTime() - Date.now()) / 3.6e+6;
+    const percentage = Math.min(100, Math.max(0, Math.round(50 + (hoursUntilExpected * 50) / 24)));
+    return percentage;
 }
 
 export async function awardMoneyForCaringForDawn(dawn: Dawnagotchi): Promise<number | null> {
