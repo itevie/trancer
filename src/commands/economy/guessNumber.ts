@@ -26,17 +26,23 @@ const command: HypnoCommand<{ cancel?: string }> = {
     handler: async (message, { args, serverSettings }) => {
         // Check if they want to cancel
         if (args.cancel)
-            if (!guessNumberGames[message.author.id])
+            if (!(message.author.id in guessNumberGames))
                 return message.reply(`You do not have a game!`)
             else {
+                // Check if penalty
+                if (guessNumberGames[message.author.id]) {
+                    await removeMoneyFor(message.author.id, 15, true);
+                    delete guessNumberGames[message.author.id];
+                    return message.reply(`The game was cancelled. But because you played in the last game and have now cancelled it, you lost **15${config.economy.currency}**`)
+                }
                 delete guessNumberGames[message.author.id];
                 return message.reply(`Game cancelled!`);
             }
 
         // Check if they are already in a game
-        if (guessNumberGames[message.author.id])
+        if (message.author.id in guessNumberGames)
             return message.reply(`You already have a game of number guessing! Run \`${serverSettings.prefix}guessnumber cancel\` to cancel it.`);
-        guessNumberGames[message.author.id] = true;
+        guessNumberGames[message.author.id] = false;
 
         let buttons: ButtonBuilder[] = [];
         let botsNumber = randomFromRange(1, 9);
@@ -147,6 +153,7 @@ const command: HypnoCommand<{ cancel?: string }> = {
             // Lost, but they still have guesses
             else {
                 guessed++;
+                guessNumberGames[message.author.id] = true;
 
                 // Send message
                 await updateMessage(`That's not correct! You now have **${3 - guessed}** guesses!\nMy number is: **${number > botsNumber ? "lower" : "higher"}**`);
