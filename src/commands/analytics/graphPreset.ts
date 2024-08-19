@@ -9,11 +9,29 @@ const preset: { [key: string]: GraphCreationDetails } = {
         sourceTableKey: "balance",
         sortByTable: "economy",
         sortByTableKey: "balance",
+        graphName: "Top 15 People's Balance Overtime"
+    },
+    topgamblinglosers: {
+        type: "bar",
+        sourceTable: "economy",
+        sourceTableKey: "from_gambling_lost",
+        sortByTable: "user_data",
+        sortByTableKey: "messages_sent",
+        graphName: "Top Gamblers That Lost Hard"
+    },
+    bumps: {
+        type: "bar",
+        sourceTable: "user_data",
+        sourceTableKey: "bumps",
+        sortByTable: "user_data",
+        sortByTableKey: "messages_sent",
+        graphName: "Top Bumpers"
     }
 };
 
 const command: HypnoCommand<{ name: string }> = {
     name: "graphpreset",
+    aliases: ["presetgraph", "gp", "pg"],
     type: "analytics",
 
     args: {

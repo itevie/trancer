@@ -15,6 +15,7 @@ export interface GraphCreationDetails {
     users?: string[],
     guildId?: string,
     amount?: number,
+    graphName?: string,
 }
 
 const width = 1000;
@@ -115,7 +116,7 @@ export async function generateGraph(creation: GraphCreationDetails): Promise<Buf
             data: {
                 labels: data.map(x => usernames[x.user_id]),
                 datasets: [{
-                    label: `Custom Graph`,
+                    label: creation.graphName ? creation.graphName : `Custom Graph`,
                     data: data.map(x => x[creation.sourceTableKey]),
                     backgroundColor: `#FFB6C1`
                 }]
