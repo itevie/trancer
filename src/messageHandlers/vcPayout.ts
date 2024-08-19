@@ -14,6 +14,8 @@ async function getCurrentVC() {
     for await (const vcChannel of config.botServer.vcChannels) {
         let channel = await client.channels.fetch(vcChannel);
         if (channel.isVoiceBased()) {
+            if (channel.members.size === 1)
+                continue;
             for (const member of channel.members)
                 inVCrightNow.push(member[1].id);
         }
