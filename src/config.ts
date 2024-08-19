@@ -182,8 +182,8 @@ const config = {
         guessNumber: {
             name: "guessing a number with .guessnumber",
             min: 10,
-            max: 20,
-            punishment: 10,
+            max: 15,
+            punishment: 15,
         }
     },
 
