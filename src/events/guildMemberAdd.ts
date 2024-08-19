@@ -29,17 +29,29 @@ client.on("guildMemberAdd", async member => {
     }
 
     // Check if the invter can be fetched
-    setTimeout(async () => {
-        let inviteDetails = await getInviteDetails(member.client, member.guild.id, member.id);
+    let attempts = 0;
+    function attempt() {
+        // Wait 30 seconds before trying
+        setTimeout(async () => {
+            try {
+                let inviteDetails = await getInviteDetails(member.client, member.guild.id, member.id);
 
-        // Check if suceeded
-        if (inviteDetails.inviterId) {
-            // Guards
-            let user = await client.users.fetch(inviteDetails.inviterId);
-            if (user.bot) return;
+                // Check if suceeded
+                if (inviteDetails.inviterId) {
+                    // Guards
+                    let user = await client.users.fetch(inviteDetails.inviterId);
+                    if (user.bot) return;
 
-            // Add money
-            await addMoneyFor(user.id, config.economy.inviting.min);
-        }
-    }, 30000);
+                    // Add money
+                    await addMoneyFor(user.id, config.economy.inviting.min, "helping");
+                    await user.dmChannel.send(`Thanks for inviting **${member.user.username}** to our server!\nYou earnt **${config.economy.inviting.min}${config.economy.currency}**`);
+                }
+            } catch {
+                // Allow only 3 attempts
+                attempts++;
+                if (attempts > 3) return;
+                attempt();
+            }
+        }, 30000);
+    }; attempt();
 });
