@@ -26,6 +26,7 @@ const command: HypnoCommand = {
 
             const creation: GraphCreationDetails = {
                 guildId: message.guildId,
+                type: "bar",
                 ...data,
             };
 
@@ -42,6 +43,7 @@ const command: HypnoCommand = {
                 files: [attachment]
             });
         } catch (e) {
+            console.log(e);
             return message.reply(`I encountered an error:\n\n\`\`\`${e}\`\`\``);
         }
     }

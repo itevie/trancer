@@ -19,6 +19,15 @@ const preset: { [key: string]: GraphCreationDetails } = {
         sortByTableKey: "messages_sent",
         graphName: "Top Gamblers That Lost Hard"
     },
+    topgamblelosersovertime: {
+        type: "line",
+        sourceTable: "money_transactions",
+        sourceTableKey: "balance",
+        sortByTable: "economy",
+        sortByTableKey: "from_gambling_lost",
+        amount: 5,
+        graphName: "Top 5 People Who Has Lost The Most Money Gambling's Balance Overtime"
+    },
     bumps: {
         type: "bar",
         sourceTable: "user_data",
