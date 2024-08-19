@@ -100,7 +100,6 @@ const command: HypnoCommand<{ cancel?: string }> = {
         const collector = botMsg.createMessageComponentCollector({
             filter: interaction => interaction.user.id === message.author.id
         });
-        let pastInteraction: ButtonInteraction | null = null;
         let isProcessing = false;
 
         // Listen for updates
@@ -119,10 +118,10 @@ const command: HypnoCommand<{ cancel?: string }> = {
 
             await interaction.deferUpdate();
 
-            let number = parseInt(interaction.customId.match(/[0-9]/)[0]);
+            let number = parseInt(interaction.customId.match(/[0-9]+/)[0]);
 
             // Update buttons
-            buttons[number - 1].setDisabled(true);
+            buttons[number].setDisabled(true);
             await botMsg.edit({
                 // @ts-ignore
                 components: [
