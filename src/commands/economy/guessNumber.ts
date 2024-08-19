@@ -47,7 +47,7 @@ const command: HypnoCommand<{ cancel?: string }> = {
         guessNumberGames[message.author.id] = false;
 
         let buttons: ButtonBuilder[] = [];
-        let botsNumber = randomFromRange(0, 11);
+        let botsNumber = randomFromRange(0, 10);
         let guessed = 0;
 
         // Generate buttons
