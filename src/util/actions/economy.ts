@@ -1,7 +1,7 @@
 import { addMoneyTransaction } from "../analytics";
 import { database } from "../database";
 
-type moneyAddReasons = "gambling" | "commands" | "messaging" | "vc" | "helping";
+export type moneyAddReasons = "gambling" | "commands" | "messaging" | "vc" | "helping";
 
 export async function economyForUserExists(userId: string): Promise<boolean> {
     return (await database.all(`SELECT * FROM economy WHERE user_id = (?)`, userId)).length !== 0;

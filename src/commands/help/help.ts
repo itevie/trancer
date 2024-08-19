@@ -47,7 +47,7 @@ const command: HypnoCommand<{ ignoreGuards: boolean }> = {
             {
                 name: "ignoreGuards",
                 type: "boolean",
-                description: "Also shows commands you don't have access too"
+                description: `Whether or not to forcefully show admin commands`
             }
         ]
     },

@@ -4,6 +4,8 @@ import * as path from "path";
 import * as fs from "fs";
 import config from "../config";
 import Logger from "./Logger";
+import { moneyAddReasons } from "./actions/economy";
+import { formatDate } from "./other";
 
 export let analyticDatabase: Database<sqlite3.Database, Statement>;
 export const analyticDatabaseLogger = new Logger("analytic-database");
@@ -56,4 +58,20 @@ export async function addCommandUsage(name: string): Promise<void> {
 export async function getAllCommandUsage(): Promise<CommandUsage[]> {
     if (!config.analytics.enabled) return [];
     return await analyticDatabase.all(`SELECT * FROM command_usage `) as CommandUsage[];
+}
+
+export async function addMessageForCurrentTime(): Promise<void> {
+    if (!config.analytics.enabled) return;
+
+    let date = formatDate(new Date());
+
+    if (!(await analyticDatabase.get(`SELECT * FROM messages_at_time WHERE time = ?`, date))) {
+        await analyticDatabase.run(`INSERT INTO messages_at_time (time) VALUES (?)`, date);
+    }
+    await analyticDatabase.run(`UPDATE messages_at_time SET amount = amount + 1 WHERE time = ?`, date);
+}
+
+export async function getMessageAtTimes(): Promise<MessagesAtTime[]> {
+    if (!config.analytics.enabled) return [];
+    return await analyticDatabase.all(`SELECT * FROM messages_at_time;`);
 }

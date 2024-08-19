@@ -7,7 +7,7 @@ import { createUserData, userDataExists } from "../util/actions/userData";
 import { generateCommandCodeBlock } from "../util/args";
 import { database } from "../util/database";
 import config from "../config";
-import { addCommandUsage } from "../util/analytics";
+import { addCommandUsage, addMessageForCurrentTime } from "../util/analytics";
 
 client.on("messageCreate", async message => {
     // German commas go away
@@ -47,7 +47,10 @@ client.on("messageCreate", async message => {
             handlers[i].handler(message);
         }
 
-    if (!message.content.startsWith(settings.prefix) && !message.content.startsWith(settings.prefix + " ")) return;
+    if (!message.content.startsWith(settings.prefix) && !message.content.startsWith(settings.prefix + " ")) {
+        await addMessageForCurrentTime();
+        return;
+    }
 
     // Extract command
     const content = message.content.substring(settings.prefix.length, message.content.length).trim();

@@ -4,7 +4,7 @@ import { addMoneyFor, getEconomyFor, removeMoneyFor } from "../../util/actions/e
 import config from "../../config";
 import { createEmbed } from "../../util/other";
 
-const existingGames: { [key: string]: string } = {};
+export const existingGames: { [key: string]: string } = {};
 
 const command: HypnoCommand<{ user: User, amount: number }> = {
     name: "coinflip",
@@ -26,7 +26,7 @@ const command: HypnoCommand<{ user: User, amount: number }> = {
         ]
     },
 
-    handler: async (message, { args }) => {
+    handler: async (message, { args, serverSettings }) => {
         let amount = args.amount;
 
         if (message.author.id === args.user.id)
@@ -43,7 +43,7 @@ const command: HypnoCommand<{ user: User, amount: number }> = {
             return message.reply(`The other person does not have enough to coinflip **${amount}${config.economy.currency}**!`);
 
         if (existingGames[message.author.id])
-            return message.reply(`You have already requested a coinflip!`);
+            return message.reply(`You have already requested a coinflip!\nIf you cannot find the cancel button, run \`${serverSettings.prefix}cancelcf\``);
         existingGames[message.author.id] = args.user.id;
 
         // Send duel message
@@ -74,6 +74,12 @@ const command: HypnoCommand<{ user: User, amount: number }> = {
 
         let collector = msg.createMessageComponentCollector()
         collector.on("collect", async data => {
+            // Check if it was cancelled
+            if (!existingGames[message.author.id]) {
+                collector.stop();
+                return message.reply(`This coinflip was cancelled!`);
+            }
+
             // Check if cancel
             if (data.customId === "cancel") {
                 // Check if author

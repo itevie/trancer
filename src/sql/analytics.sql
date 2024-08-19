@@ -9,3 +9,8 @@ CREATE TABLE IF NOT EXISTS command_usage (
     command_name TEXT UNIQUE NOT NULL,
     used INT NOT NULL DEFAULT 0
 );
+
+CREATE TABLE IF NOT EXISTS messages_at_time (
+    time TEXT UNIQUE NOT NULL,
+    amount INT NOT NULL DEFAULT 0
+);

@@ -1,10 +1,11 @@
 import { ChartConfiguration, ChartDataset } from "chart.js";
 import { HypnoCommand } from "../../types/command";
 import { ChartJSNodeCanvas } from "chartjs-node-canvas";
-import { AttachmentBuilder, User } from "discord.js";
+import { AttachmentBuilder } from "discord.js";
 import { getAllMoneyTransations } from "../../util/analytics";
 import { getAllEconomy } from "../../util/actions/economy";
 import { getAllGuildsUserData } from "../../util/actions/userData";
+import { formatDate } from "../../util/other";
 
 const width = 1000;
 const height = 600;
@@ -29,6 +30,7 @@ const command: HypnoCommand<{ useMessagesSent?: boolean }> = {
     },
 
     handler: async (message, { args }) => {
+        // Get the data whether its by messages or economy leaderboard
         const eco = (await getAllEconomy()).sort((a, b) => b.balance - a.balance)
         const userData = (await getAllGuildsUserData(message.guild.id)).sort((a, b) => b.messages_sent - a.messages_sent).slice(0, 15);
         let users: Economy[] = [];
@@ -37,6 +39,7 @@ const command: HypnoCommand<{ useMessagesSent?: boolean }> = {
                 users.push(eco.find(x => x.user_id === ud.user_id));
         } else users = eco.slice(0, 15);
 
+        // Get userIDs and usernames
         const userIDs = users.map(x => x.user_id);
         const usernames: { [key: string]: string } = {};
         for await (const id of userIDs)
@@ -44,6 +47,7 @@ const command: HypnoCommand<{ useMessagesSent?: boolean }> = {
 
         const transactions = (await getAllMoneyTransations()).filter(x => userIDs.includes(x.user_id));
 
+        // Get the oldest and newest ones, removing the seconds and milliseconds
         const oldPre = new Date(transactions[0].added_at);
         const newPre = new Date(transactions[transactions.length - 1].added_at);
         oldPre.setSeconds(0, 0);
@@ -119,15 +123,3 @@ const command: HypnoCommand<{ useMessagesSent?: boolean }> = {
 };
 
 export default command;
-
-function formatDate(date: Date) {
-    // Extract components from the date object
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-
-    // Combine them into the desired format
-    return `${year}/${month}/${day} ${hours}:${minutes}`;
-}
