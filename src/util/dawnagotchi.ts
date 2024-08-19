@@ -4,6 +4,7 @@ import makePercentageASCII from "./percentageMaker";
 import { addMoneyFor, getEconomyFor } from "./actions/economy";
 import config from "../config";
 import { database } from "./database";
+import { msToHowLong } from "./ms";
 
 interface DawnagotchiRequirements {
     feed: number,
@@ -12,8 +13,6 @@ interface DawnagotchiRequirements {
 }
 
 export function generateDawnagotchiEmbed(dawn: Dawnagotchi, moreDetails: boolean = false): EmbedBuilder {
-    let requirements = getDawnagotchiRequirements(dawn);
-
     return createEmbed()
         .setTitle(`Dawnagotchi details`)
         .addFields([
@@ -24,7 +23,7 @@ export function generateDawnagotchiEmbed(dawn: Dawnagotchi, moreDetails: boolean
                     ["Water", dawn.next_drink],
                     ["Play", dawn.next_play],
                 ].map(x => `**${x[0]}** (${calculateRequirementFromDate(new Date(x[1]))}%)\n${makePercentageASCII(calculateRequirementFromDate(new Date(x[1])), 20)
-                    }${moreDetails ? `\n(${new Date(x[1]).toLocaleString()})` : ""}`).join("\n")
+                    }${moreDetails ? `\n(${new Date(x[1]).toLocaleString()}` : ""}`).join("\n")
             },
             {
                 name: "Details",
@@ -43,7 +42,7 @@ export function getDawnagotchiRequirements(dawn: Dawnagotchi): DawnagotchiRequir
 }
 
 export function calculateRequirementFromDate(expected: Date): number {
-    let distance = ((expected.getTime() - Date.now()) / 3.6e+6);
+    let distance = ((expected.getTime() - Date.now()) / (3.6e+6 * 2));
     return Math.min(100, Math.max(0, Math.round(50 + distance)));
 }
 
