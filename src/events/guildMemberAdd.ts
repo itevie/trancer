@@ -46,7 +46,9 @@ client.on("guildMemberAdd", async member => {
                     await addMoneyFor(user.id, config.economy.inviting.min, "helping");
                     await user.dmChannel.send(`Thanks for inviting **${member.user.username}** to our server!\nYou earnt **${config.economy.inviting.min}${config.economy.currency}**`);
                 }
-            } catch {
+            } catch (err) {
+                console.log(err);
+
                 // Allow only 3 attempts
                 attempts++;
                 if (attempts > 3) return;
