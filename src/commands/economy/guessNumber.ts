@@ -4,12 +4,40 @@ import { HypnoCommand } from "../../types/command";
 import { createEmbed, randomFromRange } from "../../util/other";
 import { addMoneyFor, removeMoneyFor } from "../../util/actions/economy";
 
-const command: HypnoCommand = {
+export const guessNumberGames: { [key: string]: boolean } = {};
+
+const command: HypnoCommand<{ cancel?: string }> = {
     name: "guessnumber",
     type: "economy",
     description: `You have 3 guesses to guess the bot's number to gain some ${config.economy.currency}`,
 
-    handler: async (message) => {
+    args: {
+        requiredArguments: 0,
+        args: [
+            {
+                name: "cancel",
+                type: "string",
+                mustBe: "cancel",
+                description: `Add this if you want to cancel a previous game`
+            }
+        ]
+    },
+
+    handler: async (message, { args, serverSettings }) => {
+        // Check if they want to cancel
+        if (args.cancel)
+            if (!guessNumberGames[message.author.id])
+                return message.reply(`You do not have a game!`)
+            else {
+                delete guessNumberGames[message.author.id];
+                return message.reply(`Game cancelled!`);
+            }
+
+        // Check if they are already in a game
+        if (guessNumberGames[message.author.id])
+            return message.reply(`You already have a game of number guessing! Run \`${serverSettings.prefix}guessnumber cancel\` to cancel it.`);
+        guessNumberGames[message.author.id] = true;
+
         let buttons: ButtonBuilder[] = [];
         let botsNumber = randomFromRange(1, 9);
         let guessed = 0;
@@ -56,9 +84,14 @@ const command: HypnoCommand = {
             filter: interaction => interaction.user.id === message.author.id
         });
         let pastInteraction: ButtonInteraction | null = null;
+        let isProcessing = false;
 
         // Listen for updates
         collector.on("collect", async interaction => {
+            if (isProcessing)
+                return interaction.reply({ ephemeral: true, content: `I'm thinking... please wait...` });
+            isProcessing = true;
+
             let number = parseInt(interaction.customId.match(/[0-9]/)[0]);
 
             // Update buttons
@@ -93,6 +126,8 @@ const command: HypnoCommand = {
                 // Give money
                 await addMoneyFor(message.author.id, multipliedReward, "gambling");
                 await message.reply(`Welldone! You guessed the number **${botsNumber}** in **${guessed}** guesses! You got **${multipliedReward}${config.economy.currency}**`);
+                isProcessing = false;
+                delete guessNumberGames[message.author.id];
                 return;
             }
 
@@ -104,6 +139,8 @@ const command: HypnoCommand = {
                 let amount = config.economy.guessNumber.punishment;
                 await removeMoneyFor(message.author.id, amount, true);
                 await message.reply(`Oops... you weren't able to get the number correct in 3 guesses! The number was **${botsNumber}**! You lost **${amount}${config.economy.currency}**`)
+                isProcessing = false;
+                delete guessNumberGames[message.author.id];
                 return;
             }
 
@@ -113,6 +150,7 @@ const command: HypnoCommand = {
 
                 // Send message
                 await updateMessage(`That's not correct! You now have **${3 - guessed}** guesses!\nMy number is: **${number > botsNumber ? "lower" : "higher"}**`);
+                isProcessing = false;
             }
         });
     }
