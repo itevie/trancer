@@ -24,20 +24,22 @@ const command: HypnoCommand<{ cancel?: string }> = {
     },
 
     handler: async (message, { args, serverSettings }) => {
+        let cancelGame = async () => {
+            // Check if penalty
+            if (guessNumberGames[message.author.id]) {
+                await removeMoneyFor(message.author.id, 15, true);
+                delete guessNumberGames[message.author.id];
+                return message.reply(`The game was cancelled. But because you played in the last game and have now cancelled it, you lost **15${config.economy.currency}**`)
+            }
+            delete guessNumberGames[message.author.id];
+            return message.reply(`Game cancelled!`);
+        }
+
         // Check if they want to cancel
         if (args.cancel)
             if (!(message.author.id in guessNumberGames))
                 return message.reply(`You do not have a game!`)
-            else {
-                // Check if penalty
-                if (guessNumberGames[message.author.id]) {
-                    await removeMoneyFor(message.author.id, 15, true);
-                    delete guessNumberGames[message.author.id];
-                    return message.reply(`The game was cancelled. But because you played in the last game and have now cancelled it, you lost **15${config.economy.currency}**`)
-                }
-                delete guessNumberGames[message.author.id];
-                return message.reply(`Game cancelled!`);
-            }
+            else return cancelGame();
 
         // Check if they are already in a game
         if (message.author.id in guessNumberGames)
@@ -45,11 +47,11 @@ const command: HypnoCommand<{ cancel?: string }> = {
         guessNumberGames[message.author.id] = false;
 
         let buttons: ButtonBuilder[] = [];
-        let botsNumber = randomFromRange(1, 9);
+        let botsNumber = randomFromRange(0, 11);
         let guessed = 0;
 
         // Generate buttons
-        for (let i = 1; i != 10; i++) {
+        for (let i = 0; i != 11; i++) {
             buttons.push(
                 new ButtonBuilder()
                     .setCustomId(`guessnumber-${i}`)
@@ -57,6 +59,13 @@ const command: HypnoCommand<{ cancel?: string }> = {
                     .setStyle(ButtonStyle.Primary)
             );
         }
+
+        buttons.push(
+            new ButtonBuilder()
+                .setCustomId(`guessnumber-cancel`)
+                .setLabel(`X`)
+                .setStyle(ButtonStyle.Danger)
+        );
 
         // Function to turn the buttons into 3 action rows
         let generateActionRow: () => ActionRowBuilder[] = () => {
@@ -66,11 +75,13 @@ const command: HypnoCommand<{ cancel?: string }> = {
                 new ActionRowBuilder()
                     .addComponents(...buttons.slice(3, 6)),
                 new ActionRowBuilder()
-                    .addComponents(...buttons.slice(6, 9))
+                    .addComponents(...buttons.slice(6, 9)),
+                new ActionRowBuilder()
+                    .addComponents(...buttons.slice(9, 12))
             ];
         }
 
-        let baseDescription = `I have a number from **1 to 9**, you have 3 tries to guess it correct to win ${config.economy.currency}!`;
+        let baseDescription = `I have a number from **0 to 11**, you have 3 tries to guess it correct to win ${config.economy.currency}!`;
 
         // Create message
         let botMsg = await message.reply({
@@ -98,6 +109,16 @@ const command: HypnoCommand<{ cancel?: string }> = {
                 return interaction.reply({ ephemeral: true, content: `I'm thinking... please wait...` });
             isProcessing = true;
 
+            // Check if cancel
+            if (interaction.customId === `guessnumber-cancel`) {
+                collector.stop();
+                isProcessing = false;
+                await cancelGame();
+                return;
+            }
+
+            await interaction.deferUpdate();
+
             let number = parseInt(interaction.customId.match(/[0-9]/)[0]);
 
             // Update buttons
@@ -108,8 +129,6 @@ const command: HypnoCommand<{ cancel?: string }> = {
                     ...generateActionRow()
                 ]
             });
-
-            await interaction.deferUpdate();
 
             let updateMessage = async (message: string) => {
                 await botMsg.edit({
