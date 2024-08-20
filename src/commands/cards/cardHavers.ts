@@ -22,7 +22,7 @@ const command: HypnoCommand<{ id: number }> = {
         if (!card)
             return message.reply(`A card with that ID does not exist`);
 
-        let aquired = (await getAllAquiredCards()).filter(x => x.card_id === args.id);
+        let aquired = (await getAllAquiredCards()).filter(x => x.card_id === args.id && x.amount > 0);
         let usernames: string[] = [];
         for await (const a of aquired)
             usernames.push((await message.client.users.fetch(a.user_id)).username);
