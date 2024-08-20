@@ -14,3 +14,8 @@ CREATE TABLE IF NOT EXISTS messages_at_time (
     time TEXT UNIQUE NOT NULL,
     amount INT NOT NULL DEFAULT 0
 );
+
+CREATE TABLE IF NOT EXISTS word_usage (
+    word TEXT NOT NULL UNIQUE,
+    amount INT NOT NULL DEFAULT 0
+)

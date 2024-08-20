@@ -30,6 +30,10 @@ const command: HypnoCommand<{ amount: number, confirm?: string }> = {
         if (args.args.amount > eco.balance)
             return message.reply(`You do not have ${args.args.amount}${config.economy.currency}`);
 
+        // Check if below 10
+        if (args.args.amount < 10)
+            return message.reply(`Minimum amount is **10${config.economy.currency}**`);
+
         // Check if requires confirm
         if (args.args.amount > 1000 || (eco.balance > 100 && args.args.amount > eco.balance / 2))
             if (!args.args.confirm)

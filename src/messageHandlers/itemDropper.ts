@@ -38,7 +38,7 @@ const handler: HypnoMessageHandler = {
             });
 
             let collector = msg.channel.createMessageCollector({
-                filter: x => x.content.toLowerCase() === "catch",
+                filter: x => x.content.toLowerCase() === "catch" || x.content.toLowerCase() === "atchcay",
                 time: 30000,
             });
 
