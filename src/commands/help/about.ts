@@ -5,6 +5,7 @@ import config from "../../config";
 import { commands } from "../..";
 import { promisify } from "util";
 import { exec } from "child_process";
+import { msToHowLong } from "../../util/ms";
 
 const command: HypnoCommand = {
     name: "about",
@@ -37,6 +38,7 @@ const command: HypnoCommand = {
                             value: [
                                 ["Server Count", `${message.client.guilds.cache.size}`],
                                 ["Command Count", `${cmds.length}`],
+                                ["Uptime", msToHowLong(message.client.uptime)],
                                 ["Latest Update", `${stdout.trim()}`]
                             ].map(x => `**${x[0]}**: ${x[1]}`).join("\n")
                         },
