@@ -8,12 +8,14 @@ import { createEmbed } from "../util/other";
 
 // So it doesn't send on start
 let lastDrop = Date.now() - (config.itemDrops.frequency / 2);
+let messagesSince = 0;
 
 const handler: HypnoMessageHandler = {
     name: "item-dropper",
     description: "Drops items in a channel every so often",
 
     handler: async (message) => {
+        messagesSince++;
         // Guards
         if (message.client.user.id === config.devBot) return;
         if (!config.itemDrops.enabled) return;
@@ -21,6 +23,9 @@ const handler: HypnoMessageHandler = {
 
         // Check if should send
         if (config.itemDrops.frequency - (Date.now() - lastDrop) < 0) {
+            if (messagesSince < 50)
+                return;
+            messagesSince = 0;
             lastDrop = Date.now();
 
             // Get the item to give

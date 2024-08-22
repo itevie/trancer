@@ -23,7 +23,7 @@ const command: HypnoCommand = {
             let id = parseInt(arg);
 
             // Check if the user has any
-            let card = aquiredCards.find(x => x.card_id === id);
+            let card = aquiredCards.find(x => x?.card_id === id);
             if (!card || card.amount === 0)
                 return message.reply(`You do not have a **${card.card_id}**!`);
             let actualCard = await getCardById(card.card_id);
