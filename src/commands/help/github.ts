@@ -1,13 +1,17 @@
+import { promisify } from "util";
 import config from "../../config";
 import { HypnoCommand } from "../../types/command";
+import { exec } from "child_process";
 
 const command: HypnoCommand = {
     name: "github",
     type: "help",
     description: "Get the GitHub link for this bot",
 
-    handler: (message) => {
-        return message.reply(`${config.credits.github}`);
+    handler: async (message) => {
+        let { stdout } = await promisify(exec)(("git log -1 --pretty=%B"));
+
+        return message.reply(`${config.credits.github}\n\n**Latest Commit:** ${stdout.trim()}`);
     }
 };
 

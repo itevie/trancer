@@ -3,6 +3,8 @@ import { HypnoCommand } from "../../types/command";
 import { createEmbed } from "../../util/other";
 import config from "../../config";
 import { commands } from "../..";
+import { promisify } from "util";
+import { exec } from "child_process";
 
 const command: HypnoCommand = {
     name: "about",
@@ -22,6 +24,8 @@ const command: HypnoCommand = {
                 cmds.push(commands[i].name);
         }
 
+        let { stdout } = await promisify(exec)(("git log -1 --pretty=%B"));
+
         return message.reply({
             embeds: [
                 createEmbed()
@@ -32,7 +36,8 @@ const command: HypnoCommand = {
                             name: "Details",
                             value: [
                                 ["Server Count", `${message.client.guilds.cache.size}`],
-                                ["Command Count", `${cmds.length}`]
+                                ["Command Count", `${cmds.length}`],
+                                ["Latest Update", `${stdout.trim()}`]
                             ].map(x => `**${x[0]}**: ${x[1]}`).join("\n")
                         },
                         {
