@@ -78,7 +78,6 @@ CREATE TABLE IF NOT EXISTS user_data (
     vc_time INT NOT NULL DEFAULT 0
 );
 
-ALTER TABLE economy ADD last_dawn_care_all_100 INT NOT NULL DEFAULT 0;
 CREATE TABLE IF NOT EXISTS economy (
     user_id TEXT NOT NULL UNIQUE,
     balance INT NOT NULL DEFAULT 10,
