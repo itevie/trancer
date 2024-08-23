@@ -1,4 +1,4 @@
-import { AutoModerationRuleTriggerType, PermissionsBitField, User } from "discord.js";
+import { AutoModerationRuleTriggerType, Message, PermissionsBitField, User } from "discord.js";
 import { client, commands, handlers } from "..";
 import { HypnoCommandDetails } from "../types/command";
 import { createEconomyFor, economyForUserExists } from "../util/actions/economy";
@@ -12,6 +12,30 @@ import { addCommandUsage, addMessageForCurrentTime } from "../util/analytics";
 client.on("messageCreate", async message => {
     // German commas go away
     message.content = message.content.replace(/[’]/g, "'");
+
+    // Stop the shitty connect timeout error
+    let oldReply = message.reply;
+    message.reply = data => {
+        return new Promise<Message<boolean>>(async (resolve, reject) => {
+            let tries = 0;
+            let trySend = async () => {
+                try {
+                    let msg = await oldReply(data);
+                    resolve(msg);
+                } catch (e) {
+                    if (tries > 3) {
+                        reject(e);
+                        return;
+                    }
+                    tries++;
+                    console.log(e, `Attempt: ${tries}`);
+                    trySend();
+                }
+            }
+
+            trySend();
+        });
+    }
 
     for (const i in handlers)
         if (handlers[i].botsOnly)
