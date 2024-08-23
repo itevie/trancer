@@ -33,6 +33,7 @@ const command: HypnoCommand = {
 
             // Reply
             return message.reply({
+                content: message.author.id === "879234591968333824" ? `Blub blub blub, you're a fish flower :3c *boop!*\n:3` : "",
                 embeds: [
                     createEmbed()
                         .setTitle(`You went fishing! 🎣`)
