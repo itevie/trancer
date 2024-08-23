@@ -15,15 +15,16 @@ client.on("messageCreate", async message => {
 
     // Stop the shitty connect timeout error
     let oldReply = message.reply;
-    message.reply = data => {
+    message.reply = (data) => {
         return new Promise<Message<boolean>>(async (resolve, reject) => {
             let tries = 0;
             let trySend = async () => {
                 try {
-                    let msg = await oldReply(data);
+                    // Call oldReply with the correct context (message) using call or apply
+                    let msg = await oldReply.call(message, data);
                     resolve(msg);
                 } catch (e) {
-                    if (tries > 3) {
+                    if (tries >= 3) {
                         reject(e);
                         return;
                     }
