@@ -51,9 +51,17 @@ export async function awardMoneyForCaringForDawn(dawn: Dawnagotchi): Promise<num
 
     let moneyAwarded: number | null = null;
 
+    // Check normal dawn
     if (config.economy.dawn.limit - (Date.now() - eco.last_dawn_care) < 0) {
         moneyAwarded = randomFromRange(config.economy.dawn.min, config.economy.dawn.max);
         await database.run(`UPDATE economy SET last_dawn_care = ? WHERE user_id = ?`, Date.now(), dawn.owner_id);
+        await addMoneyFor(dawn.owner_id, moneyAwarded, "commands");
+    }
+
+    // Check 100% dawn
+    if (config.economy.dawn100.limit - (Date.now() - eco.last_dawn_care_all_100) < 0) {
+        moneyAwarded = randomFromRange(config.economy.dawn100.min, config.economy.dawn100.max);
+        await database.run(`UPDATE economy SET last_dawn_care_all_100 = ? WHERE user_id = ?`, Date.now(), dawn.owner_id);
         await addMoneyFor(dawn.owner_id, moneyAwarded, "commands");
     }
 

@@ -151,6 +151,13 @@ const config = {
             punishment: 350,
         },
 
+        dawn100: {
+            name: "getting all your Dawn's needs to 100%",
+            min: 60,
+            max: 100,
+            limit: 8.64e+7 / 2
+        },
+
         inviting: {
             name: "inviting people",
             min: 150,
