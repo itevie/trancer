@@ -18,9 +18,9 @@ client.on("messageCreate", async message => {
     message.reply = (data) => {
         return new Promise<Message<boolean>>(async (resolve, reject) => {
             let tries = 0;
-            let trySend = async () => {
+            const trySend = async () => {
                 try {
-                    // Call oldReply with the correct context (message) using call or apply
+                    // Call oldReply with the correct context
                     let msg = await oldReply.call(message, data);
                     resolve(msg);
                 } catch (e) {
@@ -30,13 +30,13 @@ client.on("messageCreate", async message => {
                     }
                     tries++;
                     console.log(e, `Attempt: ${tries}`);
-                    trySend();
+                    await trySend(); // Recursively retry sending the reply
                 }
-            }
+            };
 
-            trySend();
+            await trySend();
         });
-    }
+    };
 
     for (const i in handlers)
         if (handlers[i].botsOnly)
