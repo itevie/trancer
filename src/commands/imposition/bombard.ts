@@ -28,6 +28,9 @@ const command: HypnoCommand = {
     ],
 
     handler: async (message, { oldArgs: args }) => {
+        if (message.author.id === "735109350728663080")
+            return message.reply("Nuh uh! *bonk*");
+
         // Check for minutes
         if (!args[0] || Number.isNaN(parseFloat(args[0])))
             return message.reply(`Please provide length in minutes as the first argument`);
