@@ -5,6 +5,9 @@ import { createEmbed } from "../util/other";
 client.on("messageUpdate", async (old, newMsg) => {
     if (newMsg.author.bot) return;
 
+    // Check if they are the same content (if so, probably some weird embed update)
+    if (old.content === newMsg.content) return;
+
     const channel = await client.channels.fetch(config.botServer.channels.logs);
     if (channel.isTextBased()) {
         await channel.send({
@@ -23,7 +26,7 @@ client.on("messageUpdate", async (old, newMsg) => {
                         iconURL: newMsg.author.displayAvatarURL(),
                         name: newMsg.author.username
                     })
-            ]
+            ],
         });
     }
 });
