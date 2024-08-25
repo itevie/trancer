@@ -29,7 +29,7 @@ const command: HypnoCommand = {
 
     handler: async (message, { oldArgs: args }) => {
         if (message.author.id === "735109350728663080")
-            return message.reply("Nuh uh! *bonk*");
+            return message.reply("Nuh uh! *mwah mwah mwah!!! tight hug* courtesy of tiny Dawn");
 
         // Check for minutes
         if (!args[0] || Number.isNaN(parseFloat(args[0])))
