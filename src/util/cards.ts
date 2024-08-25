@@ -16,12 +16,15 @@ export async function generateCardEmbed(card: Card): Promise<EmbedBuilder> {
     let userAmount: string[] = [];
     let exist = aquired.filter(x => x.card_id === card.id).filter(x => x.amount !== 0);
     for (let a of exist) if (!userAmount.includes(a.user_id)) userAmount.push(a.user_id);
+    let total = 0;
+    for (const e of exist)
+        total += e.amount;
 
     let embed = createEmbed()
         .setTitle(`${card.name} - ${card.rarity}`)
         .setImage(card.link)
         .setColor(rarityColors[card.rarity])
-        .setFooter({ text: `ID ${card.id} - ${userAmount.length} have this - ${exist.length} exist` });
+        .setFooter({ text: `ID ${card.id} - ${userAmount.length} have this - ${total} exist` });
 
     if (card.description)
         embed.setDescription(card.description);
