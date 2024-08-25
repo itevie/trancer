@@ -37,8 +37,8 @@ const command: HypnoCommand<{ deckID: number, name: string, rarity: string }> = 
 
         const image = (message.attachments.entries().next().value[1] as Attachment);
 
-        if (image.contentType !== "image/png")
-            return message.reply("Please provide a png");
+        if (!["image/png", "image/gif"].includes(image.contentType))
+            return message.reply("Please provide a png or gif");
 
         // Check rarity
         if (!rarities.includes(args.rarity as Rarity))
@@ -50,7 +50,7 @@ const command: HypnoCommand<{ deckID: number, name: string, rarity: string }> = 
             return message.reply(`A deck with that ID does not exist`);
 
         // Write file
-        let fileName = `${args.name}-${args.rarity}-${args.deckID}.png`;
+        let fileName = `${args.name}-${args.rarity}-${args.deckID}.${image.contentType === "image/png" ? "png" : "gif"}`;
         let path = resolve(__dirname + "/../../data/card_images/" + fileName);
 
         // Try save file

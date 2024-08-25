@@ -29,11 +29,11 @@ const command: HypnoCommand<{ id: number }> = {
 
         const image = (message.attachments.entries().next().value[1] as Attachment);
 
-        if (image.contentType !== "image/png")
+        if (!["image/png", "image/gif"].includes(image.contentType))
             return message.reply("Please provide a png");
 
         // Write file
-        let fileName = `${card.name}-${card.rarity}-${card.id}.png`;
+        let fileName = `${card.name}-${card.rarity}-${card.id}.${image.contentType === "image/png" ? "png" : "gif"}`;
         let path = resolve(__dirname + "/../../data/card_images/" + fileName);
 
         // Try save file

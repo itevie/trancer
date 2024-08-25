@@ -7,8 +7,8 @@ const handler: HypnoMessageHandler = {
     handler: message => {
         //if (message.content.match(/you['’]?re welcome/gi))
         //    message.channel.send("smiles");
-        if (message.content.match(/(kys)|(kill ?y?o?urself)/i))
-            return message.reply(`Hey, that's not very nice!`);
+        if (message.content.match(/(kys)|(kill ?y?o?urself)|(die)|(fu?ck ?y?o?u)/i))
+            return message.reply(`Hey, that's not very nice! *patpatpat*`);
     }
 }
 

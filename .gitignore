@@ -10,4 +10,5 @@ src/messages/rules.txt
 data_backups/
 src/data/spirals/*
 src/data/card_images/*.png
+src/data/card_images/*.gif
 old.txt
