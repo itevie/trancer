@@ -3,7 +3,7 @@ A hypnotism-oriented Discord Bot, it has many features, such as random impositio
 This is not meant for huge servers, just small hypnosis servers. 
 
 > [!NOTE]
-> This bot is heavily tailored for our own server (see below)
+> This bot is heavily tailored for our own server (see below)  
 > Some changes may be needed to suit your own needs
 
 ## Join our server
