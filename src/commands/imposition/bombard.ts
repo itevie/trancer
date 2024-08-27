@@ -1,11 +1,12 @@
 import { HypnoCommand } from "../../types/command";
 import { getServerSettings } from "../../util/actions/settings";
 import { getRandomSpiral } from "../../util/actions/spirals";
+import { getUserFavouriteSpirals } from "../../util/actions/userFavouriteSpirals";
 import { database } from "../../util/database";
 import { getRandomImposition } from "../../util/other";
 
 const validOptions = [
-    "nospirals", "noimposition", "dropping", "confirm"
+    "nospirals", "allspirals", "noimposition", "dropping", "confirm"
 ];
 
 const dropping = [
@@ -21,7 +22,12 @@ const ups = [
 const command: HypnoCommand = {
     name: "bombard",
     type: "fun",
-    description: "Sends spirals & imposition for a while, ups you afterwards.",
+    description: "Sends spirals & imposition for a while, ups you afterwards."
+        + "\n\n**nospirals**: Send no spirals, just imposition"
+        + "\n**allspirals**: Send any spirals, including non-favourites"
+        + "\n**noimposition**: No imposition, just spirals"
+        + "\n**dropping**: Sends a random small induction"
+        + "\n**confirm**: Confirm you want to start it",
     examples: [
         ["$cmd 2 dropping confirm", "This will drop you then send spirals/impo for 2 minutes"],
         ["$cmd 1.5 nospirals dropping confirm", "This will drop you and send ONLY impo for 1 and a half minutes"]
@@ -48,6 +54,18 @@ const command: HypnoCommand = {
         // Check if it can actually send stuff
         if (args.includes("nospirals") && args.includes("noimposition"))
             return message.reply(`You cannot have both nospirals & noimposition enabled`);
+
+        // Get spirals
+        let spirals: Spiral[] = [];
+        if (!args.includes("nospirals"))
+            if (args.includes("allspirals"))
+                spirals = await database.all(`SELECT * FROM spirals;`);
+            else spirals = await getUserFavouriteSpirals(message.author.id);
+
+        // Make sure theres at least 3
+        if (!args.includes("nospirals"))
+            if (spirals.length < 3)
+                return message.reply(`There needs to be more than 3 provided spirals. If you are not using "favourite spirals", pass the \`nospirals\` option`)
 
         // Check for confirmation
         if (!message.channel.isDMBased() && !args.includes("confirm"))

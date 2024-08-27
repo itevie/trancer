@@ -11,9 +11,11 @@ import { getServerSettings } from "../util/actions/settings";
 setInterval(async () => {
     let botServerSettings = await getServerSettings(config.botServer.id);
 
+    const twohours = 7.2e+6;
+
     // Compute
-    if (7.2e+6 - (Date.now() - botServerSettings.last_bump) < 0) {
-        // Update so it doesn't ask again
+    if (twohours - (Date.now() - botServerSettings.last_bump) < 0) {
+        // Update so it doesn't ask again (unless its been 3 hours) || ((twohours * 1.5) - (Date.now() - botServerSettings.last_bump) < 0)
         if (!botServerSettings.bump_reminded) {
             await database.run(`UPDATE server_settings SET bump_reminded = true WHERE server_id = ?;`, config.botServer.id);
 
