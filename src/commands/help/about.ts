@@ -2,7 +2,7 @@ import { User } from "discord.js";
 import { HypnoCommand } from "../../types/command";
 import { createEmbed } from "../../util/other";
 import config from "../../config";
-import { commands } from "../..";
+import { commands, errors } from "../..";
 import { promisify } from "util";
 import { exec } from "child_process";
 import { msToHowLong } from "../../util/ms";
@@ -39,6 +39,7 @@ const command: HypnoCommand = {
                                 ["Server Count", `${message.client.guilds.cache.size}`],
                                 ["Command Count", `${cmds.length}`],
                                 ["Uptime", msToHowLong(message.client.uptime)],
+                                ["Errors", errors],
                                 ["Latest Update", `${stdout.trim()}`]
                             ].map(x => `**${x[0]}**: ${x[1]}`).join("\n")
                         },

@@ -27,6 +27,7 @@ export const client = new Client({
 });
 
 const logger = new Logger("loader");
+export let errors = 0;
 
 client.on("ready", async () => {
     // Load events
@@ -72,6 +73,7 @@ client.login(
 
 process.on("uncaughtException", async (err) => {
     console.log(err);
+    errors++;
     try {
         let channel = await client.channels.fetch(config.botServer.channels.logs);
         if (channel.isTextBased()) {

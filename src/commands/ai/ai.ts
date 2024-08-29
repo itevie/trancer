@@ -27,7 +27,6 @@ const command: HypnoCommand = {
         await message.react(`⏳`);
         await message.channel.sendTyping();
 
-
         let conversationID = details.command === "gai" ? "global" : message.author.id;
 
         // Check if history exists
@@ -39,9 +38,16 @@ const command: HypnoCommand = {
                 }
             ];
 
+        let content = details.oldArgs.join(" ");
+
+        if (content.includes("$members")) {
+            let members = (await message.guild.members.fetch()).map(x => x.user.username);
+            content = content.replace(/\$members/g, members.join(", "));
+        }
+
         let userRequest: Message = {
             role: "user",
-            content: `${message.member.nickname ?? message.author.displayName} says: "${details.oldArgs.join(" ")}"`
+            content: `${message.member.nickname ?? message.author.displayName} says: "${content}"`
         };
 
         history[conversationID].push(userRequest);
