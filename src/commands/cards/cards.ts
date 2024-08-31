@@ -4,7 +4,7 @@ import { getAllAquiredCardsFor, getCardById } from "../../util/actions/cards";
 import { createEmbed } from "../../util/other";
 import { rarities } from "../../util/cards";
 
-const command: HypnoCommand<{ user?: User }> = {
+const command: HypnoCommand<{ user?: User, sortBy: "rarity" | "id" }> = {
     name: "cards",
     type: "cards",
     description: "Get yours or another persons cards",
@@ -15,6 +15,11 @@ const command: HypnoCommand<{ user?: User }> = {
             {
                 name: "user",
                 type: "user"
+            },
+            {
+                name: "sortBy",
+                type: "string",
+                oneOf: ["rarity", "id"]
             }
         ]
     },
@@ -25,6 +30,25 @@ const command: HypnoCommand<{ user?: User }> = {
         let cards = (await getAllAquiredCardsFor(user.id))
             .filter(x => x.amount > 0)
             .sort((a, b) => a.card_id - b.card_id);
+        let actualCards: { [key: string]: Card } = {};
+        if (args.sortBy === "rarity") {
+            for await (const card of cards) {
+                actualCards[card.card_id] = await getCardById(card.card_id);
+            }
+        }
+
+        if (args.sortBy === "id") {
+            cards = cards.sort((a, b) => a.card_id - b.card_id);
+        } else if (args.sortBy === "rarity") {
+            let cardsA: { [key: string]: AquiredCard[] } = { mythic: [], epic: [], rare: [], uncommon: [], common: [] };
+            for (const card of cards) {
+                cardsA[actualCards[card.card_id].rarity].push(card);
+            }
+            cards = [];
+            for (const i in cardsA) {
+                cards.push(...cardsA[i])
+            }
+        }
 
         // Create embed
         let embed = createEmbed()
