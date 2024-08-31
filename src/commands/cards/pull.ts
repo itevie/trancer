@@ -62,6 +62,7 @@ const command: HypnoCommand<{ deckId: number, amount: number }> = {
 
         let it = " ".repeat(amount).split("");
         let cards: Card[] = [];
+        let prettyCards: { [key: string]: [number, Card] } = {};
 
         for await (const _ of it) {
             let card = await getCard();
@@ -70,6 +71,8 @@ const command: HypnoCommand<{ deckId: number, amount: number }> = {
             await addCardFor(message.author.id, card.id);
             await removeItemFor(message.author.id, config.cards.pullItemID);
             cards.push(card);
+            if (!prettyCards[card.id]) prettyCards[card.id] = [0, card];
+            prettyCards[card.id][0]++;
         }
 
         if (cards.length === 1) {
@@ -80,11 +83,17 @@ const command: HypnoCommand<{ deckId: number, amount: number }> = {
             });
         }
 
+        let text = "";
+
+        for (const i in prettyCards) {
+            text += `**${prettyCards[i][1].name}** *${prettyCards[i][1].rarity}* x${prettyCards[i][0]}\n`;
+        }
+
         return message.reply({
             embeds: [
                 createEmbed()
                     .setTitle("Your cards!")
-                    .setDescription(`${cards.map(x => `**${x.name}** *${x.rarity}*`).join("\n")}`)
+                    .setDescription(`${text}`)
             ]
         });
     }
