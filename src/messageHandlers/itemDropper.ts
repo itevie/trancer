@@ -20,6 +20,7 @@ const handler: HypnoMessageHandler = {
         if (message.client.user.id === config.devBot) return;
         if (!config.itemDrops.enabled) return;
         if (config.itemDrops.channelExclusions.includes(message.channel.id)) return;
+        if (!config.itemDrops.includeChannels.includes(message.channel.id)) return;
 
         // Check if should send
         if (config.itemDrops.frequency - (Date.now() - lastDrop) < 0) {

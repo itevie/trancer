@@ -113,6 +113,11 @@ const config = {
     itemDrops: {
         enabled: true,
         frequency: 1.8e+6, // 30 minutes
+        includeChannels: [
+            "1257416274280054967",
+            "1271324224077824051",
+            "1257417475621130351"
+        ],
         channelExclusions: [
             "1257417603568238684"
         ]
