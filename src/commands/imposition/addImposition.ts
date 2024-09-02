@@ -59,7 +59,7 @@ const command: HypnoCommand = {
 
             for await (const i of manys) {
                 let res = await add(i);
-                if (res) errors.push(res);
+                if (res) errors.push(`${i}: ${res}`);
             }
 
             return message.reply(`Added!${errors.length !== 0 ? `\n\nErrors:\n${errors.join("\n")}` : ""}`);
