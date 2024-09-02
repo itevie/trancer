@@ -47,7 +47,7 @@ const command: HypnoCommand<{ confirm?: "confirm" }> = {
         }
 
         // Add money 
-        await addMoneyFor(message.author.id, amount);
+        await addMoneyFor(message.author.id, worth);
 
         // Done
         return message.reply(`Success! You sold the following cards:\n\n${text}`);
