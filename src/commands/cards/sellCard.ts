@@ -15,7 +15,7 @@ const command: HypnoCommand<{ card: Card, amount?: number, confirm?: string }> =
         args: [
             {
                 name: "card",
-                type: "wholepositivenumber"
+                type: "card"
             },
             {
                 name: "amount",
