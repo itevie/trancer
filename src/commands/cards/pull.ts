@@ -6,7 +6,7 @@ import { generateCardEmbed } from "../../util/cards";
 import { database } from "../../util/database";
 import { createEmbed } from "../../util/other";
 
-const command: HypnoCommand<{ deckId: number, amount: number }> = {
+const command: HypnoCommand<{ deck: Deck, amount: number }> = {
     name: "pull",
     type: "cards",
     description: "Get a new card, check command `rarities` to see chances, requires the card-pull item",
@@ -15,8 +15,8 @@ const command: HypnoCommand<{ deckId: number, amount: number }> = {
         requiredArguments: 1,
         args: [
             {
-                name: "deckId",
-                type: "wholepositivenumber"
+                name: "deck",
+                type: "deck"
             },
             {
                 name: "amount",
@@ -49,7 +49,7 @@ const command: HypnoCommand<{ deckId: number, amount: number }> = {
             if (!rarity) rarity = Math.random() < 0.6 ? "common" : "uncommon";
 
             // Get the card
-            let cards = await database.all(`SELECT * FROM cards WHERE rarity = ? AND deck = ?`, rarity, args.deckId) as Card[];
+            let cards = await database.all(`SELECT * FROM cards WHERE rarity = ? AND deck = ?`, rarity, args.deck.id) as Card[];
 
             // Check if there was any
             if (cards.length === 0)

@@ -4,7 +4,7 @@ import { rarities } from "../../util/cards";
 import { database } from "../../util/database";
 import { createEmbed } from "../../util/other";
 
-const command: HypnoCommand<{ deckNameOrId: string, rarity?: Rarity }> = {
+const command: HypnoCommand<{ deck: Deck, rarity?: Rarity }> = {
     name: "deck",
     aliases: ["cardsindeck", "deckcards", "deckdetails", "deckdet"],
     description: "Get a details of a deck",
@@ -14,8 +14,8 @@ const command: HypnoCommand<{ deckNameOrId: string, rarity?: Rarity }> = {
         requiredArguments: 1,
         args: [
             {
-                name: "deckNameOrId",
-                type: "any",
+                name: "deck",
+                type: "deck",
                 description: "Provide either the name or ID of a deck"
             },
             {
@@ -27,18 +27,8 @@ const command: HypnoCommand<{ deckNameOrId: string, rarity?: Rarity }> = {
     },
 
     handler: async (message, { args, serverSettings }) => {
-        // Get the deck
-        let deck: Deck;
-        if (args.deckNameOrId.match(/^([0-9]+)$/))
-            deck = await getDeckById(args.deckNameOrId as unknown as number);
-        else deck = await getDeckByName(args.deckNameOrId);
-
-        // Check if it was found
-        if (!deck)
-            return message.reply(`A deck with the name or ID: ${args.deckNameOrId} was not found!\nUse: \`${serverSettings.prefix}decks\` to view a list of decks`);
-
         // Get the card
-        let cards: Card[] = await database.all(`SELECT * FROM cards WHERE deck = ?`, deck.id);
+        let cards: Card[] = await database.all(`SELECT * FROM cards WHERE deck = ?`, args.deck.id);
 
         // Check if rarity only
         if (args.rarity)
@@ -50,9 +40,9 @@ const command: HypnoCommand<{ deckNameOrId: string, rarity?: Rarity }> = {
         return message.reply({
             embeds: [
                 createEmbed()
-                    .setTitle(`Deck ${deck.name}`)
+                    .setTitle(`Deck ${args.deck.name}`)
                     .setDescription(`List of cards:\n\n${cards.map(x => `**${x.name}** (${x.id})`).join(", ")}`)
-                    .setFooter({ text: `ID: ${deck.id}` })
+                    .setFooter({ text: `ID: ${args.deck.id}` })
             ]
         });
     }

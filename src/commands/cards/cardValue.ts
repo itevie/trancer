@@ -3,7 +3,7 @@ import { HypnoCommand } from "../../types/command";
 import { getCardById } from "../../util/actions/cards";
 import { computeCardPrice } from "../../util/cards";
 
-const command: HypnoCommand<{ id: number }> = {
+const command: HypnoCommand<{ card: Card }> = {
     name: "cardvalue",
     aliases: ["cardv"],
     description: "Get the price of a card, if you were to sell it",
@@ -13,18 +13,15 @@ const command: HypnoCommand<{ id: number }> = {
         requiredArguments: 1,
         args: [
             {
-                name: "id",
-                type: "wholepositivenumber"
+                name: "card",
+                type: "card"
             }
         ]
     },
 
     handler: async (message, args) => {
-        let card = await getCardById(args.args.id);
-        if (!card) return message.reply(`That card does not exist`);
-
-        let result = await computeCardPrice(card);
-        return message.reply(`At the moment, **${card.name}** would be worth **${result}${config.economy.currency}**`);
+        let result = await computeCardPrice(args.args.card);
+        return message.reply(`At the moment, **${args.args.card.name}** would be worth **${result}${config.economy.currency}**`);
     }
 };
 

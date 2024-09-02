@@ -8,6 +8,7 @@ import { generateCommandCodeBlock } from "../util/args";
 import { database } from "../util/database";
 import config from "../config";
 import { addCommandUsage, addMessageForCurrentTime } from "../util/analytics";
+import { getCardById, getCardByName, getDeckById, getDeckByName } from "../util/actions/cards";
 
 client.on("messageCreate", async message => {
     // German commas go away
@@ -107,59 +108,76 @@ client.on("messageCreate", async message => {
                         if (!fullArgs[i])
                             continue;
 
-                        // Check type (special ones)
-                        if (arg.type === "user") {
-                            if (fullArgs[i].toLowerCase() === "me") {
-                                details.args[arg.name] = message.author;
-                                continue;
-                            }
+                        const checkers: { [key: string]: ((arg: string) => Promise<string | { value: any }> | string | { value: any }) } = {
+                            number: (arg) => isNaN(parseInt(arg)) ? "Invalid number provided" : { value: parseInt(arg) },
+                            wholepositivenumber: (arg) => (
+                                !isNaN(parseInt(arg))
+                                && parseInt(arg) > 0
+                                && parseInt(fullArgs[i]) % 1 !== 0
+                            ) ? "Expected a whole, positive number" : { value: parseInt(arg) },
+                            boolean: (arg) =>
+                                ["true", "false", "yes", "no", "t", "f"].includes(arg)
+                                    ? "Expected true or false"
+                                    : { value: { true: true, false: false, yes: true, no: false, t: true, f: false }[arg] },
+                            string: (arg) => { return { value: arg } },
+                            any: (arg) => { return { value: arg } },
+                            card: async (arg) => {
+                                let card: Card;
+                                if (arg.match(/[0-9]+/))
+                                    card = await getCardById(parseInt(arg));
+                                else card = await getCardByName(arg);
+                                if (!card) return "Invalid card ID/name provided!";
+                                return { value: card };
+                            },
+                            deck: async (arg) => {
+                                let deck: Deck;
+                                if (arg.match(/[0-9]+/))
+                                    deck = await getDeckById(parseInt(arg));
+                                else deck = await getDeckByName(arg);
+                                if (!deck) return "Invalid deck ID/name provided!";
+                                return { value: deck };
+                            },
+                            user: async (arg) => {
+                                // Check if self
+                                if (arg.toLowerCase() === "me") {
+                                    return { value: message.author };
+                                }
 
-                            if (!fullArgs[i].match(/<?@?[0-9]+>?/))
-                                return message.reply(`Invalid user format provided, please provide a mention or ID!\n${codeblock}`)
-                            // Try fetch user
-                            let user: User;
-                            try {
-                                user = await client.users.fetch(fullArgs[i].replace(/[<>@]/g, ""));
-                            } catch (err) {
-                                console.log(err);
-                                return message.reply(`Failed to fetch the user: ${fullArgs[i]} :(`);
-                            }
+                                if (!arg.match(/<?@?[0-9]+>?/))
+                                    return `Invalid user format provided, please provide a mention or ID!`;
 
-                            // Set argument
-                            details.args[arg.name] = user;
-                        } else {
-                            // Check for numbers
-                            if (arg.type === "number")
-                                if (isNaN(parseInt(fullArgs[i])))
-                                    return message.reply(`Invalid number provided for **${arg.name}**: ${fullArgs[i]}\n${codeblock}`);
-                                else details.args[arg.name] = parseInt(fullArgs[i]);
-                            else if (arg.type === "wholepositivenumber")
-                                if (isNaN(parseInt(fullArgs[i])) || parseInt(fullArgs[i]) < 0 || parseInt(fullArgs[i]) % 1 !== 0)
-                                    return message.reply(`Expected positive, whole number for **${arg.name}**: ${fullArgs[i]}\n${codeblock}`);
-                                else details.args[arg.name] = parseInt(fullArgs[i]);
-                            else if (arg.type === "boolean")
-                                if (["true", "false", "yes", "no", "t", "f"].includes(fullArgs[i]))
-                                    details.args[arg.name] = { true: true, false: false, yes: true, no: false, t: true, f: false }[fullArgs[i].toLowerCase()]
-                                else return message.reply(`Expected true or false for parameter **${arg.name}**\n${codeblock}`)
-                            // If its a string it can just go right through
-                            else if (arg.type === "string")
-                                details.args[arg.name] = fullArgs[i];
-                            else if (arg.type === "any")
-                                details.args[arg.name] = fullArgs[i];
+                                let user: User;
+                                try {
+                                    user = await client.users.fetch(arg.replace(/[<>@]/g, ""));
+                                } catch (err) {
+                                    console.log(err);
+                                    return `Failed to fetch the user: ${arg}`;
+                                }
 
-                            if (arg.mustBe) {
-                                if (details.args[arg.name] !== arg.mustBe)
-                                    return message.reply(`Argument **${arg.name}** must be: **${arg.mustBe}**\n${codeblock}`);
+                                return { value: user }
                             }
+                        };
 
-                            if (arg.oneOf) {
-                                let success = false;
-                                for (const i of arg.oneOf)
-                                    if (details.args[arg.name] === i)
-                                        success = true;
-                                if (!success)
-                                    return message.reply(`Parameter **${arg.name}** must be one of: ${arg.oneOf.join(", ")}\n${codeblock}`);
-                            }
+                        let checker = checkers[arg.type];
+                        if (!checker) return message.reply(`Oops! The develoepr hasn't set up a checker for ${arg.type}`);
+                        let result = await checker(fullArgs[i]);
+                        if (typeof result === "string") {
+                            return message.reply(`${result} At parameter **${arg.name}** which must be a **${arg.type}**\n${codeblock}`);
+                        }
+                        details.args[arg.name] = result.value;
+
+                        if (arg.mustBe) {
+                            if (details.args[arg.name] !== arg.mustBe)
+                                return message.reply(`Argument **${arg.name}** must be: **${arg.mustBe}**\n${codeblock}`);
+                        }
+
+                        if (arg.oneOf) {
+                            let success = false;
+                            for (const i of arg.oneOf)
+                                if (details.args[arg.name] === i)
+                                    success = true;
+                            if (!success)
+                                return message.reply(`Parameter **${arg.name}** must be one of: ${arg.oneOf.join(", ")}\n${codeblock}`);
                         }
                     }
                 }

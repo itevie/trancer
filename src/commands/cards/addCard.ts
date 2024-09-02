@@ -5,7 +5,7 @@ import { generateCardEmbed, rarities } from "../../util/cards";
 import { Attachment } from "discord.js";
 import { downloadFile } from "../../util/fileDownloader";
 
-const command: HypnoCommand<{ deckID: number, name: string, rarity: string }> = {
+const command: HypnoCommand<{ deck: Deck, name: string, rarity: string }> = {
     name: "+card",
     type: "cards",
     description: "Add a card to a deck",
@@ -16,8 +16,8 @@ const command: HypnoCommand<{ deckID: number, name: string, rarity: string }> = 
         requiredArguments: 3,
         args: [
             {
-                name: "deckID",
-                type: "number"
+                name: "deck",
+                type: "deck"
             },
             {
                 name: "name",
@@ -44,13 +44,8 @@ const command: HypnoCommand<{ deckID: number, name: string, rarity: string }> = 
         if (!rarities.includes(args.rarity as Rarity))
             return message.reply(`Invalid rarity! Provide one of: ${rarities.join(", ")}`);
 
-        // Validate deck
-        let deck = getDeckById(args.deckID);
-        if (!deck)
-            return message.reply(`A deck with that ID does not exist`);
-
         // Write file
-        let fileName = `${args.name}-${args.rarity}-${args.deckID}.${image.contentType === "image/png" ? "png" : "gif"}`;
+        let fileName = `${args.name}-${args.rarity}-${args.deck.id}.${image.contentType === "image/png" ? "png" : "gif"}`;
         let path = resolve(__dirname + "/../../data/card_images/" + fileName);
 
         // Try save file
@@ -61,7 +56,7 @@ const command: HypnoCommand<{ deckID: number, name: string, rarity: string }> = 
         }
 
         // Add card
-        let card = await addCard(args.name, args.deckID, args.rarity, fileName, image.proxyURL);
+        let card = await addCard(args.name, args.deck.id, args.rarity, fileName, image.proxyURL);
         return message.reply({
             embeds: [
                 await generateCardEmbed(card)

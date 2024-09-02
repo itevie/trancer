@@ -16,6 +16,10 @@ export async function getCardById(id: number): Promise<Card | undefined> {
     return await database.get(`SELECT * FROM cards WHERE id = ?`, id);
 }
 
+export async function getCardByName(name: string): Promise<Card | undefined> {
+    return await database.get(`SELECT * FROM cards WHERE name = ? LIMIT 1;`, name);
+}
+
 export async function getAllAquiredCardsFor(userId: string): Promise<AquiredCard[]> {
     return await database.all(`SELECT * FROM aquired_cards WHERE user_id = ?`, userId);
 }

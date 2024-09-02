@@ -2,7 +2,7 @@ import { HypnoCommand } from "../../types/command";
 import { getCardById } from "../../util/actions/cards";
 import { generateCardEmbed } from "../../util/cards";
 
-const command: HypnoCommand<{ id: number }> = {
+const command: HypnoCommand<{ card: Card }> = {
     name: "getcard",
     type: "cards",
     description: "Gets and displays a card",
@@ -11,20 +11,16 @@ const command: HypnoCommand<{ id: number }> = {
         requiredArguments: 1,
         args: [
             {
-                name: "id",
-                type: "wholepositivenumber"
+                name: "card",
+                type: "card"
             }
         ]
     },
 
     handler: async (message, { args }) => {
-        let card = await getCardById(args.id);
-        if (!card)
-            return message.reply(`A card with that ID does not exist`);
-
         return message.reply({
             embeds: [
-                await generateCardEmbed(card)
+                await generateCardEmbed(args.card)
             ]
         });
     }
