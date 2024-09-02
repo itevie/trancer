@@ -16,7 +16,7 @@ export async function getDawnagotchi(userId: string): Promise<Dawnagotchi | unde
 
 export async function setupDawnagotchi(userId: string): Promise<Dawnagotchi> {
     return await database.get(
-        `INSERT INTO dawnagotchi (owner_id, next_feed, next_drink, next_play) VALUES (?, ?, ?, ?)`,
+        `INSERT INTO dawnagotchi (owner_id, next_feed, next_drink, next_play) VALUES (?, ?, ?, ?) RETURNING *;`,
         userId, Date.now(), Date.now(), Date.now()
     ) as Dawnagotchi;
 }

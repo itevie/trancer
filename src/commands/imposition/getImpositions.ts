@@ -1,23 +1,26 @@
+import { User } from "discord.js";
 import { HypnoCommand } from "../../types/command";
 import { getImpositionFor } from "../../util/actions/imposition";
 import { createEmbed } from "../../util/other";
 
-const command: HypnoCommand = {
+const command: HypnoCommand<{ user?: User }> = {
     name: "getimpositions",
     aliases: ["getimpos", "getis"],
     type: "imposition",
     description: "Get your own or someone elses imposition actions",
 
-    handler: async (message, { oldArgs: args }) => {
-        let imposition = await getImpositionFor(message.author.id);
+    args: {
+        requiredArguments: 0,
+        args: [
+            {
+                name: "user",
+                type: "user"
+            }
+        ]
+    },
 
-        // Check if another user was provided
-        if (args[0]) {
-            const userId = args[0].replace(/[<@>]/g, "");
-            if (!userId.match(/^([0-9]+)/))
-                return message.reply(`Please provide a valid mention of a user`);
-            imposition = await getImpositionFor(userId);
-        }
+    handler: async (message, { args }) => {
+        let imposition = await getImpositionFor(args.user ? args.user.id : message.author.id);
 
         // Done
         return message.reply({

@@ -20,7 +20,7 @@ const command: HypnoCommand<{ card: Card }> = {
     },
 
     handler: async (message, args) => {
-        let result = await computeCardPrice(args.args.card);
+        let result = computeCardPrice(args.args.card);
         return message.reply(`At the moment, **${args.args.card.name}** would be worth **${result}${config.economy.currency}**`);
     }
 };

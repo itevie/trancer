@@ -1,6 +1,7 @@
 import { Message } from "discord.js"
 
 type HypnoCommandType = "analytics" | "dawnagotchi" | "ranks" | "economy" | "cards" | "badges" | "counting" | "spirals" | "quotes" | "help" | "imposition" | "uncategorised" | "fun" | "admin" | "messages" | "leaderboards" | "ai";
+type Guard = "admin" | "bot-server" | "bot-owner";
 
 interface HypnoCommandDetails<Args extends { [key: string]: any } = {}> {
     serverSettings: ServerSettings,
@@ -24,6 +25,8 @@ interface HypnoCommand<Args extends { [key: string]: any } = {}> {
     except?: (message: Message, args: string[]) => boolean,
     handler: (message: Message, options: HypnoCommandDetails<Args>) => void,
 
+    guards?: Guard[];
+
     adminOnly?: boolean,
     botServerOnly?: boolean,
     botOwnerOnly?: boolean,
@@ -31,7 +34,7 @@ interface HypnoCommand<Args extends { [key: string]: any } = {}> {
 }
 
 interface Argument {
-    type: "string" | "any" | "number" | "wholepositivenumber" | "user" | "boolean" | "card" | "deck";
+    type: "string" | "confirm" | "any" | "number" | "wholepositivenumber" | "user" | "boolean" | "card" | "deck";
     name: string,
     onMissing?: string,
     description?: string,

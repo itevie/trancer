@@ -4,7 +4,7 @@ import badges from "../../util/badges";
 import { addBadgeFor, getAllAquiredBadges } from "../../util/actions/badges";
 
 const command: HypnoCommand<{ badge: string, user: User }> = {
-    name: "+badge",
+    name: "addbadge",
     type: "badges",
     description: "Give a user a badge",
 

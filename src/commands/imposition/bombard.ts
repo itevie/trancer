@@ -95,7 +95,11 @@ const command: HypnoCommand = {
                         return resolve();
 
                     // Send the message
-                    await message.channel.send(arr[index]);
+                    try {
+                        await message.channel.send(arr[index]);
+                    } catch (e) {
+                        console.log(e);
+                    }
                     index++;
 
                     // Set timeout for the next part of the drop/up
@@ -129,16 +133,20 @@ const command: HypnoCommand = {
                 if (stop) return doStop();
                 if ((minutes * 60000) - (Date.now() - startTime) < 0) stop = true;
 
-                // Check what it should do
-                if (args.includes("noimposition"))
-                    await message.channel.send((await getRandomSpiral()).link);
-                else if (args.includes("nospirals"))
-                    await message.channel.send(await getRandomImposition(message.author.id, true));
-                else {
-                    // It will pick a random thing to do 
-                    if (Math.random() > 0.4)
+                try {
+                    // Check what it should do
+                    if (args.includes("noimposition"))
+                        await message.channel.send((await getRandomSpiral()).link);
+                    else if (args.includes("nospirals"))
                         await message.channel.send(await getRandomImposition(message.author.id, true));
-                    else await message.channel.send((await getRandomSpiral()).link);
+                    else {
+                        // It will pick a random thing to do 
+                        if (Math.random() > 0.4)
+                            await message.channel.send(await getRandomImposition(message.author.id, true));
+                        else await message.channel.send((await getRandomSpiral()).link);
+                    }
+                } catch (e) {
+                    console.log(e);
                 }
 
                 // Set the timeout for it to do it again

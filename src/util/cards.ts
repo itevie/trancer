@@ -1,6 +1,6 @@
 import { ColorResolvable, EmbedBuilder } from "discord.js";
 import { createEmbed } from "./other";
-import { getAllAquiredCards } from "./actions/cards";
+import { getAllAquiredCards, getCardById } from "./actions/cards";
 
 export const rarities: Rarity[] = ["common", "uncommon", "rare", "epic", "mythic"];
 export const rarityColors: { [key: string]: ColorResolvable } = {
@@ -40,9 +40,17 @@ const rarityBasePrices = {
     "mythic": 600
 };
 
-export async function computeCardPrice(card: Card): Promise<number> {
+export function computeCardPrice(card: Card): number {
     let basePrice = rarityBasePrices[card.rarity];
     //let exist = (await getAllAquiredCards()).filter(x => x.card_id === card.id).length;
 
     return Math.round(basePrice);
-}   
+}
+
+export async function convertAquiredCardsToCards(acards: AquiredCard[]): Promise<Card[]> {
+    let cards: Card[] = [];
+    for await (const acard of acards) {
+        cards.push(await getCardById(acard.card_id));
+    }
+    return cards;
+}

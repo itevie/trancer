@@ -4,7 +4,7 @@ import badges from "../../util/badges";
 import { removeBadgeFor } from "../../util/actions/badges";
 
 const command: HypnoCommand<{ badge: string, user: User }> = {
-    name: "-badge",
+    name: "removebadge",
     type: "badges",
     description: "Removes a users  badge",
 

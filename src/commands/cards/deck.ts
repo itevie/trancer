@@ -1,5 +1,5 @@
 import { HypnoCommand } from "../../types/command";
-import { getDeckById, getDeckByName } from "../../util/actions/cards";
+import { getAllAquiredCardsFor, getDeckById, getDeckByName } from "../../util/actions/cards";
 import { rarities } from "../../util/cards";
 import { database } from "../../util/database";
 import { createEmbed } from "../../util/other";
@@ -26,9 +26,14 @@ const command: HypnoCommand<{ deck: Deck, rarity?: Rarity }> = {
         ]
     },
 
-    handler: async (message, { args, serverSettings }) => {
+    handler: async (message, { args }) => {
         // Get the card
         let cards: Card[] = await database.all(`SELECT * FROM cards WHERE deck = ?`, args.deck.id);
+        let aquired = (await getAllAquiredCardsFor(message.author.id)).filter(x => x.amount > 0).map(x => x.card_id);
+        let has = 0;
+        for (const card of cards)
+            if (aquired.includes(card.id))
+                has++;
 
         // Check if rarity only
         if (args.rarity)
@@ -41,8 +46,8 @@ const command: HypnoCommand<{ deck: Deck, rarity?: Rarity }> = {
             embeds: [
                 createEmbed()
                     .setTitle(`Deck ${args.deck.name}`)
-                    .setDescription(`List of cards:\n\n${cards.map(x => `**${x.name}** (${x.id})`).join(", ")}`)
-                    .setFooter({ text: `ID: ${args.deck.id}` })
+                    .setDescription(`${cards.map(x => `${aquired.includes(x.id) ? ":white_check_mark:" : ":x:"} **${x.name}** (${x.id})`).join("\n")}`)
+                    .setFooter({ text: `ID: ${args.deck.id}, You have ${has}/${cards.length} (${((has / cards.length) * 100).toFixed(0)}%)` })
             ]
         });
     }

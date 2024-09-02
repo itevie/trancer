@@ -35,7 +35,12 @@ export async function getAquiredCardsFor(userId: string, cardId: number): Promis
     return result;
 }
 
-export async function addCardFor(userId: string, cardId: number): Promise<void> {
+export async function addCardFor(userId: string, cardId: number, amount: number = 1): Promise<void> {
     await getAquiredCardsFor(userId, cardId);
-    await database.run(`UPDATE aquired_cards SET amount = amount + 1 WHERE user_id = ? AND card_id = ?;`, userId, cardId);
+    await database.run(`UPDATE aquired_cards SET amount = amount + ? WHERE user_id = ? AND card_id = ?;`, amount, userId, cardId);
+}
+
+export async function removeCardFor(userId: string, cardId: number, amount: number = 1): Promise<void> {
+    await getAquiredCardsFor(userId, cardId);
+    await database.run(`UPDATE aquired_cards SET amount = amount - ? WHERE user_id = ? AND card_id = ?;`, amount, userId, cardId);
 }

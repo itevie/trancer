@@ -121,6 +121,7 @@ client.on("messageCreate", async message => {
                                     : { value: { true: true, false: false, yes: true, no: false, t: true, f: false }[arg] },
                             string: (arg) => { return { value: arg } },
                             any: (arg) => { return { value: arg } },
+                            confirm: (arg) => ["confirm", "c"].includes(arg.toLowerCase()) ? { value: "confirm" } : "Expected **confirm**",
                             card: async (arg) => {
                                 let card: Card;
                                 if (arg.match(/[0-9]+/))
