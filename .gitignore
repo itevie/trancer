@@ -12,3 +12,4 @@ src/data/spirals/*
 src/data/card_images/*.png
 src/data/card_images/*.gif
 old.txt
+last_backup.txt

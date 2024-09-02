@@ -2,13 +2,14 @@ import { Client, IntentsBitField, } from "discord.js";
 import { HypnoCommand } from "./types/command";
 import getAllFiles from "./util/getAllFiles";
 import { connect } from "./util/database";
-import { createEmbed } from "./util/other";
-import { readFileSync } from "fs";
+import { createBackup, createEmbed } from "./util/other";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import { HypnoMessageHandler } from "./types/messageHandler";
 import { checkBadges } from "./util/badges";
 import Logger from "./util/Logger";
 import config from "./config";
 import { connectAnalytic } from "./util/analytics";
+import path from "path";
 
 export const commands: { [key: string]: HypnoCommand } = {};
 export const handlers: HypnoMessageHandler[] = [];
@@ -97,3 +98,16 @@ process.on("uncaughtException", async (err) => {
         process.exit(0);
     }
 });
+
+// Backup
+let lastBackup = 0;
+let loc = path.normalize(path.resolve(__dirname, "../last_backup.txt"));
+if (!existsSync(loc))
+    writeFileSync(loc, "0");
+lastBackup = new Date(readFileSync(loc, "utf-8")).getTime();
+
+if (8.64e+7 - (Date.now() - lastBackup) < 0) {
+    createBackup();
+    logger.log(`Created backup!`);
+    writeFileSync(loc, Date.now().toString());
+}

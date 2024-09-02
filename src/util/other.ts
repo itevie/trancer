@@ -2,6 +2,7 @@ import { ColorResolvable, DataManager, EmbedBuilder, EmbedData, HexColorString }
 import config from "../config";
 import * as fs from "fs";
 import { getImpositionFor } from "./actions/imposition";
+import path from "path";
 
 export function createEmbed(): EmbedBuilder {
     return new EmbedBuilder()
@@ -67,4 +68,11 @@ export function formatDate(date: Date) {
 
     // Combine them into the desired format
     return `${year}/${month}/${day} ${hours}:${minutes}`;
+}
+
+export function createBackup() {
+    let folder = path.normalize(path.resolve(__dirname, "../../data_backups"));
+    if (!fs.existsSync(folder))
+        fs.mkdirSync(folder);
+    fs.copyFileSync(__dirname + "/../../data.db", folder + `/${new Date().toDateString().replace(/\//g, "-")}.db`);
 }
