@@ -3,7 +3,7 @@ import { HypnoCommand } from "../../types/command";
 import { addCard, getDeckById } from "../../util/actions/cards";
 import { generateCardEmbed, rarities } from "../../util/cards";
 import { Attachment } from "discord.js";
-import { downloadFile } from "../../util/fileDownloader";
+import { downloadFile } from "../../util/other";
 
 const command: HypnoCommand<{ deck: Deck, name: string, rarity: string }> = {
     name: "+card",

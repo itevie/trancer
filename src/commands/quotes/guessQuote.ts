@@ -1,7 +1,6 @@
 import { HypnoCommand } from "../../types/command";
 import { genQuote, getQuote, randomQuote } from "../../util/actions/quotes";
-import { createEmbed } from "../../util/other";
-import { compareTwoStrings } from "../../util/stringSimilar";
+import { compareTwoStrings, createEmbed } from "../../util/other";
 
 let games = [];
 

@@ -1,4 +1,3 @@
-import message from "../../messages/help-cards";
 import { HypnoCommand } from "../../types/command";
 import { database } from "../../util/database";
 import { createEmbed } from "../../util/other";

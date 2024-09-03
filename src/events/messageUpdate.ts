@@ -3,6 +3,7 @@ import config from "../config";
 import { createEmbed } from "../util/other";
 
 client.on("messageUpdate", async (old, newMsg) => {
+    if (old.guild.id !== config.botServer.id) return;
     if (newMsg.author.bot) return;
 
     // Check if they are the same content (if so, probably some weird embed update)

@@ -1,6 +1,5 @@
 import { EmbedBuilder } from "discord.js";
-import { createEmbed, randomFromRange } from "./other";
-import makePercentageASCII from "./percentageMaker";
+import { createEmbed, makePercentageASCII, randomFromRange } from "./other";
 import { addMoneyFor, getEconomyFor } from "./actions/economy";
 import config from "../config";
 import { database } from "./database";

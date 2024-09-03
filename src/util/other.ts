@@ -3,6 +3,22 @@ import config from "../config";
 import * as fs from "fs";
 import { getImpositionFor } from "./actions/imposition";
 import path from "path";
+import axios from "axios";
+
+export default function getAllFiles(dirPath: string, arrayOfFiles: string[] = []): string[] {
+    const files = fs.readdirSync(dirPath);
+    arrayOfFiles = arrayOfFiles || [];
+
+    files.forEach(file => {
+        if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+            arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles);
+        } else {
+            arrayOfFiles.push(dirPath + (dirPath.endsWith("/") ? "" : "/") + file);
+        }
+    });
+
+    return arrayOfFiles;
+}
 
 export function createEmbed(): EmbedBuilder {
     return new EmbedBuilder()
@@ -75,4 +91,74 @@ export function createBackup() {
     if (!fs.existsSync(folder))
         fs.mkdirSync(folder);
     fs.copyFileSync(__dirname + "/../../data.db", folder + `/${new Date().toDateString().replace(/\//g, "-")}.db`);
+}
+
+/**
+ * 
+ * @copyright Stolen from package string-similarity
+ * @param first 
+ * @param second 
+ * @returns 
+ */
+export function compareTwoStrings(first: string, second: string) {
+    first = first.replace(/\s+/g, '')
+    second = second.replace(/\s+/g, '')
+
+    if (first === second) return 1; // identical or empty
+    if (first.length < 2 || second.length < 2) return 0; // if either is a 0-letter or 1-letter string
+
+    let firstBigrams = new Map();
+    for (let i = 0; i < first.length - 1; i++) {
+        const bigram = first.substring(i, i + 2);
+        const count = firstBigrams.has(bigram)
+            ? firstBigrams.get(bigram) + 1
+            : 1;
+
+        firstBigrams.set(bigram, count);
+    };
+
+    let intersectionSize = 0;
+    for (let i = 0; i < second.length - 1; i++) {
+        const bigram = second.substring(i, i + 2);
+        const count = firstBigrams.has(bigram)
+            ? firstBigrams.get(bigram)
+            : 0;
+
+        if (count > 0) {
+            firstBigrams.set(bigram, count - 1);
+            intersectionSize++;
+        }
+    }
+
+    return (2.0 * intersectionSize) / (first.length + second.length - 2);
+}
+
+export function downloadFile(link: string, path: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+        const writer = fs.createWriteStream(path);
+
+        axios.get(link, {
+            responseType: "stream"
+        }).then(response => {
+            response.data.pipe(writer);
+
+            writer.on("error", err => {
+                reject(err);
+            });
+
+            writer.on("finish", () => {
+                resolve();
+            });
+        });
+    });
+}
+
+const empty = "░";
+const filled = "█";
+
+export function makePercentageASCII(percentage: number, length: number): string {
+    const percentagePer = 100 / length;
+    const amount = Math.round(percentage / percentagePer);
+
+    return `${filled.repeat(amount)}${empty.repeat(length - amount)}`;
 }

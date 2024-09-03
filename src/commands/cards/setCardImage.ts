@@ -1,10 +1,9 @@
 import { resolve } from "path";
 import { Attachment } from "discord.js";
 import { HypnoCommand } from "../../types/command";
-import { getCardById } from "../../util/actions/cards";
-import { downloadFile } from "../../util/fileDownloader";
 import { database } from "../../util/database";
 import { generateCardEmbed } from "../../util/cards";
+import { downloadFile } from "../../util/other";
 
 const command: HypnoCommand<{ card: Card }> = {
     name: "setcardimage",

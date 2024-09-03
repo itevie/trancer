@@ -2,6 +2,8 @@ import { client } from "..";
 import config from "../config";
 
 client.on("guildMemberRemove", async member => {
+    if (member.guild.id !== config.botServer.id) return;
+
     const channel = await client.channels.fetch(config.botServer.channels.welcomes);
     if (channel.isTextBased()) {
         await channel.send(`**${member.user.username}** left our server :( We now have ${member.guild.memberCount} members`);
@@ -9,8 +11,10 @@ client.on("guildMemberRemove", async member => {
 });
 
 client.on("guildBanAdd", async member => {
+    if (member.guild.id !== config.botServer.id) return;
+
     const channel = await client.channels.fetch(config.botServer.channels.welcomes);
     if (channel.isTextBased()) {
-        await channel.send(`**${member.user.username}** Was **BANNED** from our server.`);
+        await channel.send(`**${member.user.username}** was caught <:uppies:1278754282413490259> and **BANNED** from our server.`);
     }
 });

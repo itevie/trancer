@@ -14,18 +14,26 @@ let message: MessageCreateOptions = {
                 {
                     name: "Decks",
                     value: `Each card belongs to a deck, for example there is a deck called ONE, and all the cards are ONE characters.`
-                        + `\nTo view a decks cards, run: \`$prefixdeckcards <deck name>\`, for example \`$prefixdeckcards one\``
-                        + `\nYou can also get all the cards with a certain rarity: \`$prefixdeckcards one mythic\``
+                        + `\nTo view a decks cards, run: \`$prefixdeck <deck name>\`, for example \`$prefixdeck one\``
+                        + `\nYou can also get all the cards with a certain rarity: \`$prefixdeck one mythic\``
                 },
                 {
                     name: "Viewing Cards",
                     value: `To view the cards you have: \`$prefixcards\``
-                        + `\nTo get details about a specific card: \`$prefixgetcard <id>\``
+                        + `\nTo get details about a specific card: \`$prefixgetcard <card>\``
+                        + `\nTo see who has a card: \`$prefixwhohascard <card>\``
                 },
                 {
                     name: "Obtaining Cards",
-                    value: "The only way to obtain cards are by \"pulling\" them.\n\nTo do this, you must buy a \"card-pull\" from the `$prefixshop`"
+                    value: "The only way to obtain cards are by \"pulling\" them.\n\nTo do this, you must buy a \"card-pull\" from the `$prefixshop` "
                         + "using `$prefixbuy card-pull`, then using it with `$prefixpull`"
+                },
+                {
+                    name: "Selling Cards",
+                    value: "Once you have obtained cards, you can sell them for money!"
+                        + `\nUse \`$prefixsellcard <card>\` to sell a card`
+                        + `\nUse \`$prefixsellduplicates\` to sell all the duplicate cards you have`
+                        + `\nUse \`$prefixgivecard <card>\` to give someone else a card`
                 }
             ])
     ]

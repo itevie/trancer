@@ -1,8 +1,7 @@
 import { Client, IntentsBitField, } from "discord.js";
 import { HypnoCommand } from "./types/command";
-import getAllFiles from "./util/getAllFiles";
 import { connect } from "./util/database";
-import { createBackup, createEmbed } from "./util/other";
+import getAllFiles, { createBackup, createEmbed } from "./util/other";
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import { HypnoMessageHandler } from "./types/messageHandler";
 import { checkBadges } from "./util/badges";
@@ -23,7 +22,8 @@ export const client = new Client({
         IntentsBitField.Flags.GuildMessages,
         IntentsBitField.Flags.DirectMessages,
         IntentsBitField.Flags.GuildVoiceStates,
-        IntentsBitField.Flags.DirectMessages
+        IntentsBitField.Flags.DirectMessages,
+        IntentsBitField.Flags.GuildModeration
     ],
 });
 

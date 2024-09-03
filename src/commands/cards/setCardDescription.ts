@@ -4,7 +4,8 @@ import { generateCardEmbed } from "../../util/cards";
 import { database } from "../../util/database";
 
 const command: HypnoCommand<{ card: Card }> = {
-    name: "=carddesc",
+    name: "setcarddescription",
+    aliases: ["setcarddesc"],
     description: "Set a cards description",
     type: "cards",
 

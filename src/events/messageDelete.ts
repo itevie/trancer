@@ -4,6 +4,8 @@ import config from "../config";
 import { createEmbed } from "../util/other";
 
 client.on("messageDelete", async message => {
+    if (message.guild.id !== config.botServer.id) return;
+
     const channel = await client.channels.fetch(config.botServer.channels.logs);
     if (channel.isTextBased()) {
         await channel.send({

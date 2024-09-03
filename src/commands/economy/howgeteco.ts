@@ -16,7 +16,7 @@ for (let i in config.economy) {
                 ? (
                     `Min: \`${config.economy[i].min}\`${symbol} Max: \`${config.economy[i].max}\`${symbol}`
                     + `${config.economy[i].limit ? `\nEvery: **${config.economy[i].limit / 60000} minutes**` : ""}`
-                    + `${config.economy[i].punishment ? `\nPunishment: **${config.economy[i].punishment}${config.economy.spirals}**` : ""}`
+                    + `${config.economy[i].punishment ? `\nPunishment: **${config.economy[i].punishment}${config.economy.currency}**` : ""}`
                 ) : "*No other details*"
         }
     ]);
