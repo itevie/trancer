@@ -1,10 +1,16 @@
 import { client } from "..";
 import config from "../config";
 import { addMoneyFor } from "../util/actions/economy";
+import { addToMemberCount } from "../util/analytics";
 import getInviteDetails from "../util/getInviteDetails";
 import { createEmbed } from "../util/other";
 
 client.on("guildMemberAdd", async member => {
+    console.log(`${member.user.username} joined`);
+    // Add to analytics
+    await addToMemberCount(member.guild.id, member.guild.memberCount);
+
+    // Guards
     if (client.user.id === config.devBot) return;
     if (member.guild.id !== config.botServer.id) return;
 

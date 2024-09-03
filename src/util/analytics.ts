@@ -75,3 +75,12 @@ export async function getMessageAtTimes(): Promise<MessagesAtTime[]> {
     if (!config.analytics.enabled) return [];
     return await analyticDatabase.all(`SELECT * FROM messages_at_time;`);
 }
+
+export async function addToMemberCount(serverId: string, count: number): Promise<void> {
+    if (!config.analytics.enabled) return;
+    await analyticDatabase.run(`INSERT INTO member_count (time, server_id, amount) VALUES (?, ?, ?);`, formatDate(new Date()), serverId, count);
+}
+
+export async function getMemberCounts(serverId: string): Promise<MemberCount[]> {
+    return await analyticDatabase.all(`SELECT * FROM member_count WHERE server_id = ?;`, serverId);
+}

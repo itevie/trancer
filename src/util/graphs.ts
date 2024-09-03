@@ -23,6 +23,22 @@ const height = 600;
 const backgroundColour = "#111111";
 const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height, backgroundColour });
 
+export async function generateSimpleLineChart(data: object[], timeKey: string, valueKey: string, label: string): Promise<Buffer> {
+    const configuration: ChartConfiguration = {
+        type: "line",
+        data: {
+            labels: data.map(x => x[timeKey]),
+            datasets: [{
+                label: label,
+                data: data.map(x => x[valueKey]),
+                borderColor: `#FFB6C1`
+            }]
+        }
+    };
+
+    return await chartJSNodeCanvas.renderToBuffer(configuration);
+}
+
 export async function generateGraph(creation: GraphCreationDetails): Promise<Buffer | string> {
     const tableGetters = {
         user_data: async () => await getAllGuildsUserData(creation.guildId),

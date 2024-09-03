@@ -18,4 +18,12 @@ CREATE TABLE IF NOT EXISTS messages_at_time (
 CREATE TABLE IF NOT EXISTS word_usage (
     word TEXT NOT NULL UNIQUE,
     amount INT NOT NULL DEFAULT 0
-)
+);
+
+DROP TABLE IF EXISTS member_count;
+CREATE TABLE IF NOT EXISTS member_count (
+    id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
+    time TEXT NOT NULL,
+    server_id TEXT NOT NULL,
+    amount INT NOT NULL
+);
