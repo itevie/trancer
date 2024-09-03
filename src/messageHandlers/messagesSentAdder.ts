@@ -9,7 +9,6 @@ const handler: HypnoMessageHandler = {
     description: "Adds 1 to your total sent messages",
 
     handler: async (message) => {
-        if (message.guild.id !== config.botServer.id) return;
         if (config.modules.statistics.enabled && !config.modules.statistics.ignoreChannels.includes(message.channel.id)) {
             addMessageSent(message.author.id, message.guild.id);
         }
