@@ -75,15 +75,17 @@ client.on("ready", async () => {
     if (config.website.enabled) {
         initServer();
 
-        const child = spawn("ssh", ["-R", "80:localhost:8080", "nokey@localhost.run"]);
+        if (client.user.id !== config.devBot) {
+            const child = spawn("ssh", ["-R", "80:localhost:8080", "nokey@localhost.run"]);
 
-        child.stdout.on('data', (data: string) => {
-            let url = data.toString().match(/[a-z0-9]+\.lhr\.life/)?.[0];
-            if (url) {
-                logger.log(`localhost.run URL: ${url}`);
-                localhostRunUrl = `http://${url}`;
-            }
-        });
+            child.stdout.on('data', (data: string) => {
+                let url = data.toString().match(/[a-z0-9]+\.lhr\.life/)?.[0];
+                if (url) {
+                    logger.log(`localhost.run URL: ${url}`);
+                    localhostRunUrl = `http://${url}`;
+                }
+            });
+        }
     }
 });
 

@@ -8,7 +8,7 @@ const command: HypnoCommand = {
     handler: async (message) => {
         if (!localhostRunUrl)
             return message.reply(`There is no tunnel!`);
-        return message.reply(`The current link is: ${localhostRunUrl}`);
+        return message.reply(`The current link is: ${localhostRunUrl}\n\nDo **not** save this URL, as it can change quite frequently.`);
     }
 };
 

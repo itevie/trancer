@@ -88,13 +88,34 @@ button:hover {
 .flex-col {
     display: flex;
     flex-direction: row;
+    flex-flow: wrap;
     gap: 50px;
 
     width: 100%;
     max-width: 100vw;
-    height: 100%;
 }
 
 .flex-col>div {
     min-width: 200px;
+    min-width: 0;
+}
+
+.loader {
+    width: 10px;
+    text-align: center;
+    animation: rotate linear infinite 0.5s;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+canvas {
+    min-width: 600px;
 }

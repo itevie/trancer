@@ -15,10 +15,13 @@
     <nav class="nav">
         <label>Trancer</label>
         <button onclick="loadPage('leaderboards');">Leaderboards</button>
+        <button onclick="loadPage('server');">Server</button>
+        <button onclick="loadPage('bot');">Bot</button>
     </nav>
     <div class="page-container">
         <div data-page-id="leaderboards" style="display: block;">
             <h1>Leaderboards</h1>
+            <label>Filter: <input id="leaderboard-search" onkeyup="updateLeaderboardPageSeach()"></label>
             <div class="flex-col">
                 <div>
                     <h2>Economy Leaderboard</h2>
@@ -40,6 +43,33 @@
         </div>
         <div data-page-id="money-overtime" style="display: none;">
             <h1>Money Overtime</h1>
+        </div>
+        <div data-page-id="server" style="display: none;">
+            <h1>Server Graphs</h1>
+            <div class="flex-col">
+                <div>
+                    <h2>Member Count Overtime</h2>
+                    <canvas id="member-count-overtime-chart"></canvas>
+                </div>
+                <div>
+                    <h2>Messages Overtime</h2>
+                    <canvas id="messages-overtime-chart"></canvas>
+                    <label>Filter:</label>
+                    <select id="messages-overtime-filter" onchange="updateServerGraphs()">
+                        <option value="minute">Minutes</option>
+                        <option value="hour">Hours</option>
+                        <option value="day" selected>Days</option>
+                        <option value="month">Months</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div data-page-id="bot" style="display: none;">
+            <h1>Bot Stuff</h1>
+            <div>
+                <h2>Command Usage</h2>
+                <p id="command-usage-leaderboard"></p>
+            </div>
         </div>
     </div>
 </body>
