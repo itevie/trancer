@@ -9,6 +9,8 @@ const command: HypnoCommand = {
     description: `Get a graph of the balance of certain people overtime`,
 
     handler: async (message, { oldArgs }) => {
+        let cap = oldArgs[0] !== "nocap" ? (oldArgs.shift() && 500) : null;
+
         if (oldArgs.length > 20 || oldArgs.length < 2)
             return message.reply(`Please provide 2-20 users!`);
 
@@ -20,7 +22,8 @@ const command: HypnoCommand = {
             sourceTableKey: "balance",
             sortByTable: "user_data",
             sortByTableKey: "messages_sent",
-            users: oldArgs.map(x => x.replace(/[<>@]/g, ""))
+            users: oldArgs.map(x => x.replace(/[<>@]/g, "")),
+            cap,
         });
 
         const attachment = new AttachmentBuilder(image)

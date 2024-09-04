@@ -6,7 +6,6 @@ import getInviteDetails from "../util/getInviteDetails";
 import { createEmbed } from "../util/other";
 
 client.on("guildMemberAdd", async member => {
-    console.log(`${member.user.username} joined`);
     // Add to analytics
     await addToMemberCount(member.guild.id, member.guild.memberCount);
 

@@ -42,9 +42,9 @@ export async function getMoneyTransations(userId: string): Promise<MoneyTransact
     return await analyticDatabase.all(`SELECT * FROM money_transactions WHERE user_id = ?`, userId) as MoneyTransaction[];
 }
 
-export async function getAllMoneyTransations(): Promise<MoneyTransaction[]> {
+export async function getAllMoneyTransations(limit?: number): Promise<MoneyTransaction[]> {
     if (!config.analytics.enabled) return [];
-    return await analyticDatabase.all(`SELECT * FROM money_transactions `) as MoneyTransaction[];
+    return await analyticDatabase.all(`SELECT * FROM money_transactions ORDER BY added_at DESC LIMIt ?`, limit || 1_000_000) as MoneyTransaction[];
 }
 
 export async function addCommandUsage(name: string): Promise<void> {

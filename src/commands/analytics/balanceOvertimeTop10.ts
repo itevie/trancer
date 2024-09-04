@@ -2,7 +2,7 @@ import { HypnoCommand } from "../../types/command";
 import { AttachmentBuilder } from "discord.js";
 import { generateGraph } from "../../util/graphs";
 
-const command: HypnoCommand<{ useMessagesSent?: boolean }> = {
+const command: HypnoCommand<{ useMessagesSent?: boolean, nocap?: boolean, }> = {
     name: "balanceovertimetop10",
     aliases: ["balovertop10", "bott"],
     type: "analytics",
@@ -15,6 +15,11 @@ const command: HypnoCommand<{ useMessagesSent?: boolean }> = {
                 name: "useMessagesSent",
                 type: "boolean",
                 description: "Base the top 15 off of messages instead of economy"
+            },
+            {
+                name: "nocap",
+                type: "boolean",
+                description: "Remove the 500 transaction cap",
             }
         ]
     },
@@ -37,6 +42,7 @@ const command: HypnoCommand<{ useMessagesSent?: boolean }> = {
                     }
             ),
             amount: 15,
+            cap: !args.nocap ? 500 : null,
         });
 
         const attachment = new AttachmentBuilder(image)

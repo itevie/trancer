@@ -27,6 +27,12 @@ const config = {
         )
     },
 
+    // ----- Website -----
+    website: {
+        enabled: true,
+        port: 8080,
+    },
+
     // ----- Exceptions to the command guard checks -----
     exceptions: [
         "395877903998648322"

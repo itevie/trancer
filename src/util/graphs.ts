@@ -15,6 +15,7 @@ export interface GraphCreationDetails {
     users?: string[],
     guildId?: string,
     amount?: number,
+    cap?: number,
     graphName?: string,
 }
 
@@ -43,7 +44,7 @@ export async function generateGraph(creation: GraphCreationDetails): Promise<Buf
     const tableGetters = {
         user_data: async () => await getAllGuildsUserData(creation.guildId),
         economy: async () => await getAllEconomy(),
-        money_transactions: async () => await getAllMoneyTransations()
+        money_transactions: async () => await getAllMoneyTransations(creation.cap)
     };
 
     const graphError = (msg: string) => {
@@ -69,7 +70,7 @@ export async function generateGraph(creation: GraphCreationDetails): Promise<Buf
             return graphError(`key ${creation.sourceTableKey}'s type is not of type number in table ${creation.sourceTable}`);
     }
 
-    const source = sourcePreSort.sort((a, b) => b[creation.sourceTableKey] - a[creation.sourceTableKey]);
+    let source = sourcePreSort.sort((a, b) => b[creation.sourceTableKey] - a[creation.sourceTableKey]);
 
     // Get the sort by
     let sortBy: string[] = [];

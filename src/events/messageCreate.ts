@@ -116,7 +116,7 @@ client.on("messageCreate", async message => {
                                 && parseInt(fullArgs[i]) % 1 !== 0
                             ) ? "Expected a whole, positive number" : { value: parseInt(arg) },
                             boolean: (arg) =>
-                                ["true", "false", "yes", "no", "t", "f"].includes(arg)
+                                !["true", "false", "yes", "no", "t", "f"].includes(arg)
                                     ? "Expected true or false"
                                     : { value: { true: true, false: false, yes: true, no: false, t: true, f: false }[arg] },
                             string: (arg) => { return { value: arg } },

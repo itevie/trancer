@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <!--<div class="blindfold">
+        Loading data... Please wait...
+    </div>-->
+    <nav class="nav">
+        <label>Trancer</label>
+        <button onclick="loadPage('leaderboards');">Leaderboards</button>
+    </nav>
+    <div class="page-container">
+        <div data-page-id="leaderboards" style="display: block;">
+            <h1>Leaderboards</h1>
+            <div class="flex-col">
+                <div>
+                    <h2>Economy Leaderboard</h2>
+                    <p id="economy-leaderboard"></p>
+                </div>
+                <div>
+                    <h2>Messages Leaderboard</h2>
+                    <p id="messages-leaderboard"></p>
+                </div>
+                <div>
+                    <h2>VC Time Leaderboard</h2>
+                    <p id="vctime-leaderboard"></p>
+                </div>
+                <div>
+                    <h2>Bump Leaderboard</h2>
+                    <p id="bump-leaderboard"></p>
+                </div>
+            </div>
+        </div>
+        <div data-page-id="money-overtime" style="display: none;">
+            <h1>Money Overtime</h1>
+        </div>
+    </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/script.js"></script>
+
+</html>

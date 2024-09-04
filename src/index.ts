@@ -9,9 +9,12 @@ import Logger from "./util/Logger";
 import config from "./config";
 import { connectAnalytic } from "./util/analytics";
 import path from "path";
+import initServer from "./website";
+import { spawn } from "child_process";
 
 export const commands: { [key: string]: HypnoCommand } = {};
 export const handlers: HypnoMessageHandler[] = [];
+export let localhostRunUrl: string | null = null;
 
 // Setup client shit
 export const client = new Client({
@@ -66,6 +69,22 @@ client.on("ready", async () => {
     }, 60000);
 
     logger.log(`${client.user?.username} successfully logged in!`);
+
+    await (await client.guilds.fetch(config.botServer.id)).members.fetch();
+
+    if (config.website.enabled) {
+        initServer();
+
+        const child = spawn("ssh", ["-R", "80:localhost:8080", "nokey@localhost.run"]);
+
+        child.stdout.on('data', (data: string) => {
+            let url = data.toString().match(/[a-z0-9]+\.lhr\.life/)?.[0];
+            if (url) {
+                logger.log(`localhost.run URL: ${url}`);
+                localhostRunUrl = `http://${url}`;
+            }
+        });
+    }
 });
 
 client.login(
