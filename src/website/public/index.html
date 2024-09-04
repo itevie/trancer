@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style.css">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark/dark.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -15,6 +17,7 @@
     <nav class="nav">
         <label>Trancer</label>
         <button onclick="loadPage('leaderboards');">Leaderboards</button>
+        <button onclick="loadPage('user-data');">User Data</button>
         <button onclick="loadPage('server');">Server</button>
         <button onclick="loadPage('bot');">Bot</button>
     </nav>
@@ -41,8 +44,10 @@
                 </div>
             </div>
         </div>
-        <div data-page-id="money-overtime" style="display: none;">
-            <h1>Money Overtime</h1>
+        <div data-page-id="user-data" style="display: none;">
+            <h1>User Data</h1>
+            <label>Usernames:</label>
+            <div id="user-data-usernames"></div>
         </div>
         <div data-page-id="server" style="display: none;">
             <h1>Server Graphs</h1>

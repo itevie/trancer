@@ -14,6 +14,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     localStorage.setItem("usernames", JSON.stringify(usernames));
 
+    const usernameSelect = document.getElementById("user-data-usernames");
+    for (const i of Object.values(usernames).sort()) {
+        const label = document.createElement("label");
+        label.innerHTML = i;
+        const option = document.createElement("input");
+        option.type = "checkbox"
+        label.appendChild(option);
+        usernameSelect.appendChild(label);
+    }
+
     let p = window.location.hash.replace("#", "");
 
     p ? loadPage(p) : loadLeaderboardPage();
@@ -154,9 +164,23 @@ function fetchData(type) {
     return new Promise((resolve, reject) => {
         fetch(`/data/${type}`)
             .then(async data => {
-                return resolve(data.json());
+                data.json().then(x => {
+                    resolve(x)
+                }).catch(e => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Ruh Roh!",
+                        text: `Couldn't fetch data for: ${type}! (${e.toString()})`,
+                    });
+                    reject(e)
+                })
             })
             .catch(err => {
+                Swal.fire({
+                    icon: "error",
+                    title: "Ruh Roh!",
+                    text: `Couldn't fetch data for: ${type}! (${e.toString()})`,
+                });
                 reject(err);
             });
     });
