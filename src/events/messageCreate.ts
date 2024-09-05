@@ -1,4 +1,4 @@
-import { AutoModerationRuleTriggerType, Message, PermissionsBitField, User } from "discord.js";
+import { AutoModerationRuleTriggerType, Message, PermissionsBitField, Role, User } from "discord.js";
 import { client, commands, handlers } from "..";
 import { HypnoCommandDetails } from "../types/util";
 import { createEconomyFor, economyForUserExists } from "../util/actions/economy";
@@ -80,8 +80,41 @@ client.on("messageCreate", async message => {
 
     // Extract command
     const content = message.content.substring(settings.prefix.length, message.content.length).trim();
-    const fullArgs = content.replace(/ {2,}/g, ' ').split(" ");
+
+    const fullArgs: string[] = [];
+    let currentArg: string = "";
+    let inQuote: boolean = false;
+
+    for (const char of content) {
+        // Check if new arg
+        if (char === " " && !inQuote) {
+            fullArgs.push(currentArg);
+            currentArg = "";
+            continue;
+        }
+
+        // Check if string
+        if (char === "\"") {
+            if (inQuote) {
+                inQuote = false;
+                fullArgs.push(currentArg);
+                currentArg = "";
+                continue;
+            }
+
+            inQuote = true;
+            continue;
+        }
+
+        currentArg += char;
+    }
+    if (currentArg) fullArgs.push(currentArg);
+
+    const fullArgs2 = content.replace(/ {2,}/g, ' ').split(" ");
     const command = fullArgs.shift().toLowerCase();
+
+    const originalContent = content.split(" ");
+    originalContent.shift();
 
     try {
         // Check if command was found
@@ -92,6 +125,7 @@ client.on("messageCreate", async message => {
                 command,
                 args: {},
                 oldArgs: fullArgs,
+                originalContent: originalContent.join(" "),
             };
 
             // Function to actually execute the command if wanted
@@ -156,6 +190,20 @@ client.on("messageCreate", async message => {
                                 }
 
                                 return { value: user }
+                            },
+                            role: async (arg) => {
+                                if (!arg.match(/<?@?&?[0-9]+>?/))
+                                    return `Invalid role format provided, please provide a mention or ID!`;
+
+                                let role: Role;
+                                try {
+                                    role = await message.guild.roles.fetch(arg.replace(/[<>@&]/g, ""));
+                                } catch (err) {
+                                    console.log(err);
+                                    return `Failed to fetch the role: ${arg}`;
+                                }
+
+                                return { value: role }
                             }
                         };
 

@@ -1,4 +1,4 @@
-import { Client, IntentsBitField, } from "discord.js";
+import { Client, IntentsBitField, Partials, } from "discord.js";
 import { HypnoCommand, HypnoMessageHandler } from "./types/util";
 import { connect } from "./util/database";
 import getAllFiles, { createBackup, createEmbed } from "./util/other";
@@ -25,8 +25,10 @@ export const client = new Client({
         IntentsBitField.Flags.DirectMessages,
         IntentsBitField.Flags.GuildVoiceStates,
         IntentsBitField.Flags.DirectMessages,
-        IntentsBitField.Flags.GuildModeration
+        IntentsBitField.Flags.GuildModeration,
+        IntentsBitField.Flags.GuildMessageReactions,
     ],
+    partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
 
 const logger = new Logger("loader");

@@ -1,0 +1,144 @@
+{
+    "menus": [
+        {
+            "name": "Age",
+            "items": [
+                {
+                    "name": "14-15",
+                    "emoji": "🍼",
+                    "role": "1257419527721848834"
+                },
+                {
+                    "name": "16-17",
+                    "emoji": "😎",
+                    "role": "1257419597217267774"
+                },
+                {
+                    "name": "18+",
+                    "emoji": "🧑",
+                    "role": "1257420001753698390"
+                }
+            ]
+        },
+        {
+            "name": "Hypnosis Role",
+            "items": [
+                {
+                    "name": "Subject",
+                    "emoji": "😵‍💫",
+                    "role": "1257420084511768698"
+                },
+                {
+                    "name": "Hypnotist",
+                    "emoji": "🌀",
+                    "role": "1257420070582226944"
+                },
+                {
+                    "name": "Switch",
+                    "emoji": "👿",
+                    "role": "1257420095614091396"
+                },
+                {
+                    "name": "Hypno Curious",
+                    "emoji": "❓",
+                    "role": "1257420129667518596"
+                }
+            ]
+        },
+        {
+            "name": "Pronouns",
+            "items": [
+                {
+                    "name": "she / her",
+                    "emoji": "🔴",
+                    "role": "1257483558264508491"
+                },
+                {
+                    "name": "he / him",
+                    "emoji": "🟠",
+                    "role": "1257483574471557140"
+                },
+                {
+                    "name": "they / them",
+                    "emoji": "🟡",
+                    "role": "1257483585494192128"
+                },
+                {
+                    "name": "it / its",
+                    "emoji": "🟢",
+                    "role": "1257483599398309959"
+                },
+                {
+                    "name": "Ask Pronouns",
+                    "emoji": "🔵",
+                    "role": "1257483612119634001"
+                },
+                {
+                    "name": "Name Pronouns",
+                    "emoji": "🟣",
+                    "role": "1257483631165968456"
+                }
+            ]
+        },
+        {
+            "name": "DM Status",
+            "items": [
+                {
+                    "name": "Open DMs",
+                    "emoji": "📫",
+                    "role": "1257427262668537907"
+                },
+                {
+                    "name": "Closed DMs",
+                    "emoji": "📪",
+                    "role": "1257427298051821691"
+                },
+                {
+                    "name": "Ask To DM",
+                    "emoji": "❓",
+                    "role": "1257427317425180792"
+                }
+            ]
+        },
+        {
+            "name": "Pings",
+            "items": [
+                {
+                    "name": "Hypnotist Ping",
+                    "emoji": "🌀",
+                    "role": "1257431793276157983"
+                },
+                {
+                    "name": "Subject Ping",
+                    "emoji": "😵‍💫",
+                    "role": "1257431860091555970"
+                },
+                {
+                    "name": "QOTD Ping",
+                    "emoji": "❓",
+                    "role": "1257477180858962013"
+                },
+                {
+                    "name": "Announcement Ping",
+                    "emoji": "🔊",
+                    "role": "1257799645048869004"
+                },
+                {
+                    "name": "Minecraft Ping",
+                    "emoji": "🌲",
+                    "role": "1261463747797581824"
+                },
+                {
+                    "name": "VC Ping",
+                    "emoji": "📞",
+                    "role": "1263620518087626853"
+                },
+                {
+                    "name": "Bot Updates",
+                    "emoji": "🤖",
+                    "role": "1280494604432707585"
+                }
+            ]
+        }
+    ]
+}

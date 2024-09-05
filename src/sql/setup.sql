@@ -1,18 +1,4 @@
-CREATE TABLE IF NOT EXISTS spirals (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    link TEXT NOT NULL,
-    sent_by TEXT DEFAULT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    file_name TEXT DEFAULT NULL
-);
-
-CREATE TABLE IF NOT EXISTS channel_imposition (
-    channel_id TEXT NOT NULL,
-    is_enabled BOOLEAN NOT NULL DEFAULT false,
-    chance INT NOT NULL DEFAULT 70,
-    every INT NOT NULL DEFAULT 10
-);
-
+-- Server specific stuff
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
@@ -25,12 +11,103 @@ CREATE TABLE IF NOT EXISTS server_settings (
     switch_role_id TEXT DEFAULT NULL
 );
 
+CREATE TABLE IF NOT EXISTS channel_imposition (
+    channel_id TEXT NOT NULL,
+    is_enabled BOOLEAN NOT NULL DEFAULT false,
+    chance INT NOT NULL DEFAULT 70,
+    every INT NOT NULL DEFAULT 10
+);
+
 CREATE TABLE IF NOT EXISTS server_count (
     server_id TEXT NOT NULL,
     channel_id TEXT NOT NULL,
     current_count INT NOT NULL DEFAULT 0,
     last_counter TEXT DEFAULT NULL,
     highest_count INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS role_menus (
+    id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
+    server_id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    description TEXT DEFAULT NULL,
+    attached_to TEXT DEFAULT NULL
+);
+
+CREATE TABLE IF NOT EXISTS role_menu_items (
+    id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
+    menu_id INTEGER REFERENCES role_menu(id),
+    name TEXT NOT NULL,
+    emoji TEXT NOT NULL,
+    role_id TEXT NOT NULL
+);
+
+-- User specific stuff
+CREATE TABLE IF NOT EXISTS user_imposition (
+    user_id TEXT NOT NULL,
+    what TEXT NOT NULL,
+    is_bombardable BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE TABLE IF NOT EXISTS user_favourite_spirals (
+    id INT REFERENCES spirals(id) NOT NULL,
+    user_id TEXT NOT NULL
+);
+    
+CREATE TABLE IF NOT EXISTS user_data (
+    user_id TEXT NOT NULL,
+    guild_id TEXT NOT NULL,
+    bumps INT NOT NULL DEFAULT 0,
+    messages_sent INT NOT NULL DEFAULT 0,
+    vc_time INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS dawnagotchi (
+    id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
+    owner_id TEXT NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    hair_color_hex TEXT NOT NULL DEFAULT '#FFB6C1',
+
+    alive BOOLEAN NOT NULL DEFAULT true,
+
+    next_feed INT NOT NULL DEFAULT 0,
+    next_drink INT NOT NULL DEFAULT 0,
+    next_play INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS aquired_badges (
+    user TEXT NOT NULL,
+    badge_name TEXT NOT NULL,
+    date_aquired DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS aquired_items (
+    item_id INTEGER REFERENCES items(id),
+    user_id TEXT NOT NULL,
+    amount INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS aquired_cards (
+    card_id INTEGER REFERENCES cards(id),
+    user_id TEXT NOT NULL,
+    amount INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS votes (
+    rank_name TEXT NOT NULL,
+    voter TEXT NOT NULL,
+    votee TEXT NOT NULL,
+    voted_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Global stuff
+CREATE TABLE IF NOT EXISTS spirals (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    link TEXT NOT NULL,
+    sent_by TEXT DEFAULT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    file_name TEXT DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS quotes (
@@ -44,37 +121,10 @@ CREATE TABLE IF NOT EXISTS quotes (
     last_guessed DATETIME NOT NULL DEFAULT 0
 );
 
-CREATE TABLE IF NOT EXISTS user_imposition (
-    user_id TEXT NOT NULL,
-    what TEXT NOT NULL,
-    is_bombardable BOOLEAN NOT NULL DEFAULT FALSE
-);
-
-CREATE TABLE IF NOT EXISTS user_favourite_spirals (
-    id INT REFERENCES spirals(id) NOT NULL,
-    user_id TEXT NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS ranks (
     rank_name TEXT NOT NULL UNIQUE,
     created_by TEXT NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE IF NOT EXISTS votes (
-    rank_name TEXT NOT NULL,
-    voter TEXT NOT NULL,
-    votee TEXT NOT NULL,
-    voted_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-    
-CREATE TABLE IF NOT EXISTS user_data (
-    user_id TEXT NOT NULL,
-    guild_id TEXT NOT NULL,
-    bumps INT NOT NULL DEFAULT 0,
-    messages_sent INT NOT NULL DEFAULT 0,
-    vc_time INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS economy (
@@ -101,12 +151,6 @@ CREATE TABLE IF NOT EXISTS leaderboard_entries (
     leaderboard TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS aquired_badges (
-    user TEXT NOT NULL,
-    badge_name TEXT NOT NULL,
-    date_aquired DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE TABLE IF NOT EXISTS decks (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     name TEXT UNIQUE NOT NULL,
@@ -124,36 +168,10 @@ CREATE TABLE IF NOT EXISTS cards (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS aquired_cards (
-    card_id INTEGER REFERENCES cards(id),
-    user_id TEXT NOT NULL,
-    amount INT NOT NULL DEFAULT 0
-);
-
 CREATE TABLE IF NOT EXISTS items (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     name TEXT NOT NULL,
     price INT NOT NULL,
     description TEXT DEFAULT NULL,
     droppable BOOLEAN NOT NULL DEFAULT false
-);
-
-CREATE TABLE IF NOT EXISTS aquired_items (
-    item_id INTEGER REFERENCES items(id),
-    user_id TEXT NOT NULL,
-    amount INT NOT NULL DEFAULT 0
-);
-
-CREATE TABLE IF NOT EXISTS dawnagotchi (
-    id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
-    owner_id TEXT NOT NULL,
-    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    hair_color_hex TEXT NOT NULL DEFAULT '#FFB6C1',
-
-    alive BOOLEAN NOT NULL DEFAULT true,
-
-    next_feed INT NOT NULL DEFAULT 0,
-    next_drink INT NOT NULL DEFAULT 0,
-    next_play INT NOT NULL DEFAULT 0
 );

@@ -25,3 +25,19 @@ interface ServerCount {
     current_count: number,
     highest_count: number,
 }
+
+interface RoleMenu {
+    id: number,
+    server_id: string,
+    name: string,
+    description: string,
+    attached_to: string | null,
+}
+
+interface RoleMenuItem {
+    id: number,
+    menu_id: number,
+    name: string,
+    emoji: string,
+    role_id: string,
+}

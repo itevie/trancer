@@ -7,13 +7,14 @@ type HypnoCommandType = "analytics" | "dawnagotchi" | "ranks" | "economy"
 type Guard = "admin" | "bot-server" | "bot-owner";
 
 type ArgumentType = "string" | "confirm" | "any" | "number" | "wholepositivenumber"
-    | "user" | "boolean" | "card" | "deck";
+    | "user" | "boolean" | "card" | "deck" | "role";
 
 interface HypnoCommandDetails<Args extends { [key: string]: any } = {}> {
     serverSettings: ServerSettings,
     command: string,
     args?: Args,
-    oldArgs: string[]
+    oldArgs: string[],
+    originalContent: string,
 }
 
 interface HypnoCommand<Args extends { [key: string]: any } = {}> {
