@@ -15,7 +15,7 @@ const command: HypnoCommand = {
             const user = args[0].replace(/[<>@]/g, "");
             return message.channel.send(`${args.join(" ")} ${await getRandomImposition(user)}`);
         }
-        return message.reply(await getRandomImposition(message.author.id) + ` ${message.author.id === "735109350728663080"}` ? "<@735109350728663080>" : "");
+        return message.reply(await getRandomImposition(message.author.id) + ` ${message.author.id === "735109350728663080"}` ? "<@395877903998648322>" : "");
     }
 }
 
