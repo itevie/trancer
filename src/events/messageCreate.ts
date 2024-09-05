@@ -255,6 +255,13 @@ client.on("messageCreate", async message => {
                 if (!message.member.permissions.has(PermissionsBitField.Flags.Administrator) && !except())
                     return message.reply(`You are not administrator :cyclone:`);
 
+            // Check if has specific permissions
+            if (cmd.permissions) {
+                for (const permission of cmd.permissions)
+                    if (!message.member.permissions.has(permission) && !except())
+                        return message.reply(`You do not have the ${permission} permission!`);
+            }
+
             // Check if commandis bot-server only
             if (cmd.botServerOnly && message.guild.id !== config.botServer.id)
                 return message.reply(`This command can only be used in the bot server :cyclone:`);

@@ -16,7 +16,6 @@ const command: HypnoCommand = {
         // Get JSON
         let json: object;
         try {
-            console.log(originalContent.replace(/```/g, "").replace(/[\r\n]/g, ""));
             json = JSON.parse(originalContent.replace(/```/g, "").replace(/[\r\n]/g, ""));
         } catch (e) {
             return err(`Failed to parse JSON: ${e}`);

@@ -44,14 +44,15 @@ const config = {
         invite: "https://discord.gg/zBWq29apsy",
 
         roles: {
-            member: "1257423790212907038"
+            member: "1257423790212907038",
+            verified: "1257423790212907038",
         },
 
         channels: {
             logs: "1257417773483561031",
             quotes: "1257815880557920307",
             bumps: "1257429174637826059",
-            welcomes: "1257417250395263036"
+            welcomes: "1257417250395263036",
         },
 
         vcChannels: [
