@@ -1,5 +1,5 @@
 import { AttachmentBuilder } from "discord.js";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { getMemberCounts } from "../../util/analytics";
 import { generateSimpleLineChart } from "../../util/graphs";
 

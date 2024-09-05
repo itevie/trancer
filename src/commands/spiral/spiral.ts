@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { getRandomSpiral, getSpirals } from "../../util/actions/spirals";
 
 export const sentSpirals: { [key: string]: Spiral } = {};

@@ -1,5 +1,5 @@
 import { User } from "discord.js";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import badges from "../../util/badges";
 import { removeBadgeFor } from "../../util/actions/badges";
 

@@ -1,4 +1,4 @@
-import { HypnoMessageHandler } from "../types/messageHandler";
+import { HypnoMessageHandler } from "../types/util";
 import { getImposition } from "../util/actions/imposition";
 import { getRandomImpositionFromFile } from "../util/other";
 

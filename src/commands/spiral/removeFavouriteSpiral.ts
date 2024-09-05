@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { removeFavouriteSpiral } from "../../util/actions/userFavouriteSpirals";
 
 const command: HypnoCommand<{ id: number }> = {

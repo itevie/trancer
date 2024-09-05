@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { commands } from "../..";
 import { createEmbed } from "../../util/other";
 import { getServerSettings } from "../../util/actions/settings";

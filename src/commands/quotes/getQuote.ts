@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { genQuote, getQuote, randomQuote } from "../../util/actions/quotes";
 
 const command: HypnoCommand = {

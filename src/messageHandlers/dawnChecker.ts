@@ -1,5 +1,5 @@
 import config from "../config";
-import { HypnoMessageHandler } from "../types/messageHandler";
+import { HypnoMessageHandler } from "../types/util";
 import { getDawnagotchi, removeDawnagotchi } from "../util/actions/dawnagotchi";
 import { removeMoneyFor } from "../util/actions/economy";
 import { database } from "../util/database";

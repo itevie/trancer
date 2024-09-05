@@ -1,5 +1,5 @@
 import { User } from "discord.js";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { addCardFor, getAquiredCardsFor, removeCardFor } from "../../util/actions/cards";
 import { generateCardEmbed } from "../../util/cards";
 

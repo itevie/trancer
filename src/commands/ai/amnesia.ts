@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { history } from "./ai";
 
 const command: HypnoCommand = {

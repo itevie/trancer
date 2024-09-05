@@ -1,6 +1,6 @@
 import { AutoModerationRuleTriggerType, Message, PermissionsBitField, User } from "discord.js";
 import { client, commands, handlers } from "..";
-import { HypnoCommandDetails } from "../types/command";
+import { HypnoCommandDetails } from "../types/util";
 import { createEconomyFor, economyForUserExists } from "../util/actions/economy";
 import { getServerSettings, setupSettingsFor } from "../util/actions/settings";
 import { createUserData, userDataExists } from "../util/actions/userData";

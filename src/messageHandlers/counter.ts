@@ -1,5 +1,5 @@
 import { client } from "..";
-import { HypnoMessageHandler } from "../types/messageHandler";
+import { HypnoMessageHandler } from "../types/util";
 import { getServerCount } from "../util/actions/serverCount";
 import { database } from "../util/database";
 import { createEmbed } from "../util/other";

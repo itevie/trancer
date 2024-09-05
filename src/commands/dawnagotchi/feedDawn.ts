@@ -1,5 +1,5 @@
 import config from "../../config";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { getDawnagotchi } from "../../util/actions/dawnagotchi";
 import { getAquiredItem, removeItemFor } from "../../util/actions/items";
 import { database } from "../../util/database";

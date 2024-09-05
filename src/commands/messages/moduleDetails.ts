@@ -1,5 +1,5 @@
 import { handlers } from "../..";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand = {

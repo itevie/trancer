@@ -1,5 +1,5 @@
 import { AquiredBadge } from "../../types/aquiredBadge";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import badges, { Badge } from "../../util/badges";
 import { database } from "../../util/database";
 import { createEmbed } from "../../util/other";

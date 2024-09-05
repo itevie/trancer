@@ -1,5 +1,5 @@
 import { User } from "discord.js";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { economyForUserExists, setMoneyFor } from "../../util/actions/economy";
 import config from "../../config";
 

@@ -1,5 +1,5 @@
 import { AttachmentBuilder } from "discord.js";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { generateGraph, GraphCreationDetails } from "../../util/graphs";
 
 const preset: { [key: string]: GraphCreationDetails } = {

@@ -1,5 +1,5 @@
 import config from "../../config";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { getAllAquiredCardsFor, getAquiredCardsFor } from "../../util/actions/cards";
 import { addMoneyFor } from "../../util/actions/economy";
 import { computeCardPrice, convertAquiredCardsToCards } from "../../util/cards";

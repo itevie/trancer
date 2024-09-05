@@ -1,5 +1,5 @@
 import { User } from "discord.js";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { getAquiredItemsFor, getItem } from "../../util/actions/items";
 import { createEmbed } from "../../util/other";
 

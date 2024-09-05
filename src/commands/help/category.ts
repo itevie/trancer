@@ -1,7 +1,7 @@
 import { PermissionFlagsBits } from "discord.js";
 import { commands } from "../..";
 import config from "../../config";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 
 const command: HypnoCommand<{ category: string, ignoreGuards?: boolean }> = {
     name: "category",

@@ -1,6 +1,6 @@
 import { promisify } from "util";
 import config from "../../config";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { exec } from "child_process";
 
 const command: HypnoCommand = {

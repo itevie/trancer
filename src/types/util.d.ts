@@ -1,7 +1,13 @@
 import { Message } from "discord.js"
 
-type HypnoCommandType = "analytics" | "dawnagotchi" | "ranks" | "economy" | "cards" | "badges" | "counting" | "spirals" | "quotes" | "help" | "imposition" | "uncategorised" | "fun" | "admin" | "messages" | "leaderboards" | "ai";
+type HypnoCommandType = "analytics" | "dawnagotchi" | "ranks" | "economy"
+    | "cards" | "badges" | "counting" | "spirals" | "quotes" | "help" | "imposition"
+    | "uncategorised" | "fun" | "admin" | "messages" | "leaderboards" | "ai";
+
 type Guard = "admin" | "bot-server" | "bot-owner";
+
+type ArgumentType = "string" | "confirm" | "any" | "number" | "wholepositivenumber"
+    | "user" | "boolean" | "card" | "deck";
 
 interface HypnoCommandDetails<Args extends { [key: string]: any } = {}> {
     serverSettings: ServerSettings,
@@ -34,10 +40,20 @@ interface HypnoCommand<Args extends { [key: string]: any } = {}> {
 }
 
 interface Argument {
-    type: "string" | "confirm" | "any" | "number" | "wholepositivenumber" | "user" | "boolean" | "card" | "deck";
+    type: ArgumentType,
     name: string,
     onMissing?: string,
     description?: string,
     mustBe?: any,
     oneOf?: any[],
+}
+
+interface HypnoMessageHandler {
+    name: string,
+    description: string,
+    examples?: string[],
+    botsOnly?: boolean,
+    noCommands?: boolean,
+
+    handler: (message: Message) => void,
 }

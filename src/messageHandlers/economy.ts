@@ -1,4 +1,4 @@
-import { HypnoMessageHandler } from "../types/messageHandler";
+import { HypnoMessageHandler } from "../types/util";
 import config from "../config";
 import { randomFromRange } from "../util/other";
 import { addMoneyFor } from "../util/actions/economy";

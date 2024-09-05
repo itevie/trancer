@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { getAllEconomy } from "../../util/actions/economy";
 import { createEmbed } from "../../util/other";
 import config from "../../config";

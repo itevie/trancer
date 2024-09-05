@@ -1,9 +1,8 @@
 import { Client, IntentsBitField, } from "discord.js";
-import { HypnoCommand } from "./types/command";
+import { HypnoCommand, HypnoMessageHandler } from "./types/util";
 import { connect } from "./util/database";
 import getAllFiles, { createBackup, createEmbed } from "./util/other";
 import { existsSync, readFileSync, writeFileSync } from "fs";
-import { HypnoMessageHandler } from "./types/messageHandler";
 import { checkBadges } from "./util/badges";
 import Logger from "./util/Logger";
 import config from "./config";

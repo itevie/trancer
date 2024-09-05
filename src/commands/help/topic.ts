@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { fixMagicVariablesInEmbed } from "../../util/other";
 import { messages } from "./help";
 const command: HypnoCommand = {

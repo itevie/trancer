@@ -1,6 +1,6 @@
 import { MessageCreateOptions, PermissionFlagsBits } from "discord.js";
 import { commands } from "../..";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { getServerSettings } from "../../util/actions/settings";
 import getAllFiles, { createEmbed } from "../../util/other";
 import config from "../../config";

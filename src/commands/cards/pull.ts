@@ -1,5 +1,5 @@
 import config from "../../config";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { addCardFor } from "../../util/actions/cards";
 import { getAquiredItem, getItem, removeItemFor } from "../../util/actions/items";
 import { generateCardEmbed } from "../../util/cards";

@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { setServerPrefix } from "../../util/actions/settings";
 import { database } from "../../util/database";
 import { createEmbed } from "../../util/other";

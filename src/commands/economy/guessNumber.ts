@@ -1,6 +1,6 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle } from "discord.js";
 import config from "../../config";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { createEmbed, randomFromRange } from "../../util/other";
 import { addMoneyFor, removeMoneyFor } from "../../util/actions/economy";
 

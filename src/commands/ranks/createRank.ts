@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { rankExists } from "../../util/actions/ranks";
 import { database } from "../../util/database";
 

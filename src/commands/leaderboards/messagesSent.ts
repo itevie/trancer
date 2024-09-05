@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { getAllGuildsUserData } from "../../util/actions/userData";
 import createLeaderboardFromData from "../../util/createLeaderboard";
 

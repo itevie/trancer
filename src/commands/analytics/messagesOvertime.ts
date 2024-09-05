@@ -1,5 +1,5 @@
 import { ChartConfiguration } from "chart.js";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { ChartJSNodeCanvas } from "chartjs-node-canvas";
 import { AttachmentBuilder } from "discord.js";
 import { getMessageAtTimes } from "../../util/analytics";

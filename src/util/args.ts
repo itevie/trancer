@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../types/command";
+import { HypnoCommand } from "../types/util";
 
 export function generateCommandCodeBlock(command: HypnoCommand, serverSettings: ServerSettings) {
     let codeblock = "```" + `${serverSettings.prefix}${command.name}`;

@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { existingGames } from "./coinflip";
 
 const command: HypnoCommand = {

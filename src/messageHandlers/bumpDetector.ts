@@ -1,4 +1,4 @@
-import { HypnoMessageHandler } from "../types/messageHandler";
+import { HypnoMessageHandler } from "../types/util";
 import { createLeaderboard, insertLeaderboardEntry, leaderboardExists } from "../util/actions/leaderboards";
 import { addBump } from "../util/actions/userData";
 import config from "../config";

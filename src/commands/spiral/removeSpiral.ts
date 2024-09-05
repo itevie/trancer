@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { deleteSpiral, getSpiralById, hasSpiral } from "../../util/actions/spirals";
 import { getServerSettings } from "../../util/actions/settings";
 import { sentSpirals } from "./spiral";

@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { addImpositionFor } from "../../util/actions/imposition";
 import { database } from "../../util/database";
 import * as fs from "fs";

@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { addMoneyFor, getEconomyFor, removeMoneyFor } from "../../util/actions/economy";
 import config from "../../config";
 

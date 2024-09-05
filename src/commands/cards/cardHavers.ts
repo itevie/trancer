@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { getAllAquiredCards, getCardById } from "../../util/actions/cards";
 import { generateCardEmbed } from "../../util/cards";
 

@@ -1,5 +1,5 @@
 import { resolve } from "path";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { addCard, getDeckById } from "../../util/actions/cards";
 import { generateCardEmbed, rarities } from "../../util/cards";
 import { Attachment } from "discord.js";

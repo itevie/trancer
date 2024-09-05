@@ -10,3 +10,18 @@ interface ServerSettings {
     tist_role_id: string,
     switch_role_id: string,
 }
+
+interface ChannelImposition {
+    channel_id: string,
+    is_enabled: boolean,
+    every: number,
+    chance: number,
+}
+
+interface ServerCount {
+    server_id: string,
+    channel_id: string,
+    last_counter: string,
+    current_count: number,
+    highest_count: number,
+}

@@ -1,5 +1,5 @@
 import { User } from "discord.js";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { getAllAquiredCardsFor, getCardById } from "../../util/actions/cards";
 import { computeCardPrice } from "../../util/cards";
 import config from "../../config";

@@ -1,5 +1,5 @@
 import { User } from "discord.js";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { getDawnagotchi } from "../../util/actions/dawnagotchi";
 import { generateDawnagotchiEmbed } from "../../util/dawnagotchi";
 

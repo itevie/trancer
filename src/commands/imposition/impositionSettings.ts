@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { getImposition, impositionSetEnabled, setImpositionChance, setImpositionEvery, setupImposition } from "../../util/actions/imposition";
 import { getServerSettings } from "../../util/actions/settings";
 import { database } from "../../util/database";

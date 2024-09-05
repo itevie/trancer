@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { getItem } from "../../util/actions/items";
 import { database } from "../../util/database";
 

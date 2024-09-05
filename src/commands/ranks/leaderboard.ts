@@ -1,5 +1,5 @@
 import { client } from "../..";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { rankExists } from "../../util/actions/ranks";
 import createLeaderboardFromData, { accumlateSortLeaderboardData } from "../../util/createLeaderboard";
 import { database } from "../../util/database";

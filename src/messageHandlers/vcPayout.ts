@@ -1,6 +1,6 @@
 import { client } from "..";
 import config from "../config";
-import { HypnoMessageHandler } from "../types/messageHandler";
+import { HypnoMessageHandler } from "../types/util";
 import { addMoneyFor } from "../util/actions/economy";
 import { database } from "../util/database";
 import { randomFromRange } from "../util/other";

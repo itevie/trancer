@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { database } from "../../util/database";
 
 const command: HypnoCommand = {

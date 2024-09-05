@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import config from "../../config";
 import { User } from "discord.js";
 import { economyForUserExists, getEconomyFor, addMoneyFor, removeMoneyFor } from "../../util/actions/economy";

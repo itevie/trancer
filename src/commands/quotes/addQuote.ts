@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { addQuote, genQuote } from "../../util/actions/quotes";
 import { database } from "../../util/database";
 import config from "../../config";

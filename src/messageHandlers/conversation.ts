@@ -1,5 +1,5 @@
 import { client } from "..";
-import { HypnoMessageHandler } from "../types/messageHandler";
+import { HypnoMessageHandler } from "../types/util";
 import { getServerSettings } from "../util/actions/settings";
 
 const mentionRegex = `(<@${client.user.id}>)|(hypno ?helper)`;

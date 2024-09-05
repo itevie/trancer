@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { getDeckByName } from "../../util/actions/cards";
 import { database } from "../../util/database";
 

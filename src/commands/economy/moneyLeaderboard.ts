@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import createLeaderboardFromData from "../../util/createLeaderboard";
 import config from "../../config";
 import { getAllEconomy } from "../../util/actions/economy";

@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 
 const consonantClustors =
     ("bl, gl, pl, kl, br, dr, gr, pr, th, tr, kr, ph, spl, spr, str, skr, sp, st, sk, sl, sm, sn, thr, fl, fr, sw, tw, skw, fy, shw, shm, "

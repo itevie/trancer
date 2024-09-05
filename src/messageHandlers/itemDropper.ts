@@ -1,7 +1,7 @@
 import { Message, User } from "discord.js";
 import config from "../config";
-import { HypnoCommand } from "../types/command";
-import { HypnoMessageHandler } from "../types/messageHandler";
+import { HypnoCommand } from "../types/util";
+import { HypnoMessageHandler } from "../types/util";
 import { addItemFor } from "../util/actions/items";
 import { database } from "../util/database";
 import { createEmbed } from "../util/other";

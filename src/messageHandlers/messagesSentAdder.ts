@@ -1,4 +1,4 @@
-import { HypnoMessageHandler } from "../types/messageHandler";
+import { HypnoMessageHandler } from "../types/util";
 import { addMessageSent } from "../util/actions/userData";
 import config from "../config";
 import { analyticDatabase } from "../util/analytics";

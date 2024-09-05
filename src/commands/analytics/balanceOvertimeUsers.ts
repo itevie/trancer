@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { AttachmentBuilder } from "discord.js";
 import { generateGraph } from "../../util/graphs";
 

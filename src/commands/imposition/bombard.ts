@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { getServerSettings } from "../../util/actions/settings";
 import { getRandomSpiral } from "../../util/actions/spirals";
 import { getUserFavouriteSpirals } from "../../util/actions/userFavouriteSpirals";

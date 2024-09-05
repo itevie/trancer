@@ -1,6 +1,6 @@
 import { User } from "discord.js";
 import { client } from "../..";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import ollama from "ollama";
 
 const command: HypnoCommand = {

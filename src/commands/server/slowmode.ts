@@ -1,5 +1,5 @@
 import { TextChannel } from "discord.js";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 
 const command: HypnoCommand = {
     name: "slowmode",

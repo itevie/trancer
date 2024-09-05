@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import ollama, { Message } from "ollama";
 
 export const history: { [key: string]: Message[] } = {};

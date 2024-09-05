@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import * as path from "path";
 import { createBackup } from "../../util/other";
 

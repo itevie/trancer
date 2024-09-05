@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { addFavouriteSpiral, getUserFavouriteSpirals } from "../../util/actions/userFavouriteSpirals";
 import { sentSpirals } from "./spiral";
 

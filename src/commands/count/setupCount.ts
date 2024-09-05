@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/command";
+import { HypnoCommand } from "../../types/util";
 import { getServerCount } from "../../util/actions/serverCount";
 import { database } from "../../util/database";
 

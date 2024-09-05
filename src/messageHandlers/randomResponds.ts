@@ -1,4 +1,4 @@
-import { HypnoMessageHandler } from "../types/messageHandler";
+import { HypnoMessageHandler } from "../types/util";
 
 const handler: HypnoMessageHandler = {
     name: "random-responder",
