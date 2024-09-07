@@ -45,6 +45,7 @@ client.on("messageCreate", async message => {
 
     // Disallow bots
     if (message.author.bot) return;
+    if (!message?.author?.id || !message?.guild?.id) return;
     if (!database) return;
 
     // Check for user_data
@@ -110,8 +111,7 @@ client.on("messageCreate", async message => {
     }
     if (currentArg) fullArgs.push(currentArg);
 
-    const fullArgs2 = content.replace(/ {2,}/g, ' ').split(" ");
-    const command = fullArgs.shift().toLowerCase();
+    const command = fullArgs.shift()?.toLowerCase() ?? "";
 
     const originalContent = content.split(" ");
     originalContent.shift();
