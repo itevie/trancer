@@ -46,6 +46,7 @@ const config = {
         roles: {
             member: "1257423790212907038",
             verified: "1257423790212907038",
+            canRequest: "1282301213278474241",
         },
 
         channels: {

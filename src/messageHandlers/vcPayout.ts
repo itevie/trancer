@@ -8,6 +8,8 @@ import { randomFromRange } from "../util/other";
 let pastVC1m: string[] = [];
 let pastVCactual: string[] = [];
 
+// Gets the current people in a VC
+// excluding people on their own
 async function getCurrentVC() {
     // Compute current
     let inVCrightNow: string[] = [];
@@ -28,6 +30,7 @@ async function getCurrentVC() {
 
 }
 
+// Interval for checking for giving money for VC time
 setInterval(async () => {
     let inVCrightNow = await getCurrentVC();
 
@@ -40,6 +43,7 @@ setInterval(async () => {
     pastVCactual = inVCrightNow;
 }, config.economy.vcPayout.limit);
 
+// Interval for adding the statistic to VC time
 setInterval(async () => {
     let inVCrightNow = await getCurrentVC();
 

@@ -1,14 +1,22 @@
 import { HypnoMessageHandler } from "../types/util";
 import { addMessageSent } from "../util/actions/userData";
 import config from "../config";
-import { analyticDatabase } from "../util/analytics";
-import { ISqlite } from "sqlite";
+import { addToMemberCount, analyticDatabase } from "../util/analytics";
 
+let memberCountCache: MemberCount;
 const handler: HypnoMessageHandler = {
     name: "message-sent",
     description: "Adds 1 to your total sent messages",
 
     handler: async (message) => {
+        if (config.analytics.enabled) {
+            if (!memberCountCache)
+                memberCountCache = await analyticDatabase.get<MemberCount>(`SELECT * FROM member_count WHERE server_id = ? ORDER BY id DESC LIMIT 1;`, message.guild.id);
+            if (!memberCountCache || memberCountCache.amount !== message.guild.memberCount) {
+                await addToMemberCount(message.guild.id, message.guild.memberCount);
+                memberCountCache = await analyticDatabase.get<MemberCount>(`SELECT * FROM member_count WHERE server_id = ? ORDER BY id DESC LIMIT 1;`, message.guild.id);
+            }
+        }
         if (config.modules.statistics.enabled && !config.modules.statistics.ignoreChannels.includes(message.channel.id)) {
             addMessageSent(message.author.id, message.guild.id);
         }
