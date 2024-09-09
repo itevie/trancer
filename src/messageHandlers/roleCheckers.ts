@@ -12,8 +12,7 @@ const roles: { [key: string]: RoleChecker } = {
     "can-request": {
         id: "1282301213278474241",
         checker: async (message: Message) =>
-        ((1.728e+8 - (Date.now() - message.member.joinedAt.getTime()) < 0)
-            && (await getUserData(message.author.id, message.guild.id)).messages_sent > 50)
+            (await getUserData(message.author.id, message.guild.id)).messages_sent > 100
     }
 }
 
