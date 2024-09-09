@@ -25,7 +25,7 @@ const handler: HypnoMessageHandler = {
 
         for (const i in roles) {
             if (!message.member.roles.cache.some(x => x.id === roles[i].id))
-                if (roles[i].checker(message)) {
+                if (await roles[i].checker(message)) {
                     await message.member.roles.add(roles[i].id);
                     console.log(`Gave ${message.author.username} the ${i} role`);
                 }

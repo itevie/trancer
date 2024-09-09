@@ -28,7 +28,7 @@ const command: HypnoCommand<{ user?: User }> = {
             };
         });
 
-        return paginate(message, createEmbed().setTitle(`Quotes from ${message.author.username}`), list);
+        return paginate(message, createEmbed().setTitle(`Quotes from ${user.username}`), list);
     }
 }
 
