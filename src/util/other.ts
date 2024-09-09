@@ -1,9 +1,10 @@
-import { ColorResolvable, EmbedBuilder, HexColorString } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ColorResolvable, EmbedBuilder, HexColorString, Message, User } from "discord.js";
 import config from "../config";
 import * as fs from "fs";
 import { getImpositionFor } from "./actions/imposition";
 import path from "path";
 import axios from "axios";
+import { client } from "..";
 
 const randomCodeCharacters = "abcdefghijklmnopqrstuvwxyz".split("");
 const progressBarEmpty = "░";
@@ -236,4 +237,74 @@ export function makePercentageASCII(percentage: number, length: number): string 
     const amount = Math.round(percentage / percentagePer);
 
     return `${progressBarFilled.repeat(amount)}${progressBarEmpty.repeat(length - amount)}`;
+}
+
+export async function paginate(
+    replyTo: Message,
+    embed: EmbedBuilder,
+    fields: { name: string, value: string }[]
+): Promise<Message> {
+    // Initial
+    let currentIndex = 0;
+    let setFields = () => {
+        embed.setFields(fields.slice(currentIndex, currentIndex + 10));
+        embed.setFooter({
+            text: `Page ${(currentIndex / 10) + 1}`
+        })
+    };
+    setFields();
+
+    // Check if there is any more to add
+    if (fields.length < 11)
+        return replyTo.reply({
+            embeds: [embed]
+        });
+
+    let message = await replyTo.reply({
+        embeds: [embed],
+        components: [
+            // @ts-ignore
+            new ActionRowBuilder()
+                .addComponents([
+                    new ButtonBuilder()
+                        .setCustomId(`page-prev`)
+                        .setLabel(`<`)
+                        .setStyle(ButtonStyle.Primary),
+
+                    new ButtonBuilder()
+                        .setCustomId(`page-next`)
+                        .setLabel(`>`)
+                        .setStyle(ButtonStyle.Primary)
+                ])
+        ]
+    });
+
+    let collector = message.createMessageComponentCollector({
+        filter: i => i.user.id === replyTo.author.id,
+    });
+
+    collector.on("collect", async interaction => {
+        await interaction.deferUpdate();
+        if (interaction.customId === "page-prev") {
+            if (currentIndex < 10) return;
+            currentIndex -= 10;
+            setFields();
+        } else if (interaction.customId === "page-next") {
+            if (currentIndex > fields.length) return;
+            currentIndex += 10;
+            setFields();
+        }
+
+        await message.edit({
+            embeds: [embed]
+        });
+    });
+}
+
+export async function getUser(id: string): Promise<User | null> {
+    try {
+        return await client.users.fetch(id);
+    } catch (e) {
+        return null;
+    }
 }
