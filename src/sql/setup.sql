@@ -12,6 +12,19 @@ CREATE TABLE IF NOT EXISTS server_settings (
     invite_logger_channel_id TEXT DEFAULT NULL
 );
 
+CREATE TABLE IF NOT EXISTS star_board (
+    server_id TEXT NOT NULL,
+    emoji TEXT NOT NULL DEFAULT '⭐',
+    minimum INTEGER NOT NULL DEFAULT 3,
+    channel_id TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS star_board_messages (
+    message_id TEXT NOT NULL,
+    channel_id TEXT NOT NULL,
+    star_board_message_id TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS channel_imposition (
     channel_id TEXT NOT NULL,
     is_enabled BOOLEAN NOT NULL DEFAULT false,

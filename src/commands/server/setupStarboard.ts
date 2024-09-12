@@ -1,11 +1,11 @@
 import { Channel, PermissionsBitField } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { database } from "../../util/database";
+import { setupStarboard } from "../../util/actions/starboard";
 
 const command: HypnoCommand<{ channel: Channel }> = {
-    name: "setupinvitelogger",
-    description: "Sets up the invite logger",
+    name: "setupstarboard",
     type: "admin",
+    description: "Setup starboard in a channel",
     guards: ["admin"],
 
     args: {
@@ -14,6 +14,7 @@ const command: HypnoCommand<{ channel: Channel }> = {
             {
                 name: "channel",
                 type: "channel",
+                description: "The channel messages should be posted in"
             }
         ]
     },
@@ -23,8 +24,11 @@ const command: HypnoCommand<{ channel: Channel }> = {
             return message.reply(`I don't have permissions to send messages in that channel!`);
         }
 
-        await database.run(`UPDATE server_settings SET invite_logger_channel_id = ? WHERE server_id = ?`, args.channel.id, message.guild.id);
-        return message.reply(`Set the invite logger channel to <#${args.channel.id}>!`)
+        let starboard = await setupStarboard(message.guild.id, args.channel.id);
+        return message.reply(
+            `Messages that are star'd will be posted in <#${args.channel.id}>!\n`
+            + `\nStarboard Emoji: ${starboard.emoji}\nStars to send: ${starboard.minimum}`
+        );
     }
 };
 
