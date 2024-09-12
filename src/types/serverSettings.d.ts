@@ -6,9 +6,11 @@ interface ServerSettings {
     bump_reminded: boolean,
     last_bumper: string | null,
 
-    sub_role_id: string,
-    tist_role_id: string,
-    switch_role_id: string,
+    sub_role_id: string | null,
+    tist_role_id: string | null,
+    switch_role_id: string | null,
+
+    invite_logger_channel_id: string | null,
 }
 
 interface ChannelImposition {

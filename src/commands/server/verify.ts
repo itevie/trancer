@@ -1,4 +1,4 @@
-import { PermissionsBitField } from "discord.js";
+import { PermissionsBitField, TextChannel } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import config from "../../config";
 
@@ -11,6 +11,7 @@ const command: HypnoCommand = {
     handler: async (message) => {
         if (!config.botServer.roles.verified)
             return message.reply(`There is no verified role set up`);
+
         // Check for reference
         if (!message.reference) {
             let msg = await message.reply(`Please reply to a message.`);
@@ -25,6 +26,9 @@ const command: HypnoCommand = {
         try {
             await (await message.fetchReference()).member.roles.add(config.botServer.roles.verified);
             await message.delete();
+            (await (message.client.channels.fetch("1257416274280054967") as Promise<TextChannel>)).send(
+                `<@${(await message.fetchReference()).member.user.id}> just got verified! Welcome!`
+            );
         } catch (e) {
             console.log(e);
             return message.reply(`Error: ${e.toString()}`);

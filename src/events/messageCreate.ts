@@ -1,4 +1,4 @@
-import { AutoModerationRuleTriggerType, Message, PermissionsBitField, Role, User } from "discord.js";
+import { AutoModerationRuleTriggerType, Channel, Message, PermissionsBitField, Role, User } from "discord.js";
 import { client, commands, handlers } from "..";
 import { HypnoCommandDetails } from "../types/util";
 import { createEconomyFor, economyForUserExists } from "../util/actions/economy";
@@ -204,6 +204,20 @@ client.on("messageCreate", async message => {
                                 }
 
                                 return { value: role }
+                            },
+                            channel: async (arg) => {
+                                if (!arg.match(/<?#?[0-9]+>?/))
+                                    return `Invalid channel format provided, please provide a mention or ID!`;
+
+                                let channel: Channel;
+                                try {
+                                    channel = await message.guild.channels.fetch(arg.replace(/[<>#]/g, ""));
+                                } catch (err) {
+                                    console.log(err);
+                                    return `Failed to fetch the channel: ${arg}`;
+                                }
+
+                                return { value: channel }
                             }
                         };
 

@@ -1,4 +1,5 @@
 -- Server specific stuff
+ALTER TABLE server_settings ADD invite_logger_channel_id TEXT DEFAULT NULL;
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
@@ -8,7 +9,8 @@ CREATE TABLE IF NOT EXISTS server_settings (
 
     sub_role_id TEXT DEFAULT NULL,
     tist_role_id TEXT DEFAULT NULL,
-    switch_role_id TEXT DEFAULT NULL
+    switch_role_id TEXT DEFAULT NULL,
+    invite_logger_channel_id TEXT DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS channel_imposition (

@@ -29,6 +29,8 @@ export const client = new Client({
     partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
 
+import { initInviteCache } from "./events/guildMemberAdd";
+
 const logger = new Logger("loader");
 export let errors = 0;
 
@@ -59,6 +61,7 @@ client.on("ready", async () => {
         handlers.push(handleImport);
         logger.log(`Loaded handler: ${handleImport.name}`);
     }
+    initInviteCache();
     await connect();
     await connectAnalytic();
 
@@ -68,6 +71,7 @@ client.on("ready", async () => {
     }, 60000);
 
     logger.log(`${client.user?.username} successfully logged in!`);
+
 
     await (await client.guilds.fetch(config.botServer.id)).members.fetch();
 

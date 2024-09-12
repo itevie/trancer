@@ -3,6 +3,8 @@ import config from "../config";
 import { addToMemberCount } from "../util/analytics";
 
 client.on("guildMemberRemove", async member => {
+    if (member.guild.id !== config.botServer.id) return;
+
     // Add to analytics
     await addToMemberCount(member.guild.id, member.guild.memberCount);
 
@@ -16,6 +18,8 @@ client.on("guildMemberRemove", async member => {
 });
 
 client.on("guildBanAdd", async member => {
+    if (member.guild.id !== config.botServer.id) return;
+
     // Add to analytics
     await addToMemberCount(member.guild.id, member.guild.memberCount);
 
