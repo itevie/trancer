@@ -44,7 +44,7 @@ client.on("messageReactionRemove", async (reaction, user) => {
 async function updateStarboard(reaction: MessageReaction | PartialMessageReaction, message: Message | PartialMessage) {
     // Check for starboard
     let starboard = await getStarboardFor(message.guild.id);
-    let count = message.reactions.cache.find(x => x.emoji.name === starboard.emoji)?.count ?? -1;
+    let count = message.reactions.cache.find(x => x?.emoji?.name === starboard.emoji)?.count ?? -1;
     if (count === -1) return;
 
     if (starboard && reaction.emoji.name === starboard.emoji) {
