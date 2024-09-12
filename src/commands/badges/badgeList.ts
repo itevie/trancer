@@ -1,7 +1,7 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { getAllAquiredBadges } from "../../util/actions/badges";
-import badges, { formatBadges } from "../../util/badges";
+import badges from "../../util/badges";
 import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand = {
@@ -10,7 +10,7 @@ const command: HypnoCommand = {
     description: "Get a list of badges",
     type: "badges",
 
-    handler: async (message, args) => {
+    handler: async (message) => {
         let aquiredBadges = await getAllAquiredBadges();
         let text = "";
 

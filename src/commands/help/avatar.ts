@@ -3,6 +3,8 @@ import { HypnoCommand } from "../../types/util";
 
 const command: HypnoCommand<{ user?: User }> = {
     name: "avatar",
+    description: "Get a user's avatar",
+    aliases: ["pfp"],
     type: "help",
 
     args: {

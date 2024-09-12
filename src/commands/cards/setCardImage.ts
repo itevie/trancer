@@ -10,6 +10,8 @@ const command: HypnoCommand<{ card: Card }> = {
     description: "Set a card's image",
     type: "cards",
 
+    guards: ["bot-owner"],
+
     args: {
         requiredArguments: 1,
         args: [
@@ -19,8 +21,6 @@ const command: HypnoCommand<{ card: Card }> = {
             }
         ]
     },
-
-    botOwnerOnly: true,
 
     handler: async (message, { args }) => {
         const image = (message.attachments.entries().next().value[1] as Attachment);

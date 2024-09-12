@@ -1,7 +1,6 @@
 import { HypnoCommand } from "../../types/util";
 import { commands } from "../..";
 import { createEmbed } from "../../util/other";
-import { getServerSettings } from "../../util/actions/settings";
 import { generateCommandCodeBlock } from "../../util/args";
 
 const command: HypnoCommand<{ command: string }> = {
@@ -31,12 +30,14 @@ const command: HypnoCommand<{ command: string }> = {
 
         // Get list of restrictions
         let restrictions = [];
-        if (command.adminOnly)
-            restrictions.push(`Admin Only ${command.except ? `(has exceptions)` : ""}`);
-        if (command.botServerOnly)
-            restrictions.push("Bot Server Only");
-        if (command.botOwnerOnly)
-            restrictions.push("Bot Owner Only");
+        if (command.guards) {
+            if (command.guards.includes("admin"))
+                restrictions.push("Admin Only");
+            if (command.guards.includes("bot-owner"))
+                restrictions.push("Bot Owner Only");
+            if (command.guards.includes("bot-server"))
+                restrictions.push("Bot Server Only");
+        }
 
         // Construct embed
         const embed = createEmbed()

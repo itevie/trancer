@@ -1,4 +1,4 @@
-import { AutoModerationRuleTriggerType, Channel, Message, PermissionsBitField, Role, User } from "discord.js";
+import { Channel, Message, PermissionsBitField, Role, User } from "discord.js";
 import { client, commands, handlers } from "..";
 import { HypnoCommandDetails } from "../types/util";
 import { createEconomyFor, economyForUserExists } from "../util/actions/economy";
@@ -260,14 +260,21 @@ client.on("messageCreate", async message => {
             if (cmd.type === "ai" && !config.modules.ai.enabled)
                 return message.reply(`AI is disabled! :cyclone:`);
 
-            // Check if bot owner only
-            if (cmd.botOwnerOnly && message.author.id !== config.owner)
-                return message.reply(`Only the bot owner can run this command!`);
+            // Check guards
+            if (cmd.guards) {
+                // Check for bot owner only
+                if (cmd.guards.includes("bot-owner") && message.author.id !== config.owner)
+                    return message.reply(`Only the bot owner can run this command!`);
 
-            // Check if command is admin only
-            if (cmd.adminOnly)
-                if (!message.member.permissions.has(PermissionsBitField.Flags.Administrator) && !except())
-                    return message.reply(`You are not administrator :cyclone:`);
+                // Check if command is admin only
+                if (cmd.guards.includes("admin"))
+                    if (!message.member.permissions.has(PermissionsBitField.Flags.Administrator) && !except())
+                        return message.reply(`You are not administrator :cyclone:`);
+
+                // Check if command is bot-server only
+                if (cmd.guards.includes("bot-server") && message.guild.id !== config.botServer.id)
+                    return message.reply(`This command can only be used in the bot server :cyclone:`);
+            }
 
             // Check if has specific permissions
             if (cmd.permissions) {
@@ -275,10 +282,6 @@ client.on("messageCreate", async message => {
                     if (!message.member.permissions.has(permission) && !except())
                         return message.reply(`You do not have the ${permission} permission!`);
             }
-
-            // Check if commandis bot-server only
-            if (cmd.botServerOnly && message.guild.id !== config.botServer.id)
-                return message.reply(`This command can only be used in the bot server :cyclone:`);
 
             // Execute
             await execute();

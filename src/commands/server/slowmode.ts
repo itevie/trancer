@@ -3,8 +3,9 @@ import { HypnoCommand } from "../../types/util";
 
 const command: HypnoCommand = {
     name: "slowmode",
-    adminOnly: true,
+    description: "Sets the channel's slowmode",
     type: "admin",
+    guards: ["admin"],
 
     handler: async (message, { oldArgs: args }) => {
         if (!args[0])

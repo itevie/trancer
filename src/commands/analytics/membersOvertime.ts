@@ -6,6 +6,7 @@ import { generateSimpleLineChart } from "../../util/graphs";
 const command: HypnoCommand = {
     name: "membercountovertime",
     aliases: ["mover", "mcover", "memberover"],
+    description: "Get the server's member count overtime",
     type: "analytics",
 
     handler: async (message) => {

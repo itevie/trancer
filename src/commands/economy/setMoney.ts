@@ -7,7 +7,7 @@ const command: HypnoCommand<{ user: User, amount: number }> = {
     name: "=money",
     description: "Set a users money",
     type: "economy",
-    botOwnerOnly: true,
+    guards: ["bot-owner"],
 
     args: {
         requiredArguments: 2,

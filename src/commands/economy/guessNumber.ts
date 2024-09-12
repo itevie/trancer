@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import config from "../../config";
 import { HypnoCommand } from "../../types/util";
 import { createEmbed, randomFromRange } from "../../util/other";

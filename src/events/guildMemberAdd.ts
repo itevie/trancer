@@ -1,8 +1,8 @@
-import { Invite, TextChannel, UserContextMenuCommandInteraction } from "discord.js";
+import { Invite, TextChannel } from "discord.js";
 import { client } from "..";
 import config from "../config";
 import { addMoneyFor } from "../util/actions/economy";
-import { getServerSettings, setServerPrefix } from "../util/actions/settings";
+import { getServerSettings } from "../util/actions/settings";
 import { addToMemberCount } from "../util/analytics";
 import getInviteDetails from "../util/getInviteDetails";
 import { createEmbed } from "../util/other";
@@ -19,7 +19,6 @@ export async function initInviteCache() {
             inviteCache[_guild.id][invite.code] = invite.uses;
         }
     }
-    console.log(inviteCache);
 }
 
 client.on("guildMemberAdd", async member => {
@@ -41,8 +40,6 @@ client.on("guildMemberAdd", async member => {
                 break;
             }
         }
-
-        console.log(usedCode);
 
         if (usedCode) {
             // Send it

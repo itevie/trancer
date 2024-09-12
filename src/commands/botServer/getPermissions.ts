@@ -3,8 +3,9 @@ import { HypnoCommand } from "../../types/util";
 
 const command: HypnoCommand = {
     name: "getperms",
+    description: "Get a list of roles that have certain permissions",
     type: "admin",
-    adminOnly: true,
+    guards: ["admin"],
 
     handler: async (message, { oldArgs: args }) => {
         const roles = await message.guild.roles.fetch();

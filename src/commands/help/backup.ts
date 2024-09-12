@@ -1,11 +1,10 @@
-import * as fs from "fs";
 import { HypnoCommand } from "../../types/util";
-import * as path from "path";
 import { createBackup } from "../../util/other";
 
 const command: HypnoCommand = {
     name: "backup",
-    botOwnerOnly: true,
+    description: "Creates a database backup",
+    guards: ["bot-owner"],
 
     handler: (message) => {
         createBackup();

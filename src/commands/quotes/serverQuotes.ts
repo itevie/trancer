@@ -4,6 +4,7 @@ import { createEmbed, getUser, paginate } from "../../util/other";
 
 const command: HypnoCommand = {
     name: "serverquotes",
+    description: "Get all the quotes in the server",
     type: "quotes",
 
     handler: async (message) => {

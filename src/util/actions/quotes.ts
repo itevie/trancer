@@ -2,7 +2,6 @@ import { Attachment, EmbedBuilder, Message, User } from "discord.js";
 import { database } from "../database";
 import { createEmbed } from "../other";
 import { client } from "../..";
-import { inspect } from "util";
 
 export async function addQuote(message: Message): Promise<Quote> {
     await database.run(

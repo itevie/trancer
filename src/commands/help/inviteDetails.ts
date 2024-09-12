@@ -5,8 +5,9 @@ import getInviteDetails from "../../util/getInviteDetails";
 
 const command: HypnoCommand<{ user: User }> = {
     name: "invitedetails",
+    description: "Get who invited a user",
     type: "help",
-    botOwnerOnly: true,
+    guards: ["admin"],
 
     args: {
         requiredArguments: 1,

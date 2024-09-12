@@ -5,6 +5,7 @@ import { generateCardEmbed } from "../../util/cards";
 
 const command: HypnoCommand<{ card: Card, user: User, amount?: number }> = {
     name: "givecard",
+    description: "Give another user one of your cards",
     type: "cards",
 
     args: {
@@ -13,14 +14,17 @@ const command: HypnoCommand<{ card: Card, user: User, amount?: number }> = {
             {
                 name: "user",
                 type: "user",
+                description: "The user you want to give the card to"
             },
             {
                 name: "card",
-                type: "card"
+                type: "card",
+                description: "Which card you're giving"
             },
             {
                 name: "amount",
-                type: "wholepositivenumber"
+                type: "wholepositivenumber",
+                description: "How many of the card you are giving"
             }
         ]
     },

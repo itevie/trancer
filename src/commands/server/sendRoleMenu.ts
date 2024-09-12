@@ -5,8 +5,9 @@ import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand<{ menu: number }> = {
     name: "sendrolemenu",
+    description: "Sends a specific role menu",
     type: "admin",
-    adminOnly: true,
+    guards: ["admin"],
 
     args: {
         requiredArguments: 1,

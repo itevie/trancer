@@ -4,6 +4,7 @@ import config from "../../config";
 
 const command: HypnoCommand = {
     name: "verify",
+    description: "Verifies a member",
     aliases: ["v"],
     type: "admin",
     permissions: [PermissionsBitField.Flags.ManageMessages],

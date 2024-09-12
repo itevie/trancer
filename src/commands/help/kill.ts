@@ -4,7 +4,7 @@ const command: HypnoCommand = {
     name: "kill",
     description: "Kills the bot",
 
-    adminOnly: true,
+    guards: ["admin", "bot-server"],
 
     handler: async (message) => {
         await message.reply(`Bye bye!`);

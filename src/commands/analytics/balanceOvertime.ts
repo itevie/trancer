@@ -1,7 +1,7 @@
 import { ChartConfiguration } from "chart.js";
 import { HypnoCommand } from "../../types/util";
-import { ChartJSNodeCanvas, ChartJSNodeCanvasOptions } from "chartjs-node-canvas";
-import { Attachment, AttachmentBuilder, User } from "discord.js";
+import { ChartJSNodeCanvas } from "chartjs-node-canvas";
+import { AttachmentBuilder, User } from "discord.js";
 import { getMoneyTransations } from "../../util/analytics";
 
 const width = 800;

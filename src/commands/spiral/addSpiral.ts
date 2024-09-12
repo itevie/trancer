@@ -1,6 +1,5 @@
 import { HypnoCommand } from "../../types/util";
 import { addSpiral, hasSpiral } from "../../util/actions/spirals";
-import { getServerSettings } from "../../util/actions/settings";
 import config from "../../config";
 import { Attachment, Message } from "discord.js";
 import axios from "axios";
@@ -19,11 +18,10 @@ const command: HypnoCommand = {
         ["addspiral <link>", "Add a link which is after the spiral command"]
     ],
     type: "spirals",
-    adminOnly: true,
-    botServerOnly: true,
+    guards: ["admin", "bot-server"],
     allowExceptions: true,
 
-    handler: async (message, { oldArgs: args }) => {
+    handler: async (message) => {
         // Get the message
         let msg: Message = message.reference ? await message.fetchReference() : message;
 

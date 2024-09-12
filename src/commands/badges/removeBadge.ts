@@ -8,7 +8,7 @@ const command: HypnoCommand<{ badge: string, user: User }> = {
     type: "badges",
     description: "Removes a users  badge",
 
-    botOwnerOnly: true,
+    guards: ["bot-owner"],
 
     args: {
         requiredArguments: 1,

@@ -7,6 +7,7 @@ const consonantClustors =
 
 const command: HypnoCommand = {
     name: "piglatin",
+    description: "Converts English to pig latin (igpay atinlay)",
     type: "fun",
 
     handler: (message, { oldArgs }) => {

@@ -3,8 +3,9 @@ import config from "../../config";
 
 const command: HypnoCommand = {
     name: "unverified",
+    description: "sends a list of unverified members",
     type: "admin",
-    adminOnly: true,
+    guards: ["admin"],
 
     handler: async (message) => {
         const members = await message.guild.members.fetch();

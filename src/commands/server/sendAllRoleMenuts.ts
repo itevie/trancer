@@ -5,8 +5,9 @@ import { sendRoleMenu } from "./sendRoleMenu";
 
 const command: HypnoCommand = {
     name: "sendallrolemenus",
+    description: "Sends all the created react role menus in the current channel",
     type: "admin",
-    adminOnly: true,
+    guards: ["admin"],
 
     handler: async (message) => {
         // Get & check menus

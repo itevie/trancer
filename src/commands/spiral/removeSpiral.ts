@@ -1,15 +1,13 @@
 import { HypnoCommand } from "../../types/util";
-import { deleteSpiral, getSpiralById, hasSpiral } from "../../util/actions/spirals";
-import { getServerSettings } from "../../util/actions/settings";
+import { deleteSpiral, getSpiralById, } from "../../util/actions/spirals";
 import { sentSpirals } from "./spiral";
 
 const command: HypnoCommand<{ id?: number }> = {
     name: "removespiral",
+    description: "Removes a spiral",
     aliases: ["delspiral", "dspiral"],
     type: "spirals",
-    adminOnly: true,
-    botServerOnly: true,
-    allowExceptions: true,
+    guards: ["admin", "bot-server"],
 
     args: {
         requiredArguments: 0,

@@ -6,7 +6,7 @@ const command: HypnoCommand = {
     name: "setupcount",
     type: "counting",
     description: "Setup the counting in the current channel",
-    adminOnly: true,
+    guards: ["admin"],
 
     handler: async (message) => {
         if (await getServerCount(message.guild.id)) {

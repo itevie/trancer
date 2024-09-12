@@ -7,7 +7,7 @@ const command: HypnoCommand<{ name: string }> = {
     type: "cards",
     description: "Create a deck",
 
-    botOwnerOnly: true,
+    guards: ["bot-owner"],
 
     args: {
         requiredArguments: 1,

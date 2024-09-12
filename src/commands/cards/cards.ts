@@ -2,7 +2,6 @@ import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { getAllAquiredCardsFor, getCardById } from "../../util/actions/cards";
 import { createEmbed } from "../../util/other";
-import { rarities } from "../../util/cards";
 
 const command: HypnoCommand<{ user?: User, sortBy: "rarity" | "id" }> = {
     name: "cards",

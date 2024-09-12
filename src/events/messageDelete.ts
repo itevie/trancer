@@ -1,4 +1,3 @@
-import { TextBasedChannel } from "discord.js";
 import { client } from "..";
 import config from "../config";
 import { createEmbed } from "../util/other";

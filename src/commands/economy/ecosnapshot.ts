@@ -5,8 +5,9 @@ import * as path from "path";
 
 const command: HypnoCommand = {
     name: "ecosnapshot",
-    adminOnly: true,
+    description: "Creates an economic snapshot",
     type: "economy",
+    guards: ["bot-owner"],
 
     handler: async (message) => {
         const ecos = await getAllEconomy();

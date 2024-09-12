@@ -1,5 +1,4 @@
 import { HypnoCommand } from "../../types/util";
-import { getCardById } from "../../util/actions/cards";
 import { generateCardEmbed } from "../../util/cards";
 import { database } from "../../util/database";
 
@@ -9,7 +8,7 @@ const command: HypnoCommand<{ card: Card }> = {
     description: "Set a cards description",
     type: "cards",
 
-    botOwnerOnly: true,
+    guards: ["bot-owner"],
 
     args: {
         requiredArguments: 1,

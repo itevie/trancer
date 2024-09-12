@@ -1,5 +1,4 @@
 import { HypnoCommand } from "../../types/util";
-import { setServerPrefix } from "../../util/actions/settings";
 import { database } from "../../util/database";
 import { createEmbed } from "../../util/other";
 
@@ -28,7 +27,7 @@ const command: HypnoCommand = {
         ["$cmd tistrole <id>", "Sets the hypnotist role for this server"],
         ["$cmd switchrole <id>", "Sets the switch role for this server"],
     ],
-    adminOnly: true,
+    guards: ["admin"],
 
     handler: async (message, { oldArgs: args }) => {
         const currentSettings = await database.get(`SELECT * FROM server_settings WHERE server_id = (?)`, message.guild.id);

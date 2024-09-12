@@ -5,8 +5,9 @@ import { createRoleMenu, createRoleMenuItem } from "../../util/actions/roleMenus
 
 const command: HypnoCommand = {
     name: "createrolemenusfromjson",
+    description: "ADVANCED, creates a react role from JSON",
     type: "admin",
-    adminOnly: true,
+    guards: ["admin"],
 
     handler: async (message, { originalContent }) => {
         let err = (msg: string) => {

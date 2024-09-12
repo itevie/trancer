@@ -5,7 +5,7 @@ import { User } from "discord.js";
 
 const command: HypnoCommand<{ user?: User }> = {
     name: "balance",
-    aliases: ["bal", "xp"],
+    aliases: ["bal"],
     description: "Get your balance, or someone elses",
     type: "economy",
 

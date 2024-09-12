@@ -1,7 +1,6 @@
 import { MessageCreateOptions, PermissionFlagsBits } from "discord.js";
 import { commands } from "../..";
 import { HypnoCommand } from "../../types/util";
-import { getServerSettings } from "../../util/actions/settings";
 import getAllFiles, { createEmbed } from "../../util/other";
 import config from "../../config";
 
@@ -12,7 +11,6 @@ for (const messageFile of messageFiles) {
     const messageImport = require(messageFile).default as MessageCreateOptions;
     messages[name] = messageImport;
 }
-const types = Object.keys(messages).map(x => `\`${x}\``).join(", ");
 
 const categoryEmojis: { [key: string]: string } = {
     "ai": "🤖",
@@ -71,12 +69,14 @@ const command: HypnoCommand<{ ignoreGuards: boolean }> = {
                     add();
                     continue;
                 }
-            if (cmd.botOwnerOnly && message.author.id !== config.owner)
-                continue;
-            if (cmd.botServerOnly && message.guild.id !== config.botServer.id)
-                continue;
-            if (cmd.adminOnly && !message.member.permissions.has(PermissionFlagsBits.Administrator))
-                continue;
+            if (cmd.guards) {
+                if (cmd.guards.includes("bot-owner") && message.author.id !== config.owner)
+                    continue;
+                if (cmd.guards.includes("bot-server") && message.guild.id !== config.botServer.id)
+                    continue;
+                if (cmd.guards.includes("admin") && !message.member.permissions.has(PermissionFlagsBits.Administrator))
+                    continue;
+            }
             add();
         }
 

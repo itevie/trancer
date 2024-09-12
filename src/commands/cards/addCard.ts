@@ -1,6 +1,6 @@
 import { resolve } from "path";
 import { HypnoCommand } from "../../types/util";
-import { addCard, getDeckById } from "../../util/actions/cards";
+import { addCard } from "../../util/actions/cards";
 import { generateCardEmbed, rarities } from "../../util/cards";
 import { Attachment } from "discord.js";
 import { downloadFile } from "../../util/other";
@@ -10,7 +10,7 @@ const command: HypnoCommand<{ deck: Deck, name: string, rarity: string }> = {
     type: "cards",
     description: "Add a card to a deck",
 
-    botOwnerOnly: true,
+    guards: ["bot-owner"],
 
     args: {
         requiredArguments: 3,

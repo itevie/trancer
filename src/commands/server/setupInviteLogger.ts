@@ -4,8 +4,9 @@ import { database } from "../../util/database";
 
 const command: HypnoCommand<{ channel: Channel }> = {
     name: "setupinvitelogger",
+    description: "Sets up the invite logger",
     type: "admin",
-    adminOnly: true,
+    guards: ["admin"],
 
     args: {
         requiredArguments: 1,

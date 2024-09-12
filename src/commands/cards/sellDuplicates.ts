@@ -1,12 +1,13 @@
 import config from "../../config";
 import { HypnoCommand } from "../../types/util";
-import { getAllAquiredCardsFor, getAquiredCardsFor } from "../../util/actions/cards";
+import { getAllAquiredCardsFor } from "../../util/actions/cards";
 import { addMoneyFor } from "../../util/actions/economy";
 import { computeCardPrice, convertAquiredCardsToCards } from "../../util/cards";
 import { database } from "../../util/database";
 
 const command: HypnoCommand<{ confirm?: "confirm" }> = {
     name: "sellduplicates",
+    description: "Sells all of your duplicate cards",
     aliases: ["selldups"],
     type: "cards",
 

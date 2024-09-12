@@ -1,13 +1,13 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { addMoneyFor, economyForUserExists, getEconomyFor } from "../../util/actions/economy";
+import { addMoneyFor, economyForUserExists } from "../../util/actions/economy";
 import config from "../../config";
 
 const command: HypnoCommand<{ user: User, amount: number }> = {
     name: "+money",
     description: "Give a user money",
     type: "economy",
-    botOwnerOnly: true,
+    guards: ["bot-owner"],
 
     args: {
         requiredArguments: 2,

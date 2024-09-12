@@ -9,7 +9,7 @@ const command: HypnoCommand = {
     description: "Check where everyone got money from",
     type: "economy",
 
-    handler: async (message, { args }) => {
+    handler: async (message) => {
         // Create an eco to add onto
         let currentEco: Economy = {
             from_commands: 0,

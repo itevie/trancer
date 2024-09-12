@@ -1,6 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import { getAllAquiredCards, getCardById } from "../../util/actions/cards";
-import { generateCardEmbed } from "../../util/cards";
+import { getAllAquiredCards } from "../../util/actions/cards";
 
 const command: HypnoCommand<{ card: Card }> = {
     name: "whohascard",

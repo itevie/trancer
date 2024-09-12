@@ -7,7 +7,7 @@ const command: HypnoCommand<{ name: string, price: number }> = {
     type: "economy",
     description: "Add an item to the shop",
 
-    botOwnerOnly: true,
+    guards: ["bot-owner"],
 
     args: {
         requiredArguments: 2,

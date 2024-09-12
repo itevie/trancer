@@ -7,7 +7,7 @@ const command: HypnoCommand<{ itemId: number, value: boolean }> = {
     description: "Sets an items as droppable",
     type: "economy",
 
-    botOwnerOnly: true,
+    guards: ["bot-owner"],
 
     args: {
         requiredArguments: 2,

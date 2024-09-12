@@ -2,7 +2,6 @@ import { HypnoMessageHandler } from "../types/util";
 import config from "../config";
 import { randomFromRange } from "../util/other";
 import { addMoneyFor } from "../util/actions/economy";
-import { addToMemberCount, analyticDatabase } from "../util/analytics";
 
 const timeouts: { [key: string]: number } = {};
 

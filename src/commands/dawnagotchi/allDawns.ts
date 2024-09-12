@@ -4,6 +4,7 @@ import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand = {
     name: "alldawns",
+    description: "Get statistics on all the Dawns",
     type: "dawnagotchi",
 
     handler: async (message) => {

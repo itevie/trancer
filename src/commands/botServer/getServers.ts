@@ -2,9 +2,9 @@ import { HypnoCommand } from "../../types/util";
 
 const command: HypnoCommand = {
     name: "getservers",
-    botServerOnly: true,
-    adminOnly: true,
+    description: "Gets the list of servers the bot is in",
     type: "admin",
+    guards: ["admin", "bot-server"],
 
     handler: async (message) => {
         const guilds = await message.client.guilds.fetch();

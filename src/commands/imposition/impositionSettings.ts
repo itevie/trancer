@@ -16,7 +16,7 @@ const command: HypnoCommand = {
         ["$cmd details", "Get details on how the randomness will work in this channel (admin exception)"],
         ["$cmd where", "See which channels in this server have imposition enabled"]
     ],
-    adminOnly: true,
+    guards: ["admin"],
 
     except: (_, args) => args[0] === "details",
     handler: async (message, { oldArgs: args }) => {

@@ -1,5 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import { getAllAquiredCardsFor, getDeckById, getDeckByName } from "../../util/actions/cards";
+import { getAllAquiredCardsFor } from "../../util/actions/cards";
 import { rarities } from "../../util/cards";
 import { database } from "../../util/database";
 import { createEmbed } from "../../util/other";

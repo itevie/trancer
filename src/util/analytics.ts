@@ -4,7 +4,6 @@ import * as path from "path";
 import * as fs from "fs";
 import config from "../config";
 import Logger from "./Logger";
-import { moneyAddReasons } from "./actions/economy";
 import { formatDate } from "./other";
 
 export let analyticDatabase: Database<sqlite3.Database, Statement>;

@@ -7,7 +7,7 @@ const command: HypnoCommand<{ itemId: number, newName: string }> = {
     type: "economy",
     description: "Rename an item",
 
-    botOwnerOnly: true,
+    guards: ["bot-owner"],
 
     args: {
         requiredArguments: 2,

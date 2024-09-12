@@ -1,6 +1,5 @@
 import config from "../../config";
 import { HypnoCommand } from "../../types/util";
-import { getCardById } from "../../util/actions/cards";
 import { computeCardPrice } from "../../util/cards";
 
 const command: HypnoCommand<{ card: Card }> = {

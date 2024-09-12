@@ -5,9 +5,10 @@ import { database } from "../../util/database";
 
 const command: HypnoCommand<{ user: User, id: number, amount: number }> = {
     name: "removeitems",
+    description: "Removes an item",
     type: "economy",
 
-    botOwnerOnly: true,
+    guards: ["bot-owner"],
 
     args: {
         requiredArguments: 3,

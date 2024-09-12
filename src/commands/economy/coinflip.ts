@@ -1,4 +1,4 @@
-import { ActionRow, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageActionRowComponentBuilder, User } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { addMoneyFor, getEconomyFor, removeMoneyFor } from "../../util/actions/economy";
 import config from "../../config";

@@ -4,9 +4,10 @@ import { createRoleMenuItem, getRoleMenu, roleMenuItemExists } from "../../util/
 
 const command: HypnoCommand<{ menu: number, name: string, emoji: string, role: Role }> = {
     name: "createrolemenuitem",
+    description: "Creates a new react role menu",
     aliases: ["+roleitem", "+rolemenuitem", "createroleitem"],
     type: "admin",
-    adminOnly: true,
+    guards: ["admin"],
 
     args: {
         requiredArguments: 4,

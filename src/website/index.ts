@@ -2,7 +2,6 @@ import express from "express";
 import { readFileSync } from "fs";
 import config from "../config";
 import Logger from "../util/Logger";
-import path from "path";
 import { database } from "../util/database";
 import { getAllGuildsUserData } from "../util/actions/userData";
 import { client } from "..";

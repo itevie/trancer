@@ -1,14 +1,14 @@
 import { HypnoCommand } from "../../types/util";
-import { getCardById } from "../../util/actions/cards";
 import { generateCardEmbed } from "../../util/cards";
 import { database } from "../../util/database";
 
 const command: HypnoCommand<{ card: Card, confirm?: true }> = {
     name: "removecard",
+    description: "Removes a card from a deck",
     aliases: ["deletecard"],
     type: "cards",
 
-    botOwnerOnly: true,
+    guards: ["bot-owner"],
 
     args: {
         requiredArguments: 1,

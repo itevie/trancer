@@ -1,4 +1,4 @@
-import { Message, PermissionsBitField } from "discord.js"
+import { Message } from "discord.js"
 
 type HypnoCommandType = "analytics" | "dawnagotchi" | "ranks" | "economy"
     | "cards" | "badges" | "counting" | "spirals" | "quotes" | "help" | "imposition"
@@ -20,7 +20,7 @@ interface HypnoCommandDetails<Args extends { [key: string]: any } = {}> {
 interface HypnoCommand<Args extends { [key: string]: any } = {}> {
     name: string,
     aliases?: string[],
-    description?: string,
+    description: string,
     usage?: [string, string][],
     examples?: [string, string][],
     type?: HypnoCommandType,
@@ -33,10 +33,6 @@ interface HypnoCommand<Args extends { [key: string]: any } = {}> {
     handler: (message: Message, options: HypnoCommandDetails<Args>) => void,
 
     guards?: Guard[];
-
-    adminOnly?: boolean,
-    botServerOnly?: boolean,
-    botOwnerOnly?: boolean,
     allowExceptions?: boolean,
     permissions?: bigint[],
 }

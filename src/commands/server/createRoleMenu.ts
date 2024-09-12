@@ -6,7 +6,7 @@ const command: HypnoCommand<{ name: string }> = {
     aliases: ["+rolemenu"],
     description: "Registers a new role menu",
     type: "admin",
-    adminOnly: true,
+    guards: ["admin"],
 
     args: {
         requiredArguments: 1,

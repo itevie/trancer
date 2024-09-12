@@ -1,5 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import ollama, { Message } from "ollama";
+import ollama from "ollama";
 import { history } from "./ai";
 
 const command: HypnoCommand = {

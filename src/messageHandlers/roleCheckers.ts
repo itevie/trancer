@@ -1,4 +1,4 @@
-import { Message, User } from "discord.js";
+import { Message } from "discord.js";
 import { HypnoMessageHandler } from "../types/util";
 import { getUserData } from "../util/actions/userData";
 import config from "../config";

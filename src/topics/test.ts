@@ -1,4 +1,4 @@
-import { EmbedBuilder, MessageCreateOptions, MessagePayload } from "discord.js";
+import { MessageCreateOptions } from "discord.js";
 import { createEmbed } from "../util/other";
 
 let message: MessageCreateOptions = {

@@ -6,6 +6,7 @@ import config from "../../config";
 
 const command: HypnoCommand<{ user?: User }> = {
     name: "allcardvalue",
+    description: "Sums up all of your cards value",
     aliases: ["allcardsvalue", "acv"],
     type: "cards",
 

@@ -8,7 +8,7 @@ const command: HypnoCommand = {
     examples: [],
     usage: [],
 
-    handler: async (message, args) => {
+    handler: async (message) => {
         return message.reply(`This is a template command!`);
     }
 };
