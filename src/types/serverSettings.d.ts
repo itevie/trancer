@@ -43,16 +43,3 @@ interface RoleMenuItem {
     emoji: string,
     role_id: string,
 }
-
-interface StarBoard {
-    server_id: string,
-    channel_id: string,
-    emoji: string,
-    minimum: number,
-}
-
-interface StarBoardMessage {
-    message_id: string,
-    channel_id: string,
-    star_board_message_id: string,
-}
