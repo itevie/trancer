@@ -13,11 +13,13 @@ export async function initInviteCache() {
     for (const [_, _guild] of guilds) {
         if (!inviteCache[_guild.id]) inviteCache[_guild.id] = {};
 
-        let guild = await client.guilds.fetch(_guild.id);
-        let invites = await guild.invites.fetch();
-        for (const [_, invite] of invites) {
-            inviteCache[_guild.id][invite.code] = invite.uses;
-        }
+        try {
+            let guild = await client.guilds.fetch(_guild.id);
+            let invites = await guild.invites.fetch();
+            for (const [_, invite] of invites) {
+                inviteCache[_guild.id][invite.code] = invite.uses;
+            }
+        } catch { }
     }
 }
 

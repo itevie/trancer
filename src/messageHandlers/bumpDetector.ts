@@ -47,9 +47,9 @@ const handler: HypnoMessageHandler = {
             let user = message.interaction.user;
 
             await addBump(user.id, message.guild.id);
-            await database.run(`UPDATE server_settings SET last_bump = ? WHERE server_id = ?;`, Date.now(), config.botServer.id);
-            await database.run(`UPDATE server_settings SET bump_reminded = false WHERE server_id = ?;`, config.botServer.id);
-            await database.run(`UPDATE server_settings SET last_bumper = ? WHERE server_id = ?;`, user.id, config.botServer.id);
+            await database.run(`UPDATE server_settings SET last_bump = ? WHERE server_id = ?;`, Date.now(), message.guild.id);
+            await database.run(`UPDATE server_settings SET bump_reminded = false WHERE server_id = ?;`, message.guild.id);
+            await database.run(`UPDATE server_settings SET last_bumper = ? WHERE server_id = ?;`, user.id, message.guild.id);
 
             // Check for bot server
             if (message.guild.id === config.botServer.id) {
