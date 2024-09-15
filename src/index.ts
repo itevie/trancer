@@ -25,6 +25,7 @@ export const client = new Client({
         IntentsBitField.Flags.GuildVoiceStates,
         IntentsBitField.Flags.GuildModeration,
         IntentsBitField.Flags.GuildMessageReactions,
+        IntentsBitField.Flags.GuildInvites
     ],
     partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });

@@ -9,6 +9,7 @@ import { createEmbed } from "../util/other";
 
 let inviteCache: { [key: string]: { [key: string]: number } } = {};
 export async function initInviteCache() {
+    inviteCache = {};
     let guilds = await client.guilds.fetch();
     for (const [_, _guild] of guilds) {
         if (!inviteCache[_guild.id]) inviteCache[_guild.id] = {};
@@ -22,6 +23,12 @@ export async function initInviteCache() {
         } catch { }
     }
 }
+
+client.on("inviteCreate", async invite => {
+    await initInviteCache();
+    if (!inviteCache[invite.guild.id][invite.code])
+        inviteCache[invite.guild.id][invite.code] = 0;
+});
 
 client.on("guildMemberAdd", async member => {
     // Add to analytics
