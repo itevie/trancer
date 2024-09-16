@@ -31,6 +31,7 @@ export const client = new Client({
 });
 
 import { initInviteCache } from "./events/guildMemberAdd";
+import { fixRoleMenus } from "./events/messageReactAdd";
 
 const logger = new Logger("loader");
 export let errors = 0;
@@ -65,6 +66,7 @@ client.on("ready", async () => {
     initInviteCache();
     await connect();
     await connectAnalytic();
+    await fixRoleMenus();
 
     checkBadges();
     setTimeout(() => {
