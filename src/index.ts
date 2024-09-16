@@ -73,7 +73,6 @@ client.on("ready", async () => {
 
     logger.log(`${client.user?.username} successfully logged in!`);
 
-
     await (await client.guilds.fetch(config.botServer.id)).members.fetch();
 
     if (config.website.enabled) {
