@@ -39,8 +39,8 @@ const command: HypnoCommand<{ card: Card, confirm?: true }> = {
         let amount = 0;
         let cards = await getAllAquiredCards();
         for await (const card of cards) {
-            if (card.card_id === args.card.id) {
-                await addMoneyFor(card.user_id, computeCardPrice(args.card));
+            if (card.card_id === args.card.id && card.amount > 0) {
+                await addMoneyFor(card.user_id, computeCardPrice(args.card) * card.amount);
                 await removeCardFor(card.user_id, card.card_id, card.amount);
                 amount += card.amount;
             }
