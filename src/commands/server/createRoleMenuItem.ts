@@ -1,6 +1,7 @@
-import { Role } from "discord.js";
+import { Role, TextChannel } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { createRoleMenuItem, getRoleMenu, roleMenuItemExists } from "../../util/actions/roleMenus";
+import { sendRoleMenu } from "./sendRoleMenu";
 
 const command: HypnoCommand<{ menu: number, name: string, emoji: string, role: Role }> = {
     name: "createrolemenuitem",
@@ -43,6 +44,10 @@ const command: HypnoCommand<{ menu: number, name: string, emoji: string, role: R
 
         // Create it 
         let item = await createRoleMenuItem(args.name, menu.id, args.emoji, args.role.id);
+
+        let channel = await message.guild.channels.fetch("1257417208024268850") as TextChannel;
+        if (menu.attached_to)
+            await sendRoleMenu(channel, menu, await channel.messages.fetch(menu.attached_to));
 
         return message.reply(`The role item has been created! It's ID is **${item.id}**`);
     }

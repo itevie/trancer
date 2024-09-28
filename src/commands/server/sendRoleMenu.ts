@@ -1,4 +1,4 @@
-import { TextChannel } from "discord.js";
+import { Message, TextChannel } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { getRoleMenu, getRoleMenuItems, updateRoleMenuAttachedTo } from "../../util/actions/roleMenus";
 import { createEmbed } from "../../util/other";
@@ -32,7 +32,7 @@ const command: HypnoCommand<{ menu: number }> = {
 
 export default command;
 
-export async function sendRoleMenu(channel: TextChannel, menu: RoleMenu) {
+export async function sendRoleMenu(channel: TextChannel, menu: RoleMenu, modify: Message | null = null) {
     let items = await getRoleMenuItems(menu.id);
 
     // Create embed
@@ -44,9 +44,14 @@ export async function sendRoleMenu(channel: TextChannel, menu: RoleMenu) {
         );
 
     // Create message
-    let menuMessage = await channel.send({
+    let menuMessage = modify ? modify : await channel.send({
         embeds: [embed]
     });
+
+    if (modify)
+        await modify.edit({
+            embeds: [embed]
+        });
 
     // Add reactions
     for (const item of items) {
