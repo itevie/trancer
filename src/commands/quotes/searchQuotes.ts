@@ -18,7 +18,7 @@ const command: HypnoCommand<{ query: string }> = {
     },
 
     handler: async (message, { args }) => {
-        const quotes = await database.all<Quote[]>(`SELECT * FROM quotes;`);
+        const quotes = await database.all<Quote[]>(`SELECT * FROM quotes WHERE server_id = ?;`, message.guild.id);
         const matches: Quote[] = [];
         const query = args.query.toLowerCase();
 

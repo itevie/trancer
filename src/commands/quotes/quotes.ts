@@ -20,7 +20,7 @@ const command: HypnoCommand<{ user?: User }> = {
 
     handler: async (message, { args }) => {
         const user = args.user ? args.user : message.author;
-        const list = (await database.all<Quote[]>(`SELECT * FROM quotes WHERE author_id = (?)`, user.id)).map(x => {
+        const list = (await database.all<Quote[]>(`SELECT * FROM quotes WHERE author_id = (?) AND server_id = ?;`, user.id, message.guild.id)).map(x => {
             return {
                 name: `Quote #${x.id}`,
                 value: `*${x.content || "No Content"}*`
