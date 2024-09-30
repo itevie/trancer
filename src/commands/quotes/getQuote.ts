@@ -26,6 +26,9 @@ const command: HypnoCommand = {
         if (!quote)
             return message.reply(`It seems the quote with that ID does not exist...`);
 
+        if (quote.server_id !== message.guild.id)
+            return message.reply(`That quote is not from this server.`);
+
         // Done
         return message.reply({
             embeds: [await genQuote(quote)]
