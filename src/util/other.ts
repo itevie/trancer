@@ -249,7 +249,7 @@ export async function paginate(
     let setFields = () => {
         embed.setFields(fields.slice(currentIndex, currentIndex + 10));
         embed.setFooter({
-            text: `Page ${(currentIndex / 10) + 1}`
+            text: `Page ${(currentIndex / 10) + 1} (${fields.length} items)`
         })
     };
     setFields();
