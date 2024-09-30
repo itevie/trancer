@@ -1,4 +1,3 @@
-import { Message } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { database } from "../../util/database";
 import { createEmbed, paginate } from "../../util/other";
