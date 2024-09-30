@@ -24,7 +24,7 @@ const command: HypnoCommand<{ query: string }> = {
 
         for await (const quote of quotes) {
             if (quote.content.toLowerCase().includes(query))
-                quotes.push(quote);
+                matches.push(quote);
         }
 
         const list = matches.map(x => {
