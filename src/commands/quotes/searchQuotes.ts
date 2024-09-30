@@ -1,6 +1,6 @@
 import { HypnoCommand } from "../../types/util";
 import { database } from "../../util/database";
-import { createEmbed, paginate } from "../../util/other";
+import { createEmbed, getUser, paginate } from "../../util/other";
 
 const command: HypnoCommand<{ query: string }> = {
     name: "searchquotes",
@@ -27,12 +27,13 @@ const command: HypnoCommand<{ query: string }> = {
                 matches.push(quote);
         }
 
-        const list = matches.map(x => {
-            return {
-                name: `Quote #${x.id}`,
-                value: `*${x.content || "No Content"}*`
-            };
-        });
+        let list = [];
+        for await (const quote of matches) {
+            list.push({
+                name: `Quote #${quote.id} by ${(await getUser(quote.author_id))?.username ?? "Cannot fetch username"}`,
+                value: `*${quote.content || "No Content"}*`
+            })
+        }
 
         return paginate(message, createEmbed().setTitle(`Quotes matching that query`), list);
     }
