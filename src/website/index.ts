@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import { readFileSync } from "fs";
 import config from "../config";
 import Logger from "../util/Logger";
@@ -11,6 +12,7 @@ const logger = new Logger("website");
 
 export default function initServer() {
     const app = express();
+    app.use(cors());
 
     app.get("/", (_, res) => {
         return res.send(readFileSync(__dirname + "/public/index.html", "utf-8"));
