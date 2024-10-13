@@ -9,7 +9,7 @@ const command: HypnoCommand = {
 
     handler: async (message) => {
         const code = generateSiteCode(message.author.id);
-        return message.reply(`https://discord.dawn.rest?auth=${code}`);
+        return message.reply(`https://dawn.rest/discord?auth=${code}`);
     }
 };
 
