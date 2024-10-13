@@ -73,7 +73,7 @@ client.on("ready", async () => {
 
     await (await client.guilds.fetch(config.botServer.id)).members.fetch();
 
-    if (config.website.enabled) {
+    if (true || config.website.enabled) {
         initServer();
     }
 });

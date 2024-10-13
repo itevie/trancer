@@ -7,8 +7,10 @@ import { database } from "../util/database";
 import { getAllGuildsUserData } from "../util/actions/userData";
 import { client } from "..";
 import { getAllCommandUsage, getMemberCounts, getMessageAtTimes } from "../util/analytics";
+import { generateCode } from "../util/other";
 
 const logger = new Logger("website");
+const codes: { [key: string]: string } = {};
 
 export default function initServer() {
     const app = express();
@@ -27,6 +29,11 @@ export default function initServer() {
     });
 
     app.get("/data/:type", async (req, res) => {
+        if (!req.headers.authorization)
+            return res.status(401).send({ message: "Missing authorization header" });
+        if (!codes[req.headers.authorization])
+            return res.status(401).send({ message: "Invalid authorization code" });
+
         switch (req.params.type) {
             case "economy":
                 return res.status(200).send({
@@ -65,4 +72,10 @@ export default function initServer() {
     app.listen(config.website.port, () => {
         logger.log(`Website listening on port ${config.website.port}`);
     });
+}
+
+export function generateSiteCode(forId: string) {
+    const code = generateCode(20);
+    codes[code] = forId;
+    return code;
 }

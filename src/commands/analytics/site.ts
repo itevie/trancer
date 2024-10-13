@@ -1,4 +1,5 @@
 import { HypnoCommand } from "../../types/util";
+import { generateSiteCode } from "../../website";
 
 const command: HypnoCommand = {
     name: "site",
@@ -7,7 +8,8 @@ const command: HypnoCommand = {
     type: "analytics",
 
     handler: async (message) => {
-        return message.reply(`https://discord.dawn.rest`);
+        const code = generateSiteCode(message.author.id);
+        return message.reply(`https://discord.dawn.rest?auth=${code}`);
     }
 };
 
