@@ -47,6 +47,8 @@ const handler: HypnoMessageHandler = {
     )
       return;
 
+    lastAwards[message.author.id] = Date.now();
+
     let data = await getUserData(message.author.id, message.guild.id);
     let pre = calculateLevel(data.xp);
 
