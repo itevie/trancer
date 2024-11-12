@@ -13,7 +13,7 @@ const command: HypnoCommand = {
     handler: async (message, { oldArgs: args }) => {
         if (args[0]) {
             const user = args[0].replace(/[<>@]/g, "");
-            return message.channel.send(`${args.join(" ")} ${await getRandomImposition(user)} ${message.author.id === "735109350728663080" ? "<@395877903998648322>" : ""} `);
+            return message.channel.send(`${args.join(" ")} ${await getRandomImposition(user)}`);
         }
         return message.reply((await getRandomImposition(message.author.id)) + ` ${message.author.id === "735109350728663080" ? "<@395877903998648322>" : ""}`);
     }
