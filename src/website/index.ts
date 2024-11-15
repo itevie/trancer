@@ -74,7 +74,7 @@ export default function initServer() {
           config.botServer.id
         );
         return res.status(200).send({
-          quotes,
+          data: quotes,
         });
       default:
         return res.status(400).send("Invalid data type.");
