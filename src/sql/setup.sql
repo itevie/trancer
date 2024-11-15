@@ -67,7 +67,8 @@ CREATE TABLE IF NOT EXISTS user_favourite_spirals (
     id INT REFERENCES spirals(id) NOT NULL,
     user_id TEXT NOT NULL
 );
-    
+
+ALTER TABLE user_data ADD site_quote_opt_in BOOLEAN DEFAULT true;
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,
     guild_id TEXT NOT NULL,

@@ -5,4 +5,5 @@ interface UserData {
   messages_sent: number;
   vc_time: number;
   xp: number;
+  site_quote_opt_in: boolean;
 }
