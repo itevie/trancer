@@ -73,13 +73,17 @@ export default function initServer() {
           `SELECT * FROM quotes WHERE server_id = (?);`,
           config.botServer.id
         );
-        const optOut = (
+        const optIn = (
           await database.all<UserData[]>(
-            "SELECT * FROM user_data WHERE site_quote_opt_in = false;"
+            "SELECT * FROM user_data WHERE site_quote_opt_in = true;"
           )
-        ).map((x) => x.user_id);
+        ).map(
+          (x) => x.user_id,
+          quotes.map((x) => optIn.includes(x.author_id))
+        );
+        console.log(optIn);
         return res.status(200).send({
-          data: quotes.map((x) => !optOut.includes(x.author_id)),
+          data: quotes.map((x) => optIn.includes(x.author_id)),
         });
       default:
         return res.status(400).send("Invalid data type.");

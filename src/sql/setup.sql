@@ -68,14 +68,14 @@ CREATE TABLE IF NOT EXISTS user_favourite_spirals (
     user_id TEXT NOT NULL
 );
 
-ALTER TABLE user_data ADD site_quote_opt_in BOOLEAN DEFAULT true;
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,
     guild_id TEXT NOT NULL,
     bumps INT NOT NULL DEFAULT 0,
     messages_sent INT NOT NULL DEFAULT 0,
     vc_time INT NOT NULL DEFAULT 0,
-    xp INT NOT NULL DEFAULT 0
+    xp INT NOT NULL DEFAULT 0,
+    site_quote_opt_in BOOLEAN DEFAULT true
 );
 
 CREATE TABLE IF NOT EXISTS dawnagotchi (
