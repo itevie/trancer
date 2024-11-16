@@ -7,6 +7,7 @@ import { database } from "../util/database";
 import { getAllGuildsUserData } from "../util/actions/userData";
 import { client } from "..";
 import {
+  analyticDatabase,
   getAllCommandUsage,
   getMemberCounts,
   getMessageAtTimes,
@@ -38,10 +39,27 @@ export default function initServer() {
     if (!codes[req.headers.authorization])
       return res.status(401).send({ message: "Invalid authorization code" });
 
-    switch (req.params.type) {
+    let parts = req.params.type.split("-");
+
+    switch (parts[0] || "") {
       case "economy":
         return res.status(200).send({
           data: await database.all(`SELECT user_id, balance FROM economy;`),
+        });
+      case "money_transactions":
+        let userId = parts[1];
+        if (!userId)
+          return res
+            .status(400)
+            .send(
+              `No user ID provided. Pass it using /data/money_transactions-ID`
+            );
+        let transactions = await analyticDatabase.all<MoneyTransaction[]>(
+          "SELECT * FROM money_transactions WHERE user_id = ? ORDER BY id DESC LIMIT 1000;",
+          userId
+        );
+        return res.status(200).send({
+          data: transactions,
         });
       case "user_data":
         return res.status(200).send({
