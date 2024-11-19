@@ -61,7 +61,7 @@ const handler: HypnoMessageHandler = {
           phrases[Math.floor(Math.random() * phrases.length)]
         );
         messagesSince = 0;
-        messagesRequired = randomFromRange(50, 500);
+        messagesRequired = randomFromRange(25, 100);
       } catch {}
     }
   },
