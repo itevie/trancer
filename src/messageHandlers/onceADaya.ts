@@ -26,7 +26,6 @@ const phrases = [
   ":3c",
   "I love you!",
   "Skull emoji!",
-  "Delete this.",
   "This is why I no longer like penguins.",
   "Wowzers!",
   "Brian! Look out!",
