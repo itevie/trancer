@@ -1,9 +1,4 @@
 -- Server specific stuff
-ALTER TABLE
-    server_settings
-ADD
-    level_notifications BOOLEAN DEFAULT true;
-
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
