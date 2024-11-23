@@ -11,6 +11,7 @@ const settingsToSql = {
   bumps: "remind_bumps",
   invitelogger: "invite_logger_channel_id",
   bumpchannel: "bump_channel",
+  levelnotify: "level_notifications",
 };
 
 const settings = {
@@ -19,6 +20,7 @@ const settings = {
   tistrole: "role",
   switchrole: "role",
   bumps: "boolean",
+  levelnotify: "boolean",
   invitelogger: "id",
   bumpchannel: "id",
 };
@@ -47,6 +49,7 @@ const command: HypnoCommand<{
           "bumps",
           "invitelogger",
           "bumpchannel",
+          "levelnotify",
         ],
       },
       {

@@ -13,6 +13,7 @@ interface ServerSettings {
   invite_logger_channel_id: string | null;
   remind_bumps: boolean;
   bump_channel: string | null;
+  level_notifications: boolean;
 }
 
 interface ChannelImposition {

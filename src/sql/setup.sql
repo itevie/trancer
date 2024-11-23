@@ -2,12 +2,7 @@
 ALTER TABLE
     server_settings
 ADD
-    remind_bumps BOOLEAN DEFAULT false;
-
-ALTER TABLE
-    server_settings
-ADD
-    bump_channel TEXT DEFAULT NULL;
+    level_notifications BOOLEAN DEFAULT true;
 
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
@@ -20,7 +15,8 @@ CREATE TABLE IF NOT EXISTS server_settings (
     switch_role_id TEXT DEFAULT NULL,
     invite_logger_channel_id TEXT DEFAULT NULL,
     remind_bumps BOOLEAN DEFAULT false,
-    bump_channel TEXT DEFAULT NULL
+    bump_channel TEXT DEFAULT NULL,
+    level_notifications BOOLEAN DEFAULT true
 );
 
 CREATE TABLE IF NOT EXISTS star_board (

@@ -3,6 +3,7 @@ import config from "../config";
 import { HypnoMessageHandler } from "../types/util";
 import { addXP, getUserData } from "../util/actions/userData";
 import { randomFromRange } from "../util/other";
+import { getServerSettings } from "../util/actions/settings";
 
 const exclude = [
   "1257420480953057321",
@@ -39,15 +40,19 @@ const handler: HypnoMessageHandler = {
   description: "Awards XP",
 
   handler: async (message) => {
+    let settings = await getServerSettings(message.guild.id);
+
     if (exclude.includes(message.channel.id)) return;
-    if (message.guild.id !== config.botServer.id) return;
     if (
-      lastAwards[message.author.id] &&
-      timeBetween - (Date.now() - lastAwards[message.author.id]) > 0
+      lastAwards[`${message.author.id}-${message.channel.id}`] &&
+      timeBetween -
+        (Date.now() -
+          lastAwards[`${message.author.id}-${message.channel.id}`]) >
+        0
     )
       return;
 
-    lastAwards[message.author.id] = Date.now();
+    lastAwards[`${message.author.id}-${message.channel.id}`] = Date.now();
 
     let data = await getUserData(message.author.id, message.guild.id);
     let pre = calculateLevel(data.xp);
@@ -57,9 +62,10 @@ const handler: HypnoMessageHandler = {
 
     let post = calculateLevel(data.xp + award);
 
-    if (pre !== post) {
+    if (pre !== post && settings.level_notifications) {
       let reward = rewards[post];
-      if (reward) await reward.handle(message);
+      if (reward && message.guild.id === config.botServer.id)
+        await reward.handle(message);
       await message.reply(
         `Welldone! You levelled up from level **${pre}** to **${post}**! :cyclone:${
           reward ? `\n\n${reward.label}` : ""
