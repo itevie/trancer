@@ -40,6 +40,9 @@ const phrases = [
   "It's so over",
   "STONKS",
   "Cope",
+  "Erm nuh uh",
+  "Kaboom!!!",
+  "Throws a brick at you (cutely)",
 ];
 
 let messagesSince = 0;

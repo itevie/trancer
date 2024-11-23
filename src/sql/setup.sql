@@ -1,15 +1,18 @@
 -- Server specific stuff
+-- ALTER TABLE server_settings ADD remind_bumps BOOLEAN DEFAULT false;
+-- ALTER TABLE server_settings ADD bump_channel TEXT DEFAULT NULL;
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
     last_bump INT NOT NULL DEFAULT 0,
     last_bumper TEXT DEFAULT NULL,
     bump_reminded BOOLEAN DEFAULT false,
-
     sub_role_id TEXT DEFAULT NULL,
     tist_role_id TEXT DEFAULT NULL,
     switch_role_id TEXT DEFAULT NULL,
-    invite_logger_channel_id TEXT DEFAULT NULL
+    invite_logger_channel_id TEXT DEFAULT NULL,
+    remind_bumps BOOLEAN DEFAULT false,
+    bump_channel TEXT DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS star_board (
@@ -82,11 +85,8 @@ CREATE TABLE IF NOT EXISTS dawnagotchi (
     id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
     owner_id TEXT NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
     hair_color_hex TEXT NOT NULL DEFAULT '#FFB6C1',
-
     alive BOOLEAN NOT NULL DEFAULT true,
-
     next_feed INT NOT NULL DEFAULT 0,
     next_drink INT NOT NULL DEFAULT 0,
     next_play INT NOT NULL DEFAULT 0
