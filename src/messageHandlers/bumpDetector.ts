@@ -13,7 +13,7 @@ setInterval(async () => {
 
   for (const serverSettings of bumps) {
     // Compute
-    if (2 - (Date.now() - serverSettings.last_bump) < 0) {
+    if (7.2e6 - (Date.now() - serverSettings.last_bump) < 0) {
       if (!serverSettings.bump_reminded) {
         await database.run(
           `UPDATE server_settings SET bump_reminded = true WHERE server_id = ?;`,
