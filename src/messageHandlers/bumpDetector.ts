@@ -17,7 +17,7 @@ setInterval(async () => {
       if (!serverSettings.bump_reminded) {
         await database.run(
           `UPDATE server_settings SET bump_reminded = true WHERE server_id = ?;`,
-          config.botServer.id
+          serverSettings.server_id
         );
 
         // Send message
@@ -39,11 +39,6 @@ setInterval(async () => {
                 .setDescription(`Run \`/bump\` with DISBOARD to help us grow!`),
             ],
           });
-
-          await database.run(
-            `UPDATE server_settings SET bump_reminded = true WHERE server_id = ?;`,
-            serverSettings.server_id
-          );
         }
       }
     }
