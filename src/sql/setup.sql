@@ -1,6 +1,14 @@
 -- Server specific stuff
--- ALTER TABLE server_settings ADD remind_bumps BOOLEAN DEFAULT false;
--- ALTER TABLE server_settings ADD bump_channel TEXT DEFAULT NULL;
+ALTER TABLE
+    server_settings
+ADD
+    remind_bumps BOOLEAN DEFAULT false;
+
+ALTER TABLE
+    server_settings
+ADD
+    bump_channel TEXT DEFAULT NULL;
+
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
