@@ -54,7 +54,8 @@ const badges: { [key: string]: Badge } = {
     emoji: ":speaking_head:",
     scan: async () => {
       const users = (await database.all(
-        `SELECT * FROM user_data;`
+        `SELECT * FROM user_data WHERE server_id = ?;`,
+        config.botServer.id
       )) as UserData[];
       const aquired = await getAllAquiredBadges();
 
@@ -109,7 +110,8 @@ const badges: { [key: string]: Badge } = {
     emoji: ":telephone_receiver:",
     scan: async () => {
       const users = (await database.all(
-        `SELECT * FROM user_data;`
+        `SELECT * FROM user_data WHERE server_id = ?;`,
+        config.botServer.id
       )) as UserData[];
       const aquired = await getAllAquiredBadges();
 
@@ -149,7 +151,8 @@ const badges: { [key: string]: Badge } = {
     emoji: ":right_facing_fist:",
     scan: async () => {
       const users = (await database.all(
-        `SELECT * FROM user_data;`
+        `SELECT * FROM user_data WHERE server_id = ?;`,
+        config.botServer.id
       )) as UserData[];
       const aquired = await getAllAquiredBadges();
 
