@@ -18,7 +18,6 @@ const phrases = [
   ":)",
   "erm... what da sigma?",
   "spongeboob",
-  "<@&1257798863989903382> get em gang",
   "Tuna sandwich.",
   "Let me see your bones",
   "Are you always this gay?",
@@ -43,6 +42,8 @@ const phrases = [
   "Erm nuh uh",
   "Kaboom!!!",
   "Throws a brick at you (cutely)",
+  "Hate is such a strong word... but I think it's the correct one.",
+  "I condone gambling!",
 ];
 
 let messagesSince = 0;

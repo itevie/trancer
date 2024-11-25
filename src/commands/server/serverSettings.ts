@@ -1,7 +1,13 @@
-import { PermissionsBitField, TextChannel } from "discord.js";
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  MessageCreateOptions,
+  MessageEditOptions,
+} from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { database } from "../../util/database";
-import { checkBoolean, createEmbed } from "../../util/other";
+import { createEmbed } from "../../util/other";
 
 const settingsToSql = {
   prefix: "prefix",
@@ -12,7 +18,7 @@ const settingsToSql = {
   invitelogger: "invite_logger_channel_id",
   bumpchannel: "bump_channel",
   levelnotify: "level_notifications",
-};
+} as const;
 
 const settings = {
   prefix: "string",
@@ -21,9 +27,9 @@ const settings = {
   switchrole: "role",
   bumps: "boolean",
   levelnotify: "boolean",
-  invitelogger: "id",
-  bumpchannel: "id",
-};
+  invitelogger: "channel",
+  bumpchannel: "channel",
+} as const;
 
 const command: HypnoCommand<{
   setting: keyof typeof settingsToSql;
@@ -35,122 +41,166 @@ const command: HypnoCommand<{
   type: "admin",
   guards: ["admin"],
 
-  args: {
-    requiredArguments: 0,
-    args: [
-      {
-        name: "setting",
-        type: "string",
-        oneOf: [
-          "prefix",
-          "subrole",
-          "tistrole",
-          "switchrole",
-          "bumps",
-          "invitelogger",
-          "bumpchannel",
-          "levelnotify",
-        ],
-      },
-      {
-        name: "value",
-        type: "any",
-      },
-    ],
-  },
-
-  handler: async (message, { args }) => {
-    const currentSettings = await database.get(
+  handler: async (message) => {
+    let currentSettings = await database.get<ServerSettings>(
       `SELECT * FROM server_settings WHERE server_id = (?)`,
       message.guild.id
     );
-
-    if (!args.setting && !args.value) {
+    const generateMessagePayload = async (): Promise<
+      MessageCreateOptions | MessageEditOptions
+    > => {
+      const rows: ActionRowBuilder[] = [];
+      let actionRow = new ActionRowBuilder();
       let current = "";
-      for (const i in currentSettings) {
-        let key = null;
-        for (const x in settingsToSql)
-          if (settingsToSql[x] === i) {
-            key = x;
-            break;
-          }
-        if (!key) continue;
-        current += `**${key}**: ${currentSettings[i]}\n`;
+      for (const setting in settings) {
+        if (actionRow.components.length >= 5) {
+          rows.push(actionRow);
+          actionRow = new ActionRowBuilder();
+        }
+
+        const val = currentSettings[settingsToSql[setting]];
+
+        if (settings[setting] === "boolean") {
+          current += `**${setting}**: ${val ? "true" : "false"}\n`;
+          actionRow.addComponents(
+            new ButtonBuilder()
+              .setLabel(setting)
+              .setCustomId(setting)
+              .setStyle(
+                currentSettings[settingsToSql[setting]]
+                  ? ButtonStyle.Success
+                  : ButtonStyle.Danger
+              )
+          );
+        } else if (
+          settings[setting] === "string" ||
+          settings[setting] === "role"
+        ) {
+          current += `**${setting}**: ${val}\n`;
+          actionRow.addComponents(
+            new ButtonBuilder()
+              .setLabel(setting)
+              .setCustomId(setting)
+              .setStyle(ButtonStyle.Primary)
+          );
+        } else if (settings[setting] === "channel") {
+          current += `**${setting}**: <#${val}>\n`;
+          actionRow.addComponents(
+            new ButtonBuilder()
+              .setLabel(setting)
+              .setCustomId(setting)
+              .setStyle(ButtonStyle.Primary)
+          );
+        }
       }
 
-      // Send
-      return message.reply({
+      if (actionRow.components.length !== 0) rows.push(actionRow);
+
+      return {
         embeds: [
           createEmbed()
-            .setTitle("Please provide an option to change")
-            .setDescription(`Current settings:\n\n${current}`)
-            .addFields([
-              {
-                name: "Options",
-                value: Object.keys(settings)
-                  .map((x) => `\`${x}\``)
-                  .join(", "),
-              },
-            ]),
+            .setTitle("Click on a button to change the setting")
+            .setDescription(`Current settings:\n\n${current}`),
         ],
-      });
-    }
+        // @ts-ignore
+        components: rows,
+      };
+    };
 
-    if (!args.value)
-      return message.reply(`Please provide an **${settings[args.setting]}**!`);
-
-    // Check if it is the custom ID type
-    if (
-      settings[args.setting] === "role" &&
-      !args.value.match(/^((<&)?[0-9]+>?)$/)
-    )
-      return message.reply(
-        `Invalid ID, please provide an ID, or a mention of the ID`
-      );
-    if (
-      settings[args.setting] === "boolean" &&
-      checkBoolean(args.value) === null
-    )
-      return message.reply(`Please provided yes or no!`);
-
-    // Get content
-    const value =
-      settings[args.setting] === "id" || settings[args.setting] === "role"
-        ? args.value.replace(/[<>#&@]/g, "")
-        : settings[args.setting] === "boolean"
-        ? checkBoolean(args.value)
-        : args.value;
-
-    if (args.setting === "invitelogger" || args.setting === "bumpchannel") {
-      let channel: TextChannel;
-      try {
-        channel = (await message.guild.channels.fetch(value)) as TextChannel;
-      } catch (err) {
-        return message.reply(`Failed to fetch the channel :(`);
-      }
-
-      if (
-        !message.guild.members.me
-          .permissionsIn(channel.id)
-          .has(PermissionsBitField.Flags.SendMessages)
-      ) {
-        return message.reply(
-          `I don't have permissions to send messages in that channel!`
-        );
-      }
-    }
-
-    // Do it
-    await database.run(
-      `UPDATE server_settings SET ${
-        settingsToSql[args.setting]
-      } = (?) WHERE server_id = (?)`,
-      value,
-      message.guild.id
+    const msg = await message.reply(
+      (await generateMessagePayload()) as MessageCreateOptions
     );
-    return message.reply(
-      `Property **${args.setting}** updated to **${value}**!`
-    );
+
+    let collector = msg.createMessageComponentCollector({
+      filter: (x) => x.user.id === message.author.id,
+      time: 1000 * 60 * 5,
+    });
+
+    collector.on("collect", async (i) => {
+      const sql = settingsToSql[i.customId];
+      switch (settings[i.customId]) {
+        case "boolean":
+          await database.run(
+            `UPDATE server_settings SET ${sql} = ? WHERE server_id = ?;`,
+            currentSettings[sql] ? false : true,
+            i.guild.id
+          );
+          currentSettings[sql] = currentSettings[sql] ? false : true;
+          await msg.edit(
+            (await generateMessagePayload()) as MessageEditOptions
+          );
+          await i.deferUpdate();
+          break;
+        case "string":
+        case "role":
+        case "channel":
+          await i.reply({
+            content: `Send what you want "${i.customId}" to be in the next message. (type "null" if you want to remove the value)`,
+            ephemeral: true,
+          });
+          const result = (
+            await message.channel.awaitMessages({
+              filter: (x) => x.author.id === message.author.id,
+              max: 1,
+            })
+          ).at(0);
+
+          let content = result.content;
+
+          if (content !== "null") {
+            switch (settings[i.customId]) {
+              case "string":
+                if (result.content.length >= 5)
+                  return result.reply(
+                    `Value must be less than 5, please press the button again to try again.`
+                  );
+                break;
+              case "role":
+                try {
+                  content = content.replace(/[<@&>]/g, "");
+                  await message.guild.roles.fetch(content);
+                } catch {
+                  return result.reply(
+                    `Invalid role provided, please press the button again to try again.`
+                  );
+                }
+              case "channel":
+                try {
+                  content = content.replace(/[<#>]/g, "");
+                  await message.guild.channels.fetch(content);
+                } catch {
+                  return result.reply(
+                    `Invalid channel provided, please press the button again to try again.`
+                  );
+                }
+            }
+          }
+
+          if (content === "null") {
+            try {
+              await database.run(
+                `UPDATE server_settings SET ${sql} = NULL WHERE server_id = ?;`,
+                i.guild.id
+              );
+            } catch (e) {
+              console.log(e);
+              return result.reply(`"${i.customId}" cannot be null.`);
+            }
+            currentSettings[sql] = null;
+          } else {
+            await database.run(
+              `UPDATE server_settings SET ${sql} = ? WHERE server_id = ?;`,
+              content,
+              i.guild.id
+            );
+            currentSettings[sql] = content;
+          }
+          await msg.edit(
+            (await generateMessagePayload()) as MessageEditOptions
+          );
+          break;
+      }
+    });
   },
 };
 
