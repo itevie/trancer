@@ -74,11 +74,17 @@ const badges: { [key: string]: Badge } = {
     description: "Get to level 15",
     emoji: ":chart_with_upwards_trend:",
     scan: async () => {
+      const aquired = await getAllAquiredBadges();
       const users = (await database.all(
         "SELECT * FROM user_data;"
       )) as UserData[];
       for (const user of users) {
-        if (calculateLevel(user.xp || 0) >= 15)
+        if (
+          calculateLevel(user.xp || 0) >= 15 &&
+          !aquired.find(
+            (x) => x.user === user.user_id && x.badge_name === "level15"
+          )
+        )
           await addBadgeFor(user.user_id, "level15");
       }
     },
