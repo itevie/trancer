@@ -1,14 +1,29 @@
 import { HypnoCommand } from "../types/util";
 
-export function generateCommandCodeBlock(command: HypnoCommand, serverSettings: ServerSettings) {
-    let codeblock = "```" + `${serverSettings.prefix}${command.name}`;
+export function generateCommandCodeBlock(
+  commandName: string,
+  command: HypnoCommand,
+  serverSettings: ServerSettings,
+  name?: string
+) {
+  let commandPart = `${serverSettings.prefix}${commandName}`;
+  let codeblock = ``;
 
-    for (let i in command.args.args) {
-        let isRequired = command.args.requiredArguments > +i;
-        codeblock += ` ${isRequired ? '<' : '['}${command.args.args[i].name}${isRequired ? '>' : ']'}`;
-    }
+  for (let i in command.args.args) {
+    let isRequired = command.args.requiredArguments > +i;
+    codeblock += ` ${isRequired ? "<" : "["}${command.args.args[i].name}${
+      isRequired ? ">" : "]"
+    }`;
+  }
 
-    codeblock += "```";
+  if (name) {
+    let index = codeblock.indexOf(name);
+    codeblock += `\n${" ".repeat(index + commandPart.length)}${"^".repeat(
+      name.length
+    )}`;
+  }
 
-    return codeblock;
+  codeblock = "```" + commandPart + codeblock + "```";
+
+  return codeblock;
 }

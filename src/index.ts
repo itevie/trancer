@@ -1,4 +1,4 @@
-import { Client, IntentsBitField, Partials, } from "discord.js";
+import { Client, IntentsBitField, Partials } from "discord.js";
 import { HypnoCommand, HypnoMessageHandler } from "./types/util";
 import { connect } from "./util/database";
 import getAllFiles, { createBackup, createEmbed } from "./util/other";
@@ -15,17 +15,17 @@ export const handlers: HypnoMessageHandler[] = [];
 
 // Setup client shit
 export const client = new Client({
-    intents: [
-        IntentsBitField.Flags.MessageContent,
-        IntentsBitField.Flags.Guilds,
-        IntentsBitField.Flags.GuildMembers,
-        IntentsBitField.Flags.GuildMessages,
-        IntentsBitField.Flags.GuildVoiceStates,
-        IntentsBitField.Flags.GuildModeration,
-        IntentsBitField.Flags.GuildMessageReactions,
-        IntentsBitField.Flags.GuildInvites
-    ],
-    partials: [Partials.Message, Partials.Channel, Partials.Reaction],
+  intents: [
+    IntentsBitField.Flags.MessageContent,
+    IntentsBitField.Flags.Guilds,
+    IntentsBitField.Flags.GuildMembers,
+    IntentsBitField.Flags.GuildMessages,
+    IntentsBitField.Flags.GuildVoiceStates,
+    IntentsBitField.Flags.GuildModeration,
+    IntentsBitField.Flags.GuildMessageReactions,
+    IntentsBitField.Flags.GuildInvites,
+  ],
+  partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
 
 import { initInviteCache } from "./events/guildMemberAdd";
@@ -34,90 +34,98 @@ const logger = new Logger("loader");
 export let errors = 0;
 
 client.on("ready", async () => {
-    // Load events
-    const eventFiles = getAllFiles(__dirname + "/events");
-    for (const eventFile of eventFiles) {
-        require(eventFile);
-        logger.log(`Loaded event: ${eventFile}`);
+  // Load events
+  const eventFiles = getAllFiles(__dirname + "/events");
+  for (const eventFile of eventFiles) {
+    require(eventFile);
+    logger.log(`Loaded event: ${eventFile}`);
+  }
+
+  // Load commands
+  const commandFiles = getAllFiles(__dirname + "/commands");
+
+  for (const commandFile of commandFiles) {
+    const commandImport = require(commandFile).default as HypnoCommand;
+    commands[commandImport.name] = commandImport;
+    for (const alias of commandImport.aliases || []) {
+      if (commandImport.eachAliasIsItsOwnCommand) {
+        commands[alias] = {
+          ...commandImport,
+          name: alias,
+        };
+      } else {
+        commands[alias] = commandImport;
+      }
     }
+    logger.log(`Loaded command: ${commandImport.name}`);
+  }
 
-    // Load commands
-    const commandFiles = getAllFiles(__dirname + "/commands");
+  // Load handlers
+  const handleFiles = getAllFiles(__dirname + "/messageHandlers");
 
-    for (const commandFile of commandFiles) {
-        const commandImport = require(commandFile).default as HypnoCommand;
-        commands[commandImport.name] = commandImport;
-        for (const alias of commandImport.aliases || [])
-            commands[alias] = commandImport;
-        logger.log(`Loaded command: ${commandImport.name}`);
-    }
+  for (const handleFile of handleFiles) {
+    const handleImport = require(handleFile).default as HypnoMessageHandler;
+    handlers.push(handleImport);
+    logger.log(`Loaded handler: ${handleImport.name}`);
+  }
+  initInviteCache();
+  await connect();
+  await connectAnalytic();
 
-    // Load handlers
-    const handleFiles = getAllFiles(__dirname + "/messageHandlers");
-
-    for (const handleFile of handleFiles) {
-        const handleImport = require(handleFile).default as HypnoMessageHandler;
-        handlers.push(handleImport);
-        logger.log(`Loaded handler: ${handleImport.name}`);
-    }
-    initInviteCache();
-    await connect();
-    await connectAnalytic();
-
+  checkBadges();
+  setTimeout(() => {
     checkBadges();
-    setTimeout(() => {
-        checkBadges();
-    }, 60000);
+  }, 60000);
 
-    logger.log(`${client.user?.username} successfully logged in!`);
+  logger.log(`${client.user?.username} successfully logged in!`);
 
-    await (await client.guilds.fetch(config.botServer.id)).members.fetch();
+  await (await client.guilds.fetch(config.botServer.id)).members.fetch();
 
-    if (true || config.website.enabled) {
-        initServer();
-    }
+  if (true || config.website.enabled) {
+    initServer();
+  }
 });
 
-client.login(
-    readFileSync(__dirname + "/../token.txt", "utf-8").trim()
-);
+client.login(readFileSync(__dirname + "/../token.txt", "utf-8").trim());
 
 process.on("uncaughtException", async (err) => {
-    console.log(err);
-    errors++;
-    try {
-        let channel = await client.channels.fetch(config.botServer.channels.logs);
-        if (channel.isTextBased()) {
-            channel.send({
-                embeds: [
-                    createEmbed()
-                        .setTitle(`Oops! I died :(`)
-                        .setDescription(err.message)
-                        .setThumbnail(null)
-                        .addFields([
-                            {
-                                name: `Stacktrace`,
-                                value: "```" + (err.stack ? err.stack.slice(0, 1000) : "*No Stack*") + "```"
-                            }
-                        ])
-                ]
-            })
-        }
-    } catch (err) {
-        console.log(err);
-        process.exit(0);
+  console.log(err);
+  errors++;
+  try {
+    let channel = await client.channels.fetch(config.botServer.channels.logs);
+    if (channel.isTextBased()) {
+      channel.send({
+        embeds: [
+          createEmbed()
+            .setTitle(`Oops! I died :(`)
+            .setDescription(err.message)
+            .setThumbnail(null)
+            .addFields([
+              {
+                name: `Stacktrace`,
+                value:
+                  "```" +
+                  (err.stack ? err.stack.slice(0, 1000) : "*No Stack*") +
+                  "```",
+              },
+            ]),
+        ],
+      });
     }
+  } catch (err) {
+    console.log(err);
+    process.exit(0);
+  }
 });
 
 // Backup
 let lastBackup = 0;
 let loc = path.normalize(path.resolve(__dirname, "../last_backup.txt"));
-if (!existsSync(loc))
-    writeFileSync(loc, "0");
+if (!existsSync(loc)) writeFileSync(loc, "0");
 lastBackup = new Date(readFileSync(loc, "utf-8")).getTime();
 
-if (8.64e+7 - (Date.now() - lastBackup) < 0) {
-    createBackup();
-    logger.log(`Created backup!`);
-    writeFileSync(loc, Date.now().toString());
+if (8.64e7 - (Date.now() - lastBackup) < 0) {
+  createBackup();
+  logger.log(`Created backup!`);
+  writeFileSync(loc, Date.now().toString());
 }

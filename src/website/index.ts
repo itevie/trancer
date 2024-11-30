@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { readFileSync } from "fs";
+import { existsSync } from "fs";
 import config from "../config";
 import Logger from "../util/Logger";
 import { database } from "../util/database";
@@ -13,6 +13,7 @@ import {
   getMessageAtTimes,
 } from "../util/analytics";
 import { generateCode } from "../util/other";
+import path from "path";
 
 const logger = new Logger("website");
 const codes: { [key: string]: string } = {};
@@ -22,15 +23,26 @@ export default function initServer() {
   app.use(cors());
 
   app.get("/", (_, res) => {
-    return res.send(readFileSync(__dirname + "/public/index.html", "utf-8"));
+    return res.redirect("https://dawn.rest/trancer");
   });
 
-  app.get("/script.js", (_, res) => {
-    return res.send(readFileSync(__dirname + "/public/script.js", "utf-8"));
-  });
+  app.get("/gifs/:type/:id", async (req, res) => {
+    if (!["spirals"].includes(req.params.type))
+      return res.status(400).send({ message: "Invalid GIF type" });
+    if (!req.params["id"].match(/[0-9]+-[a-zA-Z_0-9.]+\.gif/)) {
+      return res.status(404).send({ message: "Unknown spiral" });
+    }
 
-  app.get("/style.css", (_, res) => {
-    return res.sendFile(__dirname + "/public/style.css");
+    let p = path.normalize(
+      `${__dirname}/../data/${req.params.type}/${req.params.id}`
+    );
+    console.log(p);
+
+    if (!existsSync(p)) {
+      return res.status(404).send({ message: "Unknown spiral" });
+    }
+
+    return res.status(200).sendFile(p);
   });
 
   app.get("/data/:type", async (req, res) => {

@@ -237,6 +237,9 @@ export function downloadFile(link: string, path: string): Promise<void> {
         writer.on("finish", () => {
           resolve();
         });
+      })
+      .catch((err) => {
+        reject(err);
       });
   });
 }

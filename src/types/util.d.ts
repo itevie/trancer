@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
 
-type HypnoCommandType =
+export type HypnoCommandType =
   | "analytics"
   | "dawnagotchi"
   | "ranks"
@@ -17,6 +17,8 @@ type HypnoCommandType =
   | "admin"
   | "messages"
   | "leaderboards"
+  | "games"
+  | "actions"
   | "ai";
 
 type Guard = "admin" | "bot-server" | "bot-owner";
@@ -45,6 +47,7 @@ interface HypnoCommandDetails<Args extends { [key: string]: any } = {}> {
 interface HypnoCommand<Args extends { [key: string]: any } = {}> {
   name: string;
   aliases?: string[];
+  eachAliasIsItsOwnCommand?: boolean;
   description: string;
   usage?: [string, string][];
   examples?: [string, string][];
