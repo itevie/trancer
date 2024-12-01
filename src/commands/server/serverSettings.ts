@@ -214,6 +214,7 @@ const command: HypnoCommand<{
           await msg.edit(
             (await generateMessagePayload()) as MessageEditOptions
           );
+          await result.reply(`**${i.customId}** updated to ${content}`);
           break;
       }
     });
