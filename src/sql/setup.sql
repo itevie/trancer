@@ -1,4 +1,19 @@
 -- Server specific stuff
+ALTER TABLE
+    server_settings
+ADD
+    verification_role_id TEXT DEFAULT NULL;
+
+ALTER TABLE
+    server_settings
+ADD
+    verified_string TEXT DEFAULT '{mention} has been verified! Welcome!';
+
+ALTER TABLE
+    server_settings
+ADD
+    verified_channel_id TEXT DEFAULT NULL;
+
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
@@ -11,7 +26,10 @@ CREATE TABLE IF NOT EXISTS server_settings (
     invite_logger_channel_id TEXT DEFAULT NULL,
     remind_bumps BOOLEAN DEFAULT false,
     bump_channel TEXT DEFAULT NULL,
-    level_notifications BOOLEAN DEFAULT true
+    level_notifications BOOLEAN DEFAULT true,
+    verification_role_id TEXT DEFAULT NULL,
+    verified_string TEXT DEFAULT '{mention} has been verified! Welcome!',
+    verified_channel_id TEXT DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS star_board (

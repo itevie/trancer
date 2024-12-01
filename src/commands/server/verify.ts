@@ -1,6 +1,5 @@
 import { PermissionsBitField, TextChannel } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import config from "../../config";
 
 const command: HypnoCommand = {
   name: "verify",
@@ -9,9 +8,10 @@ const command: HypnoCommand = {
   type: "admin",
   permissions: [PermissionsBitField.Flags.ManageMessages],
 
-  handler: async (message) => {
-    if (!config.botServer.roles.verified)
-      return message.reply(`There is no verified role set up`);
+  handler: async (message, o) => {
+    let role = o.serverSettings.verification_role_id;
+
+    if (!role) return message.reply(`There is no verified role set up`);
 
     // Check for reference
     if (!message.reference) {
@@ -25,19 +25,24 @@ const command: HypnoCommand = {
 
     // Add role
     try {
-      await (
-        await message.fetchReference()
-      ).member.roles.add(config.botServer.roles.verified);
+      await (await message.fetchReference()).member.roles.add(role);
       await message.delete();
-      (
-        await (message.client.channels.fetch(
-          "1257416274280054967"
-        ) as Promise<TextChannel>)
-      ).send(
-        `<@${
-          (await message.fetchReference()).member.user.id
-        }> just got verified! Welcome!`
-      );
+
+      if (
+        o.serverSettings.verified_channel_id &&
+        o.serverSettings.verified_string
+      ) {
+        let user = (await message.fetchReference()).member.user;
+        (
+          await (message.client.channels.fetch(
+            o.serverSettings.verified_channel_id
+          ) as Promise<TextChannel>)
+        ).send(
+          o.serverSettings.verified_string
+            .replace(/\{mention\}/g, `<@${user.id}>`)
+            .replace(/\{username\}/g, user.username)
+        );
+      }
     } catch (e) {
       console.log(e);
       return message.reply(`Error: ${e.toString()}`);

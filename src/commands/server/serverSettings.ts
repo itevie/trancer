@@ -18,6 +18,9 @@ const settingsToSql = {
   invitelogger: "invite_logger_channel_id",
   bumpchannel: "bump_channel",
   levelnotify: "level_notifications",
+  verificationrole: "verification_role_id",
+  verifiedmessage: "verified_string",
+  verifiedchannel: "verified_channel_id",
 } as const;
 
 const settings = {
@@ -25,6 +28,9 @@ const settings = {
   subrole: "role",
   tistrole: "role",
   switchrole: "role",
+  verificationrole: "role",
+  verifiedchannel: "channel",
+  verifiedmessage: "uservarstring",
   bumps: "boolean",
   levelnotify: "boolean",
   invitelogger: "channel",
@@ -74,6 +80,7 @@ const command: HypnoCommand<{
           );
         } else if (
           settings[setting] === "string" ||
+          settings[setting] === "uservarstring" ||
           settings[setting] === "role"
         ) {
           current += `**${setting}**: ${val}\n`;
@@ -132,10 +139,15 @@ const command: HypnoCommand<{
           await i.deferUpdate();
           break;
         case "string":
+        case "uservarstring":
         case "role":
         case "channel":
           await i.reply({
-            content: `Send what you want "${i.customId}" to be in the next message. (type "null" if you want to remove the value)`,
+            content:
+              `Send what you want "${i.customId}" to be in the next message. (type "null" if you want to remove the value)` +
+              (settings[i.customId] === "uservarstring"
+                ? "\n\nVariables:\n{mention} - Mention the user\n{username} - The user's username"
+                : ""),
             ephemeral: true,
           });
           const result = (
@@ -149,6 +161,8 @@ const command: HypnoCommand<{
 
           if (content !== "null") {
             switch (settings[i.customId]) {
+              case "uservarstring":
+                break;
               case "string":
                 if (result.content.length >= 5)
                   return result.reply(
@@ -164,6 +178,7 @@ const command: HypnoCommand<{
                     `Invalid role provided, please press the button again to try again.`
                   );
                 }
+                break;
               case "channel":
                 try {
                   content = content.replace(/[<#>]/g, "");
@@ -173,6 +188,7 @@ const command: HypnoCommand<{
                     `Invalid channel provided, please press the button again to try again.`
                   );
                 }
+                break;
             }
           }
 
