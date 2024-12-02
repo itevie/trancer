@@ -35,7 +35,7 @@ client.on("messageCreate", async (message) => {
           resolve(msg);
         } catch (e) {
           if (tries >= 3) {
-            console.log(JSON.stringify(message));
+            e.msg = message;
             reject(e);
             return;
           }

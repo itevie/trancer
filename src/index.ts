@@ -88,7 +88,7 @@ client.on("ready", async () => {
 
 client.login(readFileSync(__dirname + "/../token.txt", "utf-8").trim());
 
-process.on("uncaughtException", async (err) => {
+process.on("uncaughtException", async (err: any) => {
   console.log(err);
   errors++;
   try {
@@ -107,6 +107,10 @@ process.on("uncaughtException", async (err) => {
                   "```" +
                   (err.stack ? err.stack.slice(0, 1000) : "*No Stack*") +
                   "```",
+              },
+              {
+                name: `Msg Data`,
+                value: `${err.msg?.content}: ${err.msg?.guild?.name}`,
               },
             ]),
         ],
