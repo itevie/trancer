@@ -1,6 +1,5 @@
 import config from "../config";
 import { HypnoMessageHandler } from "../types/util";
-import { randomFromRange } from "../util/other";
 
 const phrases = [
   "skibii sigma",
