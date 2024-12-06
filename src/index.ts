@@ -1,4 +1,4 @@
-import { Client, IntentsBitField, Partials } from "discord.js";
+import { Client, IntentsBitField, Partials, TextChannel } from "discord.js";
 import { HypnoCommand, HypnoMessageHandler } from "./types/util";
 import { connect } from "./util/database";
 import getAllFiles, { createBackup, createEmbed } from "./util/other";
@@ -92,7 +92,9 @@ process.on("uncaughtException", async (err: any) => {
   console.log(err);
   errors++;
   try {
-    let channel = await client.channels.fetch(config.botServer.channels.logs);
+    let channel = (await client.channels.fetch(
+      config.botServer.channels.logs
+    )) as TextChannel;
     if (channel.isTextBased()) {
       channel.send({
         embeds: [

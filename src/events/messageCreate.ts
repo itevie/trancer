@@ -22,9 +22,11 @@ import { createEmbed } from "../util/other";
 client.on("messageCreate", async (message) => {
   // German commas go away
   message.content = message.content.replace(/[’]/g, "'");
+  if (!message.inGuild()) return;
 
   // Stop the shitty connect timeout error
   let oldReply = message.reply;
+  // @ts-ignore
   message.reply = (data) => {
     return new Promise<Message<boolean>>(async (resolve, reject) => {
       let tries = 0;

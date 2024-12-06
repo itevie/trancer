@@ -58,7 +58,7 @@ interface HypnoCommand<Args extends { [key: string]: any } = {}> {
   };
 
   except?: (message: Message, args: string[]) => boolean;
-  handler: (message: Message, options: HypnoCommandDetails<Args>) => void;
+  handler: (message: Message<true>, options: HypnoCommandDetails<Args>) => void;
 
   guards?: Guard[];
   allowExceptions?: boolean;

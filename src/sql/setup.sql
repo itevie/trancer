@@ -14,7 +14,9 @@ CREATE TABLE IF NOT EXISTS server_settings (
     level_notifications BOOLEAN DEFAULT true,
     verification_role_id TEXT DEFAULT NULL,
     verified_string TEXT DEFAULT '{mention} has been verified! Welcome!',
-    verified_channel_id TEXT DEFAULT NULL
+    verified_channel_id TEXT DEFAULT NULL,
+    auto_ban_keywords TEXT NOT NULL,
+    auto_ban_enabled BOOLEAN DEFAULT false
 );
 
 CREATE TABLE IF NOT EXISTS star_board (

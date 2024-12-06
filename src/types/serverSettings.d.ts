@@ -18,6 +18,9 @@ interface ServerSettings {
   remind_bumps: boolean;
   bump_channel: string | null;
   level_notifications: boolean;
+
+  auto_ban_keywords: string;
+  auto_ban_enabled: string;
 }
 
 interface ChannelImposition {
