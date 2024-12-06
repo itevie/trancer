@@ -33,7 +33,7 @@ const command: HypnoCommand<{ command?: string; value?: string }> = {
           createEmbed()
             .setTitle("Autoban Help")
             .setDescription(
-              "This feature autobans members if their **username** or **display name** matches a keyword." +
+              "This feature autobans members if their **username** or **display name** matches a keyword when they join." +
                 (!message.guild.members.me.permissions.has(
                   PermissionsBitField.Flags.BanMembers
                 )
@@ -54,7 +54,7 @@ const command: HypnoCommand<{ command?: string; value?: string }> = {
               },
               {
                 name: "How",
-                value: `It removes all whitespace from a user's username & display name, and checks if any of the registered phrases match it, then bans them if so.`,
+                value: `When a user joins, it removes all whitespace from a their username & display name, and checks if any of the registered phrases match it, then bans them if so.`,
               },
             ]),
         ],
