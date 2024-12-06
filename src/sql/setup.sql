@@ -1,14 +1,4 @@
 -- Server specific stuff
-ALTER TABLE
-    server_settings
-ADD
-    auto_ban_keywords TEXT NOT NULL DEFAULT "";
-
-ALTER TABLE
-    server_settings
-ADD
-    auto_ban_enabled BOOLEAN DEFAULT false;
-
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',

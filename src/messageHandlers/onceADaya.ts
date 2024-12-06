@@ -3,10 +3,7 @@ import { HypnoMessageHandler } from "../types/util";
 import { randomFromRange } from "../util/other";
 
 const phrases = [
-  "faggot",
   "skibii sigma",
-  "fuck you",
-  "twink",
   "boop",
   "RISE AND GRIND :fire:",
   "Ok hear me out",
@@ -14,7 +11,6 @@ const phrases = [
   "Chat is this fact or cap?",
   "ZOINKS SCOOB!",
   "I vote you for president!",
-  "die /j",
   ":)",
   "erm... what da sigma?",
   "spongeboob",
@@ -38,7 +34,6 @@ const phrases = [
   "This is why it's nerf or nothing",
   "It's so over",
   "STONKS",
-  "Cope",
   "Erm nuh uh",
   "Kaboom!!!",
   "Throws a brick at you (cutely)",
@@ -64,7 +59,7 @@ const handler: HypnoMessageHandler = {
           phrases[Math.floor(Math.random() * phrases.length)]
         );
         messagesSince = 0;
-        messagesRequired = randomFromRange(25, 100);
+        messagesRequired = 100;
       } catch {}
     }
   },
