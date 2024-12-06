@@ -42,7 +42,7 @@ const phrases = [
 ];
 
 let messagesSince = 0;
-let messagesRequired = 0;
+let messagesRequired = 20;
 
 const handler: HypnoMessageHandler = {
   name: "once-a-day",
