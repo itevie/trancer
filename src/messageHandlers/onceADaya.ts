@@ -1,5 +1,6 @@
 import config from "../config";
 import { HypnoMessageHandler } from "../types/util";
+import { randomFromRange } from "../util/other";
 
 const phrases = [
   "skibii sigma",
@@ -38,6 +39,12 @@ const phrases = [
   "Throws a brick at you (cutely)",
   "Hate is such a strong word... but I think it's the correct one.",
   "I condone gambling!",
+  ".q",
+  "I give this message 5 booms! Boom! Boom! Boom! Boom! Boom!",
+  "I give this message 4 booms! Boom! Boom! Boom! Boom!",
+  "I give this message 3 booms! Boom! Boom! Boom!",
+  "I give this message 2 booms! Boom! Boom!",
+  "I give this message 1 booms! Boom!",
 ];
 
 let messagesSince = 0;
@@ -58,7 +65,7 @@ const handler: HypnoMessageHandler = {
           phrases[Math.floor(Math.random() * phrases.length)]
         );
         messagesSince = 0;
-        messagesRequired = 100;
+        messagesRequired = randomFromRange(50, 100);
       } catch {}
     }
   },
