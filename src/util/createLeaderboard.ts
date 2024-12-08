@@ -1,6 +1,7 @@
 import { EmbedBuilder, Message } from "discord.js";
 import { client } from "..";
 import { createEmbed, paginate } from "./other";
+import { getUsername } from "./cachedUsernames";
 
 export function accumlateSortLeaderboardData(data: string[]) {
   const result: { [key: string]: number } = {};
@@ -41,7 +42,7 @@ export async function createPaginatedLeaderboardFromData(
       `**${parseInt(i) + 1}.** ${
         options.rawName
           ? data[i][0]
-          : (await client.users.fetch(data[i][0])).username.replace(/_/g, "\\_")
+          : (await getUsername(data[i][0])).replace(/_/g, "\\_")
       } (**${data[i][2] || data[i][1]}**${
         options.entryName ? ` ${options.entryName}` : ""
       })`
