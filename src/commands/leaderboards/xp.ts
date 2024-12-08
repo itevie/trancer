@@ -1,7 +1,8 @@
 import { calculateLevel } from "../../messageHandlers/xp";
 import { HypnoCommand } from "../../types/util";
 import { getAllGuildsUserData } from "../../util/actions/userData";
-import createLeaderboardFromData from "../../util/createLeaderboard";
+import { createPaginatedLeaderboardFromData } from "../../util/createLeaderboard";
+import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand = {
   name: `xpleaderboard`,
@@ -17,12 +18,10 @@ const command: HypnoCommand = {
       `Level ${calculateLevel(x.xp)}`,
     ]) as [string, number, any?][];
 
-    return message.reply({
-      embeds: [
-        (await createLeaderboardFromData(organised, null, null)).setTitle(
-          `Most XP in server`
-        ),
-      ],
+    await createPaginatedLeaderboardFromData({
+      embed: createEmbed().setTitle(`Most XP in server`),
+      replyTo: message,
+      data: organised,
     });
   },
 };

@@ -33,11 +33,12 @@ const command: HypnoCommand<{ user?: User }> = {
       };
     });
 
-    return paginate(
-      message,
-      createEmbed().setTitle(`Quotes from ${user.username}`),
-      list
-    );
+    return paginate({
+      replyTo: message,
+      embed: createEmbed().setTitle(`Quotes from ${user.username}`),
+      type: "field",
+      data: list,
+    });
   },
 };
 

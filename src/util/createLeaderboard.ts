@@ -1,6 +1,6 @@
-import { EmbedBuilder } from "discord.js";
+import { EmbedBuilder, Message } from "discord.js";
 import { client } from "..";
-import { createEmbed } from "./other";
+import { createEmbed, paginate } from "./other";
 
 export function accumlateSortLeaderboardData(data: string[]) {
   const result: { [key: string]: number } = {};
@@ -18,7 +18,45 @@ export function accumlateSortLeaderboardData(data: string[]) {
   return resultArr;
 }
 
-export default async function createLeaderboardFromData(
+interface LeaderboardOptions {
+  data: [string, number, any?][];
+  replyTo: Message;
+  embed: EmbedBuilder;
+  description?: string;
+  entryName?: string;
+  rawName?: boolean;
+}
+
+export async function createPaginatedLeaderboardFromData(
+  options: LeaderboardOptions
+) {
+  const data = options.data
+    .filter((x) => x[1] !== 0)
+    .sort((a, b) => b[1] - a[1]);
+
+  const displaydData: string[] = [];
+
+  for (const i in data) {
+    displaydData.push(
+      `**${parseInt(i) + 1}.** ${
+        options.rawName
+          ? data[i][0]
+          : (await client.users.fetch(data[i][0])).username.replace(/_/g, "\\_")
+      } (**${data[i][2] || data[i][1]}**${
+        options.entryName ? ` ${options.entryName}` : ""
+      })`
+    );
+  }
+
+  return paginate({
+    embed: options.embed,
+    replyTo: options.replyTo as any,
+    type: "description",
+    data: displaydData,
+  });
+}
+
+export async function createLeaderboardFromData(
   data: [string, number, any?][],
   description: string | null = null,
   entryName: string | null = "times",

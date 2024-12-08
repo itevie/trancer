@@ -1,9 +1,10 @@
 import { HypnoCommand } from "../../types/util";
-import createLeaderboardFromData from "../../util/createLeaderboard";
+import { createPaginatedLeaderboardFromData } from "../../util/createLeaderboard";
 import config from "../../config";
 import { getAllEconomy } from "../../util/actions/economy";
 import * as fs from "fs";
 import { checkBadges } from "../../util/badges";
+import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand<{ date?: string }> = {
   name: `moneyleaderboard`,
@@ -60,20 +61,17 @@ const command: HypnoCommand<{ date?: string }> = {
       description = `Who gained the most ${config.economy.currency} since ${args.date}?`;
     }
 
-    return message.reply({
-      embeds: [
-        (
-          await createLeaderboardFromData(
-            organised,
-            description,
-            config.economy.currency
-          )
-        )
-          .setTitle(`Economy Leaderboard`)
-          .setFooter({
-            text: `Check ${serverSettings.prefix}howtogeteco on how to get more!`,
-          }),
-      ],
+    await createPaginatedLeaderboardFromData({
+      embed: createEmbed()
+        .setTitle(`Economy Leaderboard`)
+
+        .setFooter({
+          text: `Check ${serverSettings.prefix}howtogeteco on how to get more!`,
+        }),
+      replyTo: message,
+      data: organised,
+      entryName: config.economy.currency,
+      description,
     });
   },
 };

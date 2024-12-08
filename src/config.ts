@@ -52,6 +52,7 @@ const config = {
       quotes: "1257815880557920307",
       bumps: "1257429174637826059",
       welcomes: "1257417250395263036",
+      howToVerify: "1283861103964717126",
     },
 
     vcChannels: [

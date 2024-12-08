@@ -262,29 +262,55 @@ export function makePercentageASCII(
   )}`;
 }
 
-export async function paginate(
-  replyTo: Message,
-  embed: EmbedBuilder,
-  fields: { name: string; value: string }[]
-): Promise<Message> {
+interface BasePaginationOptions {
+  replyTo: Message;
+  embed: EmbedBuilder;
+  type: "description" | "field";
+}
+
+interface DescriptionPaginationOptions extends BasePaginationOptions {
+  type: "description";
+  data?: string[];
+  baseDescription?: string;
+}
+
+interface FieldPaginationOptions extends BasePaginationOptions {
+  type: "field";
+  data?: { name: string; value: string }[];
+}
+
+type PaginationOptions = DescriptionPaginationOptions | FieldPaginationOptions;
+
+export async function paginate(options: PaginationOptions): Promise<Message> {
   // Initial
   let currentIndex = 0;
-  let setFields = () => {
-    embed.setFields(fields.slice(currentIndex, currentIndex + 10));
-    embed.setFooter({
-      text: `Page ${currentIndex / 10 + 1} (${fields.length} items)`,
+  let modifyEmbed = () => {
+    if (options.type === "description") {
+      options.embed.setDescription(
+        (options.baseDescription ? `${options.baseDescription}\n\n` : "") +
+          options.data.slice(currentIndex, currentIndex + 10).join("\n")
+      );
+    } else {
+      options.embed.setFields(
+        options.data.slice(currentIndex, currentIndex + 10)
+      );
+    }
+    options.embed.setFooter({
+      text: `Page ${currentIndex / 10 + 1} / ${Math.ceil(
+        options.data.length / 10
+      )} (${options.data.length} items)`,
     });
   };
-  setFields();
+  modifyEmbed();
 
   // Check if there is any more to add
-  if (fields.length < 11)
-    return replyTo.reply({
-      embeds: [embed],
+  if (options.data.length < 11)
+    return options.replyTo.reply({
+      embeds: [options.embed],
     });
 
-  let message = await replyTo.reply({
-    embeds: [embed],
+  let message = await options.replyTo.reply({
+    embeds: [options.embed],
     components: [
       // @ts-ignore
       new ActionRowBuilder().addComponents([
@@ -302,7 +328,7 @@ export async function paginate(
   });
 
   let collector = message.createMessageComponentCollector({
-    filter: (i) => i.user.id === replyTo.author.id,
+    filter: (i) => i.user.id === options.replyTo.author.id,
   });
 
   collector.on("collect", async (interaction) => {
@@ -310,15 +336,15 @@ export async function paginate(
     if (interaction.customId === "page-prev") {
       if (currentIndex < 10) return;
       currentIndex -= 10;
-      setFields();
+      modifyEmbed();
     } else if (interaction.customId === "page-next") {
-      if (currentIndex > fields.length) return;
+      if (currentIndex >= options.data.length - 10) return;
       currentIndex += 10;
-      setFields();
+      modifyEmbed();
     }
 
     await message.edit({
-      embeds: [embed],
+      embeds: [options.embed],
     });
   });
 }

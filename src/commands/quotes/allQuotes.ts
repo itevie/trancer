@@ -23,11 +23,12 @@ const command: HypnoCommand = {
         };
       });
 
-    return paginate(
-      message,
-      createEmbed().setTitle(`Quotes from ${message.author.username}`),
-      list
-    );
+    return paginate({
+      replyTo: message,
+      embed: createEmbed().setTitle(`Quotes from ${message.author.username}`),
+      type: "field",
+      data: list,
+    });
   },
 };
 

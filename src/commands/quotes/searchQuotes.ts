@@ -40,11 +40,12 @@ const command: HypnoCommand<{ query: string }> = {
       });
     }
 
-    return paginate(
-      message,
-      createEmbed().setTitle(`Quotes matching that query`),
-      list
-    );
+    return paginate({
+      replyTo: message,
+      embed: createEmbed().setTitle(`Quotes matching that query`),
+      type: "field",
+      data: list,
+    });
   },
 };
 

@@ -90,29 +90,37 @@ client.on("guildMemberAdd", async (member) => {
   // Check for welcome messages only in bot server
   if (member.guild.id !== config.botServer.id) return;
 
-  // Add default role & send message
-  const channel = await client.channels.fetch(
-    config.botServer.channels.welcomes
-  );
-  if (channel.isTextBased()) {
-    await channel.send({
-      content: `<@${member.user.id}>`,
-      embeds: [
-        createEmbed()
-          .setTitle(`New member! :cyclone:`)
-          .setDescription(
-            `Welcome **${member.user.username}** to our server!` +
-              `\n\nMake sure to read the rules in <#1257417222620577825>!` +
-              `\nThen get your roles in <#1281288438074835036>` +
-              `\nThen create an intro in <#1257424277855010826>to get access to the server!` +
-              `\n\nWe hope you enjoy your stay! :cyclone:`
-          )
-          .setFooter({
-            text: `We now have ${member.guild.memberCount} members`,
-          }),
-      ],
-    });
-  }
+  // Send welcome message
+  (
+    (await client.channels.fetch(
+      config.botServer.channels.welcomes
+    )) as TextChannel
+  ).send({
+    content: `<@${member.user.id}>`,
+    embeds: [
+      createEmbed()
+        .setTitle(`New member! :cyclone:`)
+        .setDescription(
+          `Welcome **${member.user.username}** to our server!` +
+            `\n\nRead here: <#1283861103964717126> to get access to our server!` +
+            `\n\nWe hope you enjoy your stay! :cyclone:`
+        )
+        .setFooter({
+          text: `We now have ${member.guild.memberCount} members`,
+        }),
+    ],
+  });
+
+  // Send ping in how to verify
+  let tempMessage = await (
+    (await client.channels.fetch(
+      config.botServer.channels.howToVerify
+    )) as TextChannel
+  ).send(`<@${member.user.id}> read here on how to join our server!`);
+
+  setTimeout(async () => {
+    await tempMessage.delete();
+  }, 1000 * 60 * 5);
 
   // Check if the invter can be fetched
   let attempts = 0;
@@ -127,7 +135,7 @@ client.on("guildMemberAdd", async (member) => {
         );
 
         // Check if suceeded
-        if (inviteDetails.inviterId) {
+        if (inviteDetails?.inviterId) {
           // Guards
           let user = await client.users.fetch(inviteDetails.inviterId);
           if (user.bot) return;
@@ -137,10 +145,13 @@ client.on("guildMemberAdd", async (member) => {
           await user.send(
             `Thanks for inviting ** ${member.user.username} ** to our server!\nYou earnt ** ${config.economy.inviting.min}${config.economy.currency} ** `
           );
+        } else {
+          // Allow only 3 attempts
+          attempts++;
+          if (attempts > 3) return;
+          attempt();
         }
       } catch (err) {
-        console.log(err);
-
         // Allow only 3 attempts
         attempts++;
         if (attempts > 3) return;
