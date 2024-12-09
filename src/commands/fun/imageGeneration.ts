@@ -1,6 +1,7 @@
 import { AttachmentBuilder, User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import DIG from "discord-image-generation";
+import { generateNotImmuneImage } from "../../messageHandlers/randomResponds";
 
 let allowed: Record<string, string> = {
   gay: "Gay",
@@ -27,6 +28,7 @@ let allowed: Record<string, string> = {
   trash: "Trash",
   circle: "Circle",
   wanted: "Wanted",
+  notimmune: "notimmune",
 };
 
 const command: HypnoCommand<{ type: keyof typeof allowed; user?: User }> = {
@@ -65,7 +67,10 @@ const command: HypnoCommand<{ type: keyof typeof allowed; user?: User }> = {
             extension: "png",
           });
 
-    let img = await new DIG[allowed[args.type]]().getImage(attachment);
+    let img =
+      args.type === "notimmune"
+        ? await generateNotImmuneImage(attachment)
+        : await new DIG[allowed[args.type]]().getImage(attachment);
     let attach = new AttachmentBuilder(img).setName(`${args.type}.png`);
     return message.reply({
       files: [attach],
