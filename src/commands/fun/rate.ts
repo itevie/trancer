@@ -38,7 +38,7 @@ const command: HypnoCommand<{ what: string; user?: User }> = {
 export default command;
 
 // Stolen from ChatGPT
-function randomNumberFromString(
+export function randomNumberFromString(
   input: string,
   rangeMin: number,
   rangeMax: number
