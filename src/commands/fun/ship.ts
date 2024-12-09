@@ -2,7 +2,13 @@ import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { randomNumberFromString } from "./rate";
 
-const command: HypnoCommand<{ user1: User; user2: User }> = {
+const command: HypnoCommand<{
+  user1: User;
+  user2: User;
+  user3?: User;
+  user4?: User;
+  user5?: User;
+}> = {
   name: "ship",
   description: "Ship two people together",
   type: "fun",
@@ -18,32 +24,46 @@ const command: HypnoCommand<{ user1: User; user2: User }> = {
         name: "user2",
         type: "user",
       },
+      {
+        name: "user3",
+        type: "user",
+      },
+      {
+        name: "user4",
+        type: "user",
+      },
+      {
+        name: "user5",
+        type: "user",
+      },
     ],
   },
 
   handler: (message, { args }) => {
-    let user1 =
-      parseInt(args.user1.id) > parseInt(args.user2.id)
-        ? args.user1
-        : args.user2;
-    let user2 =
-      parseInt(args.user1.id) < parseInt(args.user2.id)
-        ? args.user1
-        : args.user2;
+    let users = Object.entries(args)
+      .map((x) => x[1])
+      .sort((a, b) => parseInt(a.id) - parseInt(b.id));
 
     let shipage = randomNumberFromString(
-      `${user1.username}-${user2.username}`,
+      users.map((x) => x.username).join("-"),
       0,
       100
     );
-    let syllable1 = user1.username.match(/^([^aeiou]*[aeiou]+[^aeiou]*)/)[0];
-    let syllable2 = user2.username.match(/^([^aeiou]*[aeiou]+[^aeiou]*)/)[0];
-    let name = `${syllable1}${user2.username.slice(syllable2.length)}`;
+    let name = "";
+    for (const user of users.slice(0, -1)) {
+      let syllable = user.username.match(/^([^aeiou]*[aeiou]+[^aeiou]*)/)[0];
+      name += syllable;
+    }
+
+    let syllable = users[users.length - 1].username.match(
+      /^([^aeiou]*[aeiou]+[^aeiou]*)/
+    )[0];
+    name += users[users.length - 1].username.slice(syllable.length);
 
     return message.reply(
-      `The ship between **${user1.username}** and **${
-        user2.username
-      }** is... **${shipage.toFixed(
+      `The ship between ${users
+        .map((x) => `**${x.username}**`)
+        .join(" and ")} is... **${shipage.toFixed(
         0
       )}% strong**\n\nTheir ship name would be: **${name}**`
     );
