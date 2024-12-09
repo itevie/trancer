@@ -82,6 +82,8 @@ const phrases = [
   "The zombies are coming...",
   "*angry british noises*",
   "Hello, we are about to launch an all - out attack on your houze Sincerely, the Zombies",
+  "<:keys:1283581127071891466>",
+  "<:bite_lips:1315469148004028537>",
 ];
 
 let messagesSince = 0;

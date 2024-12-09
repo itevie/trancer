@@ -315,6 +315,10 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
       // @ts-ignore
       new ActionRowBuilder().addComponents([
         new ButtonBuilder()
+          .setCustomId("first-page")
+          .setLabel("<<<")
+          .setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder()
           .setCustomId(`page-prev`)
           .setLabel(`<`)
           .setStyle(ButtonStyle.Primary),
@@ -323,6 +327,10 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
           .setCustomId(`page-next`)
           .setLabel(`>`)
           .setStyle(ButtonStyle.Primary),
+        new ButtonBuilder()
+          .setCustomId("last-page")
+          .setLabel(">>>")
+          .setStyle(ButtonStyle.Secondary),
       ]),
     ],
   });
@@ -340,6 +348,12 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
     } else if (interaction.customId === "page-next") {
       if (currentIndex >= options.data.length - 10) return;
       currentIndex += 10;
+      modifyEmbed();
+    } else if (interaction.customId === "first-page") {
+      currentIndex = 0;
+      modifyEmbed();
+    } else if (interaction.customId === "last-page") {
+      currentIndex = options.data.length - (options.data.length % 10);
       modifyEmbed();
     }
 
