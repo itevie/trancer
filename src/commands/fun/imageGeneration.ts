@@ -26,6 +26,7 @@ let allowed: Record<string, string> = {
   stonk: "Stonk",
   trash: "Trash",
   circle: "Circle",
+  wanted: "Wanted",
 };
 
 const command: HypnoCommand<{ type: keyof typeof allowed; user?: User }> = {
