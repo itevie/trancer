@@ -150,6 +150,18 @@ client.on("messageCreate", async (message) => {
       const execute = async () => {
         // Check if the cmd requires arguments
         if (cmd.args) {
+          // Check if the last argument is a user & it is NOT provided
+          // It will be set as the message reference's author if it exists.
+          let lastIndex = cmd.args.args.length - 1;
+          if (cmd.args.args[lastIndex].type === "user") {
+            if (!fullArgs[lastIndex]) {
+              if (message.reference) {
+                let ref = await message.fetchReference();
+                fullArgs[lastIndex] = ref.author.id;
+              }
+            }
+          }
+
           for (let i in cmd.args.args) {
             let arg = cmd.args.args[i];
             const codeblock = generateCommandCodeBlock(
