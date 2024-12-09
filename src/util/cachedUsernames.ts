@@ -16,6 +16,7 @@ export async function getUsername(id: string): Promise<string> {
   } else if (usernames[id]) {
     username = usernames[id];
   } else {
+    console.log(`Fetching username ${id}`);
     username = (await client.users.fetch(id)).username;
     usernames[id] = username;
     fs.writeFileSync(path, JSON.stringify(usernames));
