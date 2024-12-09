@@ -84,8 +84,11 @@ export function calculateLevel(xp: number): number {
   for (let l of levels) {
     if (xp >= l) {
       level++;
-      temp -= l;
     }
+  }
+
+  if (xp > levels[levels.length - 1]) {
+    temp = xp - levels[levels.length - 1];
   }
 
   if (temp > 0) level += parseInt((temp / after).toFixed(0));

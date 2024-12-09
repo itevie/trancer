@@ -32,7 +32,11 @@ const command: HypnoCommand<{ type: keyof typeof allowed; user?: User }> = {
   name: "image",
   aliases: ["img"],
   type: "fun",
-  description: "Generate images",
+  description:
+    "Generate images\nTypes: " +
+    Object.keys(allowed)
+      .map((x) => `**${x}**`)
+      .join(", "),
 
   args: {
     requiredArguments: 1,

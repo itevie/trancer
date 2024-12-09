@@ -15,3 +15,4 @@ old.txt
 last_backup.txt
 src/data/gifs
 src/data/cached_usernames.json
+data_old.db

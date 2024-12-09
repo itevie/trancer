@@ -100,7 +100,9 @@ const command: HypnoCommand<{
       user3.username
     );
     return message.reply({
-      content: `Podium for **${args.type}**`,
+      content: `Podium for **${args.type}${
+        args.type === "rank" ? ` ${args.rank}` : ""
+      }**`,
       files: [new AttachmentBuilder(image).setName("podium.png")],
     });
   },

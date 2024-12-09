@@ -66,8 +66,8 @@ const command: HypnoCommand<{ command: string }> = {
           )}\n${command.args.args
             .map(
               (x) =>
-                `\`${x.name} - ${x.type}\`: ${
-                  x.description || "*No description*"
+                `\`${x.name} - ${x.type}\`${
+                  x.description ? `: ${x.description}` : ""
                 }`
             )
             .join("\n")}`,
