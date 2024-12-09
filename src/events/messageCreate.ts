@@ -99,7 +99,7 @@ client.on("messageCreate", async (message) => {
     .substring(settings.prefix.length, message.content.length)
     .trim();
 
-  const fullArgs: string[] = [];
+  let fullArgs: string[] = [];
   let currentArg: string = "";
   let inQuote: boolean = false;
 
@@ -127,6 +127,7 @@ client.on("messageCreate", async (message) => {
     currentArg += char;
   }
   if (currentArg) fullArgs.push(currentArg);
+  fullArgs = fullArgs.filter((x) => x.length > 0);
 
   const command = fullArgs.shift()?.toLowerCase() ?? "";
 

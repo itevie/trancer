@@ -26,6 +26,8 @@ const phrases = [
   "Brian! Look out!",
   "Ratio",
   "+1",
+  "-1",
+  "*1",
   "Can we get an uh oh in the chat?",
   "This is why we can't have nice things",
   "Slay!",
@@ -51,18 +53,50 @@ const phrases = [
   "I give this message 3 booms! Boom! Boom! Boom!",
   "I give this message 2 booms! Boom! Boom!",
   "I give this message 1 booms! Boom!",
+  "haha... uhm...",
+  "HAHAHAHAHA",
+  "You are in fact the best",
+  "You are so sigma",
+  "This is so skibidi",
+  "Erm... what da skibidi?",
+  "false",
+  "FALSE",
+  "true",
+  "TRUE",
+  "Checkmate liberals!",
+  "Oh brother, this guy stinks!",
+  "hehehehee",
+  "*skidadles*",
+  "*Turns you into a Giraffe.*",
+  "meow (hypnotically)",
+  "woof (scary)",
+  "Yea... that's what they all say",
+  "Would you like to present this to the class?",
+  "pain",
+  "ngl... me too",
+  "Nanomachines son!",
+  "Click the circles!",
+  "I... am Steve.",
+  "aAAAAaaAAAAAaaAAAAAAAaaAAAAAAaaAAAAA",
+  "*Has an existential crisis*",
+  "The zombies are coming...",
+  "*angry british noises*",
+  "Hello, we are about to launch an all - out attack on your houze Sincerely, the Zombies",
 ];
 
 let messagesSince = 0;
 let messagesRequired = 20;
 
+const excludedChannels = ["1315484267517575168"];
+
 const handler: HypnoMessageHandler = {
-  name: "once-a-day",
-  description: "Responds to a random message once a day",
+  name: "react-bot",
+  description: "Similar to JJJacksFilm's ReactBot",
 
   handler: async (message) => {
     if (message.guild.id !== config.botServer.id) return;
     if (message.author.bot) return;
+    if (excludedChannels.includes(message.channel.id)) return;
     messagesSince++;
 
     if (messagesSince >= messagesRequired) {

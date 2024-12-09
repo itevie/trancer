@@ -45,7 +45,7 @@ const command: HypnoCommand<{ user?: User }> = {
       }**... because they hypnotise you with **${randomFromRange(
         0,
         100
-      )}**% power!`
+      )}%** power!`
     );
   },
 };

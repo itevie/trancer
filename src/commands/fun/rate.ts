@@ -28,7 +28,7 @@ const command: HypnoCommand<{ what: string; user?: User }> = {
         user.username
       }** is... **${randomNumberFromString(
         `${user.username}-${args.what}`,
-        0,
+        -5,
         100
       ).toFixed(0)}% ${args.what}**`
     );
