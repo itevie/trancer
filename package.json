@@ -16,6 +16,7 @@
     "axios": "^1.7.3",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
+    "discord-image-generation": "^1.4.25",
     "discord.js": "14.15.3",
     "express": "^4.19.2",
     "ollama": "^0.5.6",

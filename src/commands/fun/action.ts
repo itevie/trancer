@@ -1,4 +1,3 @@
-import { existsSync, readdirSync } from "fs";
 import { HypnoCommand } from "../../types/util";
 import axios from "axios";
 import { User } from "discord.js";
@@ -112,20 +111,6 @@ const command: HypnoCommand<{ user?: User }> = {
       `https://api.otakugifs.xyz/gif?reaction=${options.command}`
     );
     return message.reply(result.data.url);
-
-    let path = `${__dirname}/../../data/gifs/${options.command}`;
-
-    if (!existsSync(path))
-      return message.reply(
-        `There are no GIFs for that selected option :(\nSo go add some! :D (\`${options.serverSettings.prefix}addgif\`)`
-      );
-
-    let files = readdirSync(path);
-    return message.reply(
-      `https://trancer.dawn.rest/gifs/${options.command}/${
-        files[Math.floor(Math.random() * files.length)]
-      }`
-    );
   },
 };
 
