@@ -75,11 +75,10 @@ CREATE TABLE IF NOT EXISTS user_favourite_spirals (
     user_id TEXT NOT NULL
 );
 
-ALTER TABLE
-    user_data
-ADD
-    allow_requests BOOLEAN NOT NULL DEFAULT false;
-
+-- ALTER TABLE
+--     user_data
+-- ADD
+--     allow_requests BOOLEAN NOT NULL DEFAULT false;
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,
     guild_id TEXT NOT NULL,

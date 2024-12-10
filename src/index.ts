@@ -1,4 +1,5 @@
 import { Client, IntentsBitField, Partials, TextChannel } from "discord.js";
+import commandLineArgs, { OptionDefinition } from "command-line-args";
 import { HypnoCommand, HypnoMessageHandler } from "./types/util";
 import { connect } from "./util/database";
 import getAllFiles, { createBackup, createEmbed } from "./util/other";
@@ -9,6 +10,13 @@ import config from "./config";
 import { connectAnalytic } from "./util/analytics";
 import path from "path";
 import initServer from "./website";
+
+const cliArgsDefinitio: OptionDefinition[] = [
+  { name: "load-cmd", multiple: true, type: String },
+  { name: "no-handlers", type: Boolean },
+] as const;
+
+let args = commandLineArgs(cliArgsDefinitio) as any;
 
 export const commands: { [key: string]: HypnoCommand } = {};
 export const handlers: HypnoMessageHandler[] = [];
@@ -33,6 +41,12 @@ import { initInviteCache } from "./events/guildMemberAdd";
 const logger = new Logger("loader");
 export let errors = 0;
 
+// Load critical stuff
+(async () => {
+  await connect();
+  await connectAnalytic();
+})();
+
 client.on("ready", async () => {
   // Load events
   const eventFiles = getAllFiles(__dirname + "/events");
@@ -42,7 +56,9 @@ client.on("ready", async () => {
   }
 
   // Load commands
-  const commandFiles = getAllFiles(__dirname + "/commands");
+  const commandFiles = args["load-cmd"]
+    ? args["load-cmd"].map((x) => `${__dirname}/commands/${x}`)
+    : getAllFiles(__dirname + "/commands");
 
   for (const commandFile of commandFiles) {
     const commandImport = require(commandFile).default as HypnoCommand;
@@ -60,17 +76,17 @@ client.on("ready", async () => {
     logger.log(`Loaded command: ${commandImport.name}`);
   }
 
-  // Load handlers
-  const handleFiles = getAllFiles(__dirname + "/messageHandlers");
+  if (!args["no-handlers"]) {
+    // Load handlers
+    const handleFiles = getAllFiles(__dirname + "/messageHandlers");
 
-  for (const handleFile of handleFiles) {
-    const handleImport = require(handleFile).default as HypnoMessageHandler;
-    handlers.push(handleImport);
-    logger.log(`Loaded handler: ${handleImport.name}`);
+    for (const handleFile of handleFiles) {
+      const handleImport = require(handleFile).default as HypnoMessageHandler;
+      handlers.push(handleImport);
+      logger.log(`Loaded handler: ${handleImport.name}`);
+    }
   }
   initInviteCache();
-  await connect();
-  await connectAnalytic();
 
   checkBadges();
   setTimeout(() => {
