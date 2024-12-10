@@ -49,7 +49,7 @@ const handler: HypnoMessageHandler = {
     }
     if (message.content.match(/(kys)|(kill ?y?o?urself)|(fu?ck ?y?o?u)/i))
       return message.reply(`Hey, that's not very nice! *patpatpat*`);
-    if (message.content.match(/i'?m im?mune/)) {
+    if (message.content.match(/i'?m ?im?mune/i)) {
       let impo = await getRandomImposition(message.author.id);
       return message.reply({
         content: impo,

@@ -42,7 +42,7 @@ const command: HypnoCommand = {
         createEmbed()
           .setTitle(`About ${message.client.user.username}!`)
           .setDescription(
-            `I am a hypnosis-oriented discord bot which many features! Check out: \`${serverSettings.prefix}help\`!`
+            `I am a hypnosis-oriented discord bot with many features! Check out: \`${serverSettings.prefix}help\`!`
           )
           .addFields([
             {
