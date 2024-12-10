@@ -44,6 +44,8 @@ const command: HypnoCommand<{ user?: User }> = {
       .sort((a, b) => b.balance - a.balance)
       .findIndex((x) => x.user_id === user.id);
 
+    let totalTTT = userData.ttt_lose + userData.ttt_tie + userData.ttt_win;
+
     // Create embed
     const embed = createEmbed()
       .setTitle(`Profile of ${user.displayName}`)
@@ -57,9 +59,9 @@ const command: HypnoCommand<{ user?: User }> = {
             "Level",
             `${calculateLevel(userData?.xp || 0)} (${userData?.xp} XP)`,
           ],
-          ["Messages", userData?.messages_sent],
-          ["VC Time", "" + userData?.vc_time + " minutes"],
-          ["Bumps", userData?.bumps],
+          ["Messages", userData.messages_sent],
+          ["VC Time", "" + userData.vc_time + " minutes"],
+          ["Bumps", userData.bumps],
           ["Balance", `${economy?.balance}${config.economy.currency}`],
           ["Economy Position", `#${ecoPosition + 1}`],
           ["Imposition Registered", imposition.length],
@@ -68,6 +70,25 @@ const command: HypnoCommand<{ user?: User }> = {
           .map((x) => `**${x[0]}**: ${x[1]}`)
           .join("\n")
       );
+
+    if (totalTTT > 0) {
+      embed.addFields([
+        {
+          name: "TicTacToe",
+          value: [
+            ["Wins", userData.ttt_win],
+            ["Loses", userData.ttt_lose],
+            ["Ties", userData.ttt_tie],
+            [
+              "Win Rate",
+              ((userData.ttt_win / totalTTT) * 100).toFixed(0) + "%",
+            ],
+          ]
+            .map((x) => `**${x[0]}**: ${x[1]}`)
+            .join("\n"),
+        },
+      ]);
+    }
 
     if (aquiredBadges.length > 0)
       embed.addFields([

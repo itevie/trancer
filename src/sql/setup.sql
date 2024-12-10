@@ -75,6 +75,21 @@ CREATE TABLE IF NOT EXISTS user_favourite_spirals (
     user_id TEXT NOT NULL
 );
 
+ALTER TABLE
+    user_data
+ADD
+    ttt_win INT NOT NULL DEFAULT 0;
+
+ALTER TABLE
+    user_data
+ADD
+    ttt_lose INT NOT NULL DEFAULT 0;
+
+ALTER TABLE
+    user_data
+ADD
+    ttt_tie INT NOT NULL DEFAULT 0;
+
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,
     guild_id TEXT NOT NULL,
@@ -82,7 +97,10 @@ CREATE TABLE IF NOT EXISTS user_data (
     messages_sent INT NOT NULL DEFAULT 0,
     vc_time INT NOT NULL DEFAULT 0,
     xp INT NOT NULL DEFAULT 0,
-    site_quote_opt_in BOOLEAN DEFAULT true
+    site_quote_opt_in BOOLEAN DEFAULT true,
+    ttt_win INT NOT NULL DEFAULT 0,
+    ttt_lose INT NOT NULL DEFAULT 0,
+    ttt_tie INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS dawnagotchi (

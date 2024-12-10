@@ -15,6 +15,7 @@ import {
   removeMoneyFor,
 } from "../../util/actions/economy";
 import config from "../../config";
+import { database } from "../../util/database";
 
 type State = "o" | "x" | "-";
 
@@ -143,7 +144,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
                 : winner === "-"
                 ? `**${current.username}** to play.${
                     args.bet
-                      ? `Note: forfeiting makes the other player win.`
+                      ? `\nNote: forfeiting makes the other player win.`
                       : ""
                   }`
                 : `**${
@@ -204,18 +205,21 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
     collector.on("collect", async (i) => {
       async function setWinner(win: State) {
         winner = win;
+        let w = winner === "x" ? message.author.id : args.user.id;
+        let l = winner === "x" ? args.user.id : message.author.id;
+
         await msg.edit(createMessage() as MessageEditOptions);
+        await database.run(
+          `UPDATE user_data SET ttt_win = ttt_win + 1 WHERE user_id = ?;`,
+          w
+        );
+        await database.run(
+          `UPDATE user_data SET ttt_lose = ttt_lose + 1 WHERE user_id = ?;`,
+          l
+        );
         if (args.bet) {
-          await addMoneyFor(
-            winner === "x" ? message.author.id : args.user.id,
-            args.bet,
-            "gambling"
-          );
-          await removeMoneyFor(
-            winner === "x" ? args.user.id : message.author.id,
-            args.bet,
-            true
-          );
+          await addMoneyFor(w, args.bet, "gambling");
+          await removeMoneyFor(l, args.bet, true);
         }
       }
 
@@ -307,6 +311,15 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
 
       if (game.every((x) => x !== "-")) {
         winner = "t";
+        await database.run(
+          "UPDATE user_data SET ttt_tie = ttt_tie + 1 WHERE user_id = ?;",
+          message.author.id
+        );
+        await database.run(
+          "UPDATE user_data SET ttt_tie = ttt_tie + 1 WHERE user_id = ?;",
+          args.user.id
+        );
+
         await msg.edit(createMessage() as MessageEditOptions);
         collector.stop();
         set.delete(message.author.id);

@@ -6,4 +6,7 @@ interface UserData {
   vc_time: number;
   xp: number;
   site_quote_opt_in: boolean;
+  ttt_win: number;
+  ttt_lose: number;
+  ttt_tie: number;
 }
