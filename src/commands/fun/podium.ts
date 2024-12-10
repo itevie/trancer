@@ -48,6 +48,9 @@ const command: HypnoCommand<{
       case "ttt_loses":
       case "ttt_ties":
       case "ttt_wins":
+      case "c4_loses":
+      case "c4_ties":
+      case "c4_wins":
         data = (await getAllGuildsUserData(message.guild.id)).map((x) => [
           x.user_id,
           x[lbUserDataMap[args.type]],

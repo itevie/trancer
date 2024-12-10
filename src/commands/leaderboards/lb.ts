@@ -16,6 +16,9 @@ export const lbUserDataMap = {
   ttt_wins: "ttt_win",
   ttt_loses: "ttt_lose",
   ttt_ties: "ttt_tie",
+  c4_wins: "c4_win",
+  c4_loses: "c4_lose",
+  c4_ties: "c4_tie",
 };
 
 export const lbTypes = [
@@ -28,6 +31,9 @@ export const lbTypes = [
   "ttt_wins",
   "ttt_loses",
   "ttt_ties",
+  "c4_wins",
+  "c4_loses",
+  "c4_ties",
 ] as const;
 
 const lbMap: Record<string, (typeof lbTypes)[number]> = {
@@ -39,6 +45,9 @@ const lbMap: Record<string, (typeof lbTypes)[number]> = {
   ttt_wins: "ttt_wins",
   ttt_loses: "ttt_loses",
   ttt_ties: "ttt_ties",
+  c4_wins: "c4_wins",
+  c4_loses: "c4_loses",
+  c4_ties: "c4_ties",
   vctime: "vc",
 } as const;
 
@@ -76,6 +85,18 @@ const lbDetails: Record<
     title: "Most TicTacToe ties",
     entryName: "tied",
   },
+  c4_wins: {
+    title: "Most Connect 4 wins",
+    entryName: "won",
+  },
+  c4_loses: {
+    title: "Most Connect 4 loses",
+    entryName: "lost",
+  },
+  c4_ties: {
+    title: "Most Connect 4 ties",
+    entryName: "tied",
+  },
 };
 
 const command: HypnoCommand = {
@@ -86,6 +107,12 @@ const command: HypnoCommand = {
   eachAliasIsItsOwnCommand: true,
 
   handler: async (message, o) => {
+    if (o.command === "leaderboard")
+      return message.reply(
+        `Please use one of the following commands instead: ${Object.keys(lbMap)
+          .map((x) => `\`${o.serverSettings.prefix}${x}\``)
+          .join(", ")}`
+      );
     let data = await getAllGuildsUserData(message.guild.id);
 
     let organised = data.map((x) => [

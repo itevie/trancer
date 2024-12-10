@@ -44,7 +44,8 @@ const command: HypnoCommand<{ user?: User }> = {
       .sort((a, b) => b.balance - a.balance)
       .findIndex((x) => x.user_id === user.id);
 
-    let totalTTT = userData.ttt_lose + userData.ttt_tie + userData.ttt_win;
+    let totalTTT = userData.ttt_lose + userData.ttt_win;
+    let totalC4 = userData.c4_win + userData.c4_lose;
 
     // Create embed
     const embed = createEmbed()
@@ -83,6 +84,22 @@ const command: HypnoCommand<{ user?: User }> = {
               "Win Rate",
               ((userData.ttt_win / totalTTT) * 100).toFixed(0) + "%",
             ],
+          ]
+            .map((x) => `**${x[0]}**: ${x[1]}`)
+            .join("\n"),
+        },
+      ]);
+    }
+
+    if (totalC4 > 0) {
+      embed.addFields([
+        {
+          name: "Connect 4",
+          value: [
+            ["Wins", userData.c4_win],
+            ["Loses", userData.c4_lose],
+            ["Ties", userData.c4_tie],
+            ["Win Rate", ((userData.c4_win / totalC4) * 100).toFixed(0) + "%"],
           ]
             .map((x) => `**${x[0]}**: ${x[1]}`)
             .join("\n"),

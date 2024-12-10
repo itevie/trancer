@@ -16,6 +16,8 @@ import {
   removeMoneyFor,
 } from "../../util/actions/economy";
 import config from "../../config";
+import { database } from "../../util/database";
+import { getUserData } from "../../util/actions/userData";
 
 const _pieces = {
   r: "🟥",
@@ -55,6 +57,15 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
 
   handler: async (message, { args }) => {
     let opponent = args.user;
+
+    if (opponent.id === message.author.id)
+      return message.reply("You can't play against youtself, silly!");
+    if (opponent.bot)
+      return message.reply("You can't play against a bot, silly!");
+
+    if (!(await getUserData(opponent.id, message.guild.id)).allow_requests) {
+      return message.reply(`Sorry, but that user has requests turned off.`);
+    }
 
     if (inGames.has(message.author.id)) {
       let place = inGames.get(message.author.id);
@@ -220,6 +231,26 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
       inGames.delete(message.author.id);
       inGames.delete(opponent.id);
 
+      if (award) {
+        await database.run(
+          `UPDATE user_data SET c4_win = c4_win + 1 WHERE user_id = ?;`,
+          award === "bw" ? message.author.id : opponent.id
+        );
+        await database.run(
+          `UPDATE user_data SET c4_lose = c4_lose + 1 WHERE user_id = ?;`,
+          award === "rw" ? message.author.id : opponent.id
+        );
+      } else if (win === "t" || win === "d") {
+        await database.run(
+          `UPDATE user_data SET c4_tie = c4_tie + 1 WHERE user_id = ?`,
+          message.author.id
+        );
+        await database.run(
+          `UPDATE user_data SET c4_tie = c4_tie + 1 WHERE user_id = ?`,
+          opponent.id
+        );
+      }
+
       if (award && args.bet) {
         await addMoneyFor(
           award === "bw" ? message.author.id : opponent.id,
@@ -251,16 +282,16 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
       }
 
       if (i.customId === "game-reject") {
-        await removeInGames(null);
         win = "c";
+        await removeInGames(null);
         await msg.edit(draw());
         await i.deferUpdate();
         return;
       }
 
       if (i.customId === "game-forfeit") {
-        await removeInGames(i.user.id === opponent.id ? "bw" : "rw");
         win = i.user.id === opponent.id ? "fo" : "fp";
+        await removeInGames(i.user.id === opponent.id ? "bw" : "rw");
         await msg.edit(draw());
         await i.deferUpdate();
         return;

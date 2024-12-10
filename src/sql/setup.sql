@@ -75,10 +75,26 @@ CREATE TABLE IF NOT EXISTS user_favourite_spirals (
     user_id TEXT NOT NULL
 );
 
--- ALTER TABLE
---     user_data
--- ADD
---     allow_requests BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE
+    user_data
+ADD
+    allow_requests BOOLEAN NOT NULL DEFAULT true;
+
+ALTER TABLE
+    user_data
+ADD
+    c4_win INT NOT NULL DEFAULT 0;
+
+ALTER TABLE
+    user_data
+ADD
+    c4_lose INT NOT NULL DEFAULT 0;
+
+ALTER TABLE
+    user_data
+ADD
+    c4_tie INT NOT NULL DEFAULT 0;
+
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,
     guild_id TEXT NOT NULL,
@@ -90,7 +106,10 @@ CREATE TABLE IF NOT EXISTS user_data (
     ttt_win INT NOT NULL DEFAULT 0,
     ttt_lose INT NOT NULL DEFAULT 0,
     ttt_tie INT NOT NULL DEFAULT 0,
-    allow_requests BOOLEAN NOT NULL DEFAULT false
+    c4_win INT NOT NULL DEFAULT 0,
+    c4_lose INT NOT NULL DEFAULT 0,
+    c4_tie INT NOT NULL DEFAULT 0,
+    allow_requests BOOLEAN NOT NULL DEFAULT true
 );
 
 CREATE TABLE IF NOT EXISTS dawnagotchi (

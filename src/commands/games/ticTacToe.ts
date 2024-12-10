@@ -16,6 +16,7 @@ import {
 } from "../../util/actions/economy";
 import config from "../../config";
 import { database } from "../../util/database";
+import { getUserData } from "../../util/actions/userData";
 
 type State = "o" | "x" | "-";
 
@@ -49,6 +50,10 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
       );
     if (args.user.bot)
       return message.reply(`You cannot play TicTacToe against a bot, silly.`);
+
+    if (!(await getUserData(args.user.id, message.guild.id)).allow_requests) {
+      return message.reply(`Sorry, but that user has requests turned off.`);
+    }
 
     if (set.has(message.author.id)) {
       let place = set.get(message.author.id);
