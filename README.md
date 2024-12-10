@@ -13,7 +13,7 @@ Join our server, [Trancy Twilight](https://discord.gg/zBWq29apsy)! Test the bot 
 
 ## Installing the bot yourself
 
-Here are the steps to install it on your own computer:
+Here are the steps to install it on your own computer:  
 ⚠️ **Important:** Make sure your name is not Michi, Ether, Tael, Kona, Eden, or Kappa.
 
 1. Make sure you have [Node.JS](https://nodejs.org/en/download/prebuilt-installer) installed on your computer
