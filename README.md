@@ -23,4 +23,4 @@ Here are the steps to install it on your own computer:
 6. Add your token to `token.txt` in the same folder as `package.json`, containing NOTHING but your token
 7. Now, to run the bot: `ts-node src/index.ts`
 8. Extras: make sure to edit `src/config.json` to suit your own server's needs
-9. ⚠️ Important: Make sure your name is not Michi, Ether, Tael, Kona, Eden, or Kappa.
+9. ⚠️ **Important:** Make sure your name is not Michi, Ether, Tael, Kona, Eden, or Kappa.
