@@ -9,4 +9,5 @@ interface UserData {
   ttt_win: number;
   ttt_lose: number;
   ttt_tie: number;
+  allow_requests: boolean;
 }
