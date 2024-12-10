@@ -12,8 +12,14 @@ import path from "path";
 import initServer from "./website";
 
 const cliArgsDefinitio: OptionDefinition[] = [
-  { name: "load-cmd", multiple: true, type: String },
-  { name: "no-handlers", type: Boolean },
+  {
+    name: "load-cmd",
+    defaultValue: [],
+    alias: "c",
+    multiple: true,
+    type: String,
+  },
+  { name: "no-handlers", defaultValue: [], type: Boolean },
 ] as const;
 
 let args = commandLineArgs(cliArgsDefinitio) as any;
@@ -56,9 +62,10 @@ client.on("ready", async () => {
   }
 
   // Load commands
-  const commandFiles = args["load-cmd"]
-    ? args["load-cmd"].map((x) => `${__dirname}/commands/${x}`)
-    : getAllFiles(__dirname + "/commands");
+  const commandFiles =
+    args["load-cmd"] && args["load-cmd"].length > 0
+      ? args["load-cmd"].map((x) => `${__dirname}/commands/${x}`)
+      : getAllFiles(__dirname + "/commands");
 
   for (const commandFile of commandFiles) {
     const commandImport = require(commandFile).default as HypnoCommand;
