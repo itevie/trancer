@@ -79,6 +79,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
     let winner: State | "t" = "-";
     let forceCancel = false;
     let current = Math.random() > 0.5 ? args.user : message.author;
+    let isForfeit = false;
 
     function generateButton(idx: number): ButtonBuilder {
       return new ButtonBuilder()
@@ -123,7 +124,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
             new ButtonBuilder()
               .setStyle(ButtonStyle.Danger)
               .setCustomId("ttt-end")
-              .setLabel("End Game")
+              .setLabel("Forfeit")
           )
         );
       }
@@ -137,15 +138,19 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
                 ? "The game was cancelled."
                 : winner === "t"
                 ? `The game was a tie!${
-                    args.bet ? "You both keep your money." : ""
+                    args.bet ? "\nYou both keep your money." : ""
                   }`
                 : winner === "-"
-                ? `**${current.username}** to play.`
+                ? `**${current.username}** to play.${
+                    args.bet
+                      ? `Note: forfeiting makes the other player win.`
+                      : ""
+                  }`
                 : `**${
                     winner === "x"
                       ? message.author.username
                       : args.user.username
-                  }** won the game!\n${
+                  }** won the game!${isForfeit ? ` (forfeit)` : ""}\n${
                     args.bet
                       ? `You won **${args.bet}${config.economy.currency}**!`
                       : ""
@@ -197,6 +202,23 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
     });
 
     collector.on("collect", async (i) => {
+      async function setWinner(win: State) {
+        winner = win;
+        await msg.edit(createMessage() as MessageEditOptions);
+        if (args.bet) {
+          await addMoneyFor(
+            winner === "x" ? message.author.id : args.user.id,
+            args.bet,
+            "gambling"
+          );
+          await removeMoneyFor(
+            winner === "x" ? args.user.id : message.author.id,
+            args.bet,
+            true
+          );
+        }
+      }
+
       if (i.customId === "ttt-start" && i.user.id !== args.user.id) {
         return i.reply({
           content: `You cannot start the game because you are the creator! Wait for the opponent to accept, or click "Reject"`,
@@ -227,9 +249,10 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
         collector.stop();
         set.delete(message.author.id);
         set.delete(args.user.id);
-        forceCancel = true;
-        await msg.edit(createMessage() as MessageEditOptions);
+        isForfeit = true;
+        setWinner(i.user.id === message.author.id ? "o" : "x");
         await i.deferUpdate();
+        return;
       }
 
       // Validate
@@ -275,18 +298,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
       }
 
       if (win !== "-") {
-        winner = win;
-        await msg.edit(createMessage() as MessageEditOptions);
-        await addMoneyFor(
-          winner === "x" ? message.author.id : args.user.id,
-          args.bet,
-          "gambling"
-        );
-        await removeMoneyFor(
-          winner === "x" ? args.user.id : message.author.id,
-          args.bet,
-          true
-        );
+        setWinner(win);
         collector.stop();
         set.delete(message.author.id);
         set.delete(args.user.id);
