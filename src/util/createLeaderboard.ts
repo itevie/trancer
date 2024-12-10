@@ -19,7 +19,7 @@ export function accumlateSortLeaderboardData(data: string[]) {
   return resultArr;
 }
 
-interface LeaderboardOptions {
+export interface LeaderboardOptions {
   data: [string, number, any?][];
   replyTo: Message;
   embed: EmbedBuilder;
@@ -32,7 +32,7 @@ export async function createPaginatedLeaderboardFromData(
   options: LeaderboardOptions
 ) {
   const data = options.data
-    .filter((x) => x[1] !== 0)
+    .filter((x) => x[1] !== 0 && x[1] !== undefined)
     .sort((a, b) => b[1] - a[1]);
 
   const displaydData: string[] = [];
@@ -50,6 +50,7 @@ export async function createPaginatedLeaderboardFromData(
   }
 
   return paginate({
+    baseDescription: options.description,
     embed: options.embed,
     replyTo: options.replyTo as any,
     type: "description",

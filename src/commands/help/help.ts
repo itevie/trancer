@@ -91,12 +91,20 @@ const command: HypnoCommand<{ ignoreGuards: boolean }> = {
       add();
     }
 
+    console.log(categories["leaderboards"]);
+
     let text = "";
 
     for (const cat in categories) {
-      text += `**${categoryEmojis[cat] || ""} ${cat}**\n${categories[cat]
-        .map((x) => `\`${x}\``)
-        .join(", ")}\n\n`;
+      if (cat === "actions") {
+        text += `**${categoryEmojis[cat] || ""} ${cat}**\nSee \`${
+          serverSettings.prefix
+        }action\` to view actions you can play!\n\n`;
+      } else {
+        text += `**${categoryEmojis[cat] || ""} ${cat}**\n${categories[cat]
+          .map((x) => `\`${x}\``)
+          .join(", ")}\n\n`;
+      }
     }
 
     return message.reply({

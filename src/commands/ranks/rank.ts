@@ -1,15 +1,16 @@
 import { HypnoCommand } from "../../types/util";
 import { rankExists } from "../../util/actions/ranks";
 import {
-  createLeaderboardFromData,
   accumlateSortLeaderboardData,
+  createPaginatedLeaderboardFromData,
 } from "../../util/createLeaderboard";
 import { database } from "../../util/database";
+import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand<{ name: string }> = {
-  name: "leaderboard",
-  aliases: ["lb"],
-  description: "Get the top 10 users on a specific leaderboard",
+  name: "rank",
+  aliases: ["r"],
+  description: "Get the top 10 users on a specific rank",
   type: "ranks",
 
   args: {
@@ -26,12 +27,11 @@ const command: HypnoCommand<{ name: string }> = {
     // Validate
     const name = args.name.toLowerCase();
 
-    // Check if the leaderboard exists
     if (!(await rankExists(name)))
       return message.reply(
-        `That leaderboard does not exist, but you can create it using \`${serverSettings.prefix}createrank ${name}\``
+        `That rank does not exist, but you can create it using \`${serverSettings.prefix}createrank ${name}\``
       );
-    const lb = await database.get(
+    const lb = await database.get<Rank>(
       `SELECT * FROM ranks WHERE rank_name = (?)`,
       name
     );
@@ -41,19 +41,17 @@ const command: HypnoCommand<{ name: string }> = {
       `SELECT * FROM votes WHERE rank_name = (?);`,
       name
     )) as Vote[];
-    return message.reply({
-      embeds: [
-        (
-          await createLeaderboardFromData(
-            accumlateSortLeaderboardData(dbResults.map((x) => x.votee)),
-            lb.description
-          )
-        )
-          .setTitle(`Leaderboard for ${name}`)
-          .setFooter({
-            text: `Use ${serverSettings.prefix}vote ${name} <user> to vote!`,
-          }),
-      ],
+
+    await createPaginatedLeaderboardFromData({
+      data: accumlateSortLeaderboardData(dbResults.map((x) => x.votee)),
+      description: `*${lb.description}*`,
+      embed: createEmbed()
+        .setTitle(`Rank ${name}`)
+        .setFooter({
+          text: `Use ${serverSettings.prefix}vote ${name} <user> to vote!`,
+        }),
+      entryName: "votes",
+      replyTo: message,
     });
   },
 };

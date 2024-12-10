@@ -75,21 +75,6 @@ CREATE TABLE IF NOT EXISTS user_favourite_spirals (
     user_id TEXT NOT NULL
 );
 
-ALTER TABLE
-    user_data
-ADD
-    ttt_win INT NOT NULL DEFAULT 0;
-
-ALTER TABLE
-    user_data
-ADD
-    ttt_lose INT NOT NULL DEFAULT 0;
-
-ALTER TABLE
-    user_data
-ADD
-    ttt_tie INT NOT NULL DEFAULT 0;
-
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,
     guild_id TEXT NOT NULL,
@@ -162,7 +147,8 @@ CREATE TABLE IF NOT EXISTS quotes (
 CREATE TABLE IF NOT EXISTS ranks (
     rank_name TEXT NOT NULL UNIQUE,
     created_by TEXT NOT NULL,
-    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    description TEXT DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS economy (

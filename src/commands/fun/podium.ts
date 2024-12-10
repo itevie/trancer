@@ -6,9 +6,10 @@ import { client } from "../..";
 import { getAllEconomy } from "../../util/actions/economy";
 import { database } from "../../util/database";
 import { accumlateSortLeaderboardData } from "../../util/createLeaderboard";
+import { lbTypes, lbUserDataMap } from "../leaderboards/lb";
 
 const command: HypnoCommand<{
-  type: "economy" | "bumps" | "xp" | "messages" | "vc" | "rank";
+  type: (typeof lbTypes)[number];
   rank?: string;
 }> = {
   name: "podium",
@@ -21,7 +22,7 @@ const command: HypnoCommand<{
       {
         name: "type",
         type: "string",
-        oneOf: ["economy", "bumps", "xp", "messages", "vc", "rank"],
+        oneOf: [...lbTypes],
       },
       {
         name: "rank",
@@ -33,34 +34,22 @@ const command: HypnoCommand<{
   handler: async (message, { args }) => {
     let data: [string, number][];
     switch (args.type) {
-      case "bumps":
-        data = (await getAllGuildsUserData(message.guild.id)).map((x) => [
-          x.user_id,
-          x.bumps,
-        ]) as [string, number][];
-        break;
-      case "xp":
-        data = (await getAllGuildsUserData(message.guild.id)).map((x) => [
-          x.user_id,
-          x.xp,
-        ]) as [string, number][];
-        break;
       case "economy":
         data = (await getAllEconomy()).map((x) => [x.user_id, x.balance]) as [
           string,
           number
         ][];
         break;
+      case "bumps":
+      case "xp":
       case "messages":
-        data = (await getAllGuildsUserData(message.guild.id)).map((x) => [
-          x.user_id,
-          x.messages_sent,
-        ]) as [string, number][];
-        break;
       case "vc":
+      case "ttt_loses":
+      case "ttt_ties":
+      case "ttt_wins":
         data = (await getAllGuildsUserData(message.guild.id)).map((x) => [
           x.user_id,
-          x.vc_time,
+          x[lbUserDataMap[args.type]],
         ]) as [string, number][];
         break;
       case "rank":

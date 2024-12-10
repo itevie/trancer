@@ -2,32 +2,38 @@ import { HypnoCommand } from "../../types/util";
 import { database } from "../../util/database";
 import { rankExists } from "../../util/actions/ranks";
 
-const command: HypnoCommand<{ leaderboard: string }> = {
-    name: "unvote",
-    description: "Unvote on a leaderboard",
-    type: "ranks",
+const command: HypnoCommand<{ rank: string }> = {
+  name: "unvote",
+  description: "Unvote on a rank",
+  type: "ranks",
 
-    args: {
-        requiredArguments: 2,
-        args: [
-            {
-                name: "leaderboard",
-                type: "string"
-            },
-        ]
-    },
+  args: {
+    requiredArguments: 2,
+    args: [
+      {
+        name: "rank",
+        type: "string",
+      },
+    ],
+  },
 
-    handler: async (message, { args, serverSettings }) => {
-        const leaderboard = args.leaderboard.toLowerCase();
+  handler: async (message, { args, serverSettings }) => {
+    const rank = args.rank.toLowerCase();
 
-        // Check if the rank exists
-        if (!await rankExists(leaderboard))
-            return message.reply(`That leaderboard does not exist! But can be created using \`${serverSettings.prefix}createrank ${leaderboard}\``);
+    // Check if the rank exists
+    if (!(await rankExists(rank)))
+      return message.reply(
+        `That rank does not exist! But can be created using \`${serverSettings.prefix}createrank ${rank}\``
+      );
 
-        await database.run(`DELETE FROM votes WHERE rank_name = ? AND voter = ?`, leaderboard, message.author.id);
+    await database.run(
+      `DELETE FROM votes WHERE rank_name = ? AND voter = ?`,
+      rank,
+      message.author.id
+    );
 
-        return message.reply(`Your vote on **${leaderboard}** has been removed`);
-    }
-}
+    return message.reply(`Your vote on **${rank}** has been removed`);
+  },
+};
 
 export default command;
