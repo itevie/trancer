@@ -11,31 +11,6 @@ const config = {
   owner: "395877903998648322",
   devBot: "1272342864004648981", // Leave empty if you don't have a developmental bot,
 
-  // ----- Database -----
-  database: {
-    location: path.resolve(
-      // This is where the database is located
-      __dirname + "/../data.db"
-    ),
-  },
-
-  analytics: {
-    enabled: true,
-    location: path.resolve(
-      // This is where the ANALYTICS database is located
-      __dirname + "/../analytics_data.db"
-    ),
-  },
-
-  // ----- Website -----
-  website: {
-    enabled: true,
-    port: 8080,
-  },
-
-  // ----- Exceptions to the command guard checks -----
-  exceptions: ["395877903998648322"],
-
   // ----- Details to do with the bots server -----
   botServer: {
     id: "1257416273520758814",
@@ -60,6 +35,31 @@ const config = {
       "1257437054283808838",
       "1273840976045019226",
     ],
+  },
+
+  // ----- Database -----
+  database: {
+    location: path.resolve(
+      // This is where the database is located
+      __dirname + "/../data.db"
+    ),
+  },
+
+  analytics: {
+    enabled: true,
+    location: path.resolve(
+      // This is where the ANALYTICS database is located
+      __dirname + "/../analytics_data.db"
+    ),
+  },
+
+  // ----- Exceptions to the command guard checks -----
+  exceptions: ["395877903998648322"],
+
+  // ----- Website -----
+  website: {
+    enabled: true,
+    port: 8080,
   },
 
   // ----- Embed Defaults -----
