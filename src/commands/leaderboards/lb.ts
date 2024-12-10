@@ -80,14 +80,14 @@ const lbDetails: Record<
 
 const command: HypnoCommand = {
   name: "leaderboard",
-  description: "Get a leaderboard for a specific type",
+  description: "Get a leaderboard for a specific type (see aliases)",
   aliases: Object.keys(lbMap),
   type: "leaderboards",
   eachAliasIsItsOwnCommand: true,
 
   handler: async (message, o) => {
     let data = await getAllGuildsUserData(message.guild.id);
-    console.log(lbUserDataMap[lbMap[o.command]]);
+
     let organised = data.map((x) => [
       x.user_id,
       x[lbUserDataMap[lbMap[o.command]]],

@@ -7,6 +7,7 @@ import { getAllEconomy } from "../../util/actions/economy";
 import { database } from "../../util/database";
 import { accumlateSortLeaderboardData } from "../../util/createLeaderboard";
 import { lbTypes, lbUserDataMap } from "../leaderboards/lb";
+import { rankExists } from "../../util/actions/ranks";
 
 const command: HypnoCommand<{
   type: (typeof lbTypes)[number];
@@ -54,6 +55,8 @@ const command: HypnoCommand<{
         break;
       case "rank":
         if (!args.rank) return message.reply("Please provide a rank name!");
+        if (!(await rankExists(args.rank)))
+          return message.reply("That rank does not exist!");
         const dbResults = (await database.all(
           `SELECT * FROM votes WHERE rank_name = (?);`,
           args.rank
