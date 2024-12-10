@@ -19,7 +19,7 @@ const cliArgsDefinitio: OptionDefinition[] = [
     multiple: true,
     type: String,
   },
-  { name: "no-handlers", defaultValue: [], type: Boolean },
+  { name: "no-handlers", defaultValue: false, type: Boolean },
 ] as const;
 
 let args = commandLineArgs(cliArgsDefinitio) as any;
