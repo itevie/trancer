@@ -176,6 +176,9 @@ export default async function wrapGame(options: GameWrapperOptions) {
       });
     } else if (i.customId === "game-reject") {
       await i.deferUpdate();
+      inGames.delete(player.id);
+      inGames.delete(opponent.id);
+      collector.stop();
       await message.edit({
         embeds: [
           createEmbed()
