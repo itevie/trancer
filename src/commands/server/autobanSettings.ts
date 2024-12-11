@@ -56,6 +56,10 @@ const command: HypnoCommand<{ command?: string; value?: string }> = {
                 name: "How",
                 value: `When a user joins, it removes all whitespace from a their username & display name, and checks if any of the registered phrases match it, then bans them if so.`,
               },
+              {
+                name: "Count",
+                value: `I have banned **${serverSettings.auto_ban_count}** people via autoban!`,
+              },
             ]),
         ],
       });

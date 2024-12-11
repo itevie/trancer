@@ -1,4 +1,9 @@
 -- Server specific stuff
+ALTER TABLE
+    server_settings
+ADD
+    auto_ban_count INT NOT NULL DEFAULT 0;
+
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
@@ -16,8 +21,16 @@ CREATE TABLE IF NOT EXISTS server_settings (
     verified_string TEXT DEFAULT '{mention} has been verified! Welcome!',
     verified_channel_id TEXT DEFAULT NULL,
     auto_ban_keywords TEXT NOT NULL,
-    auto_ban_enabled BOOLEAN DEFAULT false
+    auto_ban_enabled BOOLEAN DEFAULT false,
+    auto_ban_count INT NOT NULL DEFAULT 0
 );
+
+UPDATE
+    server_settings
+SET
+    auto_ban_count = 2
+WHERE
+    server_id = "1257416273520758814";
 
 CREATE TABLE IF NOT EXISTS star_board (
     server_id TEXT NOT NULL,

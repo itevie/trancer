@@ -21,6 +21,7 @@ interface ServerSettings {
 
   auto_ban_keywords: string;
   auto_ban_enabled: string;
+  auto_ban_count: number;
 }
 
 interface ChannelImposition {

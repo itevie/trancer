@@ -6,6 +6,7 @@ import { getServerSettings } from "../util/actions/settings";
 import { addToMemberCount } from "../util/analytics";
 import getInviteDetails from "../util/getInviteDetails";
 import { createEmbed } from "../util/other";
+import { database } from "../util/database";
 
 let inviteCache: { [key: string]: { [key: string]: number } } = {};
 export async function initInviteCache() {
@@ -30,6 +31,8 @@ client.on("inviteCreate", async (invite) => {
     inviteCache[invite.guild.id][invite.code] = 0;
 });
 
+export let autoBanned: string[] = [];
+
 export function checkAutoban(u: string, keywords: string[]): boolean {
   for (const k of keywords)
     if (u.toLowerCase().replace(/\s+/g, "").includes(k)) return true;
@@ -52,9 +55,18 @@ client.on("guildMemberAdd", async (member) => {
       checkAutoban(member.user.username, abk) ||
       checkAutoban(member.user.displayName, abk)
     ) {
+      if (member.guild.id === config.botServer.id)
+        autoBanned.push(member.user.id);
+
       await member.ban({
         reason: `Triggered autoban`,
       });
+
+      await database.run(
+        `UPDATE server_settings SET auto_ban_count = auto_ban_count + 1 WHERE server_id = ?`,
+        member.guild.id
+      );
+
       return;
     }
   }
