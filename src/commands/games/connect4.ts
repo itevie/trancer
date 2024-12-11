@@ -136,7 +136,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
           let msg: string = "";
           switch (win) {
             case "-":
-              msg = `${_pieces[turn === player ? "b" : "r"]}**${
+              msg = `${_pieces[turn === player ? "b" : "r"]} **${
                 turn.username
               }** to play.\nNote: forfeiting makes the opponent win.`;
               break;

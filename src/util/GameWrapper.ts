@@ -132,6 +132,10 @@ export default async function wrapGame(options: GameWrapperOptions) {
         time: options.timeout,
       });
 
+      let timeout = setTimeout(() => {
+        if (!gameCollector.ended) gameCollector.stop("time");
+      }, options.timeout);
+
       let currentTurn: "p" | "o" | "-" = "-";
 
       gameCollector.on("end", async (_, reason) => {
@@ -199,6 +203,10 @@ export default async function wrapGame(options: GameWrapperOptions) {
         collector: gameCollector,
         setTurn: (turn) => {
           currentTurn = turn;
+          clearInterval(timeout);
+          timeout = setTimeout(() => {
+            if (!gameCollector.ended) gameCollector.stop("time");
+          }, options.timeout);
         },
         removePlayers,
         opponent,
