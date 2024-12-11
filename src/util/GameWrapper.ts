@@ -129,16 +129,29 @@ export default async function wrapGame(options: GameWrapperOptions) {
 
       let gameCollector = message.createMessageComponentCollector({
         filter: (i) => [player.id, opponent.id].includes(i.user.id),
-        time: options.timeout,
       });
 
+      let currentTurn: "p" | "o" | "-" = "-";
+
+      let startTimeout = Date.now();
       let timeout = setTimeout(() => {
         if (!gameCollector.ended) gameCollector.stop("time");
       }, options.timeout);
 
-      let currentTurn: "p" | "o" | "-" = "-";
+      let interval = setInterval(async () => {
+        if (options.timeout - (Date.now() - startTimeout) < 30000) {
+          await message.edit({
+            content: `**${
+              currentTurn === "p" ? player.username : opponent.username
+            }**, ${Math.floor(
+              (options.timeout - (Date.now() - startTimeout)) / 1000
+            )} seconds left.`,
+          });
+        }
+      }, 5000);
 
       gameCollector.on("end", async (_, reason) => {
+        clearInterval(interval);
         if (reason === "time") {
           await removePlayers(currentTurn === "p" ? "o" : "p");
           await message.edit({
@@ -201,9 +214,13 @@ export default async function wrapGame(options: GameWrapperOptions) {
       options.callback({
         message,
         collector: gameCollector,
-        setTurn: (turn) => {
+        setTurn: async (turn) => {
+          // Modify data
           currentTurn = turn;
-          clearInterval(timeout);
+          startTimeout = Date.now();
+
+          // Re-update timeout
+          clearTimeout(timeout);
           timeout = setTimeout(() => {
             if (!gameCollector.ended) gameCollector.stop("time");
           }, options.timeout);
