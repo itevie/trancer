@@ -49,6 +49,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
         message,
         collector,
         removePlayers,
+        setTurn,
       }) => {
         const game: State[] = [, , , , , , , , ,].fill("-");
         let winner: State | "t" = "-";
@@ -171,6 +172,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
           // Update details
           game[idx] = current === player ? "x" : "o";
           current = current === player ? opponent : player;
+          setTurn(current.id === player.id ? "p" : "o");
           await i.deferUpdate();
           await msg.edit(createMessage());
 

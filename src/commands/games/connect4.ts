@@ -59,6 +59,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
         player,
         opponent,
         collector,
+        setTurn,
       }) => {
         // Setup base stuff
         let turn = Math.random() > 0.5 ? player : opponent;
@@ -247,6 +248,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
 
           // Swap turns
           turn = turn.id === player.id ? opponent : player;
+          setTurn(turn.id === player.id ? "p" : "o");
 
           // Check if all slots have been filled
           let hasDash = false;
