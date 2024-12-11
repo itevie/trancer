@@ -1,9 +1,9 @@
-import Canvas from "canvas";
 import { Jimp } from "jimp";
 import { HypnoMessageHandler } from "../types/util";
 import { getRandomImposition } from "../util/other";
 import { readFileSync } from "fs";
 import { AttachmentBuilder } from "discord.js";
+import { generateNotImmuneImage } from "../util/imageGeneration";
 
 const msgs = [
   "blub",
@@ -12,28 +12,6 @@ const msgs = [
   "fish fr",
   'pfft "not a fish"',
 ];
-
-export async function generateNotImmuneImage(avatarUrl: string) {
-  // Load stuff
-  const canvas = Canvas.createCanvas(465, 658);
-  const ctx = canvas.getContext("2d");
-  const image = await Canvas.loadImage(
-    readFileSync(__dirname + "/../data/not_immune.png")
-  );
-
-  // Make avatar a circle
-  const av = await Jimp.read(avatarUrl);
-  av.resize({ w: 200, h: 200 });
-  av.circle();
-
-  // Get avatar
-  const avatar = await Canvas.loadImage(await av.getBuffer("image/png"));
-
-  // Draw
-  ctx.drawImage(image, 0, 0);
-  ctx.drawImage(avatar, 50, 450, 100, 100);
-  return canvas.toBuffer();
-}
 
 const handler: HypnoMessageHandler = {
   name: "random-responder",

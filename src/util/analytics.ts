@@ -103,21 +103,23 @@ export async function addMessageForCurrentTime(): Promise<void> {
 
   let date = formatDate(new Date());
 
-  if (
-    !(await analyticDatabase.get(
-      `SELECT * FROM messages_at_time WHERE time = ?`,
-      date
-    ))
-  ) {
+  try {
+    if (
+      !(await analyticDatabase.get(
+        `SELECT * FROM messages_at_time WHERE time = ?`,
+        date
+      ))
+    ) {
+      await analyticDatabase.run(
+        `INSERT INTO messages_at_time (time) VALUES (?)`,
+        date
+      );
+    }
     await analyticDatabase.run(
-      `INSERT INTO messages_at_time (time) VALUES (?)`,
+      `UPDATE messages_at_time SET amount = amount + 1 WHERE time = ?`,
       date
     );
-  }
-  await analyticDatabase.run(
-    `UPDATE messages_at_time SET amount = amount + 1 WHERE time = ?`,
-    date
-  );
+  } catch {}
 }
 
 export async function getMessageAtTimes(): Promise<MessagesAtTime[]> {

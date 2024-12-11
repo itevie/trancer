@@ -2,16 +2,26 @@ import { LisaPresentation } from "discord-image-generation";
 import { HypnoCommand } from "../../types/util";
 import { AttachmentBuilder } from "discord.js";
 
-const command: HypnoCommand = {
+const command: HypnoCommand<{ content: string }> = {
   name: "listpresentation",
   type: "fun",
   aliases: ["lisa", "lisapres"],
   description: "Lisa Presentation",
 
-  handler: async (message, { oldArgs }) => {
-    if (oldArgs.length === 0) return message.reply("Please provide text!");
+  args: {
+    requiredArguments: 1,
+    args: [
+      {
+        name: "content",
+        type: "string",
+        infer: true,
+        takeContent: true,
+      },
+    ],
+  },
 
-    let image = await new LisaPresentation().getImage(oldArgs.join(" "));
+  handler: async (message, { args }) => {
+    let image = await new LisaPresentation().getImage(args.content);
     return message.reply({
       files: [new AttachmentBuilder(image).setName("list.png")],
     });

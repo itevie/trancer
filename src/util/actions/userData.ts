@@ -18,9 +18,9 @@ export async function userDataExists(
 export async function createUserData(
   userId: string,
   guildId: string
-): Promise<void> {
-  await database.run(
-    `INSERT INTO user_data (user_id, guild_id) VALUES ((?), (?))`,
+): Promise<UserData> {
+  return await database.get<UserData>(
+    `INSERT INTO user_data (user_id, guild_id) VALUES ((?), (?)) RETURNING *;`,
     userId,
     guildId
   );
@@ -49,13 +49,16 @@ export async function getUserData(
   userId: string,
   guildId: string
 ): Promise<UserData> {
-  return (
+  let result = (
     await database.all(
       `SELECT * FROM user_data WHERE user_id = (?) AND guild_id = (?);`,
       userId,
       guildId
     )
   )[0] as UserData;
+
+  if (!result) result = await createUserData(userId, guildId);
+  return result;
 }
 
 export async function getAllGuildsUserData(

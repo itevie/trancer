@@ -19,12 +19,27 @@ const _pieces = {
   "-": "◼️",
 } as const;
 
+const numbersEmojis = [
+  ..."123456789".split(""),
+  "keycap_ten",
+  "regional_indicator_a",
+  "regional_indicator_b",
+  "regional_indicator_c",
+  "regional_indicator_d",
+  "regional_indicator_e",
+];
+
 const width = 7;
 const height = 6;
 
 type State = "-" | "r" | "b" | "rw" | "bw";
 
-const command: HypnoCommand<{ user: User; bet?: number }> = {
+const command: HypnoCommand<{
+  user: User;
+  bet?: number;
+  w?: number;
+  h?: number;
+}> = {
   name: "connect4",
   aliases: ["c4"],
   description: "Play Connect 4!",
@@ -42,14 +57,34 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
         type: "wholepositivenumber",
         description: "The amount you want to bet",
       },
+      {
+        name: "w",
+        type: "wholepositivenumber",
+        description: "The width of the board",
+        wickStyle: true,
+        min: 4,
+        max: 14,
+      },
+      {
+        name: "h",
+        type: "wholepositivenumber",
+        description: "The height of the board",
+        wickStyle: true,
+        min: 4,
+        max: 12,
+      },
     ],
   },
 
   handler: async (message, { args }) => {
+    let wid = args.w || width;
+    let hei = args.h || height;
+
     await wrapGame({
       message,
       title: "Connect 4",
       databasePrefix: "c4",
+      extra: `Board size: ${wid}x${hei}`,
       opponent: args.user,
       bet: args.bet,
       timeout: 1000 * 60 * 2.5,
@@ -67,9 +102,9 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
 
         // Create board
         let board: State[][] = [];
-        for (let i = 0; i != height; i++) {
+        for (let i = 0; i != hei; i++) {
           board.push([]);
-          for (let x = 0; x != width; x++) board[i].push("-");
+          for (let x = 0; x != wid; x++) board[i].push("-");
         }
 
         function draw(): MessageReplyOptions & MessageEditOptions {
@@ -83,8 +118,13 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
           }
 
           // Add numbers underneath
-          for (let i = 0; i != width; i++) {
-            drawn += `:number_${i + 1}:`;
+          for (let i = 0; i != wid; i++) {
+            let part = numbersEmojis[i];
+            if (part == (i + 1).toString()) {
+              drawn += `:number_${i + 1}:`;
+            } else {
+              drawn += `:${part}:`;
+            }
           }
 
           // Construct the buttons under the embed
@@ -93,7 +133,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
 
           // Only add buttons if game is ongoing
           if (win === "-") {
-            for (let i = 0; i != width + 2; i++) {
+            for (let i = 0; i != wid + 2; i++) {
               // Check if there is 5 buttons on the current row
               if (current.components.length === 5) {
                 rows.push(current);
@@ -101,7 +141,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
               }
 
               // Add forfeit button (1 after all others)
-              if (i === width) {
+              if (i === wid) {
                 current.addComponents(
                   new ButtonBuilder()
                     .setCustomId("game-forfeit")
@@ -112,7 +152,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
               }
 
               // Add draw button (2 after all others)
-              if (i === width + 1) {
+              if (i === wid + 1) {
                 current.addComponents(
                   new ButtonBuilder()
                     .setCustomId("game-draw")
@@ -239,7 +279,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
           }
 
           // Place it
-          for (let i = height - 1; i >= 0; i--) {
+          for (let i = hei - 1; i >= 0; i--) {
             if (board[i][play] === "-") {
               board[i][play] = turn === player ? "b" : "r";
               break;

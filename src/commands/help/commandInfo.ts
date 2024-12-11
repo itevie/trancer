@@ -1,4 +1,4 @@
-import { HypnoCommand } from "../../types/util";
+import { HypnoCommand, NumberArgument } from "../../types/util";
 import { commands } from "../..";
 import { createEmbed } from "../../util/other";
 import { generateCommandCodeBlock } from "../../util/args";
@@ -64,13 +64,19 @@ const command: HypnoCommand<{ command: string }> = {
             command,
             serverSettings
           )}\n${command.args.args
-            .map(
-              (x) =>
-                `\`${x.name} - ${x.type}\`${
-                  x.description ? `: ${x.description}` : ""
-                }`
-            )
-            .join("\n")}`,
+            .map((arg) => {
+              let text = `**${arg.wickStyle ? "?" : ""}${arg.name}**`;
+              if (arg.description) text += `\n*${arg.description}*`;
+              text += `\n- Type: ${arg.type}`;
+              if (arg.infer)
+                text += `\n- Inferrable: ${arg.infer ? "yes" : "no"}`;
+              if ((arg as NumberArgument).min)
+                text += `\n- Minimum: ${(arg as NumberArgument).min}`;
+              if ((arg as NumberArgument).max)
+                text += `\n- Maximum: ${(arg as NumberArgument).max}`;
+              return text;
+            })
+            .join("\n\n")}`,
         },
       ]);
     }

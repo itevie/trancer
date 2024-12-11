@@ -11,9 +11,9 @@ export function generateCommandCodeBlock(
 
   for (let i in command.args.args) {
     let isRequired = command.args.requiredArguments > +i;
-    codeblock += ` ${isRequired ? "<" : "["}${command.args.args[i].name}${
-      isRequired ? ">" : "]"
-    }`;
+    codeblock += ` ${isRequired ? "<" : "["}${
+      command.args.args[i].wickStyle ? "?" : ""
+    }${command.args.args[i].name}${isRequired ? ">" : "]"}`;
   }
 
   if (name) {

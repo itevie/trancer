@@ -28,6 +28,7 @@ interface GameWrapperOptions {
   databasePrefix?: string;
   title: string;
   timeout: number;
+  extra?: string;
 }
 
 const inGames: Map<string, Message> = new Map();
@@ -86,7 +87,9 @@ export default async function wrapGame(options: GameWrapperOptions) {
             options.bet
               ? ` with a bet of **${options.bet}${config.economy.currency}**`
               : ""
-          }!\nClick the buttons below to react.\n\nThis game has a turn timeout of **${
+          }!${
+            options.extra ? `\n${options.extra}` : ""
+          }\nClick the buttons below to react.\n\nThis game has a turn timeout of **${
             options.timeout / 60000
           }** minutes.`
         ),
@@ -248,6 +251,8 @@ export default async function wrapGame(options: GameWrapperOptions) {
   // Time out message if they took too long
   collector.on("end", async (_, reason) => {
     if (reason === "time") {
+      inGames.delete(player.id);
+      inGames.delete(opponent.id);
       await message.edit({
         embeds: [
           createEmbed()

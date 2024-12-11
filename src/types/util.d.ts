@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message, PermissionResolvable } from "discord.js";
 
 export type HypnoCommandType =
   | "analytics"
@@ -62,17 +62,74 @@ interface HypnoCommand<Args extends { [key: string]: any } = {}> {
 
   guards?: Guard[];
   allowExceptions?: boolean;
-  permissions?: bigint[];
+  permissions?: PermissionResolvable[];
 }
 
-interface Argument {
+interface BaseArgument {
+  /**
+   * The type of this argument
+   */
   type: ArgumentType;
+
+  /**
+   * The name of the argument
+   */
   name: string;
-  onMissing?: string;
+
+  /**
+   * The description of the command to show in help
+   */
   description?: string;
+
+  /**
+   * The error to show if it is missing
+   */
+  onMissing?: string;
+
+  /**
+   * Check if it must be a certain something, e.g. "confirm"
+   */
   mustBe?: any;
+
+  /**
+   * The value must be one of the values in the array
+   */
   oneOf?: any[];
+
+  /**
+   * Whether or not this must be parsed as ?arg value
+   */
+  wickStyle?: boolean;
+
+  /**
+   * Whether or not this argument can be substituted from
+   * something from the message reference.
+   *
+   * Examples:
+   * type string: gets the content of the message reference
+   * type user: gets the message reference's author
+   */
+  infer?: boolean;
 }
+
+interface StringArgument extends BaseArgument {
+  type: "string";
+
+  /**
+   * If the type is a string, this will take all content
+   * and put it in this.
+   */
+  takeContent?: boolean;
+}
+
+interface NumberArgument extends BaseArgument {
+  type: "number" | "wholepositivenumber";
+
+  min?: number;
+  max?: number;
+}
+
+type Argument = NumberArgument | StringArgument | BaseArgument;
 
 interface HypnoMessageHandler {
   name: string;

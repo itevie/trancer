@@ -1,18 +1,27 @@
 import { HypnoCommand } from "../../types/util";
 import { randomFromRange } from "../../util/other";
 
-const command: HypnoCommand = {
+const command: HypnoCommand<{ content: string }> = {
   name: "messupsentence",
   description:
     "Messes up a sentence by randomly moving around letters, but keeping the first and last letters in every word",
   aliases: ["messup"],
   type: "fun",
 
-  handler: (message, { oldArgs }) => {
-    if (oldArgs.length === 0)
-      return message.reply("Please provide a sentence!");
+  args: {
+    requiredArguments: 1,
+    args: [
+      {
+        type: "string",
+        name: "content",
+        takeContent: true,
+        infer: true,
+      },
+    ],
+  },
 
-    return message.reply(oldArgs.join(" "));
+  handler: (message, { args }) => {
+    return message.reply(messUpSentence(args.content));
   },
 };
 
