@@ -1,9 +1,4 @@
 -- Server specific stuff
-ALTER TABLE
-    server_settings
-ADD
-    auto_ban_count INT NOT NULL DEFAULT 0;
-
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
@@ -24,13 +19,6 @@ CREATE TABLE IF NOT EXISTS server_settings (
     auto_ban_enabled BOOLEAN DEFAULT false,
     auto_ban_count INT NOT NULL DEFAULT 0
 );
-
-UPDATE
-    server_settings
-SET
-    auto_ban_count = 2
-WHERE
-    server_id = "1257416273520758814";
 
 CREATE TABLE IF NOT EXISTS star_board (
     server_id TEXT NOT NULL,

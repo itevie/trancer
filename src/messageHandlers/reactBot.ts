@@ -1,3 +1,4 @@
+import { messUpSentence } from "../commands/fun/messUpSentence";
 import config from "../config";
 import { HypnoMessageHandler } from "../types/util";
 import { randomFromRange } from "../util/other";
@@ -103,9 +104,9 @@ const handler: HypnoMessageHandler = {
 
     if (messagesSince >= messagesRequired) {
       try {
-        await message.reply(
-          phrases[Math.floor(Math.random() * phrases.length)]
-        );
+        let phrase = phrases[Math.floor(Math.random() * phrases.length)];
+        if (Math.random() > 0.7) phrase = messUpSentence(phrase);
+        await message.reply(phrase);
         messagesSince = 0;
         messagesRequired = randomFromRange(50, 100);
       } catch {}
