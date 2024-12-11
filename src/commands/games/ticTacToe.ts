@@ -42,6 +42,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
       opponent: args.user,
       bet: args.bet,
       message,
+      timeout: 1000 * 60 * 1,
       callback: async ({
         opponent,
         player,

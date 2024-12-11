@@ -52,6 +52,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
       databasePrefix: "c4",
       opponent: args.user,
       bet: args.bet,
+      timeout: 1000 * 60 * 2.5,
       callback: async ({
         message,
         removePlayers,
@@ -135,7 +136,9 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
           let msg: string = "";
           switch (win) {
             case "-":
-              msg = `**${turn.username}** to play.\nNote: forfeiting makes the opponent win.`;
+              msg = `${_pieces[turn === player ? "b" : "r"]}**${
+                turn.username
+              }** to play.\nNote: forfeiting makes the opponent win.`;
               break;
             case "bw":
             case "fo":
