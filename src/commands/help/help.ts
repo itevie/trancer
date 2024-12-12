@@ -92,8 +92,6 @@ const command: HypnoCommand<{ ignoreGuards: boolean }> = {
       add();
     }
 
-    console.log(categories["leaderboards"]);
-
     let text = "";
 
     for (const cat in categories) {
