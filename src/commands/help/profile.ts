@@ -9,6 +9,7 @@ import { getAllEconomy, getEconomyFor } from "../../util/actions/economy";
 import config from "../../config";
 import { getUserData } from "../../util/actions/userData";
 import { calculateLevel } from "../../messageHandlers/xp";
+import { createRating } from "../fun/rate";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "profile",
@@ -72,6 +73,27 @@ const command: HypnoCommand<{ user?: User }> = {
           .map((x) => `**${x[0]}**: ${x[1]}`)
           .join("\n")
       );
+
+    let pinnedRatings = await database.all<PinnedRating[]>(
+      "SELECT * FROM pinned_ratings WHERE user_id = ?;",
+      user.id
+    );
+    if (pinnedRatings.length > 0) {
+      embed.addFields([
+        {
+          name: `Pinned Ratings (${args.serverSettings.prefix}rate)`,
+          value: pinnedRatings
+            .map(
+              (x) =>
+                `**${x.rating}**: ${createRating(
+                  user.username,
+                  x.rating
+                ).toFixed(0)}%`
+            )
+            .join("\n"),
+        },
+      ]);
+    }
 
     if (totalTTT > 0) {
       embed.addFields([

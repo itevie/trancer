@@ -93,6 +93,11 @@ CREATE TABLE IF NOT EXISTS user_data (
     allow_requests BOOLEAN NOT NULL DEFAULT true
 );
 
+CREATE TABLE IF NOT EXISTS pinned_ratings (
+    user_id TEXT NOT NULL,
+    rating TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS dawnagotchi (
     id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
     owner_id TEXT NOT NULL,

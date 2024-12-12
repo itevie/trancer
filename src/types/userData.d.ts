@@ -14,3 +14,8 @@ interface UserData {
   c4_tie: number;
   allow_requests: boolean;
 }
+
+interface PinnedRating {
+  user_id: string;
+  rating: string;
+}

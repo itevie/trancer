@@ -26,16 +26,16 @@ const command: HypnoCommand<{ what: string; user?: User }> = {
     return message.reply(
       `According to my calculation... **${
         user.username
-      }** is... **${randomNumberFromString(
-        `${user.username}-${args.what}`,
-        -5,
-        100
-      ).toFixed(0)}% ${args.what}**`
+      }** is... **${createRating(user.username, args.what)}% ${args.what}**`
     );
   },
 };
 
 export default command;
+
+export function createRating(username: string, what: string): number {
+  return randomNumberFromString(`${username}-${what}`, -5, 100);
+}
 
 // Stolen from ChatGPT
 export function randomNumberFromString(
@@ -44,7 +44,7 @@ export function randomNumberFromString(
   rangeMax: number
 ) {
   // Step 1: Hash the string using a simple hash function
-  function simpleHash(str) {
+  function simpleHash(str: string) {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       hash = (hash * 31 + str.charCodeAt(i)) >>> 0; // Use bitwise to keep it in 32-bit range

@@ -224,7 +224,7 @@ client.on("messageCreate", async (message) => {
       }
 
       // Check if it is there and required
-      if (!givenValue && command.args.requiredArguments > +1)
+      if (!givenValue && command.args.requiredArguments > +i)
         return await message.reply({
           embeds: [
             generateErrorEmbed(
@@ -335,6 +335,7 @@ client.on("messageCreate", async (message) => {
         return null;
       };
 
+      // Check if it is a valid type
       let checkerResult = await checkArg(givenValue);
       if (checkerResult !== null) {
         return await message.reply({
@@ -345,6 +346,24 @@ client.on("messageCreate", async (message) => {
           ],
         });
       }
+
+      // Check must be
+      if (arg.mustBe && result !== arg.mustBe)
+        return await message.reply({
+          embeds: [generateErrorEmbed(`This part must be "${arg.mustBe}"`)],
+        });
+
+      // Check one of
+      if (arg.oneOf && !arg.oneOf.includes(result))
+        return await message.reply({
+          embeds: [
+            generateErrorEmbed(
+              `This part must be one of the following values: ${arg.oneOf
+                .map((x) => `**${x}**`)
+                .join(", ")}`
+            ),
+          ],
+        });
 
       details.args[arg.name] = result;
     }
@@ -363,6 +382,7 @@ client.on("messageCreate", async (message) => {
       } catch {}
     }
   } catch (err) {
+    console.log(err);
     if (message.author.id === config.owner) {
       await message.reply({
         embeds: [
