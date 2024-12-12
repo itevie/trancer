@@ -11,13 +11,11 @@ import {
   getDeckById,
   getDeckByName,
 } from "../util/actions/cards";
+import { getEconomyFor } from "../util/actions/economy";
 import { getServerSettings } from "../util/actions/settings";
 import { addCommandUsage, addMessageForCurrentTime } from "../util/analytics";
 import { generateCommandCodeBlock } from "../util/args";
 import { createEmbed } from "../util/other";
-
-let botOnlyHandlers = Object.values(handlers).filter((x) => x.botsOnly);
-let normalHandlers = Object.values(handlers).filter((x) => !x.botsOnly);
 
 client.on("messageCreate", async (message) => {
   // Only listen if in guild
@@ -27,10 +25,13 @@ client.on("messageCreate", async (message) => {
   message.content = message.content.replace(/[’]/g, "'");
 
   // Run bot-only handlers
-  for (const handler of botOnlyHandlers) handler.handler(message);
+  for (const handler of Object.values(handlers).filter((x) => x.botsOnly))
+    handler.handler(message);
 
   // Guards
   if (message.author.bot || !message?.author?.id || !message?.guild?.id) return;
+
+  await getEconomyFor(message.author.id);
 
   // Fetch data
   const settings = await getServerSettings(message.guild.id);
@@ -42,10 +43,11 @@ client.on("messageCreate", async (message) => {
     );
 
   // Run handlers
-  for (const handler of normalHandlers)
-    if (handler.noCommands) {
-      if (message.content.startsWith(settings.prefix)) continue;
-    } else handler.handler(message);
+  for (const handler of Object.values(handlers).filter((x) => !x.botsOnly)) {
+    if (handler.noCommands && message.content.startsWith(settings.prefix))
+      continue;
+    else handler.handler(message);
+  }
 
   // Analytics
   if (
