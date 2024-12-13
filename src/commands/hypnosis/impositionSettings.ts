@@ -13,7 +13,7 @@ const command: HypnoCommand = {
   name: "impositionsettings",
   aliases: ["is", "impsettings", "imposettings", "imposet"],
   description: "Modify random imposition settings in the current channel",
-  type: "imposition",
+  type: "hypnosis",
   usage: [
     ["$cmd enable", "Enables random imposition in the current channel"],
     ["$cmd disable", "Disables random imposition in the current channel"],

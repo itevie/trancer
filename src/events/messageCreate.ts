@@ -23,6 +23,7 @@ client.on("messageCreate", async (message) => {
 
   // Replace special characters
   message.content = message.content.replace(/[’]/g, "'");
+  message.content = message.content.replace(/[“”]/g, '"');
 
   // Run bot-only handlers
   for (const handler of Object.values(handlers).filter((x) => x.botsOnly))
@@ -135,7 +136,7 @@ client.on("messageCreate", async (message) => {
   // Check if the command exists
   if (args.length === 0) return;
   const commandName = args.shift()?.toLowerCase() ?? "";
-  const command = commands[commandName];
+  const command = commands[commandName.toLowerCase()];
   if (!command) return;
 
   // Check guards
@@ -179,7 +180,7 @@ client.on("messageCreate", async (message) => {
 
   const details: HypnoCommandDetails<any> = {
     serverSettings: settings,
-    command: commandName,
+    command: commandName.toLowerCase(),
     args: {},
     oldArgs: originalArguments,
     originalContent: originalArguments.join(" "),
@@ -192,7 +193,10 @@ client.on("messageCreate", async (message) => {
       let givenValue = args[i];
 
       if (arg.wickStyle) {
-        givenValue = wickStyle[arg.name] ?? "";
+        if (arg.name in wickStyle) givenValue = wickStyle[arg.name] ?? "";
+        for (const i in arg.aliases)
+          if (arg.aliases[i] in wickStyle)
+            givenValue = wickStyle[arg.aliases[i]] ?? "";
       }
 
       // Generate codeblock for the errors

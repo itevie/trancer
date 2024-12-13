@@ -70,6 +70,11 @@ const command: HypnoCommand<{ command: string }> = {
               text += `\n- Type: ${arg.type}`;
               if (arg.infer)
                 text += `\n- Inferrable: ${arg.infer ? "yes" : "no"}`;
+              if (arg.mustBe) text += `\n- Must be: "${text}"`;
+              if (arg.oneOf)
+                text += `\n- Must be one of: ${arg.oneOf
+                  .map((x) => `**${x}**`)
+                  .join(", ")}`;
               if ((arg as NumberArgument).min)
                 text += `\n- Minimum: ${(arg as NumberArgument).min}`;
               if ((arg as NumberArgument).max)

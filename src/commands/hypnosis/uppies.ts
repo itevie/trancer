@@ -10,7 +10,7 @@ const messages: string[] = [
 const command: HypnoCommand = {
   name: "uppies",
   description: "Ups you!",
-  type: "imposition",
+  type: "hypnosis",
   aliases: ["up", "ups"],
 
   handler: async (message) => {

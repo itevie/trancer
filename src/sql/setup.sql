@@ -163,7 +163,7 @@ CREATE TABLE IF NOT EXISTS ranks (
 
 CREATE TABLE IF NOT EXISTS economy (
     user_id TEXT NOT NULL UNIQUE,
-    balance INT NOT NULL DEFAULT 10,
+    balance INT NOT NULL DEFAULT 0,
     last_fish INT NOT NULL DEFAULT 0,
     last_daily INT NOT NULL DEFAULT 0,
     last_dawn_care INT NOT NULL DEFAULT 0,

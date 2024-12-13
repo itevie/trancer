@@ -6,7 +6,7 @@ import { createEmbed } from "../../util/other";
 const command: HypnoCommand<{ user?: User }> = {
   name: "getimpositions",
   aliases: ["getimpos", "getis", "impolist", "ilist", "gi"],
-  type: "imposition",
+  type: "hypnosis",
   description: "Get your own or someone elses imposition actions",
 
   args: {

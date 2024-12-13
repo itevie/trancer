@@ -64,6 +64,11 @@ const command: HypnoCommand = {
               name: "Credits",
               value: `**Created by**: ${username}\n**Server invite link**: ${config.credits.serverInvite}\n**GitHub**: ${config.credits.github}`,
             },
+            {
+              name: "Invite Me!",
+              value:
+                "Invite me to your own server by [clicking here!](https://discord.com/oauth2/authorize?client_id=1257438471664963705&permissions=563362270661696&integration_type=0&scope=bot)",
+            },
           ]),
       ],
     });

@@ -6,7 +6,7 @@ const command: HypnoCommand<{ user?: User }> = {
   name: "imposition",
   aliases: ["i", "impo"],
   description: "Send a some nice, fuzzy imposition",
-  type: "imposition",
+  type: "hypnosis",
   usage: [["$cmd <user>", "Gives another user the imposition! :)"]],
 
   args: {

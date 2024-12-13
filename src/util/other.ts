@@ -6,6 +6,10 @@ import {
   EmbedBuilder,
   HexColorString,
   Message,
+  ModalActionRowComponentBuilder,
+  ModalBuilder,
+  TextInputBuilder,
+  TextInputStyle,
   User,
 } from "discord.js";
 import config from "../config";
@@ -14,6 +18,7 @@ import { getImpositionFor } from "./actions/imposition";
 import path from "path";
 import axios from "axios";
 import { client, commands } from "..";
+import { getIDByUsername } from "./cachedUsernames";
 
 const randomCodeCharacters = "abcdefghijklmnopqrstuvwxyz".split("");
 const progressBarEmpty = "░";
@@ -326,6 +331,11 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
           .setStyle(ButtonStyle.Primary),
 
         new ButtonBuilder()
+          .setCustomId("page-search")
+          .setLabel("🔍️")
+          .setStyle(ButtonStyle.Success),
+
+        new ButtonBuilder()
           .setCustomId(`page-next`)
           .setLabel(`>`)
           .setStyle(ButtonStyle.Primary),
@@ -342,6 +352,56 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
   });
 
   collector.on("collect", async (interaction) => {
+    if (interaction.customId === "page-search") {
+      const modal = new ModalBuilder()
+        .setCustomId("page-search-modal")
+        .setTitle("Username Search");
+
+      const usernameInput = new TextInputBuilder()
+        .setValue(interaction.user.username)
+        .setCustomId("page-search-value")
+        .setLabel("Username")
+        .setPlaceholder("username")
+        .setRequired(true)
+        .setStyle(TextInputStyle.Short);
+
+      const actionRow =
+        new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
+          usernameInput
+        );
+
+      modal.addComponents(actionRow);
+      await interaction.showModal(modal);
+
+      let result = await interaction.awaitModalSubmit({
+        time: 60000,
+      });
+
+      let username = result.fields
+        .getTextInputValue("page-search-value")
+        .toLowerCase();
+      let index = options.data.findIndex(
+        (x) =>
+          (typeof x === "object" && x.name === username) ||
+          (typeof x !== "object" && x.replace(/\\\\/g, "").includes(username))
+      );
+      if (!index)
+        return await result.reply(
+          `${interaction.user.username}, sorry, but I failed to find that user in the leaderboard.`
+        );
+
+      currentIndex = index - (index % 10);
+      modifyEmbed();
+
+      await message.edit({
+        embeds: [options.embed],
+      });
+
+      await result.deferUpdate();
+
+      return;
+    }
+
     await interaction.deferUpdate();
     if (interaction.customId === "page-prev") {
       if (currentIndex < 10) return;

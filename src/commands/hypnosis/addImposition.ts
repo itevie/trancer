@@ -6,7 +6,7 @@ import * as fs from "fs";
 const command: HypnoCommand = {
   name: "addimposition",
   aliases: ["addi", "addimpo", "ia", "impositionadd", "impoadd"],
-  type: "imposition",
+  type: "hypnosis",
   description: "Add imposition action that the bot can use on you",
   usage: [
     ["$cmd *impo*", "Adds that imposition for the bot to use on you"],

@@ -22,7 +22,7 @@ const categoryEmojis: Record<HypnoCommandType, string> = {
   fun: "🎮",
   counting: "🔢",
   economy: "🌀",
-  imposition: "👉",
+  hypnosis: "😵‍💫",
   leaderboards: "🏆",
   messages: "💬",
   quotes: "🗨️",

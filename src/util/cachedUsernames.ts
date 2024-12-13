@@ -24,3 +24,7 @@ export async function getUsername(id: string): Promise<string> {
 
   return username;
 }
+
+export function getIDByUsername(username: string): string | null {
+  return Object.entries(username).find((x) => x[1] === username)?.[0];
+}

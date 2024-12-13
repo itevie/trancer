@@ -37,7 +37,7 @@ const ups = [["*upupup* all the way up", "nice and aware", "nice and awake"]];
 
 const command: HypnoCommand = {
   name: "bombard",
-  type: "imposition",
+  type: "hypnosis",
   description:
     "Sends spirals & imposition for a while, ups you afterwards." +
     "\n\n**nospirals**: Send no spirals, just imposition" +

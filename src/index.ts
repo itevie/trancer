@@ -69,6 +69,7 @@ client.on("ready", async () => {
 
   for (const commandFile of commandFiles) {
     const commandImport = require(commandFile).default as HypnoCommand;
+    if (commandImport.ignore) continue;
     commands[commandImport.name] = commandImport;
     for (const alias of commandImport.aliases || []) {
       if (commandImport.eachAliasIsItsOwnCommand) {
