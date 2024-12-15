@@ -385,7 +385,7 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
           (typeof x === "object" && x.name === username) ||
           (typeof x !== "object" && x.replace(/\\\\/g, "").includes(username))
       );
-      if (!index)
+      if (index === -1)
         return await result.reply(
           `${interaction.user.username}, sorry, but I failed to find that user in the leaderboard.`
         );
@@ -453,4 +453,13 @@ export function checkBoolean(value: string): boolean | null {
   if (["true", "yes", "on", "y"].includes(value)) return true;
   else if (["false", "no", "off", "n"].includes(value)) return false;
   return null;
+}
+
+export function isURL(url: string): boolean {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
 }

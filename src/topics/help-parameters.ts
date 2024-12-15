@@ -13,7 +13,8 @@ let message: MessageCreateOptions = {
           `\nParameters have "types," which define their format. Here are some examples:` +
           `\n- **string**: Any text, e.g., \`hello\` or \`123abc\`` +
           `\n- **wholepositivenumber**: A positive whole number, e.g., \`2\` or \`39\` (not \`-2\` or \`3.5\`)` +
-          `\n- **user**: A user's mention or ID.`
+          `\n- **user**: A user's mention or ID.` +
+          `\n- **attachment**: Attach a file, reply to a user's file, or put "pfp" here to use your pfp, or the replies pfp.`
       )
       .addFields([
         {

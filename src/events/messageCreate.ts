@@ -1,6 +1,7 @@
 import { client, commands, handlers } from "..";
 import config from "../config";
 import {
+  AttachmentArgument,
   HypnoCommandDetails,
   NumberArgument,
   StringArgument,
@@ -15,7 +16,7 @@ import { getEconomyFor } from "../util/actions/economy";
 import { getServerSettings } from "../util/actions/settings";
 import { addCommandUsage, addMessageForCurrentTime } from "../util/analytics";
 import { generateCommandCodeBlock } from "../util/args";
-import { createEmbed } from "../util/other";
+import { createEmbed, isURL } from "../util/other";
 
 client.on("messageCreate", async (message) => {
   // Only listen if in guild
@@ -65,73 +66,7 @@ client.on("messageCreate", async (message) => {
   const content = message.content.substring(settings.prefix.length).trim();
   const originalArguments = content.split(" ").slice(1);
 
-  // Tokenizer
-  let parts: string[] = [];
-  let inQuote: boolean = false;
-  let current: string = "";
-
-  for (const char of content) {
-    if (char === '"') {
-      if (inQuote) {
-        parts.push(current);
-        current = "";
-        inQuote = false;
-        continue;
-      }
-
-      inQuote = true;
-      continue;
-    }
-
-    if (inQuote) {
-      current += char;
-      continue;
-    }
-
-    if (char === " ") {
-      if (current === "") continue;
-      parts.push(current);
-      current = "";
-      continue;
-    }
-
-    current += char;
-  }
-
-  // Check leftover
-  if (current) parts.push(current);
-
-  // Get the actual arguments
-  let args: string[] = [];
-  let wickStyle: { [key: string]: string } = {};
-  let wickKey: string | null = null;
-  let currentArg: string[] = [];
-
-  for (const part of parts) {
-    if (wickKey) {
-      if (part.startsWith("?")) {
-        wickStyle[wickKey] = currentArg.join(" ") || "true";
-        currentArg = [];
-        wickKey = part.substring(1);
-        continue;
-      }
-
-      currentArg.push(part);
-      continue;
-    }
-
-    if (part.startsWith("?")) {
-      wickKey = part.substring(1);
-      continue;
-    }
-
-    args.push(part);
-  }
-
-  // Check leftover
-  if (currentArg.length > 0 || wickKey)
-    if (wickKey) wickStyle[wickKey] = currentArg.join(" ") || "true";
-    else args.push(currentArg.join(" "));
+  const { wickStyle, args } = parseCommand(content);
 
   // Check if the command exists
   if (args.length === 0) return;
@@ -216,15 +151,58 @@ client.on("messageCreate", async (message) => {
           );
       };
 
-      // Check if it can be substituted
-      if (!givenValue && arg.infer && message.reference) {
+      // Handle attachment argument
+      if (arg.type === "attachment") {
+        if (
+          (givenValue?.toLowerCase() === "pfp" ||
+            (!givenValue && (arg as AttachmentArgument).defaultPfp)) &&
+          !(arg.infer && message.reference)
+        ) {
+          givenValue = message.author.displayAvatarURL({
+            size: 2048,
+            extension: "png",
+          });
+        } else if (!givenValue || !isURL(givenValue)) {
+          givenValue =
+            message.attachments.size > 0
+              ? message.attachments.at(0).url
+              : givenValue;
+        }
+      }
+
+      // Infer value from message reference if applicable
+      if (
+        arg.infer &&
+        message.reference &&
+        (!givenValue ||
+          (arg.type === "attachment" && givenValue.toLowerCase() === "pfp"))
+      ) {
         let reference = await message.fetchReference();
+
         switch (arg.type) {
           case "string":
             givenValue = reference.content;
             break;
           case "user":
             givenValue = reference.author.id;
+            break;
+          case "attachment":
+            if (
+              givenValue?.toLowerCase() === "pfp" ||
+              (!givenValue && (arg as AttachmentArgument).defaultPfp)
+            ) {
+              givenValue = reference.author.displayAvatarURL({
+                size: 2048,
+                extension: "png",
+              });
+            } else {
+              givenValue =
+                reference.attachments.size > 0
+                  ? reference.attachments.at(0).url
+                  : isURL(reference.content)
+                  ? reference.content
+                  : givenValue;
+            }
             break;
         }
       }
@@ -254,10 +232,10 @@ client.on("messageCreate", async (message) => {
             let min = (arg as NumberArgument).min;
             let max = (arg as NumberArgument).max;
 
-            if (min || min === 0)
+            if (min !== undefined || min === 0)
               if (parseInt(a) < min) return `The minimum value is: ${min}`;
 
-            if (max || max === 0)
+            if (max !== undefined || max === 0)
               if (parseInt(a) > max) return `The maximum value is: ${max}`;
             result = parseInt(a);
             break;
@@ -282,7 +260,7 @@ client.on("messageCreate", async (message) => {
               (arg as StringArgument).takeContent &&
               a.split(" ").length === 1
             ) {
-              result = originalArguments.join(" ");
+              result = args.join(" ");
             } else {
               result = a;
             }
@@ -333,6 +311,12 @@ client.on("messageCreate", async (message) => {
             } catch {
               return `Failed to fetch the channel: ${a}`;
             }
+            break;
+          case "attachment":
+            // It has already been checked before
+            result = givenValue;
+            break;
+          case "none":
             break;
           default:
             return `The developer has not set up a type checker for ${arg.type}`;
@@ -414,3 +398,81 @@ client.on("messageCreate", async (message) => {
     throw err;
   }
 });
+
+export function parseCommand(content: string): {
+  wickStyle: { [key: string]: string };
+  args: string[];
+} {
+  // Tokenizer
+  let parts: string[] = [];
+  let inQuote: boolean = false;
+  let current: string = "";
+
+  for (const char of content) {
+    if (char === '"') {
+      if (inQuote) {
+        parts.push(current);
+        current = "";
+        inQuote = false;
+        continue;
+      }
+
+      inQuote = true;
+      continue;
+    }
+
+    if (inQuote) {
+      current += char;
+      continue;
+    }
+
+    if (char === " ") {
+      if (current === "") continue;
+      parts.push(current);
+      current = "";
+      continue;
+    }
+
+    current += char;
+  }
+
+  // Check leftover
+  if (current) parts.push(current);
+
+  // Get the actual arguments
+  let args: string[] = [];
+  let wickStyle: { [key: string]: string } = {};
+  let wickKey: string | null = null;
+  let currentArg: string[] = [];
+
+  for (const part of parts) {
+    if (wickKey) {
+      if (part.startsWith("?")) {
+        wickStyle[wickKey] = currentArg.join(" ") || "true";
+        currentArg = [];
+        wickKey = part.substring(1);
+        continue;
+      }
+
+      currentArg.push(part);
+      continue;
+    }
+
+    if (part.startsWith("?")) {
+      wickKey = part.substring(1);
+      continue;
+    }
+
+    args.push(part);
+  }
+
+  // Check leftover
+  if (currentArg.length > 0 || wickKey)
+    if (wickKey) wickStyle[wickKey] = currentArg.join(" ") || "true";
+    else args.push(currentArg.join(" "));
+
+  return {
+    wickStyle,
+    args,
+  };
+}

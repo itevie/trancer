@@ -20,7 +20,7 @@ let imageFunctions = {
   SpeechBubble: genClass(generateSpeechbubbleImage),
 };
 
-let allowed: Record<string, string> = {
+export let allowed: Record<string, string> = {
   gay: "Gay",
   blur: "Blur",
   greyscale: "Greyscale",
@@ -54,7 +54,7 @@ let allowed: Record<string, string> = {
 const command: HypnoCommand<{
   type: keyof typeof allowed;
   user?: User;
-  url?: string;
+  attachment: string;
 }> = {
   name: "image",
   aliases: ["img"],
@@ -66,7 +66,7 @@ const command: HypnoCommand<{
       .join(", "),
 
   args: {
-    requiredArguments: 1,
+    requiredArguments: 2,
     args: [
       {
         type: "string",
@@ -74,36 +74,22 @@ const command: HypnoCommand<{
         oneOf: Object.keys(allowed),
       },
       {
+        type: "attachment",
+        name: "attachment",
+        infer: true,
+        defaultPfp: true,
+      },
+      {
         type: "user",
         name: "user",
         infer: true,
-      },
-      {
-        type: "string",
-        name: "url",
-        wickStyle: true,
       },
     ],
   },
 
   handler: async (message, { args }) => {
-    let user = args.user ? args.user : message.author;
-    let ref: Message | null = null;
-    if (message.reference) ref = await message.fetchReference();
-
-    let attachment = args.url
-      ? args.url
-      : message.attachments.size > 0
-      ? message.attachments.at(0).url
-      : ref && ref.attachments.size > 0
-      ? ref.attachments.at(0).url
-      : user.displayAvatarURL({
-          forceStatic: true,
-          extension: "png",
-        });
-
     let img = await new imageFunctions[allowed[args.type]]().getImage(
-      attachment
+      args.attachment
     );
     let attach = new AttachmentBuilder(img).setName(`${args.type}.png`);
     return message.reply({

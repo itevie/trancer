@@ -24,6 +24,7 @@ export type HypnoCommandType =
 type Guard = "admin" | "bot-server" | "bot-owner";
 
 type ArgumentType =
+  | "attachment"
   | "string"
   | "confirm"
   | "any"
@@ -34,6 +35,8 @@ type ArgumentType =
   | "card"
   | "deck"
   | "role"
+  | "none"
+  | "array"
   | "channel";
 
 interface HypnoCommandDetails<Args extends { [key: string]: any } = {}> {
@@ -185,6 +188,15 @@ interface StringArgument extends BaseArgument {
   takeContent?: boolean;
 }
 
+interface AttachmentArgument extends BaseArgument {
+  type: "attachment";
+
+  /**
+   * If no value is provided, default to using the pfp
+   */
+  defaultPfp?: boolean;
+}
+
 interface NumberArgument extends BaseArgument {
   type: "number" | "wholepositivenumber";
 
@@ -192,7 +204,18 @@ interface NumberArgument extends BaseArgument {
   max?: number;
 }
 
-type Argument = NumberArgument | StringArgument | BaseArgument;
+interface ArrayArgument extends BaseArgument {
+  type: "array";
+
+  inner?: Omit<ArgumentType, "array">;
+}
+
+type Argument =
+  | AttachmentArgument
+  | NumberArgument
+  | StringArgument
+  | ArrayArgument
+  | BaseArgument;
 
 interface HypnoMessageHandler {
   name: string;
