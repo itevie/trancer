@@ -15,7 +15,7 @@ const command: HypnoCommand = {
   type: "ai",
 
   handler: async (message, o) => {
-    if (message.client.user.id !== config.devBot) {
+    if (message.client.user.id !== config.devBot.id) {
       return message.reply(
         "Oopsies! Only Trancer Dev can run process this command."
       );

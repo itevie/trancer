@@ -9,7 +9,6 @@ import * as path from "path";
 const config = {
   // ----- Bot & Creator details -----
   owner: "395877903998648322",
-  devBot: "1272342864004648981", // Leave empty if you don't have a developmental bot,
 
   // ----- Details to do with the bots server -----
   botServer: {
@@ -35,6 +34,15 @@ const config = {
       "1257437054283808838",
       "1273840976045019226",
     ],
+  },
+
+  // ----- Channels all messages should be ignores -----
+  ignoreChannels: ["1315484267517575168"],
+
+  // ----- Dev Toggles -----
+  devBot: {
+    id: "1272342864004648981", // Leave empty if you don't have a developmental bot
+    ignoreMessageHandlers: true,
   },
 
   // ----- Database -----

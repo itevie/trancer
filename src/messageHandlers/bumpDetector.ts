@@ -51,7 +51,6 @@ const handler: HypnoMessageHandler = {
   botsOnly: true,
 
   handler: async (message) => {
-    if (client.user.id === config.devBot) return;
     // Check if the message is sent by Disboard & the embed contains "Bump done!"
     if (
       message.author.id === "302050872383242240" &&

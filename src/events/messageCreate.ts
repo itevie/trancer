@@ -21,6 +21,7 @@ import { createEmbed, isURL } from "../util/other";
 client.on("messageCreate", async (message) => {
   // Only listen if in guild
   if (!message.inGuild()) return;
+  if (config.ignoreChannels.includes(message.channel.id)) return;
 
   // Replace special characters
   message.content = message.content.replace(/[’]/g, "'");
@@ -287,6 +288,11 @@ client.on("messageCreate", async (message) => {
             result = deck;
             break;
           case "user":
+            if (a.toLowerCase() === "me") {
+              result = message.author;
+              return null;
+            }
+
             // Check if it matches
             if (!a.match(/<?@?[0-9]+>?/))
               return "Invalid user format provided! Please provide a mention or ID";

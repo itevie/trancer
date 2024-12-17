@@ -15,7 +15,6 @@ const handler: HypnoMessageHandler = {
 
   handler: async (message) => {
     // Guards
-    if (message.client.user.id === config.devBot) return;
     if (!config.itemDrops.enabled) return;
     if (config.itemDrops.channelExclusions.includes(message.channel.id)) return;
     if (!config.itemDrops.includeChannels.includes(message.channel.id)) return;

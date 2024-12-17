@@ -44,7 +44,7 @@ client.on("guildMemberAdd", async (member) => {
   await addToMemberCount(member.guild.id, member.guild.memberCount);
 
   // Guards
-  if (client.user.id === config.devBot) return;
+  if (client.user.id === config.devBot.id) return;
 
   // Check invite logger
   let serverSettings = await getServerSettings(member.guild.id);

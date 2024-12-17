@@ -84,7 +84,12 @@ client.on("ready", async () => {
     logger.log(`Loaded command: ${commandImport.name}`);
   }
 
-  if (!args["no-handlers"]) {
+  if (
+    !args["no-handlers"] &&
+    !(
+      client.user.id === config.devBot.id && config.devBot.ignoreMessageHandlers
+    )
+  ) {
     // Load handlers
     const handleFiles = getAllFiles(__dirname + "/messageHandlers");
 
@@ -94,6 +99,7 @@ client.on("ready", async () => {
       logger.log(`Loaded handler: ${handleImport.name}`);
     }
   }
+
   initInviteCache();
 
   checkBadges();
