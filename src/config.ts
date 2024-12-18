@@ -38,6 +38,7 @@ const config = {
 
   // ----- Channels all messages should be ignores -----
   ignoreChannels: ["1315484267517575168"],
+  ignoreHandlersIn: ["1257417603568238684"],
 
   // ----- Dev Toggles -----
   devBot: {

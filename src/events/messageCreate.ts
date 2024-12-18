@@ -45,11 +45,13 @@ client.on("messageCreate", async (message) => {
       `Hey! My prefix is: \`${settings.prefix}\`\nUse \`${settings.prefix}commands\` to view my commands!\nAnd use \`${settings.prefix}about\` to learn about me! :cyclone:`
     );
 
-  // Run handlers
-  for (const handler of Object.values(handlers).filter((x) => !x.botsOnly)) {
-    if (handler.noCommands && message.content.startsWith(settings.prefix))
-      continue;
-    else handler.handler(message);
+  if (!config.ignoreHandlersIn.includes(message.channel.id)) {
+    // Run handlers
+    for (const handler of Object.values(handlers).filter((x) => !x.botsOnly)) {
+      if (handler.noCommands && message.content.startsWith(settings.prefix))
+        continue;
+      else handler.handler(message);
+    }
   }
 
   // Analytics
