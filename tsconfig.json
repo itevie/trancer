@@ -9,8 +9,11 @@
     "outDir": "./build",
     "typeRoots": ["./src/types"],
     //"noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "skipLibCheck": true,
+    "incremental": true
   },
+  "exclude": ["./data_backups", "./src/website/app"],
   "ts-node": {
     "files": true,
     "ignore": ["./src/retired_commands"]

@@ -77,9 +77,22 @@ const handler: HypnoMessageHandler = {
 
 export default handler;
 
+export function xpForNextLevel(xp: number): number {
+  let level = calculateLevel(xp);
+  let next = getXPForLevel(level + 1);
+  return next - xp;
+}
+
+export function getXPForLevel(level: number): number {
+  if (levels.length - 1 > level) return levels[level];
+  let last = levels.length - 1;
+  let lvl = levels[last];
+  return lvl * (level - last) * after;
+}
+
 export function calculateLevel(xp: number): number {
   let level = 0;
-  let temp = xp;
+  let temp = 0;
 
   for (let l of levels) {
     if (xp >= l) {

@@ -16,6 +16,7 @@ const command: HypnoCommand<{ what: string; user?: User }> = {
       {
         name: "user",
         type: "user",
+        infer: true,
       },
     ],
   },

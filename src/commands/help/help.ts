@@ -7,7 +7,7 @@ import config from "../../config";
 const messageFiles = getAllFiles(__dirname + "/../../topics");
 export const messages: { [key: string]: MessageCreateOptions } = {};
 for (const messageFile of messageFiles) {
-  const name = messageFile.match(/[a-z\-_]+\.ts/)[0].replace(".ts", "");
+  const name = messageFile.match(/[a-z\-_]+\.[tj]s/)[0].replace(/\.[tj]s/, "");
   const messageImport = require(messageFile).default as MessageCreateOptions;
   messages[name] = messageImport;
 }

@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@itevie/util':
-        specifier: ^1.0.2
-        version: 1.0.2
       '@types/command-line-args':
         specifier: ^5.2.3
         version: 5.2.3
@@ -83,6 +80,10 @@ importers:
       sqlite3:
         specifier: ^5.1.7
         version: 5.1.7
+    devDependencies:
+      '@types/chart.js':
+        specifier: ^2.9.41
+        version: 2.9.41
 
 packages:
 
@@ -124,9 +125,6 @@ packages:
 
   '@gar/promisify@1.1.3':
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
-
-  '@itevie/util@1.0.2':
-    resolution: {integrity: sha512-SLF2lbsSBPYfw5bNOFRatqjXJ4v/30lIov7nLmSNq2cbdWpJ1exRfZVDHOYB5i9u7UU+8tfWrVSn8BWouufP6w==}
 
   '@jimp/bmp@0.16.13':
     resolution: {integrity: sha512-9edAxu7N2FX7vzkdl5Jo1BbACfycUtBQX+XBMcHA2bk62P8R0otgkHg798frgAk/WxQIzwxqOH6wMiCwrlAzdQ==}
@@ -438,6 +436,9 @@ packages:
 
   '@types/body-parser@1.19.5':
     resolution: {integrity: sha512-fB3Zu92ucau0iQ0JMCFQE7b/dv8Ot07NI3KaZIkIUNXq82k4eBAqUaneXfleGY9JWskeS9y+u0nXMyspcuQrCg==}
+
+  '@types/chart.js@2.9.41':
+    resolution: {integrity: sha512-3dvkDvueckY83UyUXtJMalYoH6faOLkWQoaTlJgB4Djde3oORmNP0Jw85HtzTuXyliUHcdp704s0mZFQKio/KQ==}
 
   '@types/command-line-args@5.2.3':
     resolution: {integrity: sha512-uv0aG6R0Y8WHZLTamZwtfsDLVRnOa+n+n5rEvFWL5Na5gZ8V2Teab/duDPFzIIIhs9qizDpcavCusCLJZu62Kw==}
@@ -1122,6 +1123,9 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  moment@2.30.1:
+    resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==}
+
   ms@2.0.0:
     resolution: {integrity: sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==}
 
@@ -1687,8 +1691,6 @@ snapshots:
   '@gar/promisify@1.1.3':
     optional: true
 
-  '@itevie/util@1.0.2': {}
-
   '@jimp/bmp@0.16.13(@jimp/custom@0.16.13)':
     dependencies:
       '@babel/runtime': 7.26.0
@@ -2172,6 +2174,10 @@ snapshots:
     dependencies:
       '@types/connect': 3.4.38
       '@types/node': 20.17.9
+
+  '@types/chart.js@2.9.41':
+    dependencies:
+      moment: 2.30.1
 
   '@types/command-line-args@5.2.3': {}
 
@@ -3012,6 +3018,8 @@ snapshots:
       minimist: 1.2.8
 
   mkdirp@1.0.4: {}
+
+  moment@2.30.1: {}
 
   ms@2.0.0: {}
 
