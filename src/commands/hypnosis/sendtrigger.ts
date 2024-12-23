@@ -3,11 +3,10 @@ import { HypnoCommand } from "../../types/util";
 import { getRandomImposition } from "../../util/other";
 
 const command: HypnoCommand<{ user?: User }> = {
-  name: "imposition",
-  aliases: ["i", "impo"],
-  description: "Send a some nice, fuzzy imposition",
+  name: "sendtrigger",
+  aliases: ["i", "impo", "t", "trigger"],
+  description: "Send someone's trigger",
   type: "hypnosis",
-  usage: [["$cmd <user>", "Gives another user the imposition! :)"]],
 
   args: {
     requiredArguments: 0,
