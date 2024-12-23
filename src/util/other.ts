@@ -460,13 +460,14 @@ export function isURL(url: string): boolean {
   }
 }
 
-export function englishifyList(list: string[]): string {
+export function englishifyList(list: string[], useOr = false): string {
   if (list.length === 0) return "";
 
   let finished = list[0];
 
   for (let i = 1; i < list.length; i++) {
-    if (i === list.length - 1) finished += ` and ${list[i]}`;
+    if (i === list.length - 1)
+      finished += ` ${useOr ? "or" : "and"} ${list[i]}`;
     else finished += `, ${list[i]}`;
   }
 

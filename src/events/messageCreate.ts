@@ -18,7 +18,12 @@ import { getServerSettings } from "../util/actions/settings";
 import { addCommandUsage, addMessageForCurrentTime } from "../util/analytics";
 import { generateCommandCodeBlock } from "../util/args";
 import { msToHowLong } from "../util/ms";
-import { createEmbed, isURL } from "../util/other";
+import {
+  compareTwoStrings,
+  createEmbed,
+  englishifyList,
+  isURL,
+} from "../util/other";
 
 client.on("messageCreate", async (message) => {
   // Only listen if in guild
@@ -77,7 +82,29 @@ client.on("messageCreate", async (message) => {
   if (args.length === 0) return;
   const commandName = args.shift()?.toLowerCase() ?? "";
   const command = commands[commandName.toLowerCase()];
-  if (!command) return;
+  if (!command) {
+    if (commandName.length > 4) {
+      let suggestions = Array.from(
+        new Map(
+          Object.values(commands).map((x) => [
+            x.name,
+            [x.name, compareTwoStrings(commandName, x.name)] as [
+              string,
+              number
+            ],
+          ])
+        ).values()
+      ).filter((x) => x[1] > 0.6);
+      if (suggestions.length > 0)
+        return message.reply(
+          `Did you mean ${englishifyList(
+            suggestions.map((x) => `\`${x[0]}\``),
+            true
+          )}?`
+        );
+    }
+    return;
+  }
 
   // Check guards
   if (command.type === "ai" && !config.modules.ai.enabled)
