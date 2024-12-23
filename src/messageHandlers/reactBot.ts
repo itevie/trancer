@@ -110,7 +110,37 @@ const phrases = [
   "exclamation mark",
   "question mark",
   "reese's puffs reese's puffs eat em up eat em up eat em up!",
-  ".rate gay\n\nAccording to my calculation... **you** are... 889,293,112% gay",
+  ".rate gay\n\nAccording to my calculation... **$username** are... 889,293,112% gay",
+  "brick",
+  "lightly weathered cut copper stairs",
+  "are you british?",
+  "https://tenor.com/view/yippee-gif-12598976956267201998",
+  "Why did the chicken cross the road?",
+  "rawr~ x3",
+  "i love hypnosis",
+  "Τρώω εσύ.",
+  "ik hou van je moeder",
+  "<3",
+  "meow meow im a cow",
+  "hey $username, are you a cow?",
+  "Everybody do the flop!",
+  "It's muffin time!",
+  "I like trains.",
+  "I'm going to do an internet!",
+  "Beep beep, I'm a sheep",
+  "I baked you a pie!",
+  "There's something on your face!\n\n||*BOOP* IT WAS PAIN.||",
+  "I have no idea how to breathe.",
+  "this should be an asdf movie skit",
+  "/bump",
+  ".fish",
+  ".daily",
+  ".connect4 $username 694 ?h 12 ?w 12",
+  "https://www.irs.gov/",
+  "https://archlinux.org/",
+  "rip",
+  "lol",
+  "I'm Trancer.",
 ];
 
 let messagesSince = 0;
@@ -130,7 +160,9 @@ const handler: HypnoMessageHandler = {
 
     if (messagesSince >= messagesRequired) {
       try {
-        let phrase = phrases[Math.floor(Math.random() * phrases.length)];
+        let phrase = phrases[
+          Math.floor(Math.random() * phrases.length)
+        ].replace(/\$username/g, message.author.username);
 
         let fuckups = [
           () => piglatin(phrase),
@@ -149,7 +181,7 @@ const handler: HypnoMessageHandler = {
 
         await message.reply(phrase);
         messagesSince = 0;
-        messagesRequired = randomFromRange(50, 100);
+        messagesRequired = randomFromRange(20, 100);
       } catch {}
     }
   },
