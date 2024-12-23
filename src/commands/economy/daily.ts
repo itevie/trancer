@@ -1,7 +1,7 @@
 import { HypnoCommand } from "../../types/util";
 import config from "../../config";
-import { addMoneyFor, setLastDaily } from "../../util/actions/economy";
-import { createEmbed, randomFromRange } from "../../util/other";
+import { createEmbed } from "../../util/other";
+import { awardRandomThings } from "../../util/economy";
 
 const command: HypnoCommand = {
   name: "daily",
@@ -11,23 +11,26 @@ const command: HypnoCommand = {
   ratelimit: 1000 * 60 * 60 * 24,
 
   handler: async (message) => {
-    // Give money
-    let money = randomFromRange(
-      config.economy.daily.min,
-      config.economy.daily.max
-    );
-
-    await addMoneyFor(message.author.id, money, "commands");
-    await setLastDaily(message.author.id);
+    const rewards = await awardRandomThings(message.author.id, {
+      currency: {
+        min: config.economy.daily.min,
+        max: config.economy.daily.max,
+      },
+      items: {
+        pool: "get-db",
+        count: {
+          min: 0,
+          max: 5,
+        },
+      },
+    });
 
     // Reply
     return message.reply({
       embeds: [
         createEmbed()
-          .setTitle(
-            `You collected your daily box of ${config.economy.currency}`
-          )
-          .setDescription(`You earnt **${money}**${config.economy.currency}!`),
+          .setTitle(`You opened up your daily reward...`)
+          .setDescription(`And you got ${rewards}!`),
       ],
     });
   },

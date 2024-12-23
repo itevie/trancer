@@ -36,7 +36,7 @@ const command: HypnoCommand = {
         max: config.economy.fish.max,
       },
       items: {
-        pool: { [config.items.cardPull]: 0.2 },
+        pool: "get-db",
         count: {
           min: 0,
           max: 2,

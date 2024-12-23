@@ -1,6 +1,7 @@
 import config from "../config";
 import { addMoneyFor } from "./actions/economy";
 import { addItemFor, getItem } from "./actions/items";
+import { database } from "./database";
 import {
   biasedRandomFromRange,
   englishifyList,
@@ -20,7 +21,7 @@ interface RandomRewardOptions {
 
   items?: {
     // Key: item ID, value: weight
-    pool: { [key: number]: number };
+    pool: "get-db" | { [key: number]: number };
     count: {
       min: number;
       max: number;
@@ -32,7 +33,7 @@ export async function awardRandomThings(
   userId: string,
   details: RandomRewardOptions
 ): Promise<string> {
-  let rewards = generateRandomReward(details);
+  let rewards = await generateRandomReward(details);
   await giveRewardDeteils(userId, rewards);
   return englishifyRewardDetails(rewards);
 }
@@ -67,9 +68,9 @@ export async function englishifyRewardDetails(
  * @param options What to award
  * @returns The string representation of what was awarded
  */
-export function generateRandomReward(
+export async function generateRandomReward(
   options: RandomRewardOptions
-): RewardDetails {
+): Promise<RewardDetails> {
   let winnings: RewardDetails = {
     currency: 0,
     items: {},
@@ -83,7 +84,16 @@ export function generateRandomReward(
   }
 
   if (options.items) {
-    const { pool, count } = options.items;
+    let { pool, count } = options.items;
+    if (pool === "get-db") {
+      pool = Object.fromEntries(
+        (await database.all<Item[]>("SELECT * FROM items;")).map((x) => [
+          x.id.toString(),
+          x.weight,
+        ])
+      );
+    }
+
     const itemsToAward = biasedRandomFromRange(count.min, count.max);
 
     const selectedItems: { [key: number]: number } = {};

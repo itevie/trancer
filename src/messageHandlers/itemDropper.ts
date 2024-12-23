@@ -32,15 +32,13 @@ const handler: HypnoMessageHandler = {
       messagesSince = 0;
       lastDrop = Date.now();
 
-      const rewards = generateRandomReward({
+      const rewards = await generateRandomReward({
         currency: {
           min: 0,
           max: 200,
         },
         items: {
-          pool: {
-            [config.items.cardPull]: 0.6,
-          },
+          pool: "get-db",
           count: {
             min: 0,
             max: 2,
