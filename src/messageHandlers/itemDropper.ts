@@ -4,6 +4,11 @@ import { HypnoMessageHandler } from "../types/util";
 import { addItemFor } from "../util/actions/items";
 import { database } from "../util/database";
 import { createEmbed } from "../util/other";
+import {
+  englishifyRewardDetails,
+  generateRandomReward,
+  giveRewardDeteils,
+} from "../util/economy";
 
 // So it doesn't send on start
 let lastDrop = Date.now() - config.itemDrops.frequency / 2;
@@ -27,19 +32,29 @@ const handler: HypnoMessageHandler = {
       messagesSince = 0;
       lastDrop = Date.now();
 
-      // Get the item to give
-      let items = (await database.all(
-        `SELECT * FROM items WHERE droppable = true;`
-      )) as Item[];
-      if (items.length === 0) return;
-      let item = items[Math.floor(Math.random() * items.length)];
+      const rewards = await generateRandomReward({
+        currency: {
+          min: 0,
+          max: 200,
+        },
+        items: {
+          pool: {
+            [config.items.cardPull]: 0.6,
+          },
+          count: {
+            min: 0,
+            max: 2,
+          },
+        },
+      });
+      const rewardString = englishifyRewardDetails(rewards);
 
       // Send message
       let msg = await message.channel.send({
         embeds: [
           createEmbed()
             .setTitle(`Quick! An item has appeared!`)
-            .setDescription(`Type "catch" to get a **${item.name}**!`),
+            .setDescription(`Type "catch" to get ${rewardString}!`),
         ],
       });
 
@@ -54,9 +69,9 @@ const handler: HypnoMessageHandler = {
       collector.on("collect", async (msg) => {
         caughtBy = msg.author;
         collector.stop();
-        await addItemFor(msg.author.id, item.id);
+        await giveRewardDeteils(msg.author.id, rewards);
         return msg.reply(
-          `Welldone! You got the **${item.name}**, it has been added to your inventory!`
+          `Welldone! You got ${rewardString}, it has been added to your inventory!`
         );
       });
 
@@ -67,8 +82,8 @@ const handler: HypnoMessageHandler = {
               .setTitle(`The item has expired!`)
               .setDescription(
                 caughtBy
-                  ? `**${caughtBy.username}** caught the **${item.name}**!`
-                  : `No one caught the **${item.name}** in time :(`
+                  ? `**${caughtBy.username}** caught the drop of ${rewardString}!`
+                  : `No one caught the drop of ${rewardString} in time :(`
               ),
           ],
         });

@@ -5,7 +5,6 @@ const command: HypnoCommand = {
   aliases: ["removehypnostatus"],
   description: "Remove the hypno status from your nickname",
   type: "hypnosis",
-  ignore: true,
 
   handler: async (message) => {
     if (!message.member.nickname.match(/\([🔴🟢🟡]\)/)) {

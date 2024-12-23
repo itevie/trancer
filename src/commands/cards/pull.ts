@@ -32,8 +32,8 @@ const command: HypnoCommand<{ deck: Deck; amount: number }> = {
 
   handler: async (message, { args, serverSettings }) => {
     // Check if user has the pull item
-    let item = await getAquiredItem(config.cards.pullItemID, message.author.id);
-    let shopItem = await getItem(config.cards.pullItemID);
+    let item = await getAquiredItem(config.items.cardPull, message.author.id);
+    let shopItem = await getItem(config.items.cardPull);
     let amount = args.amount ? args.amount : 1;
     if (amount > item.amount)
       return message.reply(
@@ -80,7 +80,7 @@ const command: HypnoCommand<{ deck: Deck; amount: number }> = {
       if (typeof card === "string")
         return message.reply(`Failed to fetch card rarity in that deck!`);
       await addCardFor(message.author.id, card.id);
-      await removeItemFor(message.author.id, config.cards.pullItemID);
+      await removeItemFor(message.author.id, config.items.cardPull);
       cards.push(card);
       if (!prettyCards[card.id]) prettyCards[card.id] = [0, card];
       prettyCards[card.id][0]++;

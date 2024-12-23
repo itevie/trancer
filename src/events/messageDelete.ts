@@ -15,7 +15,7 @@ client.on("messageDelete", async (message) => {
           .setColor("#FF0000")
           .setAuthor({
             iconURL: message.author?.displayAvatarURL(),
-            name: message.author.username,
+            name: message.author?.username,
           }),
       ],
     });

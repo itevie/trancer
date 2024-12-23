@@ -126,6 +126,12 @@ export function randomFromRange(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+export function biasedRandomFromRange(min: number, max: number): number {
+  const r = Math.random();
+  const skewed = Math.sqrt(r);
+  return Math.floor(min + (max - min) * skewed);
+}
+
 /**
  * Replaces things like $prefix with the correct things
  * @param embed The embed to fix
@@ -271,6 +277,7 @@ interface BasePaginationOptions {
   replyTo: Message;
   embed: EmbedBuilder;
   type: "description" | "field";
+  pageLength?: number;
 }
 
 interface DescriptionPaginationOptions extends BasePaginationOptions {
@@ -287,6 +294,9 @@ interface FieldPaginationOptions extends BasePaginationOptions {
 type PaginationOptions = DescriptionPaginationOptions | FieldPaginationOptions;
 
 export async function paginate(options: PaginationOptions): Promise<Message> {
+  const pageLength = options.pageLength || 10;
+  const oldFooter = options.embed.data.footer?.text || "";
+
   // Initial
   let currentIndex = 0;
   let modifyEmbed = () => {
@@ -295,23 +305,25 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
     else if (options.type === "description") {
       options.embed.setDescription(
         (options.baseDescription ? `${options.baseDescription}\n\n` : "") +
-          options.data.slice(currentIndex, currentIndex + 10).join("\n")
+          options.data.slice(currentIndex, currentIndex + pageLength).join("\n")
       );
     } else {
       options.embed.setFields(
-        options.data.slice(currentIndex, currentIndex + 10)
+        options.data.slice(currentIndex, currentIndex + pageLength)
       );
     }
     options.embed.setFooter({
-      text: `Page ${currentIndex / 10 + 1} / ${Math.ceil(
-        options.data.length / 10
-      )} (${options.data.length} items)`,
+      text: `${oldFooter ? `${oldFooter} - ` : ""}Page ${
+        currentIndex / pageLength + 1
+      } / ${Math.ceil(options.data.length / pageLength)} (${
+        options.data.length
+      } items)`,
     });
   };
   modifyEmbed();
 
   // Check if there is any more to add
-  if (options.data.length < 11)
+  if (options.data.length < pageLength + 1)
     return options.replyTo.reply({
       embeds: [options.embed],
     });
@@ -358,10 +370,9 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
         .setTitle("Username Search");
 
       const usernameInput = new TextInputBuilder()
-        .setValue(interaction.user.username)
         .setCustomId("page-search-value")
-        .setLabel("Username")
-        .setPlaceholder("username")
+        .setLabel("Query")
+        .setPlaceholder("query")
         .setRequired(true)
         .setStyle(TextInputStyle.Short);
 
@@ -377,20 +388,21 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
         time: 60000,
       });
 
-      let username = result.fields
+      let query = result.fields
         .getTextInputValue("page-search-value")
         .toLowerCase();
       let index = options.data.findIndex(
-        (x) =>
-          (typeof x === "object" && x.name === username) ||
-          (typeof x !== "object" && x.replace(/\\\\/g, "").includes(username))
+        (x: any) =>
+          (typeof x === "object" && x.name === query) ||
+          (typeof x !== "object" &&
+            x.replace(/\\\\/g, "").toLowerCase().includes(query))
       );
       if (index === -1)
         return await result.reply(
-          `${interaction.user.username}, sorry, but I failed to find that user in the leaderboard.`
+          `${interaction.user.username}, sorry, but I couldn't find anything matching your query.`
         );
 
-      currentIndex = index - (index % 10);
+      currentIndex = index - (index % pageLength);
       modifyEmbed();
 
       await message.edit({
@@ -404,18 +416,18 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
 
     await interaction.deferUpdate();
     if (interaction.customId === "page-prev") {
-      if (currentIndex < 10) return;
-      currentIndex -= 10;
+      if (currentIndex < pageLength) return;
+      currentIndex -= pageLength;
       modifyEmbed();
     } else if (interaction.customId === "page-next") {
-      if (currentIndex >= options.data.length - 10) return;
-      currentIndex += 10;
+      if (currentIndex >= options.data.length - pageLength) return;
+      currentIndex += pageLength;
       modifyEmbed();
     } else if (interaction.customId === "first-page") {
       currentIndex = 0;
       modifyEmbed();
     } else if (interaction.customId === "last-page") {
-      currentIndex = options.data.length - (options.data.length % 10);
+      currentIndex = options.data.length - (options.data.length % pageLength);
       modifyEmbed();
     }
 
@@ -446,4 +458,17 @@ export function isURL(url: string): boolean {
   } catch {
     return false;
   }
+}
+
+export function englishifyList(list: string[]): string {
+  if (list.length === 0) return "";
+
+  let finished = list[0];
+
+  for (let i = 1; i < list.length; i++) {
+    if (i === list.length - 1) finished += ` and ${list[i]}`;
+    else finished += `, ${list[i]}`;
+  }
+
+  return finished;
 }

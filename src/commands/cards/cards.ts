@@ -1,9 +1,9 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { getAllAquiredCardsFor, getCardById } from "../../util/actions/cards";
-import { createEmbed } from "../../util/other";
+import { createEmbed, paginate } from "../../util/other";
 
-const command: HypnoCommand<{ user?: User; sortBy: "rarity" | "id" }> = {
+const command: HypnoCommand<{ user?: User; sort: "rarity" | "id" }> = {
   name: "cards",
   type: "cards",
   description: "Get yours or another persons cards",
@@ -17,9 +17,10 @@ const command: HypnoCommand<{ user?: User; sortBy: "rarity" | "id" }> = {
         infer: true,
       },
       {
-        name: "sortBy",
+        name: "sort",
         type: "string",
         oneOf: ["rarity", "id"],
+        wickStyle: true,
       },
     ],
   },
@@ -31,15 +32,15 @@ const command: HypnoCommand<{ user?: User; sortBy: "rarity" | "id" }> = {
       .filter((x) => x.amount > 0)
       .sort((a, b) => a.card_id - b.card_id);
     let actualCards: { [key: string]: Card } = {};
-    if (args.sortBy === "rarity") {
+    if (args.sort === "rarity") {
       for await (const card of cards) {
         actualCards[card.card_id] = await getCardById(card.card_id);
       }
     }
 
-    if (args.sortBy === "id") {
+    if (args.sort === "id") {
       cards = cards.sort((a, b) => a.card_id - b.card_id);
-    } else if (args.sortBy === "rarity") {
+    } else if (args.sort === "rarity") {
       let cardsA: { [key: string]: AquiredCard[] } = {
         mythic: [],
         epic: [],
@@ -56,24 +57,22 @@ const command: HypnoCommand<{ user?: User; sortBy: "rarity" | "id" }> = {
       }
     }
 
-    // Create embed
-    let embed = createEmbed().setTitle(`${user.username}'s cards`);
-
-    // Check if they had any
-    if (cards.length === 0) embed.setDescription("*No cards :(*");
-    else {
-      let text: string[] = [];
-      for await (const card of cards) {
-        let actualCard = await getCardById(card.card_id);
-        text.push(
-          `**${actualCard.name}** *${actualCard.rarity} [${actualCard.id}]*: ${card.amount}`
-        );
-      }
-      embed.setDescription(text.join("\n"));
+    let data: string[] = [];
+    for await (const card of cards) {
+      let actualCard = await getCardById(card.card_id);
+      data.push(
+        `**${actualCard.name}** *${actualCard.rarity} [${actualCard.id}]*: ${card.amount}`
+      );
     }
 
-    return message.reply({
-      embeds: [embed],
+    return paginate({
+      replyTo: message,
+      embed: createEmbed()
+        .setTitle(`${user.username}'s cards`)
+        .setTimestamp(null),
+      type: "description",
+      data: data,
+      pageLength: 20,
     });
   },
 };

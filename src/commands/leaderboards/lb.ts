@@ -19,6 +19,7 @@ export const lbUserDataMap = {
   c4_wins: "c4_win",
   c4_loses: "c4_lose",
   c4_ties: "c4_tie",
+  count_ruined: "count_ruined",
 };
 
 export const lbTypes = [
@@ -34,6 +35,7 @@ export const lbTypes = [
   "c4_wins",
   "c4_loses",
   "c4_ties",
+  "count_ruined",
 ] as const;
 
 const lbMap: Record<string, (typeof lbTypes)[number]> = {
@@ -49,6 +51,7 @@ const lbMap: Record<string, (typeof lbTypes)[number]> = {
   c4_loses: "c4_loses",
   c4_ties: "c4_ties",
   vctime: "vc",
+  count_ruined: "count_ruined",
 } as const;
 
 const lbDetails: Record<
@@ -96,6 +99,10 @@ const lbDetails: Record<
   c4_ties: {
     title: "Most Connect 4 ties",
     entryName: "tied",
+  },
+  count_ruined: {
+    title: "Most times ruining the count",
+    entryName: "times",
   },
 };
 

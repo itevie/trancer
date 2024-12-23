@@ -16,7 +16,6 @@ const command: HypnoCommand<{ type: keyof typeof typeMap }> = {
   aliases: ["sethypnostatus", "hypnostatus", "settrafficlight", "trafficlight"],
   description: "Puts a hypnosis traffic light in your profile.",
   type: "hypnosis",
-  ignore: true,
 
   args: {
     requiredArguments: 1,

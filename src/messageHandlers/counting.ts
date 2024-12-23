@@ -30,6 +30,11 @@ const handler: HypnoMessageHandler = {
         `UPDATE server_count SET current_count = 0 WHERE server_id = ?`,
         message.guild.id
       );
+      await database.run(
+        `UPDATE user_data SET count_ruined = count_ruined + 1 WHERE user_id = ? AND guild_id = ?;`,
+        message.author.id,
+        message.guild.id
+      );
       await message.react(`❌`);
       return message.reply({
         embeds: [

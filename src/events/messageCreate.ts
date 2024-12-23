@@ -13,9 +13,11 @@ import {
   getDeckByName,
 } from "../util/actions/cards";
 import { getEconomyFor } from "../util/actions/economy";
+import { getRatelimit, setRatelimit } from "../util/actions/ratelimit";
 import { getServerSettings } from "../util/actions/settings";
 import { addCommandUsage, addMessageForCurrentTime } from "../util/analytics";
 import { generateCommandCodeBlock } from "../util/args";
+import { msToHowLong } from "../util/ms";
 import { createEmbed, isURL } from "../util/other";
 
 client.on("messageCreate", async (message) => {
@@ -115,6 +117,27 @@ client.on("messageCreate", async (message) => {
         return await message.reply(
           `You do not have the ${permission} permission!`
         );
+
+  // Check ratelimit
+  if (command.ratelimit) {
+    let lastUsed = await getRatelimit(message.author.id, command.name);
+    let ms = command.ratelimit - (Date.now() - lastUsed.getTime());
+
+    if (ms > 0)
+      return await message.reply({
+        embeds: [
+          createEmbed()
+            .setTitle(`Hey! You can't do that!`)
+            .setColor("#FF0000")
+            .setDescription(
+              `You need to wait **${msToHowLong(ms)}** to use the **${
+                command.name
+              }** command!`
+            ),
+        ],
+      });
+    await setRatelimit(message.author.id, command.name, new Date());
+  }
 
   const details: HypnoCommandDetails<any> = {
     serverSettings: settings,

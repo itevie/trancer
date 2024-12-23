@@ -95,8 +95,6 @@ const config = {
 
   // ----- Dawnagotchi -----
   dawnagotchi: {
-    hairDyeItemID: 2,
-    powerFoodItemID: 3,
     actions: {
       feed: {
         timeAdd: 3.6e6 * 8,
@@ -112,7 +110,6 @@ const config = {
 
   // ----- Card Stuff -----
   cards: {
-    pullItemID: 1, // Create this using .+item (item name) (price),
     weights: {
       common: 0.5,
       uncommon: 0.3,
@@ -209,6 +206,13 @@ const config = {
       max: 15,
       punishment: 15,
     },
+  },
+
+  // ----- Item ID Definitions -----
+  items: {
+    cardPull: 1,
+    hairDye: 2,
+    powerFood: 3,
   },
 
   // ----- Credits: do not remove this -----

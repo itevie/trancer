@@ -1,48 +1,36 @@
 import { HypnoCommand } from "../../types/util";
 import config from "../../config";
-import { getEconomyFor, addMoneyFor, setLastDaily } from "../../util/actions/economy";
+import { addMoneyFor, setLastDaily } from "../../util/actions/economy";
 import { createEmbed, randomFromRange } from "../../util/other";
-import { msToHowLong } from "../../util/ms";
 
 const command: HypnoCommand = {
-    name: "daily",
-    description: `Get your daily reward of ${config.economy.currency}!`,
-    type: "economy",
+  name: "daily",
+  description: `Get your daily reward of ${config.economy.currency}!`,
+  type: "economy",
 
-    handler: async (message) => {
-        // Computer timings
-        let economy = await getEconomyFor(message.author.id);
-        let last = +new Date(economy.last_daily);
-        let time = 8.64e+7 - (Date.now() - last);
+  ratelimit: 1000 * 60 * 60 * 24,
 
-        // Check if they can fish
-        if (time < 0) {
-            // Give money
-            let money = randomFromRange(config.economy.daily.min, config.economy.daily.max);
+  handler: async (message) => {
+    // Give money
+    let money = randomFromRange(
+      config.economy.daily.min,
+      config.economy.daily.max
+    );
 
-            await addMoneyFor(message.author.id, money, "commands");
-            await setLastDaily(message.author.id);
+    await addMoneyFor(message.author.id, money, "commands");
+    await setLastDaily(message.author.id);
 
-            // Reply
-            return message.reply({
-                embeds: [
-                    createEmbed()
-                        .setTitle(`You collected your daily box of ${config.economy.currency}`)
-                        .setDescription(`You earnt **${money}**${config.economy.currency}!`)
-                ]
-            });
-        }
-
-        // They cannot fish
-        return message.reply({
-            embeds: [
-                createEmbed()
-                    .setTitle(`You have already collected your daily!`)
-                    .setDescription(`Come back in ${msToHowLong(time)}!`)
-                    .setColor("#FF0000")
-            ]
-        });
-    }
-}
+    // Reply
+    return message.reply({
+      embeds: [
+        createEmbed()
+          .setTitle(
+            `You collected your daily box of ${config.economy.currency}`
+          )
+          .setDescription(`You earnt **${money}**${config.economy.currency}!`),
+      ],
+    });
+  },
+};
 
 export default command;

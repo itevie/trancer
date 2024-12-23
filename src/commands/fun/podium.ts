@@ -8,6 +8,8 @@ import { database } from "../../util/database";
 import { accumlateSortLeaderboardData } from "../../util/createLeaderboard";
 import { lbTypes, lbUserDataMap } from "../leaderboards/lb";
 import { rankExists } from "../../util/actions/ranks";
+import path from "path";
+import { readFileSync } from "fs";
 
 const command: HypnoCommand<{
   type: (typeof lbTypes)[number];
@@ -51,6 +53,7 @@ const command: HypnoCommand<{
       case "c4_loses":
       case "c4_ties":
       case "c4_wins":
+      case "count_ruined":
         data = (await getAllGuildsUserData(message.guild.id)).map((x) => [
           x.user_id,
           x[lbUserDataMap[args.type]],
@@ -66,6 +69,8 @@ const command: HypnoCommand<{
         )) as Vote[];
         data = accumlateSortLeaderboardData(dbResults.map((x) => x.votee));
         break;
+      default:
+        return await message.reply(`This type has not been setup.`);
     }
 
     let newData = data
@@ -80,10 +85,15 @@ const command: HypnoCommand<{
     let user3 = await client.users.fetch(newData[2]);
 
     let getAvatar = (user: User) => {
-      return user.displayAvatarURL({
-        forceStatic: true,
-        extension: "png",
-      });
+      return (
+        user?.displayAvatarURL({
+          forceStatic: true,
+          extension: "png",
+        }) ||
+        (readFileSync(
+          path.resolve(__dirname, "../../data/no_pfp.png")
+        ) as unknown as string)
+      );
     };
 
     let image = await new Podium().getImage(

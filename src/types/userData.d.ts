@@ -13,6 +13,7 @@ interface UserData {
   c4_lose: number;
   c4_tie: number;
   allow_requests: boolean;
+  count_ruined: number;
 }
 
 interface PinnedRating {

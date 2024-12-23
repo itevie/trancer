@@ -110,6 +110,11 @@ interface HypnoCommand<Args extends { [key: string]: any } = {}> {
   handler: (message: Message<true>, options: HypnoCommandDetails<Args>) => void;
 
   /**
+   * How often this command can be ran
+   */
+  ratelimit?: number;
+
+  /**
    * A list of string guards to be checked when it's attempted
    * to be ran.
    */

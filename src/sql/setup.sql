@@ -76,6 +76,8 @@ CREATE TABLE IF NOT EXISTS user_favourite_spirals (
     user_id TEXT NOT NULL
 );
 
+-- ALTER TABLE user_data ADD count_ruined INT NOT NULL DEFAULT 0;
+
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,
     guild_id TEXT NOT NULL,
@@ -90,7 +92,8 @@ CREATE TABLE IF NOT EXISTS user_data (
     c4_win INT NOT NULL DEFAULT 0,
     c4_lose INT NOT NULL DEFAULT 0,
     c4_tie INT NOT NULL DEFAULT 0,
-    allow_requests BOOLEAN NOT NULL DEFAULT true
+    allow_requests BOOLEAN NOT NULL DEFAULT true,
+    count_ruined INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS pinned_ratings (
@@ -132,6 +135,13 @@ CREATE TABLE IF NOT EXISTS votes (
     voter TEXT NOT NULL,
     votee TEXT NOT NULL,
     voted_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS ratelimits (
+    command TEXT NOT NULL,
+    user_id TEXT NOT NULL,
+    last_used TEXT NOT NULL,
+    UNIQUE (user_id, command)
 );
 
 -- Global stuff
