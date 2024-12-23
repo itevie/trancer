@@ -38,8 +38,10 @@ client.on("messageDelete", async (message) => {
           .setDescription(message.content || "*No content*")
           .setColor("#FF0000")
           .setAuthor({
-            iconURL: message.author?.displayAvatarURL(),
-            name: message.author?.username,
+            iconURL:
+              message.author?.displayAvatarURL() ??
+              "https://dawn.rest/cdn/no_pfp.png",
+            name: message.author?.username ?? "No Username",
           }),
       ],
     });

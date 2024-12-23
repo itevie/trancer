@@ -48,8 +48,10 @@ client.on("messageUpdate", async (old, newMsg) => {
           ])
           .setColor("#FFFF00")
           .setAuthor({
-            iconURL: newMsg.author.displayAvatarURL(),
-            name: newMsg.author.username,
+            iconURL:
+              newMsg.author?.displayAvatarURL() ??
+              "https://dawn.rest/cdn/no_pfp.png",
+            name: newMsg.author?.username ?? "No Username",
           }),
       ],
     });
