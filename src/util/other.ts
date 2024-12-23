@@ -473,3 +473,17 @@ export function englishifyList(list: string[], useOr = false): string {
 
   return finished;
 }
+
+export function shuffle<T extends any[]>(array: T) {
+  let currentIndex = array.length;
+
+  while (currentIndex != 0) {
+    let randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+}

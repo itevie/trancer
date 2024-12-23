@@ -6,6 +6,7 @@ import {
   biasedRandomFromRange,
   englishifyList,
   randomFromRange,
+  shuffle,
 } from "./other";
 
 interface RewardDetails {
@@ -94,6 +95,8 @@ export async function generateRandomReward(
       );
     }
 
+    let poolEntries = Object.entries(pool);
+
     const itemsToAward = biasedRandomFromRange(count.min, count.max);
 
     const selectedItems: { [key: number]: number } = {};
@@ -103,7 +106,8 @@ export async function generateRandomReward(
       let cumulativeWeight = 0;
       let itemSelected = false;
 
-      for (const [itemId, weight] of Object.entries(pool)) {
+      shuffle(poolEntries);
+      for (const [itemId, weight] of poolEntries) {
         cumulativeWeight += weight;
 
         if (randomValue <= cumulativeWeight) {
