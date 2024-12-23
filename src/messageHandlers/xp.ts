@@ -66,11 +66,13 @@ const handler: HypnoMessageHandler = {
       let reward = rewards[post];
       if (reward && message.guild.id === config.botServer.id)
         await reward.handle(message);
-      await message.reply(
-        `Welldone! You levelled up from level **${pre}** to **${post}**! :cyclone:${
-          reward ? `\n\n${reward.label}` : ""
-        }`
-      );
+      try {
+        await message.reply(
+          `Welldone! You levelled up from level **${pre}** to **${post}**! :cyclone:${
+            reward ? `\n\n${reward.label}` : ""
+          }`
+        );
+      } catch {}
     }
   },
 };
