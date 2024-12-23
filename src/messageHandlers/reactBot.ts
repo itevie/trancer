@@ -86,6 +86,31 @@ const phrases = [
   "Hello, we are about to launch an all - out attack on your houze Sincerely, the Zombies",
   "<:keys:1283581127071891466>",
   "<:bite_lips:1315469148004028537>",
+  "i use arch btw",
+  "Me when",
+  "xd",
+  "bruhhh wtf",
+  "nah.....",
+  "this can't be real",
+  "is this what they made the internet for",
+  "abcdefghijklmnopqrstuvwxyz",
+  "1v1 tictactoe rn",
+  "LMAO!",
+  "haha.. this is pretty skibidi sigma i must say",
+  ":imthebest:",
+  ">////<",
+  "im telling the teacher!",
+  "<@395877903998648322> would like this",
+  "maybe you should just like not",
+  "i dont shut up, i grow up, and when i look at you, i wanna throw up",
+  "-# (edited)",
+  "erm... lemme think about that one",
+  "maybe next week idk",
+  "exclamative",
+  "exclamation mark",
+  "question mark",
+  "reese's puffs reese's puffs eat em up eat em up eat em up!",
+  ".rate gay\n\nAccording to my calculation... **you** are... 889,293,112% gay",
 ];
 
 let messagesSince = 0;
@@ -106,8 +131,22 @@ const handler: HypnoMessageHandler = {
     if (messagesSince >= messagesRequired) {
       try {
         let phrase = phrases[Math.floor(Math.random() * phrases.length)];
-        if (Math.random() > 0.9) phrase = piglatin(phrase);
-        else if (Math.random() > 0.7) phrase = messUpSentence(phrase);
+
+        let fuckups = [
+          () => piglatin(phrase),
+          () => messUpSentence(phrase),
+          () => phrase.toUpperCase(),
+          () =>
+            phrase
+              .split("")
+              .reduce(
+                (c, v) =>
+                  c + (Math.random() > 0.7 ? v.toUpperCase() : v.toLowerCase()),
+                ""
+              ),
+        ];
+        phrase = fuckups[Math.floor(Math.random() * fuckups.length)]();
+
         await message.reply(phrase);
         messagesSince = 0;
         messagesRequired = randomFromRange(50, 100);
