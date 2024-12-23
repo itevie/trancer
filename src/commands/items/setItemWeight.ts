@@ -2,9 +2,9 @@ import { HypnoCommand } from "../../types/util";
 import { getItem } from "../../util/actions/items";
 import { database } from "../../util/database";
 
-const command: HypnoCommand<{ itemId: number; newPrice: number }> = {
-  name: "setitemprice",
-  description: "Sets an items price",
+const command: HypnoCommand<{ itemId: number; newWeight: number }> = {
+  name: "setitemweight",
+  description: "Sets an items weight",
   type: "economy",
 
   guards: ["bot-owner"],
@@ -17,8 +17,8 @@ const command: HypnoCommand<{ itemId: number; newPrice: number }> = {
         type: "wholepositivenumber",
       },
       {
-        name: "newPrice",
-        type: "wholepositivenumber",
+        name: "newWeight",
+        type: "number",
       },
     ],
   },
@@ -30,8 +30,8 @@ const command: HypnoCommand<{ itemId: number; newPrice: number }> = {
 
     // Update
     await database.run(
-      `UPDATE items SET price = ? WHERE id = ?`,
-      args.newPrice,
+      `UPDATE items SET weight = ? WHERE id = ?`,
+      args.newWeight,
       args.itemId
     );
 
