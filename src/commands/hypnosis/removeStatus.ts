@@ -9,7 +9,7 @@ const command: HypnoCommand = {
   handler: async (message) => {
     if (!message.member.nickname.match(/\([🔴🟢🟡]\)/)) {
       await message.member.setNickname(
-        message.member.nickname.replace(/\([🔴🟢🟡]\)/, "")
+        message.member.nickname.replace(/\([🔴🟢🟡]\)/g, "").trim()
       );
       await message.reply(`Removed!`);
     } else {

@@ -49,7 +49,7 @@ const command: HypnoCommand<{ type: keyof typeof typeMap }> = {
       );
 
     await message.member.setNickname(
-      currentNickname.trim() + `(${typeMap[args.type]})`
+      currentNickname.trim() + ` (${typeMap[args.type]})`
     );
   },
 };

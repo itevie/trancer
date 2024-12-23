@@ -47,7 +47,7 @@ const handler: HypnoMessageHandler = {
           },
         },
       });
-      const rewardString = englishifyRewardDetails(rewards);
+      const rewardString = await englishifyRewardDetails(rewards);
 
       // Send message
       let msg = await message.channel.send({
