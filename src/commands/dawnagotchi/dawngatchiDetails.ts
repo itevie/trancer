@@ -19,6 +19,7 @@ const command: HypnoCommand<{ user?: User; extraDetails?: boolean }> = {
       {
         name: "extraDetails",
         type: "boolean",
+        wickStyle: true,
       },
     ],
   },

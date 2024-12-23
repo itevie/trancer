@@ -5,42 +5,44 @@ import { createEmbed } from "../../util/other";
 import config from "../../config";
 
 const command: HypnoCommand<{ user?: User }> = {
-    name: "moneyfromwhat",
-    aliases: ["mfw"],
-    description: "Check where you got your money from",
-    type: "economy",
+  name: "moneyfromwhat",
+  aliases: ["mfw"],
+  description: "Check where you got your money from",
+  type: "economy",
 
-    args: {
-        requiredArguments: 0,
-        args: [
-            {
-                name: "user",
-                type: "user"
-            }
-        ]
-    },
+  args: {
+    requiredArguments: 0,
+    args: [
+      {
+        name: "user",
+        type: "user",
+      },
+    ],
+  },
 
-    handler: async (message, { args }) => {
-        let user = args.user ? args.user : message.author;
-        let eco = await getEconomyFor(user.id);
+  handler: async (message, { args }) => {
+    let user = args.user ? args.user : message.author;
+    let eco = await getEconomyFor(user.id);
 
-        return message.reply({
-            embeds: [
-                createEmbed()
-                    .setTitle(`How ${user.username} got ${config.economy.currency}`)
-                    .setDescription(
-                        [
-                            ["Commands", eco.from_commands],
-                            ["Gambling", eco.from_gambling],
-                            ["Gambling Lost", eco.from_gambling_lost],
-                            ["Messaging", eco.from_messaging],
-                            ["VC", eco.from_vc],
-                            ["Helping", eco.from_helping]
-                        ].map(x => `**${x[0]}**: ${x[1]}${config.economy.currency}`).join("\n")
-                    )
+    return message.reply({
+      embeds: [
+        createEmbed()
+          .setTitle(`How ${user.username} got ${config.economy.currency}`)
+          .setDescription(
+            [
+              ["Commands", eco.from_commands],
+              ["Gambling", eco.from_gambling],
+              ["Gambling Lost", eco.from_gambling_lost],
+              ["Messaging", eco.from_messaging],
+              ["VC", eco.from_vc],
+              ["Helping", eco.from_helping],
             ]
-        })
-    }
+              .map((x) => `**${x[0]}**: ${x[1]}${config.economy.currency}`)
+              .join("\n")
+          ),
+      ],
+    });
+  },
 };
 
 export default command;

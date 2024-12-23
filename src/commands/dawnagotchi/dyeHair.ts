@@ -37,6 +37,11 @@ const command: HypnoCommand<{ hex: string }> = {
     let dawn = await getDawnagotchi(message.author.id);
     if (!dawn) return message.reply(`You do not have a Dawn!`);
 
+    if (!args.args.hex.match(/^((random)|(#[0-9a-fA-F]{6}))$/))
+      return message.reply(
+        `You need to provide a hex (#xxxxxx) color, or "random".`
+      );
+
     // Change hair color & remove item
     await database.run(
       `UPDATE dawnagotchi SET hair_color_hex = ? WHERE owner_id = ?`,

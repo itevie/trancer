@@ -378,8 +378,19 @@ client.on("messageCreate", async (message) => {
             }
             break;
           case "attachment":
-            // It has already been checked before
-            result = givenValue;
+            if (a.match(/<?@[0-9]+?>?/)) {
+              try {
+                const user = await client.users.fetch(a.replace(/[<>@]/g, ""));
+                result = user.displayAvatarURL({
+                  size: 2048,
+                  extension: "png",
+                });
+              } catch {
+                result = givenValue;
+              }
+            } else {
+              result = givenValue;
+            }
             break;
           case "none":
             break;
