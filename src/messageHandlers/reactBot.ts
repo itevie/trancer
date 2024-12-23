@@ -141,6 +141,44 @@ const phrases = [
   "rip",
   "lol",
   "I'm Trancer.",
+  "im getting the mudkip on you",
+  "hi $username",
+  "Did you know that your username is $username?",
+  "To be or not to be... that is one of the questions.",
+  "squidward's clarinet.",
+  "anyway",
+  "this is scary",
+  "$username, why did you post this?",
+  "So you were typing the letters out on your keyboard, conciously writing it, and you were also visually seeing, and reading in your mind what you was writing, yet you still sent this message. Why?",
+  "Welldone! You levelled up from level **1** to level **0**! :cyclone:",
+  "Welldone! You levelled up from level **69** to level **420**! :cyclone:",
+  "phew",
+  "who let you out of the trash can",
+  "real",
+  "*pings everyone*",
+  "get dot q'd",
+  "$username",
+  "hehehehehe",
+  "eheheh hey louis eheheh get a load of this guy louis hehehehe",
+  "(o_o)",
+  "they should add this in the next update",
+  "_ _",
+  "i call cap",
+  "Playing PowerWash Simulator",
+  "to be precise",
+  ":nerd::point_up:",
+  "IM BAKING U IDIOT",
+  "pneumonoultramicroscopicsillicovolcanoconiosis",
+  "(real)",
+  "real?",
+  "meh",
+  "I sawed this boat in half!",
+  "This can be fixed with flextape",
+  "Gamble. Rn. Do it. .rcf it all. Do it. I dare you. You won't.",
+  "one piece? more like no pieces, cause i evaporated it",
+  "imma just sit back and eat some popcorn",
+  "oh no...",
+  "take this to <#1272735665737564261> pls",
 ];
 
 let messagesSince = 0;
@@ -176,12 +214,15 @@ const handler: HypnoMessageHandler = {
                   c + (Math.random() > 0.7 ? v.toUpperCase() : v.toLowerCase()),
                 ""
               ),
+          () => phrase + "?".repeat(randomFromRange(1, 10)),
+          () => phrase + "!".repeat(randomFromRange(1, 10)),
         ];
-        phrase = fuckups[Math.floor(Math.random() * fuckups.length)]();
+        if (Math.random() > 0.5)
+          phrase = fuckups[Math.floor(Math.random() * fuckups.length)]();
 
         await message.reply(phrase);
         messagesSince = 0;
-        messagesRequired = randomFromRange(20, 100);
+        messagesRequired = randomFromRange(20, 70);
       } catch {}
     }
   },
