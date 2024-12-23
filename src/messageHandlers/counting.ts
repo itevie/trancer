@@ -4,6 +4,7 @@ import { getServerCount } from "../util/actions/serverCount";
 import { database } from "../util/database";
 import { createEmbed } from "../util/other";
 import config from "../config";
+import Mexp from "math-expression-evaluator";
 
 const handler: HypnoMessageHandler = {
   name: "counter",
@@ -16,8 +17,12 @@ const handler: HypnoMessageHandler = {
     if (message.channel.id !== count.channel_id) return;
 
     // Check if it contains a number
-    if (!message.content.match(/^([0-9]+)$/)) return;
-    let number = parseInt(message.content);
+    let number: number | null = null;
+    try {
+      number = new Mexp().eval(message.content);
+    } catch {
+      return;
+    }
 
     if (count.last_counter === message.author.id)
       return message.reply(

@@ -28,6 +28,7 @@
     "express-session": "^1.18.1",
     "express-session-sqlite": "^2.1.1",
     "jimp": "^1.6.0",
+    "math-expression-evaluator": "^2.0.6",
     "ollama": "^0.5.6",
     "passport": "^0.7.0",
     "passport-discord": "^0.1.4",

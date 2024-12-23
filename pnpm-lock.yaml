@@ -62,6 +62,9 @@ importers:
       jimp:
         specifier: ^1.6.0
         version: 1.6.0
+      math-expression-evaluator:
+        specifier: ^2.0.6
+        version: 2.0.6
       ollama:
         specifier: ^0.5.6
         version: 0.5.11
@@ -1032,6 +1035,9 @@ packages:
   make-fetch-happen@9.1.0:
     resolution: {integrity: sha512-+zopwDy7DNknmwPQplem5lAZX/eCOzSvSNNcSKm5eVwTkOBzoktEfXsa9L23J/GIRhxRsaxzkPEhrJEpE2F4Gg==}
     engines: {node: '>= 10'}
+
+  math-expression-evaluator@2.0.6:
+    resolution: {integrity: sha512-DRung1qNcKbgkhFeQ0fBPUFB6voRUMY7KyRyp1TRQ2v95Rp2egC823xLRooM1mDx1rmbkY7ym6ZWmpaE/VimOA==}
 
   media-typer@0.3.0:
     resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
@@ -2940,6 +2946,8 @@ snapshots:
       - bluebird
       - supports-color
     optional: true
+
+  math-expression-evaluator@2.0.6: {}
 
   media-typer@0.3.0: {}
 
