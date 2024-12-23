@@ -185,12 +185,13 @@ CREATE TABLE IF NOT EXISTS leaderboard_entries (
     leaderboard TEXT NOT NULL
 );
 
-ALTER TABLE decks ADD server_deck TEXT NOT NULL DEAFULT NULL;
+-- ALTER TABLE decks ADD server_deck TEXT DEAFULT NULL;
 
 CREATE TABLE IF NOT EXISTS decks (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     name TEXT UNIQUE NOT NULL,
-    description TEXT NOT NULL DEFAULT "A card deck"
+    description TEXT NOT NULL DEFAULT "A card deck",
+    server_deck TEXT DEFAULT NULL;
 );
 
 CREATE TABLE IF NOT EXISTS cards (
