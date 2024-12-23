@@ -2,16 +2,19 @@ import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
+  ChatInputCommandInteraction,
   ComponentType,
   InteractionCollector,
   MappedInteractionTypes,
   Message,
+  RepliableInteraction,
   User,
 } from "discord.js";
 import { addMoneyFor, getEconomyFor, removeMoneyFor } from "./actions/economy";
 import config from "../config";
 import { createEmbed } from "./other";
 import { database } from "./database";
+import { client } from "..";
 
 interface GameWrapperOptions {
   callback: (op: {
@@ -29,6 +32,7 @@ interface GameWrapperOptions {
   title: string;
   timeout: number;
   extra?: string;
+  allowAi?: boolean;
 }
 
 const inGames: Map<string, Message> = new Map();
@@ -37,6 +41,10 @@ export default async function wrapGame(options: GameWrapperOptions) {
   let player = options.message.author;
   let opponent = options.opponent;
 
+  if (!opponent && options.allowAi) opponent = client.user;
+  if (!opponent && !options.allowAi)
+    return await options.message.reply(`Please provide a user!`);
+
   // Check if trying to play against self
   if (opponent.id === player.id)
     return await options.message.reply(
@@ -44,7 +52,7 @@ export default async function wrapGame(options: GameWrapperOptions) {
     );
 
   // Check bot
-  if (opponent.bot)
+  if (opponent.bot && opponent.id !== client.user.id)
     return await options.message.reply("You can't play against a bot, silly!");
 
   // Check if one of the user's is already in a game
@@ -53,7 +61,7 @@ export default async function wrapGame(options: GameWrapperOptions) {
     return await options.message.reply(
       `You are already in a game!\nhttps://discord.com/channels/${place.guildId}/${place.channelId}/${place.id}`
     );
-  } else if (inGames.has(opponent.id)) {
+  } else if (inGames.has(opponent.id) && opponent.id !== client.user.id) {
     let place = inGames.get(opponent.id);
     return await options.message.reply(
       `They are already in a game!\nhttps://discord.com/channels/${place.guildId}/${place.channelId}/${place.id}`
@@ -119,119 +127,125 @@ export default async function wrapGame(options: GameWrapperOptions) {
     time: 1000 * 60,
   });
 
-  collector.on("collect", async (i) => {
-    if (i.customId === "game-start") {
-      if (i.user.id === player.id)
-        return await i.reply({
-          content: `You cannot start the game because you are the creator! Wait for the opponent to accept, or click "Reject"`,
-          ephemeral: true,
+  if (opponent.id === client.user.id) return startGame(null);
+
+  async function startGame(i: ChatInputCommandInteraction | null) {
+    if (i?.user.id === player.id && opponent.id !== client.user.id)
+      return await i.reply({
+        content: `You cannot start the game because you are the creator! Wait for the opponent to accept, or click "Reject"`,
+        ephemeral: true,
+      });
+
+    collector.stop();
+    await (i as any)?.deferUpdate();
+
+    let gameCollector = message.createMessageComponentCollector({
+      filter: (i) => [player.id, opponent.id].includes(i.user.id),
+    });
+
+    let currentTurn: "p" | "o" | "-" = "-";
+
+    let startTimeout = Date.now();
+    let timeout = setTimeout(() => {
+      if (!gameCollector.ended) gameCollector.stop("time");
+    }, options.timeout);
+
+    let interval = setInterval(async () => {
+      if (options.timeout - (Date.now() - startTimeout) < 30000) {
+        await message.edit({
+          content: `**${
+            currentTurn === "p" ? player.username : opponent.username
+          }**, ${Math.floor(
+            (options.timeout - (Date.now() - startTimeout)) / 1000
+          )} seconds left.`,
         });
+      }
+    }, 5000);
 
-      collector.stop();
-      await i.deferUpdate();
+    gameCollector.on("end", async (_, reason) => {
+      clearInterval(interval);
+      if (reason === "time") {
+        await removePlayers(currentTurn === "p" ? "o" : "p");
+        await message.edit({
+          content: `**Timeout**: This game is no longer active.\n**${
+            currentTurn === "p" ? opponent.username : player.username
+          }** won${
+            options.bet
+              ? ` the **${options.bet}${config.economy.currency}**`
+              : ""
+          }!`,
+        });
+      }
+    });
 
-      let gameCollector = message.createMessageComponentCollector({
-        filter: (i) => [player.id, opponent.id].includes(i.user.id),
-      });
+    async function removePlayers(winner: "p" | "o" | "t") {
+      // Remove players
+      inGames.delete(player.id);
+      inGames.delete(opponent.id);
 
-      let currentTurn: "p" | "o" | "-" = "-";
+      gameCollector.stop();
 
-      let startTimeout = Date.now();
-      let timeout = setTimeout(() => {
-        if (!gameCollector.ended) gameCollector.stop("time");
-      }, options.timeout);
-
-      let interval = setInterval(async () => {
-        if (options.timeout - (Date.now() - startTimeout) < 30000) {
-          await message.edit({
-            content: `**${
-              currentTurn === "p" ? player.username : opponent.username
-            }**, ${Math.floor(
-              (options.timeout - (Date.now() - startTimeout)) / 1000
-            )} seconds left.`,
-          });
-        }
-      }, 5000);
-
-      gameCollector.on("end", async (_, reason) => {
-        clearInterval(interval);
-        if (reason === "time") {
-          await removePlayers(currentTurn === "p" ? "o" : "p");
-          await message.edit({
-            content: `**Timeout**: This game is no longer active.\n**${
-              currentTurn === "p" ? opponent.username : player.username
-            }** won${
-              options.bet
-                ? ` the **${options.bet}${config.economy.currency}**`
-                : ""
-            }!`,
-          });
-        }
-      });
-
-      async function removePlayers(winner: "p" | "o" | "t") {
-        // Remove players
-        inGames.delete(player.id);
-        inGames.delete(opponent.id);
-
-        gameCollector.stop();
-
-        // Check if there was a bet
-        if (options.bet && winner !== "t") {
-          await addMoneyFor(
-            winner === "p" ? player.id : opponent.id,
-            options.bet,
-            "gambling"
-          );
-          await removeMoneyFor(
-            winner === "o" ? player.id : opponent.id,
-            options.bet,
-            true
-          );
-        }
-
-        // Check if there is database statistics
-        if (options.databasePrefix) {
-          if (winner === "t") {
-            await database.run(
-              `UPDATE user_data SET ${options.databasePrefix}_tie = ${options.databasePrefix}_tie + 1 WHERE user_id IN (?, ?) AND guild_id = ?`,
-              player.id,
-              opponent.id,
-              options.message.guild.id
-            );
-          } else {
-            await database.run(
-              `UPDATE user_data SET ${options.databasePrefix}_win = ${options.databasePrefix}_win + 1 WHERE user_id = ? AND guild_id = ?;`,
-              winner === "p" ? player.id : opponent.id,
-              options.message.guild.id
-            );
-            await database.run(
-              `UPDATE user_data SET ${options.databasePrefix}_lose = ${options.databasePrefix}_lose + 1 WHERE user_id = ? AND guild_id = ?;`,
-              winner === "o" ? player.id : opponent.id,
-              options.message.guild.id
-            );
-          }
-        }
+      // Check if there was a bet
+      if (options.bet && winner !== "t") {
+        await addMoneyFor(
+          winner === "p" ? player.id : opponent.id,
+          options.bet,
+          "gambling"
+        );
+        await removeMoneyFor(
+          winner === "o" ? player.id : opponent.id,
+          options.bet,
+          true
+        );
       }
 
-      options.callback({
-        message,
-        collector: gameCollector,
-        setTurn: async (turn) => {
-          // Modify data
-          currentTurn = turn;
-          startTimeout = Date.now();
+      // Check if there is database statistics
+      if (options.databasePrefix && opponent.id !== client.user.id) {
+        if (winner === "t") {
+          await database.run(
+            `UPDATE user_data SET ${options.databasePrefix}_tie = ${options.databasePrefix}_tie + 1 WHERE user_id IN (?, ?) AND guild_id = ?`,
+            player.id,
+            opponent.id,
+            options.message.guild.id
+          );
+        } else {
+          await database.run(
+            `UPDATE user_data SET ${options.databasePrefix}_win = ${options.databasePrefix}_win + 1 WHERE user_id = ? AND guild_id = ?;`,
+            winner === "p" ? player.id : opponent.id,
+            options.message.guild.id
+          );
+          await database.run(
+            `UPDATE user_data SET ${options.databasePrefix}_lose = ${options.databasePrefix}_lose + 1 WHERE user_id = ? AND guild_id = ?;`,
+            winner === "o" ? player.id : opponent.id,
+            options.message.guild.id
+          );
+        }
+      }
+    }
 
-          // Re-update timeout
-          clearTimeout(timeout);
-          timeout = setTimeout(() => {
-            if (!gameCollector.ended) gameCollector.stop("time");
-          }, options.timeout);
-        },
-        removePlayers,
-        opponent,
-        player,
-      });
+    options.callback({
+      message,
+      collector: gameCollector,
+      setTurn: async (turn) => {
+        // Modify data
+        currentTurn = turn;
+        startTimeout = Date.now();
+
+        // Re-update timeout
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          if (!gameCollector.ended) gameCollector.stop("time");
+        }, options.timeout);
+      },
+      removePlayers,
+      opponent,
+      player,
+    });
+  }
+
+  collector.on("collect", async (i) => {
+    if (i.customId === "game-start") {
+      await startGame(i as any);
     } else if (i.customId === "game-reject") {
       await i.deferUpdate();
       inGames.delete(player.id);

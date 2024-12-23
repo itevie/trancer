@@ -32,7 +32,7 @@ const handler: HypnoMessageHandler = {
       messagesSince = 0;
       lastDrop = Date.now();
 
-      const rewards = await generateRandomReward({
+      const rewards = generateRandomReward({
         currency: {
           min: 0,
           max: 200,

@@ -11,6 +11,7 @@ import { HypnoCommand } from "../../types/util";
 import { createEmbed } from "../../util/other";
 import config from "../../config";
 import wrapGame from "../../util/GameWrapper";
+import { client } from "../..";
 
 type State = "o" | "x" | "-";
 
@@ -21,7 +22,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
   description: "Play TicTacToe",
 
   args: {
-    requiredArguments: 1,
+    requiredArguments: 0,
     args: [
       {
         type: "user",
@@ -43,6 +44,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
       bet: args.bet,
       message,
       timeout: 1000 * 60 * 1,
+      allowAi: true,
       callback: async ({
         opponent,
         player,
@@ -55,6 +57,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
         let winner: State | "t" = "-";
         let forceCancel = false;
         let current = Math.random() > 0.5 ? opponent : player;
+        if (opponent.id === client.user.id) current = player;
         let isForfeit = false;
 
         function generateButton(idx: number): ButtonBuilder {
@@ -176,29 +179,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
           await i.deferUpdate();
           await msg.edit(createMessage());
 
-          // Check win
-          const winningCombinations = [
-            // Horizontal rows
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            // Vertical columns
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            // Diagonals
-            [0, 4, 8],
-            [2, 4, 6],
-          ];
-
-          let win: State = "-";
-
-          for (const [a, b, c] of winningCombinations) {
-            if (game[a] === game[b] && game[a] === game[c] && game[a] !== "-") {
-              win = game[a];
-              break;
-            }
-          }
+          const win = checkWin(game);
 
           // There is a winner
           if (win !== "-") {
@@ -209,6 +190,29 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
           // It is a tie
           if (game.every((x) => x !== "-")) {
             await setWinner("t");
+            return;
+          }
+
+          if (current.id === client.user.id) {
+            let turn = aiMove(game, current === player ? "x" : "o", "o");
+            game[turn] = "o";
+            await msg.edit(createMessage());
+
+            const win = checkWin(game);
+
+            // There is a winner
+            if (win !== "-") {
+              await setWinner(win);
+              return;
+            }
+
+            // It is a tie
+            if (game.every((x) => x !== "-")) {
+              await setWinner("t");
+              return;
+            }
+
+            current = player;
           }
         });
       },
@@ -217,3 +221,94 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
 };
 
 export default command;
+
+function checkWin(game: State[]): State {
+  // Check win
+  const winningCombinations = [
+    // Horizontal rows
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    // Vertical columns
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    // Diagonals
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  let win: State = "-";
+
+  for (const [a, b, c] of winningCombinations) {
+    if (game[a] === game[b] && game[a] === game[c] && game[a] !== "-") {
+      win = game[a];
+      break;
+    }
+  }
+
+  return win;
+}
+
+// -1 = lose, 0 = tie, 1 = win
+function aiMove(board: State[], turn: "x" | "o", aiPlayer: "x" | "o"): number {
+  const indexes = _aiMove(board, turn, aiPlayer, true);
+
+  const averaged: { [key: string]: number } = {};
+  for (const [key, states] of Object.entries(indexes)) {
+    const sum = states
+      .map((x) => (x === "-" ? 0 : x === aiPlayer ? 1 : -1) * states.length)
+      .reduce((p, c) => p + c, 0);
+    averaged[key] = sum / states.length;
+  }
+
+  let best: [number, number] = [-Infinity, -Infinity];
+
+  for (const [k, v] of Object.entries(averaged))
+    if (v > best[1]) best = [parseInt(k), v];
+
+  return best[0];
+}
+
+function _aiMove(
+  board: State[],
+  turn: "x" | "o",
+  aiPlayer: "x" | "o",
+  _isBase: boolean = false
+): { [key: string]: State[] } {
+  let freeIndexes = [...board]
+    .map((k, v) => (k === "-" ? v : null))
+    .filter((x) => x !== null);
+
+  const indexes: { [key: string]: State[] } = {};
+
+  for (const index of freeIndexes) {
+    let tempBoard = [...board];
+    tempBoard[index] = turn;
+
+    let win = checkWin(tempBoard);
+    // console.log(_isBase, tempBoard.join(""), index, turn, win);
+
+    // Win = return early
+    // Tie = recurse
+    // Lose = return early
+
+    if (win !== "-") {
+      indexes[index] = [...(index[index] || []), win];
+      continue;
+    }
+
+    let nextIter = _aiMove(
+      tempBoard,
+      turn === "x" ? "o" : "x",
+      aiPlayer,
+      false
+    );
+
+    for (const [k, v] of Object.entries(nextIter)) {
+      indexes[k] = [...(indexes[k] || []), ...v];
+    }
+  }
+
+  return indexes;
+}
