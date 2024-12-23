@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS user_favourite_spirals (
     user_id TEXT NOT NULL
 );
 
--- ALTER TABLE user_data ADD count_ruined INT NOT NULL DEFAULT 0;
+ALTER TABLE user_data ADD count_ruined INT NOT NULL DEFAULT 0;
 
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,

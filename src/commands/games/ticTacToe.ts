@@ -203,6 +203,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
           // There is a winner
           if (win !== "-") {
             await setWinner(win);
+            return;
           }
 
           // It is a tie
