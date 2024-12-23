@@ -426,9 +426,15 @@ client.on("messageCreate", async (message) => {
         ],
       });
     } else {
-      await message.reply(
-        `Oops... I ran into an error whilst trying to run that command :(`
-      );
+      if (err.message.toLowerCase().includes("timeout")) {
+        await message.reply(
+          `:warning: Oops! I ran into an error, but your command *did* sucessfully run!`
+        );
+      } else {
+        await message.reply(
+          `:warning: Oops! I ran into an error whilst trying to run that command :(`
+        );
+      }
     }
     throw err;
   }

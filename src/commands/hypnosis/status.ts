@@ -51,6 +51,9 @@ const command: HypnoCommand<{ type: keyof typeof typeMap }> = {
     await message.member.setNickname(
       currentNickname.trim() + ` (${typeMap[args.type]})`
     );
+    return await message.reply(
+      `Updated your status to **${typeMap[args.type]}**`
+    );
   },
 };
 

@@ -1,10 +1,10 @@
 import { HypnoCommand } from "../../types/util";
 import {
-  getImposition,
-  impositionSetEnabled,
-  setImpositionChance,
-  setImpositionEvery,
-  setupImposition,
+  getChannelAutoImposition,
+  setAutoImpositionEnabled,
+  setAutoImpositionChannel,
+  setAutoImpositionEvery,
+  setupAutoImposition,
 } from "../../util/actions/imposition";
 import { getServerSettings } from "../../util/actions/settings";
 import { database } from "../../util/database";
@@ -41,18 +41,18 @@ const command: HypnoCommand = {
       );
 
     // Fetch imposition settings
-    await setupImposition(message.channel.id);
-    const imposition = await getImposition(message.channel.id);
+    await setupAutoImposition(message.channel.id);
+    const imposition = await getChannelAutoImposition(message.channel.id);
 
     // Do it
     switch (args[0]) {
       case "enable":
-        await impositionSetEnabled(message.channel.id, true);
+        await setAutoImpositionEnabled(message.channel.id, true);
         return await message.reply(
           `Enabled imposition for this channel! Have fun :cyclone:`
         );
       case "disable":
-        await impositionSetEnabled(message.channel.id, false);
+        await setAutoImpositionEnabled(message.channel.id, false);
         return await message.reply(`Disabled imposition for this channel!`);
       case "chance":
         if (!args[1])
@@ -64,7 +64,7 @@ const command: HypnoCommand = {
         if (Number.isNaN(chanceValue) || chanceValue > 100 || chanceValue < 0)
           return message.reply(`Invalid number provided!`);
 
-        await setImpositionChance(message.channel.id, chanceValue);
+        await setAutoImpositionChannel(message.channel.id, chanceValue);
         return await message.reply(
           `There will now be a **${chanceValue}%** chance a random imposition will be sent every **${imposition.every}** minutes`
         );
@@ -78,7 +78,7 @@ const command: HypnoCommand = {
         if (Number.isNaN(message))
           return message.reply(`Invalid number provided!`);
 
-        await setImpositionEvery(message.channel.id, everyValue);
+        await setAutoImpositionEvery(message.channel.id, everyValue);
         return await message.reply(
           `There will now be a **${imposition.chance}%** chance a random imposition will be sent every **${everyValue}** minutes`
         );

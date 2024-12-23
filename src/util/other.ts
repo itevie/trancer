@@ -14,7 +14,7 @@ import {
 } from "discord.js";
 import config from "../config";
 import * as fs from "fs";
-import { getImpositionFor } from "./actions/imposition";
+import { getTriggersFor } from "./actions/imposition";
 import path from "path";
 import axios from "axios";
 import { client, commands } from "..";
@@ -83,7 +83,7 @@ export async function getRandomImposition(
   if (!forWho) return getRandomImpositionFromFile();
 
   // Get for user
-  let impos = (await getImpositionFor(forWho)) as UserImposition[];
+  let impos = (await getTriggersFor(forWho)) as UserImposition[];
   if (allowBombard === false) impos = impos.filter((x) => !x.is_bombardable);
   let strImpos = impos.map((x) => x.what);
 

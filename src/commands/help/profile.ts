@@ -1,7 +1,7 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { createEmbed } from "../../util/other";
-import { getImpositionFor } from "../../util/actions/imposition";
+import { getTriggersFor } from "../../util/actions/imposition";
 import { getAllAquiredBadgesFor } from "../../util/actions/badges";
 import badges from "../../util/badges";
 import { database } from "../../util/database";
@@ -35,7 +35,7 @@ const command: HypnoCommand<{ user?: User }> = {
     // Get details
     const economy = await getEconomyFor(user.id);
     const userData = await getUserData(user.id, message.guild.id);
-    const imposition = await getImpositionFor(user.id);
+    const imposition = await getTriggersFor(user.id);
     const spiralsGiven = (
       await database.all(`SELECT * FROM spirals WHERE sent_by = ?`, user.id)
     ).length;
