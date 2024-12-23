@@ -121,7 +121,11 @@ client.on("messageCreate", async (message) => {
   // Check ratelimit
   if (command.ratelimit) {
     let lastUsed = await getRatelimit(message.author.id, command.name);
-    let ms = command.ratelimit - (Date.now() - lastUsed.getTime());
+    let ratelimit =
+      typeof command.ratelimit === "function"
+        ? await command.ratelimit(message)
+        : command.ratelimit;
+    let ms = ratelimit - (Date.now() - lastUsed.getTime());
 
     if (ms > 0)
       return await message.reply({

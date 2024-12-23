@@ -213,6 +213,7 @@ const config = {
     cardPull: 1,
     hairDye: 2,
     powerFood: 3,
+    fishingRod: 4,
   },
 
   // ----- Credits: do not remove this -----

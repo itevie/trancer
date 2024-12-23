@@ -1,18 +1,35 @@
 import { HypnoCommand } from "../../types/util";
 import config from "../../config";
-import { getEconomyFor, setLastFish } from "../../util/actions/economy";
-import { createEmbed, randomFromRange } from "../../util/other";
-import { msToHowLong } from "../../util/ms";
+import { createEmbed } from "../../util/other";
 import { awardRandomThings } from "../../util/economy";
+import { getAquiredItemsFor, removeItemFor } from "../../util/actions/items";
 
 const command: HypnoCommand = {
   name: "fish",
   description: `Fish for fishes in the open sea and earn ${config.economy.currency}!`,
   type: "economy",
 
-  ratelimit: config.economy.fish.limit,
+  ratelimit: async (message) => {
+    let item = (await getAquiredItemsFor(message.author.id)).find(
+      (x) => x.item_id === config.items.fishingRod
+    );
+
+    return item && item.amount !== 0
+      ? config.economy.fish.limit / 2
+      : config.economy.fish.limit;
+  },
 
   handler: async (message) => {
+    if (
+      (await getAquiredItemsFor(message.author.id)).find(
+        (x) => x.item_id === config.items.fishingRod
+      )?.amount !== 0 &&
+      Math.random() > 0.9
+    ) {
+      await removeItemFor(message.author.id, config.items.fishingRod);
+      await message.reply(`Your fishing rod broke! :fishing_pole_and_fish:`);
+    }
+
     const rewardString = await awardRandomThings(message.author.id, {
       currency: {
         min: config.economy.fish.min,
