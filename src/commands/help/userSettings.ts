@@ -19,6 +19,11 @@ const command: HypnoCommand = {
           human: "Allow Game Requests",
           type: "boolean",
         },
+        {
+          dbName: "allow_triggers",
+          human: "Allow Triggers (.i / .t)",
+          type: "boolean",
+        },
       ],
       title: "Your Settings",
       onChange: async (key, value) => {

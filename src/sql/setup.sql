@@ -76,6 +76,9 @@ CREATE TABLE IF NOT EXISTS user_favourite_spirals (
     user_id TEXT NOT NULL
 );
 
+ALTER TABLE user_data ADD 
+    allow_triggers BOOLEAN NOT NULL DEFAULT true;
+
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,
     guild_id TEXT NOT NULL,
@@ -91,6 +94,7 @@ CREATE TABLE IF NOT EXISTS user_data (
     c4_lose INT NOT NULL DEFAULT 0,
     c4_tie INT NOT NULL DEFAULT 0,
     allow_requests BOOLEAN NOT NULL DEFAULT true,
+    allow_triggers BOOLEAN NOT NULL DEFAULT true,
     count_ruined INT NOT NULL DEFAULT 0
 );
 
