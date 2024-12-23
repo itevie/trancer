@@ -179,6 +179,10 @@ const phrases = [
   "imma just sit back and eat some popcorn",
   "oh no...",
   "take this to <#1272735665737564261> pls",
+  "https://tenor.com/view/virtual-sin-forgiveness-virtual-sin-virtual-sin-tiktok-sin-forgiveness-gif-12707700347974879749",
+  "https://dea.gov/",
+  "https://nsa.gov/",
+  "https://gov.uk/",
 ];
 
 let messagesSince = 0;

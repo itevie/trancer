@@ -30,6 +30,9 @@ client.on("messageCreate", async (message) => {
   if (!message.inGuild()) return;
   if (config.ignoreChannels.includes(message.channel.id)) return;
 
+  if (!message?.member?.permissions?.has("MentionEveryone"))
+    message.content = message.content.replace(/@everyone/gi, "<at>everyone");
+
   // Replace special characters
   message.content = message.content.replace(/[’]/g, "'");
   message.content = message.content.replace(/[“”]/g, '"');
