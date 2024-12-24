@@ -10,7 +10,6 @@ const command: HypnoCommand = {
   type: "economy",
 
   ratelimit: async (message) => {
-    return 0;
     let item = await actions.items.aquired.getFor(
       message.author.id,
       config.items.fishingRod
