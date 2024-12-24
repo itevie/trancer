@@ -183,6 +183,7 @@ const phrases = [
   "https://dea.gov/",
   "https://nsa.gov/",
   "https://gov.uk/",
+  "Meine Mama hat mir einfach erlaubt dass ich Cola trinken darf! Wie cool ist das bitte? Jetzt zocke ich Fortnite und trinke Cola! YIPPEE!",
 ];
 
 let messagesSince = 0;

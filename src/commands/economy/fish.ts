@@ -15,7 +15,7 @@ const command: HypnoCommand = {
       config.items.fishingRod
     );
 
-    return item && item.amount !== 0
+    return item && item.amount > 0
       ? config.economy.fish.limit / 2
       : config.economy.fish.limit;
   },

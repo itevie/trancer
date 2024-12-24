@@ -77,7 +77,7 @@ const items: Record<string, Partial<Item>> = {
   },
   "british-fish": {
     price: 300,
-    weight: 0.069,
+    weight: 0.0069,
     description: "Pip pip cheerio!",
     tag: "fish",
   },

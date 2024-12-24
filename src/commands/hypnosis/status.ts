@@ -32,8 +32,8 @@ const command: HypnoCommand<{ type: keyof typeof typeMap }> = {
     let currentNickname = message.member.nickname ?? message.author.displayName;
 
     // Check if the user already has the status
-    if (currentNickname.match(/\([🔴🟢🟡]\)/)) {
-      currentNickname = currentNickname.replace(/\([🔴🟢🟡]\)/, "");
+    if (currentNickname.match(/\(\p{Emoji}\)/u)) {
+      currentNickname = currentNickname.replace(/\(\p{Emoji}\)/u, "");
     }
 
     // Check length

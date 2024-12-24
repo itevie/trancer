@@ -50,7 +50,7 @@ const command: HypnoCommand = {
     // Add the stuff
     await database.run(
       `UPDATE dawnagotchi SET next_play = next_play + ? WHERE owner_id = ?`,
-      config.dawnagotchi.actions.play.timeAdd,
+      timeAdd,
       message.author.id
     );
 

@@ -91,6 +91,7 @@ const command: HypnoCommand<{ user?: User }> = {
                 ).toFixed(0)}%`
             )
             .join("\n"),
+          inline: true,
         },
       ]);
     }
@@ -110,6 +111,7 @@ const command: HypnoCommand<{ user?: User }> = {
           ]
             .map((x) => `**${x[0]}**: ${x[1]}`)
             .join("\n"),
+          inline: true,
         },
       ]);
     }
@@ -126,6 +128,7 @@ const command: HypnoCommand<{ user?: User }> = {
           ]
             .map((x) => `**${x[0]}**: ${x[1]}`)
             .join("\n"),
+          inline: true,
         },
       ]);
     }
@@ -135,6 +138,7 @@ const command: HypnoCommand<{ user?: User }> = {
         {
           name: "Badges",
           value: aquiredBadges.join(""),
+          inline: true,
         },
       ]);
 

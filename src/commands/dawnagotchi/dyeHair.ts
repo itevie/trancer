@@ -41,7 +41,7 @@ const command: HypnoCommand<{ hex: string }> = {
       );
 
     // Change hair color & remove item
-    await database.run(
+    await database.run( 
       `UPDATE dawnagotchi SET hair_color_hex = ? WHERE owner_id = ?`,
       args.args.hex,
       message.author.id
