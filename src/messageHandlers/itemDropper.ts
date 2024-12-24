@@ -1,8 +1,6 @@
 import { User } from "discord.js";
 import config from "../config";
 import { HypnoMessageHandler } from "../types/util";
-import { addItemFor } from "../util/actions/items";
-import { database } from "../util/database";
 import { createEmbed } from "../util/other";
 import {
   englishifyRewardDetails,

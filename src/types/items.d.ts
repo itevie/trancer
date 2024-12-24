@@ -8,8 +8,8 @@ interface Item {
   tag: string | null;
 }
 
-interface Aquireditem {
+interface AquiredItem {
   item_id: number;
-  user_id: number;
+  user_id: string;
   amount: number;
 }

@@ -78,14 +78,14 @@ for (const commandFile of commandFiles) {
   logger.log(`Loaded command: ${commandImport.name}`);
 }
 
-client.on("ready", async () => {
-  // Load events
-  const eventFiles = getAllFiles(__dirname + "/events");
-  for (const eventFile of eventFiles) {
-    require(eventFile);
-    logger.log(`Loaded event: ${eventFile}`);
-  }
+// Load events
+const eventFiles = getAllFiles(__dirname + "/events");
+for (const eventFile of eventFiles) {
+  require(eventFile);
+  logger.log(`Loaded event: ${eventFile}`);
+}
 
+client.on("ready", async () => {
   if (
     !args["no-handlers"] &&
     !(

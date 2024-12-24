@@ -1,5 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import { getItems } from "../../util/actions/items";
+import { actions } from "../../util/database";
 import {
   englishifyRewardDetails,
   generateRandomReward,
@@ -36,7 +36,7 @@ const command: HypnoCommand<{
   },
 
   handler: async (message, { args }) => {
-    let items = await getItems();
+    let items = await actions.items.getAll();
     if (args.itemtag) items = items.filter((x) => x.tag === args.itemtag);
 
     const reward = await generateRandomReward({

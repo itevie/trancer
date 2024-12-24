@@ -1,7 +1,7 @@
 import config from "../../config";
 import { HypnoCommand } from "../../types/util";
 import { getDawnagotchi } from "../../util/actions/dawnagotchi";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 import {
   awardMoneyForCaringForDawn,
   calculateRequirementFromDate,
@@ -25,6 +25,27 @@ const command: HypnoCommand = {
       return message.reply(
         `Your Dawn does not require your attention right now >:(`
       );
+
+    // Check if they have the power play
+    let powerPlay = await actions.items.aquired.getFor(
+      message.author.id,
+      (
+        await actions.items.getByName(config.items.powerPlay)
+      ).id
+    );
+    let timeAdd = config.dawnagotchi.actions.play.timeAdd;
+    if (powerPlay && powerPlay.amount > 0) {
+      timeAdd = timeAdd * 3;
+      if (Math.random() > 0.5) {
+        await actions.items.aquired.removeFor(
+          message.author.id,
+          config.items.powerFood
+        );
+        await message.reply(
+          `Oops... your Dawn ate the pendulum... you lost one...`
+        );
+      }
+    }
 
     // Add the stuff
     await database.run(

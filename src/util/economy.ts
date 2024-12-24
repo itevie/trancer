@@ -1,7 +1,6 @@
 import config from "../config";
 import { addMoneyFor } from "./actions/economy";
-import { addItemFor, getItem } from "./actions/items";
-import { database } from "./database";
+import { actions, database } from "./database";
 import {
   biasedRandomFromRange,
   englishifyList,
@@ -36,7 +35,8 @@ export async function awardRandomThings(
 ): Promise<string> {
   let rewards = await generateRandomReward(details);
   await giveRewardDeteils(userId, rewards);
-  return englishifyRewardDetails(rewards);
+  const english = await englishifyRewardDetails(rewards);
+  return english;
 }
 
 export async function giveRewardDeteils(
@@ -45,7 +45,7 @@ export async function giveRewardDeteils(
 ): Promise<void> {
   if (details.currency) await addMoneyFor(userId, details.currency);
   for await (const [item, amount] of Object.entries(details.items)) {
-    await addItemFor(userId, parseInt(item), amount);
+    await actions.items.aquired.addFor(userId, parseInt(item), amount);
   }
 }
 
@@ -57,7 +57,7 @@ export async function englishifyRewardDetails(
     winnings.push(`**${details.currency}${config.economy.currency}**`);
 
   for await (const [id, quantity] of Object.entries(details.items)) {
-    const card = await getItem(parseInt(id));
+    const card = await actions.items.get(parseInt(id));
     winnings.push(`**${quantity} ${card.name}${quantity !== 1 ? "s" : ""}**`);
   }
 

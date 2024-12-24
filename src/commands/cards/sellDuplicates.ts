@@ -3,34 +3,28 @@ import { HypnoCommand } from "../../types/util";
 import { getAllAquiredCardsFor } from "../../util/actions/cards";
 import { addMoneyFor } from "../../util/actions/economy";
 import { computeCardPrice, convertAquiredCardsToCards } from "../../util/cards";
+import ConfirmAction from "../../util/components/Confirm";
 import { database } from "../../util/database";
+import { createEmbed } from "../../util/other";
 
-const command: HypnoCommand<{ confirm?: "confirm" }> = {
+const command: HypnoCommand = {
   name: "sellduplicates",
   description: "Sells all of your duplicate cards",
   aliases: ["selldups"],
   type: "cards",
 
-  args: {
-    requiredArguments: 0,
-    args: [
-      {
-        name: "confirm",
-        type: "confirm",
-      },
-    ],
-  },
-
-  handler: async (message, { args }) => {
+  handler: async (message) => {
     // Collect all the data
     let acards = (await getAllAquiredCardsFor(message.author.id)).filter(
       (x) => x.amount > 1
     );
     if (acards.length === 0)
-      return message.reply(`You have no dupllicate cards!`);
+      return message.reply(`You have no duplicate cards!`);
+
     let cards = await convertAquiredCardsToCards(acards);
     let worth = 0;
     let amount = 0;
+
     for (const acard in acards) {
       worth += computeCardPrice(cards[acard]) * (acards[acard].amount - 1);
       amount += acards[acard].amount - 1;
@@ -46,27 +40,30 @@ const command: HypnoCommand<{ confirm?: "confirm" }> = {
       text +
       `\n\n**${amount}** cards worth: **${worth} ${config.economy.currency}**`;
 
-    // Check if confirm was added
-    if (!args.confirm)
-      return message.reply(
-        `Please pass the confirm option to sell the following cards:\n\n${text}`
-      );
+    ConfirmAction({
+      message,
+      embed: createEmbed()
+        .setTitle(`Are you sure you want to sell these?`)
+        .setDescription(text),
+      callback: async () => {
+        for await (const acard of acards) {
+          await database.run(
+            `UPDATE aquired_cards SET amount = amount - ? WHERE user_id = ? AND card_id = ?;`,
+            acard.amount - 1,
+            message.author.id,
+            acard.card_id
+          );
+        }
 
-    // Remove all the cards
-    for await (const acard of acards) {
-      await database.run(
-        `UPDATE aquired_cards SET amount = amount - ? WHERE user_id = ? AND card_id = ?;`,
-        acard.amount - 1,
-        message.author.id,
-        acard.card_id
-      );
-    }
+        await addMoneyFor(message.author.id, worth);
 
-    // Add money
-    await addMoneyFor(message.author.id, worth);
-
-    // Done
-    return message.reply(`Success! You sold the following cards:\n\n${text}`);
+        return {
+          embeds: [
+            createEmbed().setTitle("Sold the cards!").setDescription(text),
+          ],
+        };
+      },
+    });
   },
 };
 

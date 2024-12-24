@@ -8,6 +8,7 @@ import Logger from "./Logger";
 import userData from "./db-parts/userData";
 import spirals from "./db-parts/spirals";
 import serverSettings from "./db-parts/serverSettings";
+import items from "./db-parts/items";
 
 export let database: Database<sqlite3.Database, Statement>;
 export const databaseLogger = new Logger("database");
@@ -16,6 +17,7 @@ export const actions = {
   userData,
   spirals,
   serverSettings,
+  items,
 } as const;
 
 export async function connect(): Promise<void> {

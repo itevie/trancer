@@ -214,6 +214,8 @@ const config = {
     hairDye: 2,
     powerFood: 3,
     fishingRod: 4,
+    powerDrink: "juicebox",
+    powerPlay: "pendulum",
   },
 
   // ----- Credits: do not remove this -----

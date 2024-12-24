@@ -26,6 +26,11 @@ const command: HypnoCommand = {
           human: "Allow Triggers (.i / .t)",
           type: "boolean",
         },
+        {
+          dbName: "auto_sell",
+          human: "Auto-sell Fishes",
+          type: "boolean",
+        },
       ],
       title: "Your Settings",
       onChange: async (key, value) => {

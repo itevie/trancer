@@ -1,7 +1,7 @@
 import config from "../../config";
 import { HypnoCommand } from "../../types/util";
 import { getDawnagotchi } from "../../util/actions/dawnagotchi";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 import {
   awardMoneyForCaringForDawn,
   calculateRequirementFromDate,
@@ -24,10 +24,26 @@ const command: HypnoCommand = {
     if (requirement >= 100)
       return message.reply(`Your Dawn does not need watering!`);
 
+    // Check if they have the power drink
+    let powerDrink = await actions.items.aquired.getFor(
+      message.author.id,
+      (
+        await actions.items.getByName(config.items.powerDrink)
+      ).id
+    );
+    let timeAdd = config.dawnagotchi.actions.water.timeAdd;
+    if (powerDrink && powerDrink.amount > 0) {
+      timeAdd = timeAdd * 3;
+      await actions.items.aquired.removeFor(
+        message.author.id,
+        config.items.powerFood
+      );
+    }
+
     // Add the stuff
     await database.run(
       `UPDATE dawnagotchi SET next_drink = next_drink + ? WHERE owner_id = ?`,
-      config.dawnagotchi.actions.water.timeAdd,
+      timeAdd,
       message.author.id
     );
 

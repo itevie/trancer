@@ -1,12 +1,7 @@
 import config from "../../config";
 import { HypnoCommand } from "../../types/util";
 import { getDawnagotchi } from "../../util/actions/dawnagotchi";
-import {
-  getAquiredItem,
-  getItem,
-  removeItemFor,
-} from "../../util/actions/items";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 import { generateDawnagotchiEmbed } from "../../util/dawnagotchi";
 
 const command: HypnoCommand<{ hex: string }> = {
@@ -28,8 +23,11 @@ const command: HypnoCommand<{ hex: string }> = {
 
   handler: async (message, args) => {
     // Check if they have any hair dye
-    let item = await getAquiredItem(config.items.hairDye, message.author.id);
-    let shopItem = await getItem(config.items.hairDye);
+    let item = await actions.items.aquired.getFor(
+      message.author.id,
+      config.items.hairDye
+    );
+    let shopItem = await actions.items.get(config.items.hairDye);
     if (item.amount === 0)
       return message.reply(`You do not have the **${shopItem.name}** item!`);
 
@@ -48,7 +46,7 @@ const command: HypnoCommand<{ hex: string }> = {
       args.args.hex,
       message.author.id
     );
-    await removeItemFor(message.author.id, item.item_id);
+    await actions.items.aquired.removeFor(message.author.id, item.item_id);
 
     // Done
     return message.reply({

@@ -17,15 +17,21 @@ const items: Record<string, Partial<Item>> = {
     description: "Feed your Dawn some hair and it'll be a lot less hungry!",
     weight: 0.5,
   },
+  juicebox: {
+    price: 15,
+    description: "Give your Dawn some juice and it'll be a lot less thirsty!",
+    weight: 0.55,
+  },
   pendulum: {
     price: 50,
-    description: "A pendulum! It goes this way and that.",
+    description:
+      "A pendulum! It goes this way and that. (good for playing with Dawn!)",
     weight: 0.2,
   },
   stick: {
-    price: 20,
+    price: 5,
     description: "A stick.",
-    weight: 0.7,
+    weight: 0.9,
   },
   // ----- Fish -----
   "common-fish": {
@@ -61,6 +67,18 @@ const items: Record<string, Partial<Item>> = {
   "dawn-fish": {
     price: 2500,
     weight: 0.01,
+    tag: "fish",
+  },
+  "cute-fishy": {
+    price: 150,
+    weight: 0.1,
+    description: "Aw... such a cutie patootie fishie",
+    tag: "fish",
+  },
+  "british-fish": {
+    price: 300,
+    weight: 0.069,
+    description: "Pip pip cheerio!",
     tag: "fish",
   },
 } as const;

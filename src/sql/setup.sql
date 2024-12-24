@@ -92,7 +92,8 @@ CREATE TABLE IF NOT EXISTS user_data (
     c4_tie INT NOT NULL DEFAULT 0,
     allow_requests BOOLEAN NOT NULL DEFAULT true,
     allow_triggers BOOLEAN NOT NULL DEFAULT true,
-    count_ruined INT NOT NULL DEFAULT 0
+    count_ruined INT NOT NULL DEFAULT 0,
+    auto_sell BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE TABLE IF NOT EXISTS pinned_ratings (

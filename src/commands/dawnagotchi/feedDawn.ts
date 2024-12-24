@@ -1,8 +1,7 @@
 import config from "../../config";
 import { HypnoCommand } from "../../types/util";
 import { getDawnagotchi } from "../../util/actions/dawnagotchi";
-import { getAquiredItem, removeItemFor } from "../../util/actions/items";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 import {
   awardMoneyForCaringForDawn,
   calculateRequirementFromDate,
@@ -25,14 +24,17 @@ const command: HypnoCommand = {
     if (requirement >= 100) return message.reply(`Your Dawn is not hungry!`);
 
     // Check if they have the power food
-    let powerFood = await getAquiredItem(
-      config.items.powerFood,
-      message.author.id
+    let powerFood = await actions.items.aquired.getFor(
+      message.author.id,
+      config.items.powerFood
     );
     let timeAdd = config.dawnagotchi.actions.feed.timeAdd;
     if (powerFood && powerFood.amount > 0) {
       timeAdd = timeAdd * 3;
-      await removeItemFor(message.author.id, config.items.powerFood);
+      await actions.items.aquired.removeFor(
+        message.author.id,
+        config.items.powerFood
+      );
     }
 
     // Add the stuff

@@ -74,7 +74,7 @@ const lbDetails: Record<
   messages: {
     title: "Most messages in server",
     description: "Who has yapped the most?",
-    entryName: config.economy.currency,
+    entryName: "messages",
   },
   ttt_wins: {
     title: "Most TicTacToe wins",

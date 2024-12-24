@@ -1,13 +1,8 @@
 import config from "../../config";
 import { HypnoCommand } from "../../types/util";
 import { addCardFor } from "../../util/actions/cards";
-import {
-  getAquiredItem,
-  getItem,
-  removeItemFor,
-} from "../../util/actions/items";
 import { generateCardEmbed } from "../../util/cards";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand<{ deck: Deck; amount: number }> = {
@@ -32,8 +27,11 @@ const command: HypnoCommand<{ deck: Deck; amount: number }> = {
 
   handler: async (message, { args, serverSettings }) => {
     // Check if user has the pull item
-    let item = await getAquiredItem(config.items.cardPull, message.author.id);
-    let shopItem = await getItem(config.items.cardPull);
+    let item = await actions.items.aquired.getFor(
+      message.author.id,
+      config.items.cardPull
+    );
+    let shopItem = await actions.items.get(config.items.cardPull);
     let amount = args.amount ? args.amount : 1;
     if (amount > item.amount)
       return message.reply(
@@ -80,7 +78,10 @@ const command: HypnoCommand<{ deck: Deck; amount: number }> = {
       if (typeof card === "string")
         return message.reply(`Failed to fetch card rarity in that deck!`);
       await addCardFor(message.author.id, card.id);
-      await removeItemFor(message.author.id, config.items.cardPull);
+      await actions.items.aquired.removeFor(
+        message.author.id,
+        config.items.cardPull
+      );
       cards.push(card);
       if (!prettyCards[card.id]) prettyCards[card.id] = [0, card];
       prettyCards[card.id][0]++;

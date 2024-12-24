@@ -1,7 +1,7 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { getAquiredItemsFor, getItem } from "../../util/actions/items";
 import { createEmbed } from "../../util/other";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "inventory",
@@ -23,7 +23,7 @@ const command: HypnoCommand<{ user?: User }> = {
   handler: async (message, { args }) => {
     let user = args.user ? args.user : message.author;
 
-    let items = await getAquiredItemsFor(user.id);
+    let items = await actions.items.aquired.getAllFor(user.id);
 
     let embed = createEmbed().setTitle(`${user.username}'s inventory`);
 
@@ -31,7 +31,7 @@ const command: HypnoCommand<{ user?: User }> = {
     else {
       let text: string[] = [];
       for await (const i of items) {
-        let item = await getItem(i.item_id);
+        let item = await actions.items.get(i.item_id);
         text.push(`**${item.name}**: ${i.amount}`);
       }
       embed.setDescription(text.join("\n"));

@@ -2,12 +2,7 @@ import { HypnoCommand } from "../../types/util";
 import config from "../../config";
 import { createEmbed } from "../../util/other";
 import { awardRandomThings } from "../../util/economy";
-import {
-  getAquiredItem,
-  getAquiredItemsFor,
-  getItems,
-  removeItemFor,
-} from "../../util/actions/items";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand = {
   name: "fish",
@@ -16,8 +11,9 @@ const command: HypnoCommand = {
 
   ratelimit: async (message) => {
     return 0;
-    let item = (await getAquiredItemsFor(message.author.id)).find(
-      (x) => x.item_id === config.items.fishingRod
+    let item = await actions.items.aquired.getFor(
+      message.author.id,
+      config.items.fishingRod
     );
 
     return item && item.amount !== 0
@@ -27,20 +23,25 @@ const command: HypnoCommand = {
 
   handler: async (message) => {
     if (
-      (await getAquiredItem(config.items.fishingRod, message.author.id))
-        .amount > 0 &&
+      (
+        await actions.items.aquired.getFor(
+          message.author.id,
+          config.items.fishingRod
+        )
+      ).amount > 0 &&
       Math.random() > 0.9
     ) {
-      await removeItemFor(message.author.id, config.items.fishingRod);
+      await actions.items.aquired.removeFor(
+        message.author.id,
+        config.items.fishingRod
+      );
       await message.reply(`Your fishing rod broke! :fishing_pole_and_fish:`);
     }
 
     const rewardString = await awardRandomThings(message.author.id, {
       items: {
         pool: Object.fromEntries(
-          (await getItems())
-            .filter((x) => x.tag === "fish")
-            .map((x) => [x.id, x.weight])
+          (await actions.items.getByTag("fish")).map((x) => [x.id, x.weight])
         ),
         count: {
           min: 1,

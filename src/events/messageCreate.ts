@@ -13,7 +13,6 @@ import {
   getDeckByName,
 } from "../util/actions/cards";
 import { getEconomyFor } from "../util/actions/economy";
-import { getItem, getItemByName } from "../util/actions/items";
 import { getRatelimit, setRatelimit } from "../util/actions/ratelimit";
 import { addCommandUsage, addMessageForCurrentTime } from "../util/analytics";
 import { generateCommandCodeBlock } from "../util/args";
@@ -349,8 +348,9 @@ client.on("messageCreate", async (message) => {
             break;
           case "item":
             let item: Item;
-            if (a.match(/^([0-9]+)$/)) item = await getItem(parseInt(a));
-            else item = await getItemByName(a);
+            if (a.match(/^([0-9]+)$/))
+              item = await actions.items.get(parseInt(a));
+            else item = await actions.items.getByName(a);
             if (!item) return "Invalid item ID/name provided";
             result = item;
             break;
