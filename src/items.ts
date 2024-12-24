@@ -81,6 +81,11 @@ const items: Record<string, Partial<Item>> = {
     description: "Pip pip cheerio!",
     tag: "fish",
   },
+  "basking-shark": {
+    price: 5000,
+    weight: 0.001,
+    tag: "fish",
+  },
 } as const;
 
 const defaults: Omit<Item, "id" | "name"> = {
