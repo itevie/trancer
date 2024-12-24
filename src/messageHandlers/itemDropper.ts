@@ -35,7 +35,7 @@ const handler: HypnoMessageHandler = {
       const rewards = await generateRandomReward({
         currency: {
           min: 0,
-          max: 200,
+          max: 100,
         },
         items: {
           pool: "get-db",

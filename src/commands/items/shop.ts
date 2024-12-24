@@ -21,8 +21,10 @@ const command: HypnoCommand = {
       type: "description",
       data: items.map(
         (item) =>
-          `**${item.name}** - ${item.price}${config.economy.currency}\n- *${
-            item.description ?? "No description"
+          `**${item.name}** - ${item.price}${config.economy.currency} (${
+            item.weight * 100
+          }%)\n- *${item.description ?? "No description"}${
+            item.tag ? `[${item.tag}]` : ""
           }*`
       ),
     });

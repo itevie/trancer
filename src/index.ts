@@ -43,6 +43,7 @@ export const client = new Client({
 });
 
 import { initInviteCache } from "./events/guildMemberAdd";
+import { setupItems } from "./items";
 
 const logger = new Logger("loader");
 export let errors = 0;
@@ -51,6 +52,7 @@ export let errors = 0;
 (async () => {
   await connect();
   await connectAnalytic();
+  await setupItems();
 })();
 
 client.on("ready", async () => {

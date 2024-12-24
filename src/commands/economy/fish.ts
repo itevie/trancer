@@ -2,7 +2,11 @@ import { HypnoCommand } from "../../types/util";
 import config from "../../config";
 import { createEmbed } from "../../util/other";
 import { awardRandomThings } from "../../util/economy";
-import { getAquiredItemsFor, removeItemFor } from "../../util/actions/items";
+import {
+  getAquiredItem,
+  getAquiredItemsFor,
+  removeItemFor,
+} from "../../util/actions/items";
 
 const command: HypnoCommand = {
   name: "fish",
@@ -21,9 +25,8 @@ const command: HypnoCommand = {
 
   handler: async (message) => {
     if (
-      (await getAquiredItemsFor(message.author.id)).find(
-        (x) => x.item_id === config.items.fishingRod
-      )?.amount !== 0 &&
+      (await getAquiredItem(config.items.fishingRod, message.author.id))
+        .amount > 0 &&
       Math.random() > 0.9
     ) {
       await removeItemFor(message.author.id, config.items.fishingRod);

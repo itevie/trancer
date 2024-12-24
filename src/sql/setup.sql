@@ -217,5 +217,6 @@ CREATE TABLE IF NOT EXISTS items (
     price INT NOT NULL,
     description TEXT DEFAULT NULL,
     weight REAL NOT NULL DEFAULT 0.5,
-    droppable BOOLEAN NOT NULL DEFAULT false
+    droppable BOOLEAN NOT NULL DEFAULT false,
+    tag TEXT DEFAULT NULL
 );

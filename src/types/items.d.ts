@@ -5,6 +5,7 @@ interface Item {
   description: string | null;
   droppable: boolean;
   weight: number;
+  tag: string | null;
 }
 
 interface Aquireditem {
