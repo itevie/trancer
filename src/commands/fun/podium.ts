@@ -1,10 +1,9 @@
 import { AttachmentBuilder, User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { getAllGuildsUserData } from "../../util/actions/userData";
 import { Podium } from "discord-image-generation";
 import { client } from "../..";
 import { getAllEconomy } from "../../util/actions/economy";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 import { accumlateSortLeaderboardData } from "../../util/createLeaderboard";
 import { lbTypes, lbUserDataMap } from "../leaderboards/lb";
 import { rankExists } from "../../util/actions/ranks";
@@ -54,10 +53,9 @@ const command: HypnoCommand<{
       case "c4_ties":
       case "c4_wins":
       case "count_ruined":
-        data = (await getAllGuildsUserData(message.guild.id)).map((x) => [
-          x.user_id,
-          x[lbUserDataMap[args.type]],
-        ]) as [string, number][];
+        data = (await actions.userData.getForServer(message.guild.id)).map(
+          (x) => [x.user_id, x[lbUserDataMap[args.type]]]
+        ) as [string, number][];
         break;
       case "rank":
         if (!args.rank) return message.reply("Please provide a rank name!");

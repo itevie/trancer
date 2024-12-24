@@ -1,9 +1,8 @@
 import { Message } from "discord.js";
 import config from "../config";
 import { HypnoMessageHandler } from "../types/util";
-import { addXP, getUserData } from "../util/actions/userData";
 import { randomFromRange } from "../util/other";
-import { getServerSettings } from "../util/actions/settings";
+import { actions } from "../util/database";
 
 const exclude = [
   "1257420480953057321",
@@ -40,7 +39,7 @@ const handler: HypnoMessageHandler = {
   description: "Awards XP",
 
   handler: async (message) => {
-    let settings = await getServerSettings(message.guild.id);
+    let settings = await actions.serverSettings.getFor(message.guild.id);
 
     if (exclude.includes(message.channel.id)) return;
     if (
@@ -54,11 +53,19 @@ const handler: HypnoMessageHandler = {
 
     lastAwards[`${message.author.id}-${message.channel.id}`] = Date.now();
 
-    let data = await getUserData(message.author.id, message.guild.id);
+    let data = await actions.userData.getFor(
+      message.author.id,
+      message.guild.id
+    );
     let pre = calculateLevel(data.xp);
 
     let award = randomFromRange(minXP, maxXP);
-    await addXP(message.author.id, message.guild.id, award);
+    await actions.userData.incrementFor(
+      message.author.id,
+      message.guild.id,
+      "xp",
+      award
+    );
 
     let post = calculateLevel(data.xp + award);
 

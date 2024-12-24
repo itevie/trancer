@@ -1,5 +1,6 @@
 import { HypnoCommand } from "../../types/util";
-import { getRandomSpiral, getSpirals } from "../../util/actions/spirals";
+import { actions } from "../../util/database";
+import { getRandomSpiral } from "../../util/spirals";
 
 export const sentSpirals: { [key: string]: Spiral } = {};
 
@@ -13,7 +14,9 @@ const command: HypnoCommand = {
   handler: async (message, { oldArgs: args }) => {
     if (args[0] === "list") {
       return message.reply(
-        `There are ${(await getSpirals()).length} spirals registered`
+        `There are ${
+          (await actions.spirals.getAll()).length
+        } spirals registered`
       );
     }
 
@@ -21,7 +24,7 @@ const command: HypnoCommand = {
 
     if (!isNaN(parseInt(args[0] ?? ""))) {
       let idx = parseInt(args[0]);
-      let spirals = await getSpirals();
+      let spirals = await actions.spirals.getAll();
       if (idx >= spirals.length)
         return message.reply(`There are not that many spirals!`);
       spiral = spirals[idx];

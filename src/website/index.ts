@@ -3,8 +3,7 @@ import cors from "cors";
 import { existsSync } from "fs";
 import config from "../config";
 import Logger from "../util/Logger";
-import { database } from "../util/database";
-import { getAllGuildsUserData, getUserData } from "../util/actions/userData";
+import { actions, database } from "../util/database";
 import { client } from "..";
 import {
   analyticDatabase,
@@ -130,7 +129,7 @@ export default function initServer() {
       case "user_data":
         return res
           .status(200)
-          .send(await getAllGuildsUserData(config.botServer.id));
+          .send(await actions.userData.getForServer(config.botServer.id));
       case "member_count":
         return res.status(200).send(await getMemberCounts(config.botServer.id));
       case "command_usage":

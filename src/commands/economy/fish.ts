@@ -5,6 +5,7 @@ import { awardRandomThings } from "../../util/economy";
 import {
   getAquiredItem,
   getAquiredItemsFor,
+  getItems,
   removeItemFor,
 } from "../../util/actions/items";
 
@@ -14,6 +15,7 @@ const command: HypnoCommand = {
   type: "economy",
 
   ratelimit: async (message) => {
+    return 0;
     let item = (await getAquiredItemsFor(message.author.id)).find(
       (x) => x.item_id === config.items.fishingRod
     );
@@ -34,15 +36,15 @@ const command: HypnoCommand = {
     }
 
     const rewardString = await awardRandomThings(message.author.id, {
-      currency: {
-        min: config.economy.fish.min,
-        max: config.economy.fish.max,
-      },
       items: {
-        pool: "get-db",
+        pool: Object.fromEntries(
+          (await getItems())
+            .filter((x) => x.tag === "fish")
+            .map((x) => [x.id, x.weight])
+        ),
         count: {
-          min: 0,
-          max: 2,
+          min: 1,
+          max: 7,
         },
       },
     });

@@ -13,10 +13,11 @@ import {
   getDeckByName,
 } from "../util/actions/cards";
 import { getEconomyFor } from "../util/actions/economy";
+import { getItem, getItemByName } from "../util/actions/items";
 import { getRatelimit, setRatelimit } from "../util/actions/ratelimit";
-import { getServerSettings } from "../util/actions/settings";
 import { addCommandUsage, addMessageForCurrentTime } from "../util/analytics";
 import { generateCommandCodeBlock } from "../util/args";
+import { actions } from "../util/database";
 import { msToHowLong } from "../util/ms";
 import {
   compareTwoStrings,
@@ -47,7 +48,7 @@ client.on("messageCreate", async (message) => {
   await getEconomyFor(message.author.id);
 
   // Fetch data
-  const settings = await getServerSettings(message.guild.id);
+  const settings = await actions.serverSettings.getFor(message.guild.id);
 
   // Check if it's just a ping, if so send details
   if (message.content.trim() == `<@${client.user.id}>`)
@@ -345,6 +346,13 @@ client.on("messageCreate", async (message) => {
             else deck = await getDeckByName(a);
             if (!deck) return "Invalid deck ID/name provided";
             result = deck;
+            break;
+          case "item":
+            let item: Item;
+            if (a.match(/^([0-9]+)$/)) item = await getItem(parseInt(a));
+            else item = await getItemByName(a);
+            if (!item) return "Invalid item ID/name provided";
+            result = item;
             break;
           case "user":
             if (a.toLowerCase() === "me") {

@@ -1,9 +1,8 @@
 import { HypnoMessageHandler } from "../types/util";
-import { addBump } from "../util/actions/userData";
 import config from "../config";
 import { addMoneyFor } from "../util/actions/economy";
 import { createEmbed, randomFromRange } from "../util/other";
-import { database } from "../util/database";
+import { actions, database } from "../util/database";
 import { client } from "..";
 
 setInterval(async () => {
@@ -59,7 +58,7 @@ const handler: HypnoMessageHandler = {
       // Get the authors ID
       let user = message.interaction.user;
 
-      await addBump(user.id, message.guild.id);
+      await actions.userData.incrementFor(user.id, message.guild.id, "bumps");
       await database.run(
         `UPDATE server_settings SET last_bump = ? WHERE server_id = ?;`,
         Date.now(),

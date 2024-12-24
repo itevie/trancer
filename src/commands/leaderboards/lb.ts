@@ -1,11 +1,11 @@
 import config from "../../config";
 import { calculateLevel } from "../../messageHandlers/xp";
 import { HypnoCommand } from "../../types/util";
-import { getAllGuildsUserData } from "../../util/actions/userData";
 import {
   createPaginatedLeaderboardFromData,
   LeaderboardOptions,
 } from "../../util/createLeaderboard";
+import { actions } from "../../util/database";
 import { createEmbed } from "../../util/other";
 
 export const lbUserDataMap = {
@@ -120,7 +120,7 @@ const command: HypnoCommand = {
           .map((x) => `\`${o.serverSettings.prefix}${x}\``)
           .join(", ")}`
       );
-    let data = await getAllGuildsUserData(message.guild.id);
+    let data = await actions.userData.getForServer(message.guild.id);
 
     let organised = data.map((x) => [
       x.user_id,

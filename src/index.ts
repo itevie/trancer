@@ -55,35 +55,35 @@ export let errors = 0;
   await setupItems();
 })();
 
+// Load commands
+const commandFiles =
+  args["load-cmd"] && args["load-cmd"].length > 0
+    ? args["load-cmd"].map((x) => `${__dirname}/commands/${x}`)
+    : getAllFiles(__dirname + "/commands");
+
+for (const commandFile of commandFiles) {
+  const commandImport = require(commandFile).default as HypnoCommand;
+  if (commandImport.ignore) continue;
+  commands[commandImport.name] = commandImport;
+  for (const alias of commandImport.aliases || []) {
+    if (commandImport.eachAliasIsItsOwnCommand) {
+      commands[alias] = {
+        ...commandImport,
+        name: alias,
+      };
+    } else {
+      commands[alias] = commandImport;
+    }
+  }
+  logger.log(`Loaded command: ${commandImport.name}`);
+}
+
 client.on("ready", async () => {
   // Load events
   const eventFiles = getAllFiles(__dirname + "/events");
   for (const eventFile of eventFiles) {
     require(eventFile);
     logger.log(`Loaded event: ${eventFile}`);
-  }
-
-  // Load commands
-  const commandFiles =
-    args["load-cmd"] && args["load-cmd"].length > 0
-      ? args["load-cmd"].map((x) => `${__dirname}/commands/${x}`)
-      : getAllFiles(__dirname + "/commands");
-
-  for (const commandFile of commandFiles) {
-    const commandImport = require(commandFile).default as HypnoCommand;
-    if (commandImport.ignore) continue;
-    commands[commandImport.name] = commandImport;
-    for (const alias of commandImport.aliases || []) {
-      if (commandImport.eachAliasIsItsOwnCommand) {
-        commands[alias] = {
-          ...commandImport,
-          name: alias,
-        };
-      } else {
-        commands[alias] = commandImport;
-      }
-    }
-    logger.log(`Loaded command: ${commandImport.name}`);
   }
 
   if (

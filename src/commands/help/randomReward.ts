@@ -1,6 +1,15 @@
 import { HypnoCommand } from "../../types/util";
+import { getItems } from "../../util/actions/items";
+import {
+  englishifyRewardDetails,
+  generateRandomReward,
+} from "../../util/economy";
 
-const command: HypnoCommand<{ itemtag?: string }> = {
+const command: HypnoCommand<{
+  itemtag?: string;
+  minitems?: number;
+  maxitems?: number;
+}> = {
   name: "randomreward",
   type: "help",
   description: "Debug command",
@@ -13,10 +22,35 @@ const command: HypnoCommand<{ itemtag?: string }> = {
         type: "string",
         wickStyle: true,
       },
+      {
+        name: "minitems",
+        type: "wholepositivenumber",
+        wickStyle: true,
+      },
+      {
+        name: "maxitems",
+        type: "wholepositivenumber",
+        wickStyle: true,
+      },
     ],
   },
 
-  handler: (message, { args }) => {},
+  handler: async (message, { args }) => {
+    let items = await getItems();
+    if (args.itemtag) items = items.filter((x) => x.tag === args.itemtag);
+
+    const reward = await generateRandomReward({
+      items: {
+        pool: Object.fromEntries(items.map((x) => [x.id, x.weight])),
+        count: {
+          min: args.minitems || 0,
+          max: args.maxitems || 5,
+        },
+      },
+    });
+
+    return message.reply(await englishifyRewardDetails(reward));
+  },
 };
 
 export default command;
