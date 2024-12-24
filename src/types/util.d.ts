@@ -35,6 +35,7 @@ type ArgumentType =
   | "card"
   | "deck"
   | "role"
+  | "item"
   | "none"
   | "array"
   | "channel";

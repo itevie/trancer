@@ -6,7 +6,6 @@ import {
   setAutoImpositionEvery,
   setupAutoImposition,
 } from "../../util/actions/imposition";
-import { getServerSettings } from "../../util/actions/settings";
 import { database } from "../../util/database";
 
 const command: HypnoCommand = {
@@ -31,13 +30,11 @@ const command: HypnoCommand = {
   guards: ["admin"],
 
   except: (_, args) => args[0] === "details",
-  handler: async (message, { oldArgs: args }) => {
+  handler: async (message, { oldArgs: args, serverSettings }) => {
     // Check if arg
     if (!args[0])
       return message.reply(
-        `Please provide a subcommand, see \`${
-          (await getServerSettings(message.guild.id)).prefix
-        }cmd is\``
+        `Please provide a subcommand, see \`${serverSettings.prefix}cmd is\``
       );
 
     // Fetch imposition settings

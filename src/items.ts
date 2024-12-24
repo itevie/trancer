@@ -33,6 +33,36 @@ const items: Record<string, Partial<Item>> = {
     weight: 0.8,
     tag: "fish",
   },
+  "uncommon-fish": {
+    price: 40,
+    weight: 0.6,
+    tag: "fish",
+  },
+  "rare-fish": {
+    price: 100,
+    weight: 0.2,
+    tag: "fish",
+  },
+  "epic-fish": {
+    price: 200,
+    weight: 0.05,
+    tag: "fish",
+  },
+  "mythic-fish": {
+    price: 500,
+    weight: 0.01,
+    tag: "fish",
+  },
+  "you-are-never-getting-this-fish": {
+    price: 5000,
+    weight: 0.001,
+    tag: "fish",
+  },
+  "dawn-fish": {
+    price: 2500,
+    weight: 0.01,
+    tag: "fish",
+  },
 } as const;
 
 const defaults: Omit<Item, "id" | "name"> = {

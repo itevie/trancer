@@ -1,7 +1,6 @@
 import { HypnoCommand } from "../../types/util";
-import { getUserData } from "../../util/actions/userData";
 import { createSettingsPage } from "../../util/components/settingsPanel";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 
 const command: HypnoCommand = {
   name: "usersettings",
@@ -12,7 +11,10 @@ const command: HypnoCommand = {
   handler: async (message) => {
     return createSettingsPage({
       message,
-      dbData: await getUserData(message.author.id, message.guild.id),
+      dbData: await actions.userData.getFor(
+        message.author.id,
+        message.guild.id
+      ),
       options: [
         {
           dbName: "allow_requests",

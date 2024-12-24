@@ -57,3 +57,7 @@ export async function removeItemFor(userId: string, id: number): Promise<void> {
     id
   );
 }
+
+export async function getItems(): Promise<Item[]> {
+  return await database.all<Item[]>("SELECT * FROM items;");
+}

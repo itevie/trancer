@@ -1,5 +1,4 @@
 import { HypnoCommand } from "../../types/util";
-import { getServerSettings } from "../../util/actions/settings";
 import { createEmbed, gcd } from "../../util/other";
 
 const command: HypnoCommand = {
@@ -8,9 +7,8 @@ const command: HypnoCommand = {
   description: "Get the ratio of subs : tists",
   type: "fun",
 
-  handler: async (message) => {
+  handler: async (message, { serverSettings }) => {
     // Collect data
-    const serverSettings = await getServerSettings(message.guild.id);
     const members = await message.guild.members.fetch();
     let tists = 0;
     let subs = 0;

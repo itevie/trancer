@@ -1,8 +1,7 @@
 import { HypnoCommand } from "../../types/util";
-import { getRandomSpiral } from "../../util/actions/spirals";
-import { getUserFavouriteSpirals } from "../../util/actions/userFavouriteSpirals";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 import { getRandomImposition } from "../../util/other";
+import { getRandomSpiral } from "../../util/spirals";
 
 const validOptions = [
   "nospirals",
@@ -90,7 +89,7 @@ const command: HypnoCommand = {
     if (!args.includes("nospirals"))
       if (args.includes("allspirals"))
         spirals = await database.all(`SELECT * FROM spirals;`);
-      else spirals = await getUserFavouriteSpirals(message.author.id);
+      else spirals = await actions.spirals.favourites.getFor(message.author.id);
 
     // Make sure theres at least 3
     if (!args.includes("nospirals"))

@@ -4,10 +4,9 @@ import { createEmbed } from "../../util/other";
 import { getTriggersFor } from "../../util/actions/imposition";
 import { getAllAquiredBadgesFor } from "../../util/actions/badges";
 import badges from "../../util/badges";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 import { getAllEconomy, getEconomyFor } from "../../util/actions/economy";
 import config from "../../config";
-import { getUserData } from "../../util/actions/userData";
 import { calculateLevel } from "../../messageHandlers/xp";
 import { createRating } from "../fun/rate";
 
@@ -34,7 +33,7 @@ const command: HypnoCommand<{ user?: User }> = {
 
     // Get details
     const economy = await getEconomyFor(user.id);
-    const userData = await getUserData(user.id, message.guild.id);
+    const userData = await actions.userData.getFor(user.id, message.guild.id);
     const imposition = await getTriggersFor(user.id);
     const spiralsGiven = (
       await database.all(`SELECT * FROM spirals WHERE sent_by = ?`, user.id)

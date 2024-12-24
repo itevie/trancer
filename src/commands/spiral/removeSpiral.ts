@@ -1,5 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import { deleteSpiral, getSpiralById } from "../../util/actions/spirals";
+import { actions } from "../../util/database";
 import { sentSpirals } from "./spiral";
 
 const command: HypnoCommand<{ id?: number }> = {
@@ -23,7 +23,7 @@ const command: HypnoCommand<{ id?: number }> = {
     // Get the spiral
     let spiral: Spiral;
     if (args.args.id) {
-      spiral = await getSpiralById(args.args.id);
+      spiral = await actions.spirals.getById(args.args.id);
       if (!spiral) return message.reply(`A spiral with that ID does not exist`);
     } else if (message.reference) {
       if (!sentSpirals[message.reference.messageId])
@@ -34,7 +34,7 @@ const command: HypnoCommand<{ id?: number }> = {
     }
 
     // Delete the spiral
-    await deleteSpiral(spiral.id);
+    await actions.spirals.delete(spiral.id);
     return await message.reply(`Removed :cyclone:`);
   },
 };

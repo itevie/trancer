@@ -1,6 +1,6 @@
 import { calculateLevel } from "../../messageHandlers/xp";
 import { HypnoCommand } from "../../types/util";
-import { getAllGuildsUserData } from "../../util/actions/userData";
+import { actions } from "../../util/database";
 import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand = {
@@ -10,7 +10,7 @@ const command: HypnoCommand = {
   type: "leaderboards",
 
   handler: async (message) => {
-    const userData = await getAllGuildsUserData(message.guild.id);
+    const userData = await actions.userData.getForServer(message.guild.id);
     const messages = userData.reduce((v, c) => v + c.messages_sent, 0);
     const vcTime = userData.reduce((v, c) => v + c.vc_time, 0);
     const xp = userData.reduce((v, c) => v + c.xp, 0);

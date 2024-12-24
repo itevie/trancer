@@ -1,7 +1,6 @@
 import { HypnoCommand } from "../../types/util";
 import { createSettingsPage } from "../../util/components/settingsPanel";
-import { getServerSettings } from "../../util/actions/settings";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 
 const settingsToSql = {
   prefix: "prefix",
@@ -31,7 +30,7 @@ const command: HypnoCommand<{
     return createSettingsPage({
       title: "Server Settings",
       message,
-      dbData: await getServerSettings(message.guild.id),
+      dbData: await actions.serverSettings.getFor(message.guild.id),
       options: [
         {
           dbName: "prefix",

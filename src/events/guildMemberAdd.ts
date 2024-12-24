@@ -2,11 +2,10 @@ import { Invite, TextChannel } from "discord.js";
 import { client } from "..";
 import config from "../config";
 import { addMoneyFor } from "../util/actions/economy";
-import { getServerSettings } from "../util/actions/settings";
 import { addToMemberCount } from "../util/analytics";
 import getInviteDetails from "../util/getInviteDetails";
 import { createEmbed } from "../util/other";
-import { database } from "../util/database";
+import { actions, database } from "../util/database";
 
 let inviteCache: { [key: string]: { [key: string]: number } } = {};
 export async function initInviteCache() {
@@ -47,7 +46,7 @@ client.on("guildMemberAdd", async (member) => {
   if (client.user.id === config.devBot.id) return;
 
   // Check invite logger
-  let serverSettings = await getServerSettings(member.guild.id);
+  let serverSettings = await actions.serverSettings.getFor(member.guild.id);
 
   if (serverSettings.auto_ban_enabled) {
     let abk = serverSettings.auto_ban_keywords.split(";");

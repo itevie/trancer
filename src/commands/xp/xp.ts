@@ -1,12 +1,12 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { getUserData } from "../../util/actions/userData";
 import {
   calculateLevel,
   getXPForLevel,
   xpForNextLevel,
 } from "../../messageHandlers/xp";
 import { makePercentageASCII } from "../../util/other";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "xp",
@@ -27,7 +27,7 @@ const command: HypnoCommand<{ user?: User }> = {
 
   handler: async (message, { args }) => {
     let user = args.user ? args.user : message.author;
-    const { xp } = await getUserData(user.id, message.guild.id);
+    const { xp } = await actions.userData.getFor(user.id, message.guild.id);
 
     const level = calculateLevel(xp);
     const currentLevelXP = getXPForLevel(level - 2);

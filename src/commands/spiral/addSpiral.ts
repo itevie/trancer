@@ -1,5 +1,4 @@
 import { HypnoCommand } from "../../types/util";
-import { addSpiral, hasSpiral } from "../../util/actions/spirals";
 import config from "../../config";
 import { Attachment, Message } from "discord.js";
 import axios from "axios";
@@ -7,6 +6,7 @@ import { resolve } from "path";
 import { createWriteStream } from "fs";
 import { addMoneyFor } from "../../util/actions/economy";
 import Logger from "../../util/Logger";
+import { actions } from "../../util/database";
 
 let spiralLogger = new Logger("spirals");
 
@@ -46,7 +46,7 @@ const command: HypnoCommand = {
     }
 
     // Check if already exists
-    if (await hasSpiral(link))
+    if (await actions.spirals.has(link))
       return message.reply(`That spiral has already been added`);
 
     // Fetch it
@@ -77,7 +77,7 @@ const command: HypnoCommand = {
             await message.reply(
               `Failed to write the file :(\n(Added anyway, thanks)`
             );
-            await addSpiral(link, message.author.id, "");
+            await actions.spirals.add(link, message.author.id, "");
             writer.close();
           });
 
@@ -103,7 +103,7 @@ const command: HypnoCommand = {
                 createdMessage.attachments.entries().next()
                   .value[1] as Attachment
               ).url;
-              spiral = await addSpiral(link, msg.author.id, fileName);
+              spiral = await actions.spirals.add(link, msg.author.id, fileName);
             }
 
             await addMoneyFor(
@@ -120,7 +120,7 @@ const command: HypnoCommand = {
         });
     } catch (err) {
       console.log(err);
-      let spiral = await addSpiral(link, message.author.id, "");
+      let spiral = await actions.spirals.add(link, message.author.id, "");
       return message.reply(
         `Failed to download the spiral :(\nLink added directly (ID ${spiral.id})`
       );

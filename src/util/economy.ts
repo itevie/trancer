@@ -58,7 +58,7 @@ export async function englishifyRewardDetails(
 
   for await (const [id, quantity] of Object.entries(details.items)) {
     const card = await getItem(parseInt(id));
-    winnings.push(`**${quantity} ${card.name}${quantity !== 1 ? "" : "s"}**`);
+    winnings.push(`**${quantity} ${card.name}${quantity !== 1 ? "s" : ""}**`);
   }
 
   return englishifyList(winnings);
@@ -96,17 +96,16 @@ export async function generateRandomReward(
     }
 
     let poolEntries = Object.entries(pool);
-
-    const itemsToAward = biasedRandomFromRange(count.min, count.max);
-
+    shuffle(poolEntries);
+    const totalWeight = poolEntries.reduce((c, v) => c + v[1], 0);
+    const amount = biasedRandomFromRange(count.min, count.max);
     const selectedItems: { [key: number]: number } = {};
 
-    for (let i = 0; i < itemsToAward; i++) {
-      const randomValue = Math.random();
+    for (let i = 0; i < amount; i++) {
+      const randomValue = Math.random() * totalWeight;
       let cumulativeWeight = 0;
       let itemSelected = false;
 
-      shuffle(poolEntries);
       for (const [itemId, weight] of poolEntries) {
         cumulativeWeight += weight;
 
@@ -116,11 +115,6 @@ export async function generateRandomReward(
           itemSelected = true;
           break;
         }
-      }
-
-      // If no item was selected (edge case, extremely low weights), skip
-      if (!itemSelected) {
-        break;
       }
     }
 
