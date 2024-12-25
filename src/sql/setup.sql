@@ -219,5 +219,6 @@ CREATE TABLE IF NOT EXISTS items (
     description TEXT DEFAULT NULL,
     weight REAL NOT NULL DEFAULT 0.5,
     droppable BOOLEAN NOT NULL DEFAULT false,
-    tag TEXT DEFAULT NULL
+    tag TEXT DEFAULT NULL,
+    buyable BOOLEAN NOT NULL DEFAULT true
 );

@@ -6,6 +6,7 @@ interface Item {
   droppable: boolean;
   weight: number;
   tag: string | null;
+  buyable: boolean;
 }
 
 interface AquiredItem {

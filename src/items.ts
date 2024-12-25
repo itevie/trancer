@@ -40,22 +40,22 @@ const items: Record<string, Partial<Item>> = {
     tag: "fish",
   },
   "uncommon-fish": {
-    price: 40,
+    price: 20,
     weight: 0.6,
     tag: "fish",
   },
   "rare-fish": {
-    price: 100,
+    price: 50,
     weight: 0.2,
     tag: "fish",
   },
   "epic-fish": {
-    price: 200,
+    price: 100,
     weight: 0.05,
     tag: "fish",
   },
   "mythic-fish": {
-    price: 500,
+    price: 450,
     weight: 0.01,
     tag: "fish",
   },
@@ -86,6 +86,12 @@ const items: Record<string, Partial<Item>> = {
     weight: 0.001,
     tag: "fish",
   },
+  "christmas-cookie": {
+    price: 1000,
+    weight: 0,
+    tag: "collectable",
+    buyable: false,
+  },
 } as const;
 
 const defaults: Omit<Item, "id" | "name"> = {
@@ -94,6 +100,7 @@ const defaults: Omit<Item, "id" | "name"> = {
   weight: 0.5,
   droppable: true,
   tag: null,
+  buyable: true,
 };
 
 export async function setupItems(): Promise<void> {
@@ -104,8 +111,8 @@ export async function setupItems(): Promise<void> {
     if (!databaseItem) {
       await database.run(
         `
-        INSERT INTO items (name, price, description, weight, droppable, tag)
-        VALUES (?, ?, ?, ?, ?, ?);
+        INSERT INTO items (name, price, description, weight, droppable, tag, buyable)
+        VALUES (?, ?, ?, ?, ?, ?, ?);
       `,
         name,
         ...Object.entries(defaults).map(([k, v]) => (k in item ? item[k] : v))

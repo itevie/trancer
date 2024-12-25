@@ -28,6 +28,8 @@ const command: HypnoCommand<{ item: Item; amount?: number }> = {
 
     // Check if item exists
     if (!args.item) return message.reply(`That item does not exist!`);
+    if (!args.item.buyable)
+      return message.reply(`:warning: That item is not buyable!`);
 
     let amount = args.amount || 1;
     let price = args.item.price * amount;
