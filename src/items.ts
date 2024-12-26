@@ -56,6 +56,43 @@ const items: Record<string, Partial<Item>> = {
     tag: "fish",
     emoji: "<:common_fish:1321758129872048189>",
   },
+  cod: {
+    price: 5,
+    weight: 0.9,
+    tag: "fish",
+  },
+  salmon: {
+    price: 15,
+    weight: 0.75,
+    tag: "fish",
+  },
+  "wide-salmon": {
+    price: 20,
+    weight: 0.7,
+    tag: "fish",
+  },
+  pufferfish: {
+    price: 30,
+    weight: 0.6,
+    tag: "fish",
+  },
+  catfish: {
+    price: 10,
+    weight: 0.3,
+    tag: "fish",
+  },
+  "spiral-fish": {
+    price: 50,
+    weight: 0.2,
+    tag: "fish",
+  },
+  "we-are-number-one-fish": {
+    price: 20000,
+    weight: 0.00005,
+    tag: "fish",
+    description:
+      "If you wanna be a villain number one, you have to catch a fishie on the run.",
+  },
   "uncommon-fish": {
     price: 20,
     weight: 0.6,
@@ -113,8 +150,8 @@ const items: Record<string, Partial<Item>> = {
     tag: "fish",
   },
   "cookie-fish": {
-    price: 50,
-    weight: 0.05,
+    price: 100,
+    weight: 0.1,
     tag: "fish",
     emoji: "<:cookie_fish:1321843822115684483>",
   },
