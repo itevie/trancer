@@ -8,6 +8,7 @@ interface Item {
   tag: string | null;
   buyable: boolean;
   emoji: string | null;
+  max: number | null;
 }
 
 interface AquiredItem {

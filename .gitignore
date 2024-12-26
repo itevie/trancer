@@ -19,3 +19,5 @@ data_old.db
 backup.db
 /build/
 src/website/app/build!
+./lottery.txt
+lottery.txt

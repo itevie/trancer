@@ -40,6 +40,18 @@ const command: HypnoCommand<{ item: Item; amount?: number }> = {
         `You do not have **${price}${config.economy.currency}**`
       );
 
+    // Check if max
+    if (args.item.max) {
+      const ai = await actions.items.aquired.getFor(
+        message.author.id,
+        args.item.id
+      );
+      if (ai.amount + amount > args.item.max)
+        return message.reply(
+          `You can't buy more as this item is maxxed at **${args.item.max}** per person.`
+        );
+    }
+
     // Give the user the item
     await removeMoneyFor(message.author.id, price);
     await actions.items.aquired.addFor(message.author.id, args.item.id, amount);

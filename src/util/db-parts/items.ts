@@ -51,6 +51,13 @@ const _actions = {
       );
     },
 
+    get: async (itemId: number): Promise<AquiredItem[]> => {
+      return await database.all<AquiredItem[]>(
+        "SELECT * FROM aquired_items WHERE item_id = ? AND amount > 0;",
+        itemId
+      );
+    },
+
     resolveFrom: async (
       aquired: AquiredItem[]
     ): Promise<(Item & AquiredItem)[]> => {

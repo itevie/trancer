@@ -44,6 +44,7 @@ export const client = new Client({
 
 import { initInviteCache } from "./events/guildMemberAdd";
 import { setupItems } from "./items";
+import { initLottery } from "./util/lottery";
 
 const logger = new Logger("loader");
 export let errors = 0;
@@ -102,7 +103,10 @@ client.on("ready", async () => {
     }
   }
 
-  initInviteCache();
+  if (client.user.id !== config.devBot.id) {
+    initInviteCache();
+    initLottery();
+  }
 
   checkBadges();
   setTimeout(() => {

@@ -1,3 +1,4 @@
+import config from "./config";
 import { database, databaseLogger } from "./util/database";
 
 const items: Record<string, Partial<Item>> = {
@@ -146,6 +147,13 @@ const items: Record<string, Partial<Item>> = {
     buyable: false,
     emoji: "<:chirtmas_cookie:1321761548372279337>",
   },
+  "lottery-ticket": {
+    price: config.lottery.entryPrice,
+    weight: 0,
+    droppable: false,
+    buyable: config.lottery.enabled,
+    max: 5,
+  },
 } as const;
 
 const defaults: Omit<Item, "id" | "name"> = {
@@ -156,6 +164,7 @@ const defaults: Omit<Item, "id" | "name"> = {
   tag: null,
   buyable: true,
   emoji: null,
+  max: null,
 };
 
 export async function setupItems(): Promise<void> {
@@ -166,8 +175,8 @@ export async function setupItems(): Promise<void> {
     if (!databaseItem) {
       await database.run(
         `
-        INSERT INTO items (name, price, description, weight, droppable, tag, buyable, emoji)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+        INSERT INTO items (name, price, description, weight, droppable, tag, buyable, emoji, max)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
       `,
         name,
         ...Object.entries(defaults).map(([k, v]) => (k in item ? item[k] : v))

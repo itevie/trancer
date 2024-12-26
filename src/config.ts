@@ -132,6 +132,15 @@ const config = {
   },
 
   // ----- Economy Settings -----
+  lottery: {
+    enabled: true,
+    length: 1000 * 60 * 60 * 24 * 7,
+    basePool: 250,
+    entryPrice: 250,
+    maxEntries: 5,
+    announcementChannel: "1257417475621130351",
+  },
+
   economy: {
     currency: "🌀",
 
