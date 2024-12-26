@@ -108,6 +108,36 @@ const items: Record<string, Partial<Item>> = {
     weight: 0.001,
     tag: "fish",
   },
+  "cookie-fish": {
+    price: 50,
+    weight: 0.05,
+    tag: "fish",
+    emoji: "<:cookie_fish:1321843822115684483>",
+  },
+  "transparent-fish": {
+    price: 100,
+    weight: 0.1,
+    tag: "fish",
+    emoji: "<:transparent_fish:1321843791241678869>",
+  },
+  "gay-fish": {
+    price: 300,
+    weight: 0.009,
+    tag: "fish",
+    emoji: "<:gay_fish:1321843756592271441>",
+  },
+  "scottish-fish": {
+    price: 100,
+    weight: 0.2,
+    tag: "fish",
+    emoji: "<:scotish_fish:1321843773415886899>",
+  },
+  "trans-fish": {
+    price: 5000,
+    weight: 0.005,
+    tag: "fish",
+    emoji: "<:trans_fish:1321845160492925029>",
+  },
   "christmas-cookie": {
     price: 1000,
     weight: 0,
@@ -136,8 +166,8 @@ export async function setupItems(): Promise<void> {
     if (!databaseItem) {
       await database.run(
         `
-        INSERT INTO items (name, price, description, weight, droppable, tag, buyable)
-        VALUES (?, ?, ?, ?, ?, ?, ?);
+        INSERT INTO items (name, price, description, weight, droppable, tag, buyable, emoji)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?);
       `,
         name,
         ...Object.entries(defaults).map(([k, v]) => (k in item ? item[k] : v))
