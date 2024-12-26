@@ -104,6 +104,19 @@ const _actions = {
         await _actions.aquired.removeFor(userId, parseInt(id), amount);
       }
     },
+
+    setLock: async (
+      userId: string,
+      itemId: number,
+      lock: boolean
+    ): Promise<void> => {
+      await database.run(
+        `UPDATE aquired_items SET protected = ? WHERE user_id = ? AND item_id = ?;`,
+        lock,
+        userId,
+        itemId
+      );
+    },
   },
 } as const;
 

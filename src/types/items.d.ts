@@ -13,4 +13,5 @@ interface AquiredItem {
   item_id: number;
   user_id: string;
   amount: number;
+  protected: boolean;
 }

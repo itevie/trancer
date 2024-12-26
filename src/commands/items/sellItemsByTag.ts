@@ -3,6 +3,7 @@ import { HypnoCommand } from "../../types/util";
 import { addMoneyFor } from "../../util/actions/economy";
 import ConfirmAction from "../../util/components/Confirm";
 import { actions } from "../../util/database";
+import { calculateItemPrice } from "../../util/economy";
 import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand<{ tag: string }> = {
@@ -26,9 +27,12 @@ const command: HypnoCommand<{ tag: string }> = {
       await actions.items.aquired.resolveFrom(
         await actions.items.aquired.getAllFor(message.author.id)
       )
-    ).filter((x) => x.tag === args.tag);
+    ).filter((x) => x.tag === args.tag && !x.protected);
 
-    const price = items.reduce((c, v) => c + v.price * v.amount, 0);
+    const price = items.reduce(
+      (c, v) => c + calculateItemPrice(v) * v.amount,
+      0
+    );
 
     const msg = `${items
       .map((x) => `**${x.name}**: ${x.amount}`)

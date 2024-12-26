@@ -89,6 +89,7 @@ const items: Record<string, Partial<Item>> = {
   "christmas-cookie": {
     price: 1000,
     weight: 0,
+    description: "A tasty cookie given on 25/12/2024!",
     tag: "collectable",
     buyable: false,
   },

@@ -121,7 +121,8 @@ CREATE TABLE IF NOT EXISTS aquired_badges (
 CREATE TABLE IF NOT EXISTS aquired_items (
     item_id INTEGER REFERENCES items(id),
     user_id TEXT NOT NULL,
-    amount INT NOT NULL DEFAULT 0
+    amount INT NOT NULL DEFAULT 0,
+    protected BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE TABLE IF NOT EXISTS aquired_cards (

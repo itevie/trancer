@@ -123,3 +123,7 @@ export async function generateRandomReward(
 
   return winnings;
 }
+
+export function calculateItemPrice(item: Item): number {
+  return Math.round(Math.min(0.7, 1 - item.weight) * item.price);
+}

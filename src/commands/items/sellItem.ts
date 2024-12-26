@@ -3,6 +3,7 @@ import { HypnoCommand } from "../../types/util";
 import { addMoneyFor } from "../../util/actions/economy";
 import ConfirmAction from "../../util/components/Confirm";
 import { actions } from "../../util/database";
+import { calculateItemPrice } from "../../util/economy";
 import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand<{ item: Item; amount?: number }> = {
@@ -38,9 +39,14 @@ const command: HypnoCommand<{ item: Item; amount?: number }> = {
         `:warning: You do not have **${amount} ${args.item.name}**!`
       );
 
+    if (aquiredItem.protected)
+      return message.reply(
+        `:warning: You have protected that item, so you can't sell it!`
+      );
+
     // Calculate price
     // 1 - weight * price * amount?
-    const price = (1 - args.item.weight) * args.item.price * amount;
+    const price = calculateItemPrice(args.item) * amount;
 
     ConfirmAction({
       message,
