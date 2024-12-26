@@ -1,3 +1,4 @@
+git pull
 rm -rf build/
 tsc --build --verbose
 cp -r ./src/sql ./build/sql
