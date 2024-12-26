@@ -37,7 +37,7 @@ async function checkLottery() {
   );
   let prize: number = items.reduce(
     (p, c) => p + config.lottery.entryPrice * c.amount,
-    0
+    config.lottery.basePool
   );
 
   // Pick winner

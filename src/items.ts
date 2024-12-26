@@ -90,12 +90,15 @@ const items: Record<string, Partial<Item>> = {
     price: 2500,
     weight: 0.01,
     tag: "fish",
+    description:
+      "According to all known laws of hypnosis, Dawn is a fish... allegedly.",
   },
   "cute-fishy": {
     price: 150,
     weight: 0.1,
     description: "Aw... such a cutie patootie fishie",
     tag: "fish",
+    emoji: "<:cute_fish:1321857857636798566>",
   },
   "british-fish": {
     price: 300,
@@ -120,24 +123,28 @@ const items: Record<string, Partial<Item>> = {
     weight: 0.1,
     tag: "fish",
     emoji: "<:transparent_fish:1321843791241678869>",
+    description: "Woah.",
   },
   "gay-fish": {
     price: 300,
     weight: 0.009,
     tag: "fish",
     emoji: "<:gay_fish:1321843756592271441>",
+    description: "Gay!!!!",
   },
   "scottish-fish": {
     price: 100,
     weight: 0.2,
     tag: "fish",
     emoji: "<:scotish_fish:1321843773415886899>",
+    description: "SCOTLAND FOREVER!",
   },
   "trans-fish": {
     price: 5000,
     weight: 0.005,
     tag: "fish",
     emoji: "<:trans_fish:1321845160492925029>",
+    description: "Your average trans fish",
   },
   "christmas-cookie": {
     price: 1000,
