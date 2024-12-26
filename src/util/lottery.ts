@@ -74,6 +74,8 @@ async function checkLottery() {
     ],
   });
 
+  if (!winner) return;
+
   // Remove items
   for await (const ai of items) {
     await actions.items.aquired.removeFor(ai.user_id, ai.item_id, ai.amount);

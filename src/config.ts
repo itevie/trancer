@@ -138,7 +138,7 @@ const config = {
     basePool: 250,
     entryPrice: 250,
     maxEntries: 5,
-    announcementChannel: "1257417475621130351",
+    announcementChannel: "1257417208024268850",
   },
 
   economy: {
