@@ -106,7 +106,7 @@ export default function initServer() {
 
   app.get("/api/servers", async (_, res) => {
     return res.status(200).send(
-      client.guilds.cache.map((x) => {
+      (await client.guilds.fetch()).map((x) => {
         return {
           id: x.id,
           name: x.name,
