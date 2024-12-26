@@ -1,7 +1,7 @@
 import { HypnoCommand } from "../../types/util";
 import config from "../../config";
 import { createEmbed } from "../../util/other";
-import { awardRandomThings } from "../../util/economy";
+import { awardRandomThings } from "../../util/items";
 
 const command: HypnoCommand = {
   name: "daily",

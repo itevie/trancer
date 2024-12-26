@@ -3,7 +3,7 @@ import { actions } from "../../util/database";
 import {
   englishifyRewardDetails,
   generateRandomReward,
-} from "../../util/economy";
+} from "../../util/items";
 
 const command: HypnoCommand<{
   itemtag?: string;

@@ -5,6 +5,7 @@ const items: Record<string, Partial<Item>> = {
     price: 100,
     description: "Buy this, and pull a card using the `pull` command!",
     weight: 0.2,
+    emoji: "<:card_pull:1321761564314964010> ",
   },
   "hair-dye": {
     price: 150,
@@ -32,37 +33,57 @@ const items: Record<string, Partial<Item>> = {
     price: 5,
     description: "A stick.",
     weight: 0.9,
+    emoji: "<:stick:1321761484174524498>",
+  },
+  rock: {
+    price: 10,
+    description: "A rock.",
+    weight: 0.5,
+    emoji: "<:rock:1321761504386744391>",
+  },
+  "fishing-rod": {
+    price: 250,
+    weight: 0.1,
+    description:
+      "You can fish more frequently. This has a 10% chance of breaking.",
+    emoji: "<:fishing_rod:1321761522699210802>",
   },
   // ----- Fish -----
   "common-fish": {
     price: 10,
     weight: 0.8,
     tag: "fish",
+    emoji: "<:common_fish:1321758129872048189>",
   },
   "uncommon-fish": {
     price: 20,
     weight: 0.6,
     tag: "fish",
+    emoji: "<:uncommon_fish:1321758154715041873>",
   },
   "rare-fish": {
     price: 50,
     weight: 0.2,
     tag: "fish",
+    emoji: "<:rare_fish:1321758169004773419>",
   },
   "epic-fish": {
     price: 100,
     weight: 0.05,
     tag: "fish",
+    emoji: "<:epic_fish:1321758183882227755>",
   },
   "mythic-fish": {
     price: 450,
     weight: 0.01,
     tag: "fish",
+    emoji: "<:mythic_fish:1321758197178175588>",
   },
   "you-are-never-getting-this-fish": {
     price: 5000,
     weight: 0.001,
     tag: "fish",
+    emoji: "<:you_are_never_getting_this_fish:1321758224222912604>",
   },
   "dawn-fish": {
     price: 2500,
@@ -80,6 +101,7 @@ const items: Record<string, Partial<Item>> = {
     weight: 0.0069,
     description: "Pip pip cheerio!",
     tag: "fish",
+    emoji: "<:british_fish:1321758209983381534>",
   },
   "basking-shark": {
     price: 5000,
@@ -92,6 +114,7 @@ const items: Record<string, Partial<Item>> = {
     description: "A tasty cookie given on 25/12/2024!",
     tag: "collectable",
     buyable: false,
+    emoji: "<:chirtmas_cookie:1321761548372279337>",
   },
 } as const;
 
@@ -102,6 +125,7 @@ const defaults: Omit<Item, "id" | "name"> = {
   droppable: true,
   tag: null,
   buyable: true,
+  emoji: null,
 };
 
 export async function setupItems(): Promise<void> {

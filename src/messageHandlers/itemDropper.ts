@@ -6,7 +6,7 @@ import {
   englishifyRewardDetails,
   generateRandomReward,
   giveRewardDeteils,
-} from "../util/economy";
+} from "../util/items";
 
 // So it doesn't send on start
 let lastDrop = Date.now() - config.itemDrops.frequency / 2;

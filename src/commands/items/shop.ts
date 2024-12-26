@@ -1,6 +1,7 @@
 import config from "../../config";
 import { HypnoCommand } from "../../types/util";
 import { database } from "../../util/database";
+import { itemText } from "../../util/items";
 import { createEmbed, paginate } from "../../util/other";
 
 const command: HypnoCommand = {
@@ -21,7 +22,7 @@ const command: HypnoCommand = {
       type: "description",
       data: items.map(
         (item) =>
-          `**${item.name}** - ${!item.buyable ? "~~" : ""}${item.price}${
+          `**${itemText(item)}** - ${!item.buyable ? "~~" : ""}${item.price}${
             config.economy.currency
           }${!item.buyable ? "~~" : ""} (${item.weight * 100}%)\n- *${
             item.description ?? "No description"

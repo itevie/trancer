@@ -57,8 +57,10 @@ export async function englishifyRewardDetails(
     winnings.push(`**${details.currency}${config.economy.currency}**`);
 
   for await (const [id, quantity] of Object.entries(details.items)) {
-    const card = await actions.items.get(parseInt(id));
-    winnings.push(`**${quantity} ${card.name}${quantity !== 1 ? "s" : ""}**`);
+    const item = await actions.items.get(parseInt(id));
+    winnings.push(
+      `**${quantity} ${itemText(item)}${quantity !== 1 ? "s" : ""}**`
+    );
   }
 
   return englishifyList(winnings);
@@ -126,4 +128,8 @@ export async function generateRandomReward(
 
 export function calculateItemPrice(item: Item): number {
   return Math.round(Math.min(0.7, 1 - item.weight) * item.price);
+}
+
+export function itemText(item: Item): string {
+  return `${item.emoji ? ` ${item.emoji}` : ""}${item.name}`;
 }

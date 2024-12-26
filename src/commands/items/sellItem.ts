@@ -3,7 +3,7 @@ import { HypnoCommand } from "../../types/util";
 import { addMoneyFor } from "../../util/actions/economy";
 import ConfirmAction from "../../util/components/Confirm";
 import { actions } from "../../util/database";
-import { calculateItemPrice } from "../../util/economy";
+import { calculateItemPrice } from "../../util/items";
 import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand<{ item: Item; amount?: number }> = {

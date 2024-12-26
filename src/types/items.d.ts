@@ -7,6 +7,7 @@ interface Item {
   weight: number;
   tag: string | null;
   buyable: boolean;
+  emoji: string | null;
 }
 
 interface AquiredItem {

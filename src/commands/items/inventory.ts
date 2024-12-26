@@ -2,6 +2,7 @@ import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { createEmbed } from "../../util/other";
 import { actions } from "../../util/database";
+import { itemText } from "../../util/items";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "inventory",
@@ -33,7 +34,9 @@ const command: HypnoCommand<{ user?: User }> = {
       for await (const i of items) {
         let item = await actions.items.get(i.item_id);
         text.push(
-          `**${item.name}**: ${i.amount}${i.protected ? `*[protected]*` : ""}`
+          `**${itemText(item)}**: ${i.amount}${
+            i.protected ? ` *[protected]*` : ""
+          }`
         );
       }
       embed.setDescription(text.join("\n"));
