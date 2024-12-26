@@ -32,7 +32,9 @@ const command: HypnoCommand<{ user?: User }> = {
       let text: string[] = [];
       for await (const i of items) {
         let item = await actions.items.get(i.item_id);
-        text.push(`**${item.name}**: ${i.amount}`);
+        text.push(
+          `**${item.name}**: ${i.amount}${i.protected ? `*[protected]*` : ""}`
+        );
       }
       embed.setDescription(text.join("\n"));
     }
