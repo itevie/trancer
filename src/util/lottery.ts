@@ -17,7 +17,7 @@ export async function initLottery() {
 
   setInterval(() => {
     checkLottery();
-  }, 1000);
+  }, 60000);
 }
 
 async function checkLottery() {
@@ -47,6 +47,8 @@ async function checkLottery() {
       : await client.users.fetch(
           userIDs[Math.floor(Math.random() * userIDs.length)]
         );
+
+  writeFileSync(lotteryFileLocation, new Date().toISOString());
 
   const channel = (await client.channels.fetch(
     config.lottery.announcementChannel
@@ -83,5 +85,4 @@ async function checkLottery() {
 
   // Award
   await addMoneyFor(winner.id, prize, "gambling");
-  writeFileSync(lotteryFileLocation, new Date().toISOString());
 }
