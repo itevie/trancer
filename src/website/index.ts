@@ -105,6 +105,7 @@ export default function initServer() {
   }*/
 
   app.get("/api/servers", async (_, res) => {
+    console.log(await client.guilds.fetch());
     return res.status(200).send(
       (await client.guilds.fetch()).map((x) => {
         return {
