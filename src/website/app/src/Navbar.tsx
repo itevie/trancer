@@ -6,7 +6,8 @@ export default function AppNavbar({ full }: { full?: boolean }) {
   return (
     <Navbar title="Trancer Bot" breadcrumb noPage={full}>
       <Row>
-        <Link href="/leaderboards">Leaderboards</Link>
+        <Link href="/servers">Servers</Link>
+        <Link href="/economy">Economy</Link>
       </Row>
     </Navbar>
   );

@@ -16,5 +16,6 @@ last_backup.txt
 src/data/gifs
 src/data/cached_usernames.json
 data_old.db
-build/
 backup.db
+/build/
+src/website/app/build!

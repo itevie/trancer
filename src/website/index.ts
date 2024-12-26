@@ -18,6 +18,7 @@ import { Strategy } from "passport-discord";
 import session from "express-session";
 import sqliteStoreFactory from "express-session-sqlite";
 import sqlite3 from "sqlite3";
+import { MakeServerRoutes } from "./routes/api/serverRoutes";
 const SqliteStore = sqliteStoreFactory(session);
 
 const logger = new Logger("website");
@@ -27,6 +28,9 @@ const baseUrl = "http://localhost:3000";
 export default function initServer() {
   const app = express();
   app.use(cors());
+  app.use("/", express.static(__dirname + "/app/build"));
+
+  app.use(MakeServerRoutes());
 
   /*
   app.use(
@@ -100,7 +104,19 @@ export default function initServer() {
     next();
   }*/
 
-  app.get("/data/:type", async (req, res) => {
+  app.get("/api/servers", async (_, res) => {
+    return res.status(200).send(
+      client.guilds.cache.map((x) => {
+        return {
+          id: x.id,
+          name: x.name,
+          avatar: x.iconURL(),
+        };
+      })
+    );
+  });
+
+  app.get("/api/data/:type", async (req, res) => {
     /*if (!req.headers.authorization)
       return res.status(401).send({ message: "Missing authorization header" });
     if (!codes[req.headers.authorization])
@@ -161,8 +177,8 @@ export default function initServer() {
     }
   });
 
-  app.get("/", (_, res) => {
-    return res.redirect("https://dawn.rest/trancer");
+  app.get(["/", "/servers", "/servers/:id/:type?"], (_, res) => {
+    return res.sendFile(__dirname + "/app/build/index.html");
   });
 
   app.get("/gifs/:type/:id", async (req, res) => {

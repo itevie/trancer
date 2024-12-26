@@ -1,5 +1,4 @@
 import { HypnoCommand } from "../../types/util";
-import { generateSiteCode } from "../../website";
 
 const command: HypnoCommand = {
   name: "site",
@@ -8,7 +7,7 @@ const command: HypnoCommand = {
 
   handler: async (message) => {
     return await message.reply(
-      `https://dawn.rest/trancer?auth=${generateSiteCode(message.author.id)}`
+      `https://trancer.dawn.rest/servers/${message.guild.id}/`
     );
   },
 };
