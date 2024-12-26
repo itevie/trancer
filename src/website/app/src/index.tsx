@@ -10,7 +10,7 @@ import "./style.css";
 import ServerList from "./pages/Servers";
 import ServerOptions from "./pages/ServerOptions";
 
-export const apiUrl = `http://localhost:8080/`;
+export const apiUrl = `https://trancer.dawn.rest/`;
 export const axiosClient = new AxiosWrapper();
 axiosClient.noReject = true;
 axiosClient.showLoader = true;
