@@ -67,6 +67,7 @@ const items: Record<string, Partial<Item>> = {
     price: 15,
     weight: 0.75,
     tag: "fish",
+    emoji: "<:salmon:1322129073811623991>",
   },
   "wide-salmon": {
     price: 20,
@@ -96,6 +97,7 @@ const items: Record<string, Partial<Item>> = {
     price: 10,
     weight: 0.01,
     tag: "fish",
+    emoji: "<:fish:1322130721548009512>",
   },
   "we-are-number-one-fish": {
     price: 20000,
@@ -207,6 +209,7 @@ const items: Record<string, Partial<Item>> = {
     price: 500,
     weight: 0.05,
     tag: "fish",
+    emoji: "<:weed_fish:1322130669479923762>",
   },
   "lottery-ticket": {
     price: config.lottery.entryPrice,
