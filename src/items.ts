@@ -23,6 +23,7 @@ const items: Record<string, Partial<Item>> = {
     price: 15,
     description: "Give your Dawn some juice and it'll be a lot less thirsty!",
     weight: 0.55,
+    emoji: "<:juicebox:1322129011899502602>",
   },
   pendulum: {
     price: 50,
@@ -60,6 +61,7 @@ const items: Record<string, Partial<Item>> = {
     price: 5,
     weight: 0.9,
     tag: "fish",
+    emoji: "<:cod:1322128982027534367>",
   },
   salmon: {
     price: 15,
@@ -70,20 +72,29 @@ const items: Record<string, Partial<Item>> = {
     price: 20,
     weight: 0.7,
     tag: "fish",
+    emoji: "<:wide_salmon:1322129134423379991>",
   },
   pufferfish: {
     price: 30,
     weight: 0.6,
     tag: "fish",
+    emoji: "<:pufferfish:1322129056086491136>",
   },
   catfish: {
-    price: 10,
+    price: 0,
     weight: 0.3,
     tag: "fish",
+    emoji: "<:cat_fish:1322128963837104158>",
   },
   "spiral-fish": {
     price: 50,
     weight: 0.2,
+    tag: "fish",
+    emoji: "<:spiral_fish:1322129093684101193>",
+  },
+  fish: {
+    price: 10,
+    weight: 0.01,
     tag: "fish",
   },
   "we-are-number-one-fish": {
@@ -92,6 +103,7 @@ const items: Record<string, Partial<Item>> = {
     tag: "fish",
     description:
       "If you wanna be a villain number one, you have to catch a fishie on the run.",
+    emoji: "<:we_are_number_one_fish:1322129116006449234>",
   },
   "uncommon-fish": {
     price: 20,
@@ -191,12 +203,18 @@ const items: Record<string, Partial<Item>> = {
     buyable: false,
     emoji: "<:chirtmas_cookie:1321761548372279337>",
   },
+  "weed-fish": {
+    price: 500,
+    weight: 0.05,
+    tag: "fish",
+  },
   "lottery-ticket": {
     price: config.lottery.entryPrice,
     weight: 0,
     droppable: false,
     buyable: config.lottery.enabled,
     max: 5,
+    emoji: "<:lottery_ticket:1322129029368909917>",
   },
 } as const;
 

@@ -1,6 +1,8 @@
+import { readFileSync } from "fs";
 import config from "../../config";
 import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
+import { msToHowLong } from "../../util/ms";
 
 const command: HypnoCommand = {
   name: "lottery",
@@ -23,7 +25,17 @@ const command: HypnoCommand = {
     );
 
     return message.reply(
-      `The lottery currently has **${userIDs.length} entries**, and a prize pool of **${prize}${config.economy.currency}**`
+      `The lottery currently has **${
+        userIDs.length
+      } entries** with a prize pool of **${prize}${
+        config.economy.currency
+      }**\nIt ends in **${msToHowLong(
+        config.lottery.length -
+          (Date.now() -
+            new Date(
+              readFileSync(__dirname + "/../../../lottery.txt", "utf-8")
+            ).getTime())
+      )}**`
     );
   },
 };
