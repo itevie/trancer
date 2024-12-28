@@ -153,7 +153,7 @@ export default async function wrapGame(options: GameWrapperOptions) {
     if (options.timeout) {
       setTimeout(() => {
         if (!gameCollector.ended) gameCollector.stop("time");
-      }, options.timeout);
+      }, 1000 * 60 * 30);
     }
 
     let interval: ReturnType<typeof setInterval> = undefined;
