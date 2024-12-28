@@ -2,6 +2,7 @@ import { HypnoCommand } from "../../types/util";
 import { getAllEconomy } from "../../util/actions/economy";
 import { createEmbed } from "../../util/other";
 import config from "../../config";
+import ecoConfig from "../../ecoConfig";
 
 const command: HypnoCommand = {
   name: "globalmoneyfromwhat",
@@ -42,7 +43,7 @@ const command: HypnoCommand = {
     return message.reply({
       embeds: [
         createEmbed()
-          .setTitle(`How EVERYONE got ${config.economy.currency}`)
+          .setTitle(`How EVERYONE got ${ecoConfig.currency}`)
           .setDescription(
             [
               ["Commands", currentEco.from_commands],
@@ -52,7 +53,7 @@ const command: HypnoCommand = {
               ["VC", currentEco.from_vc],
               ["Helping", currentEco.from_helping],
             ]
-              .map((x) => `**${x[0]}**: ${x[1]}${config.economy.currency}`)
+              .map((x) => `**${x[0]}**: ${x[1]}${ecoConfig.currency}`)
               .join("\n")
           ),
       ],

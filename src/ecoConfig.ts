@@ -1,0 +1,99 @@
+const ecoConfig = {
+  currency: "🌀",
+
+  items: {
+    cardPull: "card-pull",
+    hairDye: "hair-dye",
+    powerFood: "hair",
+    powerDrink: "juicebox",
+    powerPlay: "pendulum",
+    fishingRod: "fishing-rod",
+  },
+
+  lottery: {
+    enabled: true,
+    length: 1000 * 60 * 60 * 24 * 7,
+    basePool: 250,
+    entryPrice: 250,
+    maxEntries: 5,
+    announcementChannel: "1257417208024268850",
+  },
+
+  payouts: {
+    message: {
+      name: "messaging",
+      min: 0,
+      max: 3,
+      limit: 1000 * 60,
+    },
+
+    vc: {
+      name: "voicechatting",
+      min: 5,
+      max: 15,
+      limit: 1000 * 60 * 5,
+    },
+
+    bump: {
+      name: "bumping",
+      min: 40,
+      max: 60,
+    },
+
+    dawn: {
+      name: "caring for your Dawn",
+      min: 20,
+      max: 40,
+      limit: 1000 * 60 * 30,
+      punishment: 350,
+    },
+
+    dawn100: {
+      name: "getting all of your Dawn's needs to 100%",
+      min: 50,
+      max: 100,
+      limit: 1000 * 60 * 60 * 12, // 12 hours
+    },
+
+    inviting: {
+      name: "inviting people",
+      min: 150,
+      max: 150,
+    },
+
+    fish: {
+      name: "fishing",
+      min: 10,
+      max: 20,
+      limit: 1000 * 60 * 30,
+    },
+
+    work: {
+      name: "working",
+      min: 20,
+      max: 40,
+      limit: 1000 * 60 * 15,
+    },
+
+    daily: {
+      name: "collecting .daily",
+      min: 75,
+      max: 150,
+    },
+
+    spirals: {
+      name: "adding spirals",
+      min: 100,
+      max: 100,
+    },
+
+    guessNumber: {
+      name: "guessing a number with .guessnumber",
+      min: 10,
+      max: 15,
+      punishment: 15,
+    },
+  },
+} as const;
+
+export default ecoConfig;

@@ -1,8 +1,7 @@
-import config from "../../config";
 import { HypnoCommand } from "../../types/util";
 import { database } from "../../util/database";
-import { itemText } from "../../util/items";
 import { createEmbed, paginate } from "../../util/other";
+import { currency, itemText } from "../../util/textProducer";
 
 const command: HypnoCommand<{ tag?: string }> = {
   name: "shop",
@@ -33,9 +32,9 @@ const command: HypnoCommand<{ tag?: string }> = {
       type: "description",
       data: items.map(
         (item) =>
-          `**${itemText(item)}** - ${!item.buyable ? "~~" : ""}${item.price}${
-            config.economy.currency
-          }${!item.buyable ? "~~" : ""} (${item.weight * 100}%)\n- *${
+          `${itemText(item)} - ${!item.buyable ? "~~" : ""}${currency(
+            item.price
+          )}${!item.buyable ? "~~" : ""} (${item.weight * 100}%)\n- *${
             item.description ?? "No description"
           }${item.tag ? ` [${item.tag}]` : ""}*`
       ),

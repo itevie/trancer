@@ -5,6 +5,7 @@ import ConfirmAction from "../../util/components/Confirm";
 import { actions } from "../../util/database";
 import { calculateItemPrice } from "../../util/items";
 import { createEmbed } from "../../util/other";
+import { currency, itemText } from "../../util/textProducer";
 
 const command: HypnoCommand<{ tag: string }> = {
   name: "sellitemsbytag",
@@ -35,8 +36,8 @@ const command: HypnoCommand<{ tag: string }> = {
     );
 
     const msg = `${items
-      .map((x) => `**${x.name}**: ${x.amount}`)
-      .join("\n")}\n\nFor **${price}${config.economy.currency}**`;
+      .map((x) => `${itemText(x)}: ${x.amount}`)
+      .join("\n")}\n\nFor ${currency(price)}`;
 
     ConfirmAction({
       message,

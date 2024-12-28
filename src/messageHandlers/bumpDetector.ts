@@ -5,6 +5,7 @@ import { createEmbed, randomFromRange } from "../util/other";
 import { actions, database } from "../util/database";
 import { client } from "..";
 import { awardRandomThings } from "../util/items";
+import ecoConfig from "../ecoConfig";
 
 setInterval(async () => {
   let bumps = await database.all<ServerSettings[]>(
@@ -79,8 +80,8 @@ const handler: HypnoMessageHandler = {
       if (message.guild.id === config.botServer.id) {
         const reward = await awardRandomThings(user.id, {
           currency: {
-            min: config.economy.bump.min,
-            max: config.economy.bump.max,
+            min: ecoConfig.payouts.bump.min,
+            max: ecoConfig.payouts.bump.max,
           },
           items: {
             pool: "get-db",
@@ -96,7 +97,7 @@ const handler: HypnoMessageHandler = {
             createEmbed()
               .setTitle(`${user.username}, thanks for bumping our server!`)
               .setDescription(
-                `You have been awarded **${reward}**\n\nI will remind you again in **2 hours**!`
+                `You have been awarded ${reward}\n\nI will remind you again in **2 hours**!`
               ),
           ],
         });

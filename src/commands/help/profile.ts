@@ -9,6 +9,7 @@ import { getAllEconomy, getEconomyFor } from "../../util/actions/economy";
 import config from "../../config";
 import { calculateLevel } from "../../messageHandlers/xp";
 import { createRating } from "../fun/rate";
+import { currency } from "../../util/textProducer";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "profile",
@@ -64,7 +65,7 @@ const command: HypnoCommand<{ user?: User }> = {
           ["Messages", userData.messages_sent],
           ["VC Time", "" + userData.vc_time + " minutes"],
           ["Bumps", userData.bumps],
-          ["Balance", `${economy?.balance}${config.economy.currency}`],
+          ["Balance", `${currency(economy.balance)}`],
           ["Economy Position", `#${ecoPosition + 1}`],
           ["Ruined the count", `${userData.count_ruined} times`],
           ["Imposition Registered", imposition.length],

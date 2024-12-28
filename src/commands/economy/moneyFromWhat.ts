@@ -2,7 +2,7 @@ import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { getEconomyFor } from "../../util/actions/economy";
 import { createEmbed } from "../../util/other";
-import config from "../../config";
+import ecoConfig from "../../ecoConfig";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "moneyfromwhat",
@@ -27,7 +27,7 @@ const command: HypnoCommand<{ user?: User }> = {
     return message.reply({
       embeds: [
         createEmbed()
-          .setTitle(`How ${user.username} got ${config.economy.currency}`)
+          .setTitle(`How ${user.username} got ${ecoConfig.currency}`)
           .setDescription(
             [
               ["Commands", eco.from_commands],
@@ -37,7 +37,7 @@ const command: HypnoCommand<{ user?: User }> = {
               ["VC", eco.from_vc],
               ["Helping", eco.from_helping],
             ]
-              .map((x) => `**${x[0]}**: ${x[1]}${config.economy.currency}`)
+              .map((x) => `**${x[0]}**: ${x[1]}${ecoConfig.currency}`)
               .join("\n")
           ),
       ],

@@ -6,6 +6,8 @@ import { addToMemberCount } from "../util/analytics";
 import getInviteDetails from "../util/getInviteDetails";
 import { createEmbed } from "../util/other";
 import { actions, database } from "../util/database";
+import ecoConfig from "../ecoConfig";
+import { currency } from "../util/textProducer";
 
 let inviteCache: { [key: string]: { [key: string]: number } } = {};
 export async function initInviteCache() {
@@ -152,9 +154,13 @@ client.on("guildMemberAdd", async (member) => {
           if (user.bot) return;
 
           // Add money
-          await addMoneyFor(user.id, config.economy.inviting.min, "helping");
+          await addMoneyFor(user.id, ecoConfig.payouts.inviting.min, "helping");
           await user.send(
-            `Thanks for inviting ** ${member.user.username} ** to our server!\nYou earnt ** ${config.economy.inviting.min}${config.economy.currency} ** `
+            `Thanks for inviting ** ${
+              member.user.username
+            } ** to our server!\nYou earnt ${currency(
+              ecoConfig.payouts.inviting.min
+            )}`
           );
         } else {
           // Allow only 3 attempts

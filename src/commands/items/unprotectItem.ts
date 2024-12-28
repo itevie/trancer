@@ -1,5 +1,6 @@
 import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
+import { itemText } from "../../util/textProducer";
 
 const command: HypnoCommand<{ item: Item }> = {
   name: "unprotectitem",
@@ -20,7 +21,7 @@ const command: HypnoCommand<{ item: Item }> = {
   handler: async (message, { args }) => {
     await actions.items.aquired.setLock(message.author.id, args.item.id, false);
     return await message.reply(
-      `**${args.item.name}** has been protected! You are now able to sell it.`
+      `${itemText(args.item)} has been protected! You are now able to sell it.`
     );
   },
 };

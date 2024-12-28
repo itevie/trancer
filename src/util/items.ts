@@ -7,6 +7,7 @@ import {
   randomFromRange,
   shuffle,
 } from "./other";
+import { currency, itemText } from "./textProducer";
 
 interface RewardDetails {
   currency: number;
@@ -53,8 +54,7 @@ export async function englishifyRewardDetails(
   details: RewardDetails
 ): Promise<string> {
   let winnings: string[] = [];
-  if (details.currency !== 0)
-    winnings.push(`**${details.currency}${config.economy.currency}**`);
+  if (details.currency !== 0) winnings.push(`${currency(details.currency)}`);
 
   for await (const [id, quantity] of Object.entries(details.items)) {
     const item = await actions.items.get(parseInt(id));
@@ -128,8 +128,4 @@ export async function generateRandomReward(
 
 export function calculateItemPrice(item: Item): number {
   return Math.round(Math.min(0.7, 1 - item.weight) * item.price);
-}
-
-export function itemText(item: Item): string {
-  return `${item.emoji ? ` ${item.emoji}` : ""}${item.name}`;
 }

@@ -2,6 +2,7 @@ import { HypnoCommand } from "../../types/util";
 import { getEconomyFor } from "../../util/actions/economy";
 import config from "../../config";
 import { User } from "discord.js";
+import { currency } from "../../util/textProducer";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "balance",
@@ -30,9 +31,7 @@ const command: HypnoCommand<{ user?: User }> = {
     if (!economy) return message.reply(`That user has no economy setup.`);
 
     // Done
-    return message.reply(
-      `${pronoun} balance is **${economy.balance}${config.economy.currency}**`
-    );
+    return message.reply(`${pronoun} balance is ${currency(economy.balance)}`);
   },
 };
 

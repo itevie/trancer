@@ -6,11 +6,13 @@ import { TextChannel } from "discord.js";
 import { createEmbed } from "./other";
 import { msToHowLong } from "./ms";
 import { addMoneyFor } from "./actions/economy";
+import ecoConfig from "../ecoConfig";
+import { currency } from "./textProducer";
 
 const lotteryFileLocation = __dirname + "/../../lottery.txt";
 
 export async function initLottery() {
-  if (!config.lottery.enabled) return;
+  if (!ecoConfig.lottery.enabled) return;
 
   if (!existsSync(lotteryFileLocation))
     writeFileSync(lotteryFileLocation, new Date(0).toISOString());
@@ -22,7 +24,7 @@ export async function initLottery() {
 
 async function checkLottery() {
   const lastStartTime = new Date(readFileSync(lotteryFileLocation, "utf-8"));
-  if (config.lottery.length - (Date.now() - lastStartTime.getTime()) > 0)
+  if (ecoConfig.lottery.length - (Date.now() - lastStartTime.getTime()) > 0)
     return;
 
   // Get people who bought it
@@ -36,8 +38,8 @@ async function checkLottery() {
     [] as string[]
   );
   let prize: number = items.reduce(
-    (p, c) => p + config.lottery.entryPrice * c.amount,
-    config.lottery.basePool
+    (p, c) => p + ecoConfig.lottery.entryPrice * c.amount,
+    ecoConfig.lottery.basePool
   );
 
   // Pick winner
@@ -51,7 +53,7 @@ async function checkLottery() {
   writeFileSync(lotteryFileLocation, new Date().toISOString());
 
   const channel = (await client.channels.fetch(
-    config.lottery.announcementChannel
+    ecoConfig.lottery.announcementChannel
   )) as TextChannel;
   await channel.send({
     content: "<@&1280494604432707585>",
@@ -62,14 +64,18 @@ async function checkLottery() {
           `The lottery has ended!\n${
             winner === null
               ? "There were no entries, so there was no winner."
-              : `There were **${userIDs.length}** entries with a prize pool of **${prize}${config.economy.currency}**, and... ||**${winner.username}**|| won!!`
+              : `There were **${
+                  userIDs.length
+                }** entries with a prize pool of ${currency(
+                  prize
+                )}, and... ||**${winner.username}**|| won!!`
           }`
         )
         .addFields([
           {
             name: "Enter",
             value: `To enter the new lottery, buy a lottery ticket with \`.buy lottery-ticket\`!\nThe winner will be drawn in **${msToHowLong(
-              config.lottery.length
+              ecoConfig.lottery.length
             )}**!`,
           },
         ]),

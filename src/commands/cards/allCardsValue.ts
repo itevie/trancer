@@ -3,6 +3,7 @@ import { HypnoCommand } from "../../types/util";
 import { getAllAquiredCardsFor, getCardById } from "../../util/actions/cards";
 import { computeCardPrice } from "../../util/cards";
 import config from "../../config";
+import { currency } from "../../util/textProducer";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "allcardvalue",
@@ -30,11 +31,13 @@ const command: HypnoCommand<{ user?: User }> = {
 
     for await (const card of cards) {
       let actualCard = await getCardById(card.card_id);
-      cardPrice += (await computeCardPrice(actualCard)) * card.amount;
+      cardPrice += computeCardPrice(actualCard) * card.amount;
     }
 
     return message.reply(
-      `With all your card values summed up, you have: **${cardPrice}${config.economy.currency}** worth of cards`
+      `With all your card values summed up, you have: ${currency(
+        cardPrice
+      )} worth of cards`
     );
   },
 };

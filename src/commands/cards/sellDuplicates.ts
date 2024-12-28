@@ -6,6 +6,7 @@ import { computeCardPrice, convertAquiredCardsToCards } from "../../util/cards";
 import ConfirmAction from "../../util/components/Confirm";
 import { database } from "../../util/database";
 import { createEmbed } from "../../util/other";
+import { currency } from "../../util/textProducer";
 
 const command: HypnoCommand = {
   name: "sellduplicates",
@@ -36,9 +37,7 @@ const command: HypnoCommand = {
         (v, i) => `**${cards[i].name}** *${cards[i].rarity}* x${v.amount - 1}`
       )
       .join("\n");
-    text =
-      text +
-      `\n\n**${amount}** cards worth: **${worth} ${config.economy.currency}**`;
+    text = text + `\n\n**${amount}** cards worth: ${currency(worth)}`;
 
     ConfirmAction({
       message,

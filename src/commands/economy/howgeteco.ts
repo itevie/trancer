@@ -1,27 +1,29 @@
 import { HypnoCommand } from "../../types/util";
 import config from "../../config";
 import { createEmbed } from "../../util/other";
+import ecoConfig from "../../ecoConfig";
+import { currency } from "../../util/textProducer";
 
 // Do it here to not waste shit
-let embed = createEmbed().setTitle(`Ways to get ${config.economy.currency}!`);
-let symbol = config.economy.currency;
+let embed = createEmbed().setTitle(`Ways to get ${ecoConfig.currency}!`);
+let symbol = ecoConfig.currency;
 
-for (let i in config.economy) {
+for (let i in ecoConfig.payouts) {
   if (["currency"].includes(i)) continue;
   embed.addFields([
     {
-      name: `For ${config.economy[i].name}`,
+      name: `For ${ecoConfig.payouts[i].name}`,
       value:
-        config.economy[i].min !== undefined
-          ? `Min: \`${config.economy[i].min}\`${symbol} Max: \`${config.economy[i].max}\`${symbol}` +
+        ecoConfig.payouts[i].min !== undefined
+          ? `Min: \`${ecoConfig.payouts[i].min}\`${symbol} Max: \`${ecoConfig.payouts[i].max}\`${symbol}` +
             `${
-              config.economy[i].limit
-                ? `\nEvery: **${config.economy[i].limit / 60000} minutes**`
+              ecoConfig.payouts[i].limit
+                ? `\nEvery: **${ecoConfig.payouts[i].limit / 60000} minutes**`
                 : ""
             }` +
             `${
-              config.economy[i].punishment
-                ? `\nPunishment: **${config.economy[i].punishment}${config.economy.currency}**`
+              ecoConfig.payouts[i].punishment
+                ? `\nPunishment: ${currency(ecoConfig.payouts[i].punishment)}`
                 : ""
             }`
           : "*No other details*",

@@ -7,6 +7,8 @@ import { createWriteStream } from "fs";
 import { addMoneyFor } from "../../util/actions/economy";
 import Logger from "../../util/Logger";
 import { actions } from "../../util/database";
+import ecoConfig from "../../ecoConfig";
+import { currency } from "../../util/textProducer";
 
 let spiralLogger = new Logger("spirals");
 
@@ -108,13 +110,15 @@ const command: HypnoCommand = {
 
             await addMoneyFor(
               msg.author.id,
-              config.economy.spirals.max,
+              ecoConfig.payouts.spirals.max,
               "helping"
             );
 
             // Done
             return message.reply(
-              `Thanks! Sucessfully added the spiral (ID ${spiral.id})}! **${msg.author.username}** gained **${config.economy.spirals.min}${config.economy.currency}**!`
+              `Thanks! Sucessfully added the spiral (ID ${spiral.id})}! **${
+                msg.author.username
+              }** gained ${currency(ecoConfig.payouts.spirals.max)}!`
             );
           });
         });

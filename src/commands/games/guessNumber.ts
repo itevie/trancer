@@ -3,13 +3,15 @@ import config from "../../config";
 import { HypnoCommand } from "../../types/util";
 import { createEmbed, randomFromRange } from "../../util/other";
 import { addMoneyFor, removeMoneyFor } from "../../util/actions/economy";
+import ecoConfig from "../../ecoConfig";
+import { currency } from "../../util/textProducer";
 
 export const guessNumberGames: { [key: string]: boolean } = {};
 
 const command: HypnoCommand<{ cancel?: string }> = {
   name: "guessnumber",
   type: "games",
-  description: `You have 3 guesses to guess the bot's number to gain some ${config.economy.currency}`,
+  description: `You have 3 guesses to guess the bot's number to gain some ${ecoConfig.currency}`,
 
   args: {
     requiredArguments: 0,
@@ -30,7 +32,9 @@ const command: HypnoCommand<{ cancel?: string }> = {
         await removeMoneyFor(message.author.id, 15, true);
         delete guessNumberGames[message.author.id];
         return message.reply(
-          `The game was cancelled. But because you played in the last game and have now cancelled it, you lost **15${config.economy.currency}**`
+          `The game was cancelled. But because you played in the last game and have now cancelled it, you lost ${currency(
+            15
+          )}`
         );
       }
       delete guessNumberGames[message.author.id];
@@ -81,7 +85,7 @@ const command: HypnoCommand<{ cancel?: string }> = {
       ];
     };
 
-    let baseDescription = `I have a number from **0 to 10**, you have 3 tries to guess it correct to win ${config.economy.currency}!`;
+    let baseDescription = `I have a number from **0 to 10**, you have 3 tries to guess it correct to win ${ecoConfig.currency}!`;
 
     // Create message
     let botMsg = await message.reply({
@@ -142,15 +146,17 @@ const command: HypnoCommand<{ cancel?: string }> = {
 
         // Calculate win
         let baseReward = randomFromRange(
-          config.economy.guessNumber.min,
-          config.economy.guessNumber.max
+          ecoConfig.payouts.guessNumber.min,
+          ecoConfig.payouts.guessNumber.max
         );
         let multipliedReward = baseReward * (3 - guessed);
 
         // Give money
         await addMoneyFor(message.author.id, multipliedReward, "gambling");
         await message.reply(
-          `Welldone! You guessed the number **${botsNumber}** in **${guessed}** guesses! You got **${multipliedReward}${config.economy.currency}**`
+          `Welldone! You guessed the number **${botsNumber}** in **${guessed}** guesses! You got ${currency(
+            multipliedReward
+          )}`
         );
         isProcessing = false;
         delete guessNumberGames[message.author.id];
@@ -162,10 +168,12 @@ const command: HypnoCommand<{ cancel?: string }> = {
         collector.stop();
 
         // Remove money
-        let amount = config.economy.guessNumber.punishment;
+        let amount = ecoConfig.payouts.guessNumber.punishment;
         await removeMoneyFor(message.author.id, amount, true);
         await message.reply(
-          `Oops... you weren't able to get the number correct in 3 guesses! The number was **${botsNumber}**! You lost **${amount}${config.economy.currency}**`
+          `Oops... you weren't able to get the number correct in 3 guesses! The number was **${botsNumber}**! You lost ${currency(
+            amount
+          )}`
         );
         isProcessing = false;
         delete guessNumberGames[message.author.id];

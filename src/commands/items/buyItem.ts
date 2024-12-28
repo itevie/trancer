@@ -2,6 +2,7 @@ import config from "../../config";
 import { HypnoCommand } from "../../types/util";
 import { getEconomyFor, removeMoneyFor } from "../../util/actions/economy";
 import { actions } from "../../util/database";
+import { currency, itemText } from "../../util/textProducer";
 
 const command: HypnoCommand<{ item: Item; amount?: number }> = {
   name: "buy",
@@ -36,9 +37,7 @@ const command: HypnoCommand<{ item: Item; amount?: number }> = {
 
     // Check if user has enough money
     if (price > eco.balance)
-      return message.reply(
-        `You do not have **${price}${config.economy.currency}**`
-      );
+      return message.reply(`You do not have ${currency(price)}`);
 
     // Check if max
     if (args.item.max) {
@@ -58,7 +57,7 @@ const command: HypnoCommand<{ item: Item; amount?: number }> = {
 
     // Done
     return message.reply(
-      `You bought ${amount} **${args.item.name}** for **${price}${config.economy.currency}**`
+      `You bought ${itemText(args.item, amount)} for ${currency(price)}`
     );
   },
 };

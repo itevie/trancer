@@ -1,6 +1,7 @@
 import config from "../../config";
 import { HypnoCommand } from "../../types/util";
 import { computeCardPrice } from "../../util/cards";
+import { currency } from "../../util/textProducer";
 
 const command: HypnoCommand<{ card: Card }> = {
   name: "cardvalue",
@@ -21,7 +22,9 @@ const command: HypnoCommand<{ card: Card }> = {
   handler: async (message, args) => {
     let result = computeCardPrice(args.args.card);
     return message.reply(
-      `At the moment, **${args.args.card.name}** would be worth **${result}${config.economy.currency}**`
+      `At the moment, **${args.args.card.name}** would be worth ${currency(
+        result
+      )}`
     );
   },
 };

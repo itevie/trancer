@@ -1,4 +1,5 @@
 import config from "../../config";
+import ecoConfig from "../../ecoConfig";
 import { HypnoCommand } from "../../types/util";
 import { addCardFor } from "../../util/actions/cards";
 import { generateCardEmbed } from "../../util/cards";
@@ -29,9 +30,11 @@ const command: HypnoCommand<{ deck: Deck; amount: number }> = {
     // Check if user has the pull item
     let item = await actions.items.aquired.getFor(
       message.author.id,
-      config.items.cardPull
+      await actions.items.getId(ecoConfig.items.cardPull)
     );
-    let shopItem = await actions.items.get(config.items.cardPull);
+    let shopItem = await actions.items.get(
+      await actions.items.getId(ecoConfig.items.cardPull)
+    );
     let amount = args.amount ? args.amount : 1;
     if (amount > item.amount)
       return message.reply(
@@ -80,7 +83,7 @@ const command: HypnoCommand<{ deck: Deck; amount: number }> = {
       await addCardFor(message.author.id, card.id);
       await actions.items.aquired.removeFor(
         message.author.id,
-        config.items.cardPull
+        await actions.items.getId(ecoConfig.items.cardPull)
       );
       cards.push(card);
       if (!prettyCards[card.id]) prettyCards[card.id] = [0, card];

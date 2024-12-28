@@ -294,8 +294,12 @@ interface FieldPaginationOptions extends BasePaginationOptions {
 type PaginationOptions = DescriptionPaginationOptions | FieldPaginationOptions;
 
 export async function paginate(options: PaginationOptions): Promise<Message> {
+  options.embed.setTimestamp(null);
   const pageLength = options.pageLength || 10;
   const oldFooter = options.embed.data.footer?.text || "";
+  const user = options.data.findIndex((x) =>
+    x.toString().includes(options.replyTo.author.username)
+  );
 
   // Initial
   let currentIndex = 0;
@@ -317,7 +321,7 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
         currentIndex / pageLength + 1
       } / ${Math.ceil(options.data.length / pageLength)} (${
         options.data.length
-      } items)`,
+      } items)${user !== -1 ? ` - You are #${user + 1}` : ""}`,
     });
   };
   modifyEmbed();

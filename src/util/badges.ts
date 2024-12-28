@@ -8,6 +8,7 @@ import { getAllEconomy } from "./actions/economy";
 import { database } from "./database";
 import config from "../config";
 import { calculateLevel } from "../messageHandlers/xp";
+import { currency } from "./textProducer";
 
 export interface Badge {
   name: string;
@@ -128,7 +129,7 @@ const badges: { [key: string]: Badge } = {
   },
   "5kmoney": {
     name: "Money Maker",
-    description: `Reached 5000${config.economy.currency} at some point`,
+    description: `Reached ${currency(5000)} at some point`,
     emoji: ":cyclone:",
     scan: async () => {
       const users = (await database.all(`SELECT * FROM economy;`)) as Economy[];

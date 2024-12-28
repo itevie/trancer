@@ -1,4 +1,5 @@
 import config from "./config";
+import ecoConfig from "./ecoConfig";
 import { database, databaseLogger } from "./util/database";
 
 const items: Record<string, Partial<Item>> = {
@@ -212,10 +213,10 @@ const items: Record<string, Partial<Item>> = {
     emoji: "<:weed_fish:1322130669479923762>",
   },
   "lottery-ticket": {
-    price: config.lottery.entryPrice,
+    price: ecoConfig.lottery.entryPrice,
     weight: 0,
     droppable: false,
-    buyable: config.lottery.enabled,
+    buyable: ecoConfig.lottery.enabled,
     max: 5,
     emoji: "<:lottery_ticket:1322129029368909917>",
   },

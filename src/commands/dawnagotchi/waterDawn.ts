@@ -1,4 +1,5 @@
 import config from "../../config";
+import ecoConfig from "../../ecoConfig";
 import { HypnoCommand } from "../../types/util";
 import { getDawnagotchi } from "../../util/actions/dawnagotchi";
 import { actions, database } from "../../util/database";
@@ -7,6 +8,7 @@ import {
   calculateRequirementFromDate,
   generateDawnagotchiEmbed,
 } from "../../util/dawnagotchi";
+import { currency } from "../../util/textProducer";
 
 const command: HypnoCommand = {
   name: "water",
@@ -27,16 +29,14 @@ const command: HypnoCommand = {
     // Check if they have the power drink
     let powerDrink = await actions.items.aquired.getFor(
       message.author.id,
-      (
-        await actions.items.getByName(config.items.powerDrink)
-      ).id
+      await actions.items.getId(ecoConfig.items.powerDrink)
     );
     let timeAdd = config.dawnagotchi.actions.water.timeAdd;
     if (powerDrink && powerDrink.amount > 0) {
       timeAdd = timeAdd * 3;
       await actions.items.aquired.removeFor(
         message.author.id,
-        config.items.powerFood
+        await actions.items.getId(ecoConfig.items.powerDrink)
       );
     }
 
@@ -51,7 +51,7 @@ const command: HypnoCommand = {
 
     // Done
     return message.reply({
-      content: money ? `You got **${money}${config.economy.currency}** ` : "",
+      content: money ? `You got ${currency(money)}` : "",
       embeds: [
         generateDawnagotchiEmbed(await getDawnagotchi(message.author.id)),
       ],

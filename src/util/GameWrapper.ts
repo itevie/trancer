@@ -15,6 +15,7 @@ import config from "../config";
 import { createEmbed } from "./other";
 import { database } from "./database";
 import { client } from "..";
+import { currency } from "./textProducer";
 
 interface GameWrapperOptions {
   callback: (op: {
@@ -30,7 +31,7 @@ interface GameWrapperOptions {
   bet?: number;
   databasePrefix?: string;
   title: string;
-  timeout: number;
+  timeout?: number;
   extra?: string;
   allowAi?: boolean;
 }
@@ -75,11 +76,11 @@ export default async function wrapGame(options: GameWrapperOptions) {
     let oEco = await getEconomyFor(opponent.id);
     if (pEco.balance < options.bet)
       return await options.message.reply(
-        `You do not have **${bet}**${config.economy.currency} to bet!`
+        `You do not have ${currency(bet)} to bet!`
       );
     if (oEco.balance < bet)
       return await options.message.reply(
-        `They do not have **${bet}**${config.economy.currency} to bet!`
+        `They do not have ${currency(bet)} to bet!`
       );
   }
 
@@ -92,14 +93,16 @@ export default async function wrapGame(options: GameWrapperOptions) {
           `**${opponent.username}**, **${
             player.username
           }** has invited you to a game of ${options.title}${
-            options.bet
-              ? ` with a bet of **${options.bet}${config.economy.currency}**`
-              : ""
+            options.bet ? ` with a bet of ${currency(options.bet)}` : ""
           }!${
             options.extra ? `\n${options.extra}` : ""
-          }\nClick the buttons below to react.\n\nThis game has a turn timeout of **${
-            options.timeout / 60000
-          }** minutes.`
+          }\nClick the buttons below to react.${
+            options.timeout
+              ? `\n\nThis game has a turn timeout of **${
+                  options.timeout / 60000
+                }** minutes.`
+              : ""
+          }`
         ),
     ],
     components: [
@@ -146,21 +149,27 @@ export default async function wrapGame(options: GameWrapperOptions) {
     let currentTurn: "p" | "o" | "-" = "-";
 
     let startTimeout = Date.now();
-    let timeout = setTimeout(() => {
-      if (!gameCollector.ended) gameCollector.stop("time");
-    }, options.timeout);
+    let timeout: ReturnType<typeof setTimeout> = undefined;
+    if (options.timeout) {
+      setTimeout(() => {
+        if (!gameCollector.ended) gameCollector.stop("time");
+      }, options.timeout);
+    }
 
-    let interval = setInterval(async () => {
-      if (options.timeout - (Date.now() - startTimeout) < 30000) {
-        await message.edit({
-          content: `**${
-            currentTurn === "p" ? player.username : opponent.username
-          }**, ${Math.floor(
-            (options.timeout - (Date.now() - startTimeout)) / 1000
-          )} seconds left.`,
-        });
-      }
-    }, 5000);
+    let interval: ReturnType<typeof setInterval> = undefined;
+    if (options.timeout) {
+      interval = setInterval(async () => {
+        if (options.timeout - (Date.now() - startTimeout) < 30000) {
+          await message.edit({
+            content: `**${
+              currentTurn === "p" ? player.username : opponent.username
+            }**, ${Math.floor(
+              (options.timeout - (Date.now() - startTimeout)) / 1000
+            )} seconds left.`,
+          });
+        }
+      }, 5000);
+    }
 
     gameCollector.on("end", async (_, reason) => {
       clearInterval(interval);
@@ -169,11 +178,7 @@ export default async function wrapGame(options: GameWrapperOptions) {
         await message.edit({
           content: `**Timeout**: This game is no longer active.\n**${
             currentTurn === "p" ? opponent.username : player.username
-          }** won${
-            options.bet
-              ? ` the **${options.bet}${config.economy.currency}**`
-              : ""
-          }!`,
+          }** won${options.bet ? ` the ${currency(options.bet)}` : ""}!`,
         });
       }
     });

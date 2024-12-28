@@ -1,11 +1,11 @@
 import { HypnoCommand } from "../../types/util";
-import config from "../../config";
 import { createEmbed } from "../../util/other";
 import { awardRandomThings } from "../../util/items";
+import ecoConfig from "../../ecoConfig";
 
 const command: HypnoCommand = {
   name: "daily",
-  description: `Get your daily reward of ${config.economy.currency}!`,
+  description: `Get your daily reward of ${ecoConfig.currency}!`,
   type: "economy",
 
   ratelimit: 1000 * 60 * 60 * 24,
@@ -13,8 +13,8 @@ const command: HypnoCommand = {
   handler: async (message) => {
     const rewards = await awardRandomThings(message.author.id, {
       currency: {
-        min: config.economy.daily.min,
-        max: config.economy.daily.max,
+        min: ecoConfig.payouts.daily.min,
+        max: ecoConfig.payouts.daily.max,
       },
       items: {
         pool: "get-db",

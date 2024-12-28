@@ -10,6 +10,7 @@ import { HypnoCommand } from "../../types/util";
 import { createEmbed } from "../../util/other";
 import config from "../../config";
 import wrapGame from "../../util/GameWrapper";
+import { currency } from "../../util/textProducer";
 
 const _pieces = {
   r: "🟥",
@@ -184,13 +185,13 @@ const command: HypnoCommand<{
             case "bw":
             case "fo":
               msg = `**${player.username}** won${
-                args.bet ? ` **${args.bet}${config.economy.currency}**` : ""
+                args.bet ? ` ${currency(args.bet)}` : ""
               }!${win === "fo" ? " (forfeit)" : ""}`;
               break;
             case "rw":
             case "fp":
               msg = `**${opponent.username}** won${
-                args.bet ? ` **${args.bet}${config.economy.currency}**` : ""
+                args.bet ? ` ${currency(args.bet)}` : ""
               }!${win === "fp" ? " (forfeit)" : ""}`;
               break;
             case "t":

@@ -6,6 +6,7 @@ import { computeCardPrice } from "../../util/cards";
 import ConfirmAction from "../../util/components/Confirm";
 import { actions, database } from "../../util/database";
 import { createEmbed } from "../../util/other";
+import { currency } from "../../util/textProducer";
 
 const command: HypnoCommand<{ card: Card; amount?: number }> = {
   name: "sellcard",
@@ -48,7 +49,9 @@ const command: HypnoCommand<{ card: Card; amount?: number }> = {
       embed: createEmbed()
         .setTitle("Confirm sell")
         .setDescription(
-          `Are you sure you want to sell **${amount} ${args.card.name}** for **${price}${config.economy.currency}**?`
+          `Are you sure you want to sell **${amount} ${
+            args.card.name
+          }** for ${currency(price)}?`
         ),
       callback: async () => {
         await database.run(
@@ -59,7 +62,9 @@ const command: HypnoCommand<{ card: Card; amount?: number }> = {
         );
         await addMoneyFor(message.author.id, price);
         return {
-          content: `You sold **${amount} ${args.card.name}**(s) for **${price}${config.economy.currency}**!`,
+          content: `You sold **${amount} ${args.card.name}**(s) for ${currency(
+            price
+          )}!`,
         };
       },
       autoYes: price < 100,

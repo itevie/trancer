@@ -7,10 +7,12 @@ import {
   addMoneyFor,
   removeMoneyFor,
 } from "../../util/actions/economy";
+import ecoConfig from "../../ecoConfig";
+import { currency } from "../../util/textProducer";
 
 const command: HypnoCommand<{ user: User; amount: number }> = {
   name: "give",
-  description: `Give someone else some ${config.economy.currency}`,
+  description: `Give someone else some ${ecoConfig.currency}`,
   type: "economy",
 
   args: {
@@ -24,7 +26,7 @@ const command: HypnoCommand<{ user: User; amount: number }> = {
       {
         type: "number",
         name: "amount",
-        onMissing: `Please provide the amount of ${config.economy.currency} you want to give`,
+        onMissing: `Please provide the amount of ${ecoConfig.currency} you want to give`,
       },
     ],
   },
@@ -47,9 +49,7 @@ const command: HypnoCommand<{ user: User; amount: number }> = {
 
     // Check if they have enough
     if (options.args.amount > eco.balance)
-      return message.reply(
-        `You do not have ${options.args.amount}${config.economy.currency}!`
-      );
+      return message.reply(`You do not have ${currency(options.args.amount)}!`);
 
     // Add money
     await addMoneyFor(options.args.user.id, options.args.amount);
@@ -57,7 +57,9 @@ const command: HypnoCommand<{ user: User; amount: number }> = {
 
     // Done
     return message.reply(
-      `Successfully gave **${options.args.user.username} ${options.args.amount}${config.economy.currency}**!`
+      `Successfully gave **${options.args.user.username}** ${currency(
+        options.args.amount
+      )}!`
     );
   },
 };

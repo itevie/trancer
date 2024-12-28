@@ -2,7 +2,7 @@ import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { createEmbed } from "../../util/other";
 import { actions } from "../../util/database";
-import { itemText } from "../../util/items";
+import { itemText } from "../../util/textProducer";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "inventory",

@@ -3,21 +3,22 @@ import config from "../../config";
 import { createEmbed } from "../../util/other";
 import { awardRandomThings } from "../../util/items";
 import { actions } from "../../util/database";
+import ecoConfig from "../../ecoConfig";
 
 const command: HypnoCommand = {
   name: "fish",
-  description: `Fish for fishes in the open sea and earn ${config.economy.currency}!`,
+  description: `Fish for fishes in the open sea and earn ${ecoConfig.currency}!`,
   type: "economy",
 
   ratelimit: async (message) => {
     let item = await actions.items.aquired.getFor(
       message.author.id,
-      config.items.fishingRod
+      await actions.items.getId(ecoConfig.items.fishingRod)
     );
 
     return item && item.amount > 0
-      ? config.economy.fish.limit / 2
-      : config.economy.fish.limit;
+      ? ecoConfig.payouts.fish.limit / 2
+      : ecoConfig.payouts.fish.limit;
   },
 
   handler: async (message) => {
@@ -25,14 +26,14 @@ const command: HypnoCommand = {
       (
         await actions.items.aquired.getFor(
           message.author.id,
-          config.items.fishingRod
+          await actions.items.getId(ecoConfig.items.fishingRod)
         )
       ).amount > 0 &&
       Math.random() > 0.9
     ) {
       await actions.items.aquired.removeFor(
         message.author.id,
-        config.items.fishingRod
+        await actions.items.getId(ecoConfig.items.fishingRod)
       );
       await message.reply(`Your fishing rod broke! :fishing_pole_and_fish:`);
     }
@@ -67,9 +68,7 @@ const command: HypnoCommand = {
       embeds: [
         createEmbed()
           .setTitle(`You went fishing! 🎣`)
-          .setDescription(
-            `You caught ${fish.join(", ")} and got ${rewardString}!`
-          ),
+          .setDescription(`You caught ${fish.join(", ")} and ${rewardString}!`),
       ],
     });
   },

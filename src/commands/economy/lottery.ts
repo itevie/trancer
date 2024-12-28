@@ -1,8 +1,9 @@
 import { readFileSync } from "fs";
-import config from "../../config";
 import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
 import { msToHowLong } from "../../util/ms";
+import ecoConfig from "../../ecoConfig";
+import { currency } from "../../util/textProducer";
 
 const command: HypnoCommand = {
   name: "lottery",
@@ -20,17 +21,17 @@ const command: HypnoCommand = {
       [] as string[]
     );
     let prize: number = items.reduce(
-      (p, c) => p + config.lottery.entryPrice * c.amount,
-      config.lottery.basePool
+      (p, c) => p + ecoConfig.lottery.entryPrice * c.amount,
+      ecoConfig.lottery.basePool
     );
 
     return message.reply(
       `The lottery currently has **${
         userIDs.length
-      } entries** with a prize pool of **${prize}${
-        config.economy.currency
-      }**\nIt ends in **${msToHowLong(
-        config.lottery.length -
+      } entries** with a prize pool of ${currency(
+        prize
+      )}\nIt ends in **${msToHowLong(
+        ecoConfig.lottery.length -
           (Date.now() -
             new Date(
               readFileSync(__dirname + "/../../../lottery.txt", "utf-8")

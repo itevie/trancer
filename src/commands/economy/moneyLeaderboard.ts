@@ -1,14 +1,14 @@
 import { HypnoCommand } from "../../types/util";
 import { createPaginatedLeaderboardFromData } from "../../util/createLeaderboard";
-import config from "../../config";
 import { getAllEconomy } from "../../util/actions/economy";
 import { checkBadges } from "../../util/badges";
 import { createEmbed } from "../../util/other";
+import ecoConfig from "../../ecoConfig";
 
 const command: HypnoCommand = {
   name: `moneyleaderboard`,
   aliases: ["moneylb", "ecolb", "elb", "baltop"],
-  description: `See who has the most ${config.economy.currency}`,
+  description: `See who has the most ${ecoConfig.currency}`,
   type: "economy",
 
   handler: async (message, { serverSettings }) => {
@@ -17,7 +17,7 @@ const command: HypnoCommand = {
       string,
       number
     ][];
-    let description = `Who has the most ${config.economy.currency}?`;
+    let description = `Who has the most ${ecoConfig.currency}?`;
 
     checkBadges();
 
@@ -30,7 +30,7 @@ const command: HypnoCommand = {
         }),
       replyTo: message,
       data: organised,
-      entryName: config.economy.currency,
+      entryName: ecoConfig.currency,
       description,
     });
   },

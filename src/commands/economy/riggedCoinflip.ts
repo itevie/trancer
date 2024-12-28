@@ -5,6 +5,7 @@ import {
   removeMoneyFor,
 } from "../../util/actions/economy";
 import config from "../../config";
+import { currency } from "../../util/textProducer";
 
 const command: HypnoCommand<{ amount: number; confirm?: string }> = {
   name: "riggedcoinflip",
@@ -32,15 +33,11 @@ const command: HypnoCommand<{ amount: number; confirm?: string }> = {
 
     // Check if has enough
     if (args.args.amount > eco.balance)
-      return message.reply(
-        `You do not have ${args.args.amount}${config.economy.currency}`
-      );
+      return message.reply(`You do not have ${currency(args.args.amount)}`);
 
     // Check if below 10
     if (args.args.amount < 10)
-      return message.reply(
-        `Minimum amount is **10${config.economy.currency}**`
-      );
+      return message.reply(`Minimum amount is ${currency(10)}`);
 
     // Check if requires confirm
     if (
@@ -57,12 +54,16 @@ const command: HypnoCommand<{ amount: number; confirm?: string }> = {
     if (win) {
       await addMoneyFor(message.author.id, args.args.amount, "gambling");
       return message.reply(
-        `:green_circle: The coin landed in your favour! Your earnt ${args.args.amount}${config.economy.currency}!`
+        `:green_circle: The coin landed in your favour! Your earnt ${currency(
+          args.args.amount
+        )}!`
       );
     } else {
       await removeMoneyFor(message.author.id, args.args.amount, true);
       return message.reply(
-        `:red_circle: The coin did not land in your favour, you lost ${args.args.amount}${config.economy.currency} :(`
+        `:red_circle: The coin did not land in your favour, you lost ${currency(
+          args.args.amount
+        )} :(`
       );
     }
   },

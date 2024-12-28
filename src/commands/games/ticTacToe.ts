@@ -12,6 +12,7 @@ import { createEmbed } from "../../util/other";
 import config from "../../config";
 import wrapGame from "../../util/GameWrapper";
 import { client } from "../..";
+import { currency } from "../../util/textProducer";
 
 type State = "o" | "x" | "-";
 
@@ -126,9 +127,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
             message = `**${
               winner === "x" ? player.username : opponent.username
             }** won the game!${isForfeit ? " (forfeit)" : ""}\n${
-              args.bet
-                ? `You won **${args.bet}${config.economy.currency}**!`
-                : ""
+              args.bet ? `You won ${currency(args.bet)}!` : ""
             }`;
 
           return {

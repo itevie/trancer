@@ -5,6 +5,7 @@ import ConfirmAction from "../../util/components/Confirm";
 import { actions } from "../../util/database";
 import { calculateItemPrice } from "../../util/items";
 import { createEmbed } from "../../util/other";
+import { currency, itemText } from "../../util/textProducer";
 
 const command: HypnoCommand<{ item: Item; amount?: number }> = {
   name: "sellitem",
@@ -51,9 +52,11 @@ const command: HypnoCommand<{ item: Item; amount?: number }> = {
     ConfirmAction({
       message,
       embed: createEmbed()
-        .setTitle(`Confirm sell for ${price} ${config.economy.currency}`)
+        .setTitle(`Confirm sell for ${currency(price)}`)
         .setDescription(
-          `Are you sure you want to sell **${amount} ${args.item.name}** for **${price} ${config.economy.currency}**?`
+          `Are you sure you want to sell **${amount} ${
+            args.item.name
+          }** for ${currency(price)}?`
         ),
       callback: async () => {
         await addMoneyFor(message.author.id, price);
@@ -63,7 +66,9 @@ const command: HypnoCommand<{ item: Item; amount?: number }> = {
           amount
         );
         return {
-          content: `Sold **${amount} ${args.item.name}** for **${price} ${config.economy.currency}!**`,
+          content: `Sold ${itemText(args.item, amount)} for ${currency(
+            price
+          )}!`,
         };
       },
       autoYes: price < 500,

@@ -6,6 +6,12 @@ const _actions = {
     return await database.get<Item>("SELECT * FROM items WHERE id = ?;", id);
   },
 
+  getId: async (name: string): Promise<number> => {
+    return (
+      await database.get<Item>("SELECT * FROM items WHERE name = ?;", name)
+    ).id;
+  },
+
   getAll: async (): Promise<Item[]> => {
     return await database.all<Item[]>("SELECT * FROM items;");
   },

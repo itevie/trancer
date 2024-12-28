@@ -1,4 +1,5 @@
 import config from "../../config";
+import ecoConfig from "../../ecoConfig";
 import { HypnoCommand } from "../../types/util";
 import { getDawnagotchi } from "../../util/actions/dawnagotchi";
 import { actions, database } from "../../util/database";
@@ -25,9 +26,9 @@ const command: HypnoCommand<{ hex: string }> = {
     // Check if they have any hair dye
     let item = await actions.items.aquired.getFor(
       message.author.id,
-      config.items.hairDye
+      await actions.items.getId(ecoConfig.items.hairDye)
     );
-    let shopItem = await actions.items.get(config.items.hairDye);
+    let shopItem = await actions.items.getByName(ecoConfig.items.hairDye);
     if (item.amount === 0)
       return message.reply(`You do not have the **${shopItem.name}** item!`);
 
@@ -41,7 +42,7 @@ const command: HypnoCommand<{ hex: string }> = {
       );
 
     // Change hair color & remove item
-    await database.run( 
+    await database.run(
       `UPDATE dawnagotchi SET hair_color_hex = ? WHERE owner_id = ?`,
       args.args.hex,
       message.author.id
