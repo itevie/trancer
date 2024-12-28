@@ -284,7 +284,7 @@ client.on("messageCreate", async (message) => {
       let checkArg = async (a: string): Promise<string | null> => {
         switch (arg.type) {
           case "wholepositivenumber":
-            if (isNaN(parseInt(a)) || parseInt(a) % 1 !== 0)
+            if (isNaN(parseInt(a)) || parseInt(a) % 1 !== 0 || parseInt(a) < 0)
               return "Expected a whole, positive number";
           case "number":
             if (isNaN(parseInt(a))) return "Invalid number provided";
