@@ -63,17 +63,14 @@ const lbDetails: Record<
   },
   bumps: {
     title: "Most bumps in server",
-    footer: "Bump the server with /bump to get higher!",
     entryName: "bumps",
   },
   vc: {
     title: "Most time in VC",
-    description: "Who has yapped the most in VC?",
     entryName: "minutes",
   },
   messages: {
     title: "Most messages in server",
-    description: "Who has yapped the most?",
     entryName: "messages",
   },
   ttt_wins: {

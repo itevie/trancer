@@ -7,10 +7,36 @@ import {
   generateRandomReward,
   giveRewardDeteils,
 } from "../util/items";
+import { piglatin } from "../commands/fun/pigLatin";
 
 // So it doesn't send on start
 let lastDrop = Date.now() - config.itemDrops.frequency / 2;
 let messagesSince = 0;
+
+const words = [
+  "hypnosis",
+  "hypno",
+  "catch",
+  "!",
+  "?",
+  "water",
+  "trance",
+  "trancer",
+  "spiral",
+  "meow",
+  "woof",
+  "hello",
+  "hi",
+  "how are you",
+  "im a cat",
+  "twilight",
+  "kaboom",
+  "induction",
+  "trigger",
+  "fish",
+  "agency",
+  ".fish",
+];
 
 const handler: HypnoMessageHandler = {
   name: "item-dropper",
@@ -44,20 +70,21 @@ const handler: HypnoMessageHandler = {
         },
       });
       const rewardString = await englishifyRewardDetails(rewards);
+      const word = words[Math.floor(Math.random() * words.length)];
 
       // Send message
       let msg = await message.channel.send({
         embeds: [
           createEmbed()
             .setTitle(`Quick! An item has appeared!`)
-            .setDescription(`Type "catch" to get ${rewardString}!`),
+            .setDescription(`Type "${word}" to get ${rewardString}!`),
         ],
       });
 
       let collector = msg.channel.createMessageCollector({
         filter: (x) =>
-          x.content.toLowerCase() === "catch" ||
-          x.content.toLowerCase() === "atchcay",
+          x.content.toLowerCase() === word ||
+          x.content.toLowerCase() === piglatin(word),
         time: 30000,
       });
 
