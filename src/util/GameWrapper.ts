@@ -149,12 +149,9 @@ export default async function wrapGame(options: GameWrapperOptions) {
     let currentTurn: "p" | "o" | "-" = "-";
 
     let startTimeout = Date.now();
-    let timeout: ReturnType<typeof setTimeout> = undefined;
-    if (options.timeout) {
-      setTimeout(() => {
-        if (!gameCollector.ended) gameCollector.stop("time");
-      }, 1000 * 60 * 30);
-    }
+    setTimeout(() => {
+      if (!gameCollector.ended) gameCollector.stop("time");
+    }, 1000 * 60 * 30);
 
     let interval: ReturnType<typeof setInterval> = undefined;
     if (options.timeout) {
@@ -235,12 +232,6 @@ export default async function wrapGame(options: GameWrapperOptions) {
         // Modify data
         currentTurn = turn;
         startTimeout = Date.now();
-
-        // Re-update timeout
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-          if (!gameCollector.ended) gameCollector.stop("time");
-        }, options.timeout);
       },
       removePlayers,
       opponent,
