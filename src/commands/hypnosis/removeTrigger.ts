@@ -15,10 +15,6 @@ const command: HypnoCommand<{ trigger: string; confirm?: string }> = {
         type: "string",
         takeContent: true,
       },
-      {
-        name: "confirm",
-        type: "confirm",
-      },
     ],
   },
 
