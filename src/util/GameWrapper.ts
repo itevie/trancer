@@ -157,6 +157,8 @@ export default async function wrapGame(options: GameWrapperOptions) {
     if (options.timeout) {
       interval = setInterval(async () => {
         if (options.timeout - (Date.now() - startTimeout) < 30000) {
+          if (options.timeout - (Date.now() - startTimeout) < 0)
+            gameCollector.stop("time");
           await message.edit({
             content: `**${
               currentTurn === "p" ? player.username : opponent.username
