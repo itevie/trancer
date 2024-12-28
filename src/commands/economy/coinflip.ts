@@ -61,8 +61,7 @@ const command: HypnoCommand<{ user: User; amount: number }> = {
                 ),
             ],
           });
-          await addMoneyFor(winner.id, args.amount, "gambling");
-          await removeMoneyFor(loser.id, args.amount, true);
+          op.removePlayers(winner.id === message.author.id ? "p" : "o");
         }, 1000);
       },
     });
