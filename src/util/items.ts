@@ -58,9 +58,7 @@ export async function englishifyRewardDetails(
 
   for await (const [id, quantity] of Object.entries(details.items)) {
     const item = await actions.items.get(parseInt(id));
-    winnings.push(
-      `**${quantity} ${itemText(item)}${quantity !== 1 ? "s" : ""}**`
-    );
+    winnings.push(`${itemText(item, quantity, true)}`);
   }
 
   return englishifyList(winnings);
