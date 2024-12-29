@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { Client, IntentsBitField, Partials, TextChannel } from "discord.js";
 import commandLineArgs, { OptionDefinition } from "command-line-args";
 import { HypnoCommand, HypnoMessageHandler } from "./types/util";
@@ -122,7 +123,7 @@ client.on("ready", async () => {
   }
 });
 
-client.login(readFileSync(__dirname + "/../token.txt", "utf-8").trim());
+client.login(process.env.BOT_TOKEN);
 
 process.on("uncaughtException", async (err: any) => {
   console.log(err);

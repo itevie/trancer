@@ -9,8 +9,10 @@ import { AxiosWrapper } from "./dawn-ui/util";
 import "./style.css";
 import ServerList from "./pages/Servers";
 import ServerOptions from "./pages/ServerOptions";
+import UserSettings from "./pages/UserSettings";
 
-export const apiUrl = `https://trancer.dawn.rest/`;
+export const apiUrl =
+  localStorage.getItem("api-url") || `https://trancer.dawn.rest/`;
 export const axiosClient = new AxiosWrapper();
 axiosClient.noReject = true;
 axiosClient.showLoader = true;
@@ -46,6 +48,10 @@ const router = createBrowserRouter([
   {
     path: "/servers/:id/leaderboards",
     element: <LeaderboardPage />,
+  },
+  {
+    path: "/user_settings",
+    element: <UserSettings />,
   },
 ]);
 

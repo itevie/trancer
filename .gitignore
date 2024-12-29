@@ -21,3 +21,4 @@ backup.db
 src/website/app/build!
 ./lottery.txt
 lottery.txt
+.env

@@ -1,4 +1,4 @@
-import express, { NextFunction } from "express";
+import express from "express";
 import cors from "cors";
 import { existsSync } from "fs";
 import config from "../config";
@@ -13,109 +13,21 @@ import {
 } from "../util/analytics";
 import { generateCode } from "../util/other";
 import path from "path";
-import passport from "passport";
-import { Strategy } from "passport-discord";
-import session from "express-session";
-import sqliteStoreFactory from "express-session-sqlite";
-import sqlite3 from "sqlite3";
 import { MakeServerRoutes } from "./routes/api/serverRoutes";
-const SqliteStore = sqliteStoreFactory(session);
+import MakeAuthRoutes, { Authenticate } from "./routes/auth";
 
 const logger = new Logger("website");
 const codes: { [key: string]: string } = {};
-const baseUrl = "http://localhost:3000";
+export const baseUrl = "https://trancer.dawn.rest";
 
 export default function initServer() {
   const app = express();
   app.use(cors());
+  app.use(Authenticate);
   app.use("/", express.static(__dirname + "/app/build"));
 
+  app.use(MakeAuthRoutes());
   app.use(MakeServerRoutes());
-
-  /*
-  app.use(
-    cors({
-      origin: baseUrl,
-      credentials: true,
-    })
-  );
-
-  app.use(
-    session({
-      secret: "meow",
-      store: new SqliteStore({
-        driver: sqlite3.Database,
-        path: path.join(__dirname, "session.db"),
-        ttl: 1234,
-      }),
-      resave: true,
-      saveUninitialized: false,
-      cookie: {
-        httpOnly: false,
-        secure: false,
-        sameSite: "none",
-      },
-    })
-  );
-
-  app.use(passport.initialize());
-  app.use(passport.session());
-  passport.use(
-    new Strategy(
-      {
-        clientID: "1257438471664963705",
-        clientSecret: "QJnG9r9HB9D-PImDsd6riNC1xiFQgFws",
-        callbackURL: "http://localhost:8080/auth/discord",
-      },
-      async function (_accessToken, _refreshToken, profile, cb) {
-        return cb(null, { id: profile.id });
-      }
-    )
-  );
-
-  passport.serializeUser(function (user, done) {
-    console.log(user);
-    done(null, user);
-  });
-
-  passport.deserializeUser(function (user, done) {
-    console.log(user, "d");
-    done(null, user);
-  });
-
-  app.get(
-    "/auth/discord",
-    passport.authenticate("discord", { scope: ["identify"] }),
-    (req, res) => {
-      console.log(req.session, req.user);
-      res.redirect(baseUrl);
-    }
-  );
-
-  function authenticate(
-    req: Express.Request,
-    _res: Express.Response,
-    next: NextFunction
-  ) {
-    if (req.isAuthenticated()) {
-      console.log("authed");
-    }
-    console.log(req.session, req.user);
-    next();
-  }*/
-
-  app.get("/api/servers", async (_, res) => {
-    console.log(await client.guilds.fetch());
-    return res.status(200).send(
-      (await client.guilds.fetch()).map((x) => {
-        return {
-          id: x.id,
-          name: x.name,
-          avatar: x.iconURL(),
-        };
-      })
-    );
-  });
 
   app.get("/api/data/:type", async (req, res) => {
     /*if (!req.headers.authorization)
