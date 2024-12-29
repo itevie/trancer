@@ -93,9 +93,12 @@ export default function initServer() {
     }
   });
 
-  app.get(["/", "/servers", "/servers/:id/:type?"], (_, res) => {
-    return res.sendFile(__dirname + "/app/build/index.html");
-  });
+  app.get(
+    ["/", "/servers", "/servers/:id/:type?", "/user_settings", "/economy"],
+    (_, res) => {
+      return res.sendFile(__dirname + "/app/build/index.html");
+    }
+  );
 
   app.get("/gifs/:type/:id", async (req, res) => {
     if (!["spirals"].includes(req.params.type))
