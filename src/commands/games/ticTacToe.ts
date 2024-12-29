@@ -195,7 +195,7 @@ const command: HypnoCommand<{ user: User; bet?: number; reverse?: boolean }> = {
 
           // There is a winner
           if (win !== "-") {
-            if (args.reverse) await setWinner(win);
+            if (!args.reverse) await setWinner(win);
             else await setWinner(win === "o" ? "x" : "o");
             return;
           }
