@@ -9,17 +9,11 @@ export default function App() {
     <>
       <AppNavbar />
       <Page>
-        <Container>
-          <p>Welcome to Trancer - the hypnosis-oriented Discord bot!</p>
-          <Button
-            className="login-with-discord"
-            big
-            onClick={() =>
-              (window.location.href = `https://discord.com/oauth2/authorize?client_id=1257438471664963705&response_type=code&redirect_uri=${apiUrl}login/callback&scope=identify+guilds`)
-            }
-          >
-            Login with Discord
-          </Button>
+        <Container title="Welcome to Trancer">
+          <p>
+            Trancer is a hypnosis-oriented Discord bot with many features such
+            as: economy, spirals, trigger usage, and more!
+          </p>
         </Container>
       </Page>
     </>

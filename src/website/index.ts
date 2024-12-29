@@ -15,6 +15,7 @@ import { generateCode } from "../util/other";
 import path from "path";
 import { MakeServerRoutes } from "./routes/api/serverRoutes";
 import MakeAuthRoutes, { Authenticate } from "./routes/auth";
+import MakeSettingsRoutes from "./routes/api/settingsRoutes";
 
 const logger = new Logger("website");
 const codes: { [key: string]: string } = {};
@@ -23,11 +24,13 @@ export const baseUrl = "https://trancer.dawn.rest";
 export default function initServer() {
   const app = express();
   app.use(cors());
+  app.use(express.json());
   app.use(Authenticate);
   app.use("/", express.static(__dirname + "/app/build"));
 
   app.use(MakeAuthRoutes());
   app.use(MakeServerRoutes());
+  app.use(MakeSettingsRoutes());
 
   app.get("/api/data/:type", async (req, res) => {
     /*if (!req.headers.authorization)

@@ -68,7 +68,8 @@ CREATE TABLE IF NOT EXISTS role_menu_items (
 CREATE TABLE IF NOT EXISTS user_imposition (
     user_id TEXT NOT NULL,
     what TEXT NOT NULL,
-    is_bombardable BOOLEAN NOT NULL DEFAULT FALSE
+    is_bombardable BOOLEAN NOT NULL DEFAULT FALSE,
+    tags TEXT NOT NULL DEFAULT 'green;yellow;bombard;by others'
 );
 
 CREATE TABLE IF NOT EXISTS user_favourite_spirals (

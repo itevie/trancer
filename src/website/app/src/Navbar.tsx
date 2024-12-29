@@ -8,6 +8,7 @@ export default function AppNavbar({ full }: { full?: boolean }) {
       <Row>
         <Link href="/servers">Servers</Link>
         <Link href="/economy">Economy</Link>
+        <Link href="/user_settings">Your Settings</Link>
       </Row>
     </Navbar>
   );

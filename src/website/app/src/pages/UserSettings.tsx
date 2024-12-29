@@ -1,4 +1,4 @@
-import { useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import Column from "../dawn-ui/components/Column";
 import Container from "../dawn-ui/components/Container";
 import Page from "../dawn-ui/components/Page";
@@ -7,6 +7,7 @@ import AppNavbar from "../Navbar";
 import Row from "../dawn-ui/components/Row";
 import Button from "../dawn-ui/components/Button";
 import { showErrorAlert } from "../dawn-ui/components/AlertManager";
+import { axiosClient } from "..";
 
 interface Trigger {
   what: string;
@@ -16,7 +17,18 @@ interface Trigger {
 export default function UserSettings() {
   const [triggers, setTriggers] = useState<Trigger[]>([]);
   const triggerRef = useRef<HTMLInputElement>(null);
-  const [_, forceUpdate] = useReducer((x) => x + 1, 0);
+
+  useEffect(() => {
+    (async () => {
+      const result = await axiosClient.get("/api/imposition");
+      console.log(result.data);
+      setTriggers(
+        result.data.map((x: any) => {
+          return { ...x, tags: x.tags.split(";") };
+        })
+      );
+    })();
+  }, []);
 
   function addTrigger() {
     if (!triggerRef.current) return;
@@ -44,6 +56,10 @@ export default function UserSettings() {
     });
   }
 
+  async function saveTriggers() {
+    await axiosClient.post("/api/imposition", triggers);
+  }
+
   return (
     <>
       <AppNavbar full />
@@ -56,6 +72,7 @@ export default function UserSettings() {
                 <tr>
                   <th>Trigger</th>
                   <th style={{ textAlign: "left" }}>When can it be used?</th>
+                  <th>Actions</th>
                 </tr>
                 {triggers.map((x) => (
                   <tr key={x.what}>
@@ -88,6 +105,19 @@ export default function UserSettings() {
                         </div>
                       ))}
                     </td>
+                    <td>
+                      <Button
+                        onClick={() => {
+                          setTriggers((old) => {
+                            let index = old.findIndex((y) => y.what === x.what);
+                            old.splice(index, 1);
+                            return [...old];
+                          });
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -96,7 +126,9 @@ export default function UserSettings() {
               <input ref={triggerRef} style={{ width: "fit-content" }} />
               <Button onClick={addTrigger}>Add!</Button>
             </Row>
-            <Button big>Save Settings</Button>
+            <Button big onClick={saveTriggers}>
+              Save Settings
+            </Button>
           </Container>
         </Column>
       </Page>
