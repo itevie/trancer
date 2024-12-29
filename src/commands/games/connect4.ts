@@ -40,6 +40,7 @@ const command: HypnoCommand<{
   bet?: number;
   w?: number;
   h?: number;
+  reverse?: boolean;
 }> = {
   name: "connect4",
   aliases: ["c4"],
@@ -74,6 +75,13 @@ const command: HypnoCommand<{
         min: 4,
         max: 12,
       },
+      {
+        name: "reverse",
+        type: "boolean",
+        wickStyle: true,
+        description: "Whether or not the goal should be losing",
+        aliases: ["r"],
+      },
     ],
   },
 
@@ -83,7 +91,7 @@ const command: HypnoCommand<{
 
     await wrapGame({
       message,
-      title: "Connect 4",
+      title: `${args.reverse ? "Reverse " : ""}Connect 4`,
       databasePrefix: "c4",
       extra: `Board size: ${wid}x${hei}`,
       opponent: args.user,
@@ -180,7 +188,9 @@ const command: HypnoCommand<{
             case "-":
               msg = `${_pieces[turn === player ? "b" : "r"]} **${
                 turn.username
-              }** to play.\nNote: forfeiting makes the opponent win.`;
+              }** to play.\nNote: forfeiting makes the opponent win.${
+                args.reverse ? "\nLoser wins." : ""
+              }`;
               break;
             case "bw":
             case "fo":
@@ -308,11 +318,13 @@ const command: HypnoCommand<{
             win = "t";
           } else {
             win = checkWin(board);
+            if (args.reverse && win !== "-") win = win === "bw" ? "rw" : "bw";
           }
 
           // Check if a conclusion has been made
           if (win === "bw" || win === "rw") {
-            await removePlayers(win === "bw" ? "p" : "o");
+            if (args.reverse) await removePlayers(win === "bw" ? "o" : "p");
+            else await removePlayers(win === "bw" ? "p" : "o");
           } else if (win === "t") {
             await removePlayers("t");
           }

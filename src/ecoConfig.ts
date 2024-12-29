@@ -27,6 +27,12 @@ const ecoConfig = {
       limit: 1000 * 60,
     },
 
+    itemDrops: {
+      name: "catching drops",
+      min: 30,
+      max: 70,
+    },
+
     vc: {
       name: "voicechatting",
       min: 5,
@@ -36,8 +42,8 @@ const ecoConfig = {
 
     bump: {
       name: "bumping",
-      min: 40,
-      max: 60,
+      min: 50,
+      max: 200,
     },
 
     dawn: {

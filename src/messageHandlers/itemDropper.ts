@@ -8,6 +8,7 @@ import {
   giveRewardDeteils,
 } from "../util/items";
 import { piglatin } from "../commands/fun/pigLatin";
+import ecoConfig from "../ecoConfig";
 
 // So it doesn't send on start
 let lastDrop = Date.now() - config.itemDrops.frequency / 2;
@@ -58,14 +59,14 @@ const handler: HypnoMessageHandler = {
 
       const rewards = await generateRandomReward({
         currency: {
-          min: 30,
-          max: 150,
+          min: ecoConfig.payouts.itemDrops.min,
+          max: ecoConfig.payouts.itemDrops.max,
         },
         items: {
           pool: "get-db",
           count: {
             min: 0,
-            max: 3,
+            max: 2,
           },
         },
       });

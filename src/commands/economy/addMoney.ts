@@ -1,7 +1,6 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { addMoneyFor, economyForUserExists } from "../../util/actions/economy";
-import config from "../../config";
 import { currency } from "../../util/textProducer";
 
 const command: HypnoCommand<{ user: User; amount: number }> = {
@@ -16,6 +15,7 @@ const command: HypnoCommand<{ user: User; amount: number }> = {
       {
         name: "user",
         type: "user",
+        infer: true,
       },
       {
         name: "amount",

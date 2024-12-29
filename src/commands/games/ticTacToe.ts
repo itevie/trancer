@@ -16,7 +16,7 @@ import { currency } from "../../util/textProducer";
 
 type State = "o" | "x" | "-";
 
-const command: HypnoCommand<{ user: User; bet?: number }> = {
+const command: HypnoCommand<{ user: User; bet?: number; reverse?: boolean }> = {
   name: "tictactoe",
   type: "games",
   aliases: ["ttt"],
@@ -34,12 +34,19 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
         name: "bet",
         description: "Bet an amount of money",
       },
+      {
+        name: "reverse",
+        type: "boolean",
+        wickStyle: true,
+        aliases: ["r"],
+        description: "Whether or not the goal should be losing",
+      },
     ],
   },
 
   handler: async (message, { args }) => {
     await wrapGame({
-      title: "TicTacToe",
+      title: `${args.reverse ? "Reverse " : ""}TicTacToe`,
       databasePrefix: "ttt",
       opponent: args.user,
       bet: args.bet,
@@ -121,7 +128,11 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
             }`;
           // Game is ongoing
           else if (winner === "-")
-            message = `**${current.username}** to play.\nForfeiting makes the other player win.`;
+            message = `**${
+              current.username
+            }** to play.\nForfeiting makes the other player win.${
+              args.reverse ? "\nLoser wins." : ""
+            }`;
           // Game has a winner
           else if (winner === "o" || winner === "x")
             message = `**${
@@ -132,7 +143,9 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
 
           return {
             embeds: [
-              createEmbed().setTitle("TicTacToe").setDescription(message),
+              createEmbed()
+                .setTitle(`${args.reverse ? "Reverse" : ""}TicTacToe`)
+                .setDescription(message),
             ],
             // @ts-ignore
             components,
@@ -182,7 +195,7 @@ const command: HypnoCommand<{ user: User; bet?: number }> = {
 
           // There is a winner
           if (win !== "-") {
-            await setWinner(win);
+            await setWinner(win === "o" ? "x" : "o");
             return;
           }
 

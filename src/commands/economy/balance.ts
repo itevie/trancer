@@ -17,6 +17,7 @@ const command: HypnoCommand<{ user?: User }> = {
         name: "user",
         type: "user",
         description: "The other user to get the balance of",
+        infer: true,
       },
     ],
   },

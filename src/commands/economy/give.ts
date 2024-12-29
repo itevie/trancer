@@ -22,6 +22,7 @@ const command: HypnoCommand<{ user: User; amount: number }> = {
         type: "user",
         name: "user",
         onMissing: "Please provide a user to give money to!",
+        infer: true,
       },
       {
         type: "number",
