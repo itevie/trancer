@@ -15,6 +15,7 @@ interface UserData {
   allow_requests: boolean;
   allow_triggers: boolean;
   count_ruined: number;
+  hypno_status: string;
 }
 
 interface PinnedRating {

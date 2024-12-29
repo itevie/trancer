@@ -21,16 +21,23 @@ const command: HypnoCommand<{ user?: User }> = {
   },
 
   handler: async (message, { args }) => {
-    if (
-      args.user &&
-      !(await actions.userData.getFor(args.user.id, message.guild.id))
-        .allow_triggers
-    )
+    const user = args.user ? args.user.id : message.author.id;
+    const userData = await actions.userData.getFor(user, message.guild.id);
+
+    if (args.user && userData.allow_triggers)
       return message.reply(`:warning: That user has triggers disabled.`);
 
-    return message.reply(
-      await getRandomImposition(args.user ? args.user.id : message.author.id)
-    );
+    const random = await actions.triggers.getRandomByTagFor(user, [
+      userData.hypno_status,
+      user !== message.author.id ? "by others" : "giraffe",
+    ]);
+
+    if (!random)
+      return message.reply(
+        `:warning: Could not get a random trigger for that user.\nTheir status is **${userData.hypno_status}**`
+      );
+
+    return message.reply(random.what);
   },
 };
 

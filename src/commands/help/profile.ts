@@ -58,6 +58,7 @@ const command: HypnoCommand<{ user?: User }> = {
           ["Username", user.username],
           ["ID", user.id],
           ["Joined Server", member.joinedAt.toDateString()],
+          ["Status", userData.hypno_status],
           [
             "Level",
             `${calculateLevel(userData?.xp || 0)} (${userData?.xp} XP)`,
@@ -65,7 +66,7 @@ const command: HypnoCommand<{ user?: User }> = {
           ["Messages", userData.messages_sent],
           ["VC Time", "" + userData.vc_time + " minutes"],
           ["Bumps", userData.bumps],
-          ["Balance", `${currency(economy.balance)}`],
+          ["Balance", `${currency(economy.balance).replace(/\*/g, "")}`],
           ["Economy Position", `#${ecoPosition + 1}`],
           ["Ruined the count", `${userData.count_ruined} times`],
           ["Imposition Registered", imposition.length],

@@ -94,7 +94,8 @@ CREATE TABLE IF NOT EXISTS user_data (
     allow_requests BOOLEAN NOT NULL DEFAULT true,
     allow_triggers BOOLEAN NOT NULL DEFAULT true,
     count_ruined INT NOT NULL DEFAULT 0,
-    auto_sell BOOLEAN NOT NULL DEFAULT false
+    auto_sell BOOLEAN NOT NULL DEFAULT false,
+    hypno_status TEXT NOT NULL DEFAULT 'green'
 );
 
 CREATE TABLE IF NOT EXISTS pinned_ratings (
