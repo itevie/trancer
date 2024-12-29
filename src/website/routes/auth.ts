@@ -4,9 +4,6 @@ import axios from "axios";
 import jwt from "jsonwebtoken";
 
 export function Authenticate(req: Request, res: Response, next: NextFunction) {
-  // @ts-ignore
-  req.user = "395877903998648322";
-  return next();
   if (req.url.startsWith("/login")) return next();
 
   const token = req.headers.cookie
