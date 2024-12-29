@@ -50,7 +50,9 @@ const command: HypnoCommand<{ trigger: string; confirm?: string }> = {
       args.trigger
     );
 
-    return message.reply(`Sucessfully deleted! :cyclone:`);
+    return message.reply(
+      `Sucessfully deleted! :cyclone:\nNote: you can manage your triggers more easier on the site: <https://trancer.dawn.rest/user_settings>`
+    );
   },
 };
 

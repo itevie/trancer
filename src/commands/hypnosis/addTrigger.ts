@@ -63,7 +63,9 @@ const command: HypnoCommand<{ trigger: string; bombard?: boolean }> = {
 
     // Add it
     await addTriggerFor(message.author.id, args.trigger, args.bombard ?? false);
-    return message.reply(`Added the trigger! :cyclone:`);
+    return message.reply(
+      `Added the trigger! :cyclone:\nNote: you can manage your triggers more easier on the site: <https://trancer.dawn.rest/user_settings>`
+    );
   },
 };
 
