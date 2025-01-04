@@ -86,7 +86,7 @@ export default function UserSettings() {
                         "Bombard",
                         "By Others",
                       ].map((t) => (
-                        <div key={t} style={{ display: "inline" }}>
+                        <div key={t} style={{ display: "inline-block" }}>
                           <input
                             checked={x.tags.includes(t.toLowerCase())}
                             disabled={

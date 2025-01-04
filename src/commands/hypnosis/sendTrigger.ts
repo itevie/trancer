@@ -29,7 +29,7 @@ const command: HypnoCommand<{ user?: User }> = {
 
     const random = await actions.triggers.getRandomByTagFor(user, [
       userData.hypno_status,
-      user !== message.author.id ? "by others" : "giraffe",
+      user !== message.author.id ? "by others" : null,
     ]);
 
     if (!random)

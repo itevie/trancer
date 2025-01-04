@@ -2,6 +2,7 @@ import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { getTriggersFor } from "../../util/actions/imposition";
 import { createEmbed, paginate } from "../../util/other";
+import { tagEmojiMap } from "../../util/db-parts/triggers";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "gettriggers",
@@ -28,7 +29,15 @@ const command: HypnoCommand<{ user?: User }> = {
       replyTo: message,
       type: "description",
       data: triggers.map(
-        (x) => `${x.what}${x.is_bombardable ? " (bombard)" : ""}`
+        (x) =>
+          `${x.what}${
+            x.tags.length > 0
+              ? ` [${x.tags
+                  .split(";")
+                  .map((x) => tagEmojiMap[x])
+                  .join("")}]`
+              : ""
+          }`
       ),
       embed: createEmbed().setTitle(`Triggers for ${user.username}`),
       pageLength: 20,

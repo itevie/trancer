@@ -1,5 +1,22 @@
 import { database } from "../database";
 
+type TriggerTag =
+  | "green"
+  | "red"
+  | "yellow"
+  | "by others"
+  | "anytime"
+  | "bombard";
+
+export const tagEmojiMap: Record<TriggerTag, string> = {
+  green: "🟢",
+  red: "🔴",
+  yellow: "🟡",
+  bombard: "🔫",
+  "by others": "🧑",
+  anytime: "🕓",
+};
+
 const _actions = {
   getFor: async (userId: string): Promise<UserImposition[]> => {
     return await database.all<UserImposition[]>(
@@ -8,13 +25,23 @@ const _actions = {
     );
   },
 
+  getList: async (
+    userId: string,
+    tags: (TriggerTag | null)[]
+  ): Promise<UserImposition[]> => {
+    tags = tags.filter((x) => !!x);
+    return (await _actions.getFor(userId)).filter((x) =>
+      (x.tags.split(";") as TriggerTag[]).some(
+        (y) => y === "anytime" || tags.includes(y)
+      )
+    );
+  },
+
   getRandomByTagFor: async (
     userId: string,
-    tags: string[]
+    tags: (TriggerTag | null)[]
   ): Promise<UserImposition | null> => {
-    const impositions = (await _actions.getFor(userId)).filter((x) =>
-      x.tags.split(";").some((y) => y === "anywhere" || tags.includes(y))
-    );
+    const impositions = await _actions.getList(userId, tags);
     if (impositions.length === 0) return null;
     return impositions[Math.floor(Math.random() * impositions.length)];
   },

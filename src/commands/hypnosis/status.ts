@@ -75,9 +75,15 @@ const command: HypnoCommand<{
           `Oops! I don't have permission to change your nickname in this server.`
         );
 
-      await message.member.setNickname(
-        currentNickname.trim() + ` (${typeMap[args.type]})`
-      );
+      try {
+        await message.member.setNickname(
+          currentNickname.trim() + ` (${typeMap[args.type]})`
+        );
+      } catch (e) {
+        return await message.reply(
+          `Oops! I couldn't change your nickname: ${e.message}`
+        );
+      }
     }
 
     return await message.reply(
