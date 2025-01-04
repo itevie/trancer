@@ -205,7 +205,24 @@ const phrases = [
   "egg",
   "me when",
   "xd",
+  "baby gronk",
+  "ohio rizz",
+  "ohio gyatt",
+  "double pump shotgun",
+  "golden scar",
+  "anyone got a big pot?",
+  "everyone knows im in the thick of it",
+  "Want a break from the ads?",
+  "Bro's speaking Yapanese",
 ];
+
+const brainrot = (
+  "baby gronk,ayo,baka,:cap:,ahh,alpha,among us,aura,ayo,backrooms,bussin',before gta 6,cap,chungus,cooked," +
+  "cringe,delulu,discord mod,Dr. DisRespect,fanum-tax,feastables,fent,fortnite battle pass,freaky,gacha life,glazing,glizzy,giddy," +
+  "grimace shake,gyatt,hawk tuah,hear me out,i am Steve,ipad kid,kai cenat,ksi,L,ligma,lil' bro,lock in,looksmaxxing,lock in," +
+  "luckly,mah boi,mid,mewing,minecraft movie,ohio,phonk,poggers,pookie,quandale dingle,ratio,redditor,rizz,the rizzler," +
+  "sigma,skibidi,skibidi toilet,slay,squid game,sus,thick of it,very demure,demure,zesty"
+).split(",");
 
 let messagesSince = 0;
 let messagesRequired = 20;
@@ -242,8 +259,44 @@ const handler: HypnoMessageHandler = {
               ),
           () => phrase + "?".repeat(randomFromRange(1, 10)),
           () => phrase + "!".repeat(randomFromRange(1, 10)),
+          () => {
+            let text = "";
+            const amount = randomFromRange(1, 7);
+            for (let i = 0; i != amount; i++)
+              text += brainrot[Math.floor(Math.random() * brainrot.length)];
+            return text;
+          },
+          () =>
+            phrase
+              .split("")
+              .reduce(
+                (c, v) =>
+                  c +
+                  ` ${
+                    Math.random() > 0.3
+                      ? `${
+                          brainrot[Math.floor(Math.random() * brainrot.length)]
+                        } `
+                      : ""
+                  }${
+                    Math.random() > 0.3
+                      ? `${
+                          brainrot[Math.floor(Math.random() * brainrot.length)]
+                        } `
+                      : ""
+                  }${
+                    Math.random() > 0.3
+                      ? `${
+                          brainrot[Math.floor(Math.random() * brainrot.length)]
+                        } `
+                      : ""
+                  }${v}`,
+                ""
+              ),
         ];
         if (Math.random() > 0.5)
+          phrase = fuckups[Math.floor(Math.random() * fuckups.length)]();
+        if (Math.random() > 0.8)
           phrase = fuckups[Math.floor(Math.random() * fuckups.length)]();
 
         await message.reply(phrase);

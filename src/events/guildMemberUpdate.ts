@@ -7,6 +7,8 @@ import ecoConfig from "../ecoConfig";
 import { addMoneyFor } from "../util/actions/economy";
 
 client.on("guildMemberUpdate", async (oldMember, newMember) => {
+  if (newMember.guild.id !== config.botServer.id) return;
+
   if (!oldMember.premiumSince && newMember.premiumSince) {
     await addMoneyFor(
       newMember.user.id,
