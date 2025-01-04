@@ -33,6 +33,12 @@ const ecoConfig = {
       max: 70,
     },
 
+    boosts: {
+      name: "boosting",
+      min: 2500,
+      max: 2500,
+    },
+
     vc: {
       name: "voicechatting",
       min: 5,
