@@ -4,7 +4,7 @@ import { actions } from "../../util/database";
 import { itemText } from "../../util/textProducer";
 
 const command: HypnoCommand<{ user: User; item: Item; amount?: number }> = {
-  name: "giveitem",
+  name: "give",
   description: "Give someone else an item",
   type: "economy",
 

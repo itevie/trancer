@@ -11,7 +11,7 @@ import ecoConfig from "../../ecoConfig";
 import { currency } from "../../util/textProducer";
 
 const command: HypnoCommand<{ user: User; amount: number }> = {
-  name: "give",
+  name: "pay",
   description: `Give someone else some ${ecoConfig.currency}`,
   type: "economy",
 
