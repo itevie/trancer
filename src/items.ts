@@ -2,6 +2,80 @@ import config from "./config";
 import ecoConfig from "./ecoConfig";
 import { database, databaseLogger } from "./util/database";
 
+/**
+ * {[key: string]: [price, weight]}
+ */
+const fr = {
+  veryCommon: [5, 0.9],
+  common: [10, 0.8],
+  uncommonish: [15, 0.75],
+  uncommon: [15, 0.6],
+  rarish: [25, 0.5],
+  rare: [40, 0.2],
+  veryRare: [55, 0.1],
+  epic: [80, 0.05],
+  legendary: [125, 0.04],
+  mythic: [300, 0.01],
+  divine: [1250, 0.005],
+} as const;
+
+/**
+ * [name, [price, weight], emoji][]
+ */
+const fish: [string, readonly [number, number], string | null][] = [
+  // ----- Standard -----
+  ["cod", fr.veryCommon, "<:cod:1322128982027534367>"],
+  ["common-fish", fr.common, "<:common_fish:1321758129872048189>"],
+  ["salmon", fr.uncommonish, "<:salmon:1322129073811623991>"],
+  ["uncommon-fish", fr.uncommon, "<:uncommon_fish:1321758154715041873>"],
+  ["wide-salmon", fr.uncommon, "<:wide_salmon:1322129134423379991>"],
+  ["pufferfish", fr.rarish, "<:pufferfish:1322129056086491136>"],
+  ["rare-fish", fr.rare, "<:rare_fish:1321758169004773419>"],
+  ["spiral-fish", fr.rare, "<:spiral_fish:1322129093684101193>"],
+  ["scottish-fish", fr.rare, "<:scotish_fish:1321843773415886899>"],
+  ["cute-fishy", fr.veryRare, "<:cute_fish:1321857857636798566>"],
+  ["cookie-fish", fr.veryRare, "<:cookie_fish:1321843822115684483>"],
+  ["transparent-fish", fr.veryRare, "<:transparent_fish:1321843791241678869>"],
+  ["epic-fish", fr.epic, "<:epic_fish:1321758183882227755>"],
+  ["basking-shark", fr.epic, null],
+  ["angle-fish", fr.legendary, "<:angel_fish:1325262607812395079>"],
+  ["devil-fish", fr.legendary, "<:devil_fish:1325262632776892487>"],
+  ["mythic-fish", fr.mythic, "<:mythic_fish:1321758197178175588>"],
+  ["dawn-fish", fr.mythic, null],
+  ["weed-fish", fr.mythic, "<:weed_fish:1322130669479923762>"],
+  ["fish", fr.mythic, "<:fish:1322130721548009512>"],
+  ["gay-fish", fr.mythic, "<:gay_fish:1321843756592271441>"],
+  ["trans-fish", fr.divine, "<:trans_fish:1321845160492925029>"],
+  ["british-fish", fr.divine, "<:british_fish:1321758209983381534>"],
+
+  // ----- Special -----
+  ["catfish", [2, 0.3], "<:cat_fish:1322128963837104158>"],
+  [
+    "you-are-never-getting-this-fish",
+    [5000, 0.0005],
+    "<:you_are_never_getting_this_fish:1321758224222912604>",
+  ],
+  [
+    "we-are-number-one-fish",
+    [20_000, 0.00001],
+    "<:we_are_number_one_fish:1322129116006449234>",
+  ],
+];
+
+const fishDescriptions: { [key: string]: string } = {
+  "cute-fishy": "Aw... such a cutie patootie fishie",
+  "dawn-fish":
+    "According to all known laws of hypnosis, Dawn is a fish... allegedly.",
+  catfish: "Such rare... very nothing... much scam...",
+  "transparent-fish": "Woah.",
+  "trans-fish": "Your average trans fish.",
+  "gay-fish": "Gay!!!!",
+  "scottish-fish": "SCOTLAND FOREVER!",
+  "british-fish": "Pip pip cheerio!",
+  "we-are-number-one-fish":
+    "If you wanna be a villain number one, you have to catch a fishie on the run.",
+} as const;
+
 const items: Record<string, Partial<Item>> = {
   "card-pull": {
     price: 100,
@@ -51,153 +125,8 @@ const items: Record<string, Partial<Item>> = {
       "You can fish more frequently. This has a 10% chance of breaking.",
     emoji: "<:fishing_rod:1321761522699210802>",
   },
-  // ----- Fish -----
-  "common-fish": {
-    price: 10,
-    weight: 0.8,
-    tag: "fish",
-    emoji: "<:common_fish:1321758129872048189>",
-  },
-  cod: {
-    price: 10,
-    weight: 0.9,
-    tag: "fish",
-    emoji: "<:cod:1322128982027534367>",
-  },
-  salmon: {
-    price: 15,
-    weight: 0.75,
-    tag: "fish",
-    emoji: "<:salmon:1322129073811623991>",
-  },
-  "wide-salmon": {
-    price: 18,
-    weight: 0.7,
-    tag: "fish",
-    emoji: "<:wide_salmon:1322129134423379991>",
-  },
-  pufferfish: {
-    price: 30,
-    weight: 0.5,
-    tag: "fish",
-    emoji: "<:pufferfish:1322129056086491136>",
-  },
-  catfish: {
-    price: 2,
-    weight: 0.3,
-    tag: "fish",
-    emoji: "<:cat_fish:1322128963837104158>",
-  },
-  "spiral-fish": {
-    price: 50,
-    weight: 0.2,
-    tag: "fish",
-    emoji: "<:spiral_fish:1322129093684101193>",
-  },
-  fish: {
-    price: 10,
-    weight: 0.01,
-    tag: "fish",
-    emoji: "<:fish:1322130721548009512>",
-  },
-  "we-are-number-one-fish": {
-    price: 20000,
-    weight: 0.00005,
-    tag: "fish",
-    description:
-      "If you wanna be a villain number one, you have to catch a fishie on the run.",
-    emoji: "<:we_are_number_one_fish:1322129116006449234>",
-  },
-  "uncommon-fish": {
-    price: 15,
-    weight: 0.6,
-    tag: "fish",
-    emoji: "<:uncommon_fish:1321758154715041873>",
-  },
-  "rare-fish": {
-    price: 40,
-    weight: 0.2,
-    tag: "fish",
-    emoji: "<:rare_fish:1321758169004773419>",
-  },
-  "epic-fish": {
-    price: 80,
-    weight: 0.05,
-    tag: "fish",
-    emoji: "<:epic_fish:1321758183882227755>",
-  },
-  "mythic-fish": {
-    price: 300,
-    weight: 0.01,
-    tag: "fish",
-    emoji: "<:mythic_fish:1321758197178175588>",
-  },
-  "you-are-never-getting-this-fish": {
-    price: 5000,
-    weight: 0.001,
-    tag: "fish",
-    emoji: "<:you_are_never_getting_this_fish:1321758224222912604>",
-  },
-  "dawn-fish": {
-    price: 350,
-    weight: 0.01,
-    tag: "fish",
-    description:
-      "According to all known laws of hypnosis, Dawn is a fish... allegedly.",
-  },
-  "cute-fishy": {
-    price: 120,
-    weight: 0.1,
-    description: "Aw... such a cutie patootie fishie",
-    tag: "fish",
-    emoji: "<:cute_fish:1321857857636798566>",
-  },
-  "british-fish": {
-    price: 250,
-    weight: 0.0069,
-    description: "Pip pip cheerio!",
-    tag: "fish",
-    emoji: "<:british_fish:1321758209983381534>",
-  },
-  "basking-shark": {
-    price: 1500,
-    weight: 0.001,
-    tag: "fish",
-  },
-  "cookie-fish": {
-    price: 100,
-    weight: 0.1,
-    tag: "fish",
-    emoji: "<:cookie_fish:1321843822115684483>",
-  },
-  "transparent-fish": {
-    price: 100,
-    weight: 0.1,
-    tag: "fish",
-    emoji: "<:transparent_fish:1321843791241678869>",
-    description: "Woah.",
-  },
-  "gay-fish": {
-    price: 200,
-    weight: 0.009,
-    tag: "fish",
-    emoji: "<:gay_fish:1321843756592271441>",
-    description: "Gay!!!!",
-  },
-  "scottish-fish": {
-    price: 100,
-    weight: 0.2,
-    tag: "fish",
-    emoji: "<:scotish_fish:1321843773415886899>",
-    description: "SCOTLAND FOREVER!",
-  },
-  "trans-fish": {
-    price: 2500,
-    weight: 0.005,
-    tag: "fish",
-    emoji: "<:trans_fish:1321845160492925029>",
-    description: "Your average trans fish",
-  },
+
+  // ----- Collectables -----
   "christmas-cookie": {
     price: 1000,
     weight: 0,
@@ -206,12 +135,8 @@ const items: Record<string, Partial<Item>> = {
     buyable: false,
     emoji: "<:chirtmas_cookie:1321761548372279337>",
   },
-  "weed-fish": {
-    price: 300,
-    weight: 0.05,
-    tag: "fish",
-    emoji: "<:weed_fish:1322130669479923762>",
-  },
+
+  // ----- Misc -----
   "lottery-ticket": {
     price: ecoConfig.lottery.entryPrice,
     weight: 0,
@@ -220,6 +145,20 @@ const items: Record<string, Partial<Item>> = {
     max: 5,
     emoji: "<:lottery_ticket:1322129029368909917>",
   },
+
+  // ----- Load Fish -----
+  ...Object.fromEntries(
+    fish.map((x) => [
+      x[0],
+      {
+        price: x[1][0],
+        weight: x[1][1],
+        description: fishDescriptions[x[0]] || null,
+        emoji: x[2],
+        tag: "fish",
+      },
+    ])
+  ),
 } as const;
 
 const defaults: Omit<Item, "id" | "name"> = {

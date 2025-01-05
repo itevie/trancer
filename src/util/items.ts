@@ -125,5 +125,5 @@ export async function generateRandomReward(
 }
 
 export function calculateItemPrice(item: Item): number {
-  return Math.round(Math.min(0.7, 1 - item.weight) * item.price);
+  return Math.max(1, Math.round(Math.min(0.7, 1 - item.weight) * item.price));
 }

@@ -34,9 +34,11 @@ const command: HypnoCommand<{ tag?: string }> = {
         (item) =>
           `${itemText(item)} - ${!item.buyable ? "~~" : ""}${currency(
             item.price
-          )}${!item.buyable ? "~~" : ""} (${item.weight * 100}%)\n- *${
-            item.description ?? "No description"
-          }${item.tag ? ` [${item.tag}]` : ""}*`
+          )}${!item.buyable ? "~~" : ""} (${(item.weight * 100).toFixed(
+            0
+          )}%)\n- *${item.description ?? "No description"}${
+            item.tag ? ` [${item.tag}]` : ""
+          }*`
       ),
     });
   },
