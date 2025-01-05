@@ -148,6 +148,19 @@ client.on("messageCreate", async (message) => {
           `You do not have the ${permission} permission!`
         );
 
+  const details: HypnoCommandDetails<any> = {
+    serverSettings: settings,
+    command: commandName.toLowerCase(),
+    args: {},
+    oldArgs: originalArguments,
+    originalContent: originalArguments.join(" "),
+  };
+
+  // Check prehandler
+  if (command.preHandler) {
+    if (!(await command.preHandler(message, details))) return;
+  }
+
   // Check ratelimit
   if (command.ratelimit) {
     let lastUsed = await getRatelimit(message.author.id, command.name);
@@ -174,14 +187,6 @@ client.on("messageCreate", async (message) => {
       await setRatelimit(message.author.id, command.name, new Date());
     }
   }
-
-  const details: HypnoCommandDetails<any> = {
-    serverSettings: settings,
-    command: commandName.toLowerCase(),
-    args: {},
-    oldArgs: originalArguments,
-    originalContent: originalArguments.join(" "),
-  };
 
   // Check if the command requires argument validation
   if (command.args) {

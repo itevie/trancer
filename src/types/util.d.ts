@@ -106,6 +106,15 @@ interface HypnoCommand<Args extends { [key: string]: any } = {}> {
   except?: (message: Message, args: string[]) => boolean;
 
   /**
+   * Runs before the main handler. Used to check if it should be ran or not.
+   * Return true to run the handler, false to skip it.
+   */
+  preHandler?: (
+    message: Message<true>,
+    options: HypnoCommandDetails<Args>
+  ) => Promise<boolean>;
+
+  /**
    * The main handler for the command
    */
   handler: (message: Message<true>, options: HypnoCommandDetails<Args>) => void;

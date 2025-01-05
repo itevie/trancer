@@ -11,17 +11,9 @@ const command: HypnoCommand = {
     "Mine for minerals, requires a pickaxe. Uses your most expensive pickaxe.",
   type: "economy",
 
-  ratelimit: async (message) => {
-    const pickaxe = (
-      await actions.items.aquired.resolveFrom(
-        await actions.items.aquired.getAllFor(message.author.id)
-      )
-    ).filter((item) => item.tag === "pickaxe")[0];
-    if (!pickaxe) return null;
-    return ecoConfig.payouts.mine.limit;
-  },
+  ratelimit: ecoConfig.payouts.mine.limit,
 
-  handler: async (message, { serverSettings }) => {
+  preHandler: async (message, { serverSettings }) => {
     // Resolve user's most expensive pickaxe
     const pickaxe = (
       await actions.items.aquired.resolveFrom(
@@ -32,11 +24,15 @@ const command: HypnoCommand = {
       .sort((a, b) => b.price - a.price)[0];
 
     if (!pickaxe) {
-      return message.reply(
+      await message.reply(
         `:warning: You do not have a pickaxe! Check the crafting recipes with \`${serverSettings.prefix}recipes\`.`
       );
+      return false;
     }
+    return true;
+  },
 
+  handler: async (message) => {
     // Generate minerals and fallback rock
     const minerals = await actions.items.getByTag("mineral");
     const rock = itemMap[ecoConfig.mining.defaultSpace];
