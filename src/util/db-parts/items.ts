@@ -48,7 +48,15 @@ const _actions = {
 
   // ----- Aquired -----
   aquired: {
-    getAllFor: async (userId: string): Promise<AquiredItem[]> => {
+    getAllFor: async (
+      userId: string,
+      includeZeros = false
+    ): Promise<AquiredItem[]> => {
+      if (includeZeros)
+        return await database.all<AquiredItem[]>(
+          "SELECT * FROM aquired_items WHERE user_id = ?;",
+          userId
+        );
       return await database.all<AquiredItem[]>(
         "SELECT * FROM aquired_items WHERE user_id = ? AND amount > 0;",
         userId
