@@ -11,7 +11,15 @@ const command: HypnoCommand = {
     "Mine for minerals, requires a pickaxe. Uses your most expensive pickaxe.",
   type: "economy",
 
-  ratelimit: ecoConfig.payouts.mine.limit,
+  ratelimit: async (message) => {
+    const pickaxe = (
+      await actions.items.aquired.resolveFrom(
+        await actions.items.aquired.getAllFor(message.author.id)
+      )
+    ).filter((item) => item.tag === "pickaxe")[0];
+    if (!pickaxe) return 0;
+    return ecoConfig.payouts.mine.limit;
+  },
 
   handler: async (message, { serverSettings }) => {
     // Resolve user's most expensive pickaxe

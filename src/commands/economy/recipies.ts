@@ -1,12 +1,12 @@
 import recipies from "../../craftingRecipies";
 import { HypnoCommand } from "../../types/util";
-import { actions } from "../../util/database";
 import { itemMap } from "../../util/db-parts/items";
 import { createEmbed, englishifyList, paginate } from "../../util/other";
 import { itemText } from "../../util/textProducer";
 
 const command: HypnoCommand = {
-  name: "recipies",
+  name: "recipes",
+  aliases: ["recipies"],
   description: "Get a list of craftable items",
   type: "economy",
 
