@@ -24,7 +24,7 @@ const command: HypnoCommand<{ user?: User }> = {
     const user = args.user ? args.user.id : message.author.id;
     const userData = await actions.userData.getFor(user, message.guild.id);
 
-    if (args.user && userData.allow_triggers)
+    if (args.user && !userData.allow_triggers)
       return message.reply(`:warning: That user has triggers disabled.`);
 
     const random = await actions.triggers.getRandomByTagFor(user, [

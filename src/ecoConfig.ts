@@ -10,6 +10,11 @@ const ecoConfig = {
     fishingRod: "fishing-rod",
   },
 
+  mining: {
+    defaultSpace: "rock",
+    unknownSpace: ":question:",
+  },
+
   lottery: {
     enabled: true,
     length: 1000 * 60 * 60 * 24 * 7,
@@ -75,9 +80,12 @@ const ecoConfig = {
 
     fish: {
       name: "fishing",
-      min: 10,
-      max: 20,
       limit: 1000 * 60 * 30,
+    },
+
+    mine: {
+      name: "mining",
+      limit: 1000 * 60 * 60,
     },
 
     work: {

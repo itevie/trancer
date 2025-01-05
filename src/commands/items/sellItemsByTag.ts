@@ -18,7 +18,7 @@ const command: HypnoCommand<{ tag: string }> = {
       {
         name: "tag",
         type: "string",
-        oneOf: ["fish"],
+        oneOf: ["fish", "mineral"],
       },
     ],
   },

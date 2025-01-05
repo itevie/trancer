@@ -1,6 +1,19 @@
+import { setupItems } from "../../items";
 import { database } from "../database";
 
+export const itemMap: { [key: string]: Item } = {};
+export const itemIDMap: { [key: number]: Item } = {};
+
 const _actions = {
+  _init: async () => {
+    await setupItems();
+    const items = await database.all<Item[]>("SELECT * FROM items;");
+    for (const item of items) {
+      itemMap[item.name] = item;
+      itemIDMap[item.id] = item;
+    }
+  },
+
   // ----- Single -----
   get: async (id: number): Promise<Item | null> => {
     return await database.get<Item>("SELECT * FROM items WHERE id = ?;", id);
@@ -70,7 +83,8 @@ const _actions = {
       const items: (Item & AquiredItem)[] = [];
 
       for await (const fakeItem of aquired) {
-        const item = await _actions.get(fakeItem.item_id);
+        const item =
+          itemIDMap[fakeItem.item_id] || (await _actions.get(fakeItem.item_id));
         items.push({
           ...item,
           ...fakeItem,

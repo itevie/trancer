@@ -431,7 +431,8 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
       currentIndex = 0;
       modifyEmbed();
     } else if (interaction.customId === "last-page") {
-      currentIndex = options.data.length - (options.data.length % pageLength);
+      currentIndex =
+        options.data.length - (options.data.length % pageLength) - pageLength;
       modifyEmbed();
     }
 

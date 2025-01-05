@@ -62,6 +62,13 @@ const fish: [string, readonly [number, number], string | null][] = [
   ],
 ];
 
+console.log(
+  fish
+    .filter((x) => !!x[2])
+    .map((x) => x[2].match(x[2]))
+    .join("")
+);
+
 const fishDescriptions: { [key: string]: string } = {
   "cute-fishy": "Aw... such a cutie patootie fishie",
   "dawn-fish":
@@ -80,7 +87,7 @@ const items: Record<string, Partial<Item>> = {
   "card-pull": {
     price: 100,
     description: "Buy this, and pull a card using the `pull` command!",
-    weight: 0.2,
+    weight: 0.3,
     emoji: "<:card_pull:1321761564314964010> ",
   },
   "hair-dye": {
@@ -106,6 +113,15 @@ const items: Record<string, Partial<Item>> = {
       "A pendulum! It goes this way and that. (good for playing with Dawn!)",
     weight: 0.2,
   },
+  "fishing-rod": {
+    price: 250,
+    weight: 0.1,
+    description:
+      "You can fish more frequently. This has a 10% chance of breaking.",
+    emoji: "<:fishing_rod:1321761522699210802>",
+  },
+
+  // ----- Resoureces -----
   stick: {
     price: 5,
     description: "A stick.",
@@ -118,12 +134,33 @@ const items: Record<string, Partial<Item>> = {
     weight: 0.5,
     emoji: "<:rock:1321761504386744391>",
   },
-  "fishing-rod": {
-    price: 250,
-    weight: 0.1,
-    description:
-      "You can fish more frequently. This has a 10% chance of breaking.",
-    emoji: "<:fishing_rod:1321761522699210802>",
+
+  // ----- Minerals -----
+  coal: {
+    price: 10,
+    weight: 0.35,
+    emoji: "<:coal:1325546270500196443>",
+    tag: "mineral",
+  },
+  iron: {
+    price: 30,
+    weight: 0.2,
+    emoji: "<:iron:1325546289261318294>",
+    tag: "mineral",
+  },
+  gold: {
+    price: 100,
+    weight: 0.05,
+    emoji: "<:gold:1325546308689199155>",
+    tag: "mineral",
+  },
+
+  // ---- Craftables -----
+  "stone-pickaxe": {
+    price: 40,
+    weight: 0.4,
+    tag: "pickaxe",
+    emoji: "<:stone_pickaxe:1325548046188286053> ",
   },
 
   // ----- Collectables -----
