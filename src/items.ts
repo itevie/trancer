@@ -37,11 +37,11 @@ const fish: [string, readonly [number, number], string | null][] = [
   ["cookie-fish", fr.veryRare, "<:cookie_fish:1321843822115684483>"],
   ["transparent-fish", fr.veryRare, "<:transparent_fish:1321843791241678869>"],
   ["epic-fish", fr.epic, "<:epic_fish:1321758183882227755>"],
-  ["basking-shark", fr.epic, null],
+  ["basking-shark", fr.epic, "<:basking_shark:1325557096808452107>"],
   ["angle-fish", fr.legendary, "<:angel_fish:1325262607812395079>"],
   ["devil-fish", fr.legendary, "<:devil_fish:1325262632776892487>"],
   ["mythic-fish", fr.mythic, "<:mythic_fish:1321758197178175588>"],
-  ["dawn-fish", fr.mythic, null],
+  ["dawn-fish", fr.mythic, "<:dawn_fish:1325556803546779678>"],
   ["weed-fish", fr.mythic, "<:weed_fish:1322130669479923762>"],
   ["fish", fr.mythic, "<:fish:1322130721548009512>"],
   ["gay-fish", fr.mythic, "<:gay_fish:1321843756592271441>"],
@@ -95,11 +95,13 @@ const items: Record<string, Partial<Item>> = {
     description:
       "Dye the hair of your Dawn! Use the `dyehair` command to do so!",
     weight: 0.05,
+    emoji: "<:hair_dye:1325556895309758576>",
   },
   hair: {
     price: 30,
     description: "Feed your Dawn some hair and it'll be a lot less hungry!",
     weight: 0.5,
+    emoji: "<:hair:1325556878494928957>",
   },
   juicebox: {
     price: 15,
@@ -112,6 +114,7 @@ const items: Record<string, Partial<Item>> = {
     description:
       "A pendulum! It goes this way and that. (good for playing with Dawn!)",
     weight: 0.2,
+    emoji: "<:pendulum:1325556858869645443>",
   },
   "fishing-rod": {
     price: 250,

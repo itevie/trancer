@@ -35,7 +35,7 @@ const command: HypnoCommand<{ user: User; item: Item; amount?: number }> = {
 
     if (aquired.amount < amount)
       return message.reply(
-        `:warning: You do not have **${amount} ${itemText(args.item)}**!`
+        `:warning: You do not have ${itemText(args.item, amount)}!`
       );
 
     await actions.items.aquired.removeFor(
