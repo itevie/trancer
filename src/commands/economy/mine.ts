@@ -17,7 +17,7 @@ const command: HypnoCommand = {
         await actions.items.aquired.getAllFor(message.author.id)
       )
     ).filter((item) => item.tag === "pickaxe")[0];
-    if (!pickaxe) return 0;
+    if (!pickaxe) return null;
     return ecoConfig.payouts.mine.limit;
   },
 

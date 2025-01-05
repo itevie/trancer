@@ -10,7 +10,7 @@ const command: HypnoCommand = {
   description: "Get a list of craftable items",
   type: "economy",
 
-  handler: (message) => {
+  handler: (message, { serverSettings }) => {
     const data: string[] = [];
 
     for (const part of Object.entries(recipies)) {
@@ -23,7 +23,9 @@ const command: HypnoCommand = {
 
     return paginate({
       replyTo: message,
-      embed: createEmbed().setTitle("List of craftable items"),
+      embed: createEmbed()
+        .setTitle("List of craftable items")
+        .setFooter({ text: `Get with ${serverSettings.prefix}craft [item]` }),
       type: "description",
       data: data,
     });

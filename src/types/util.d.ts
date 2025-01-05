@@ -113,7 +113,7 @@ interface HypnoCommand<Args extends { [key: string]: any } = {}> {
   /**
    * How often this command can be ran
    */
-  ratelimit?: number | ((message: Message<true>) => Promise<number>);
+  ratelimit?: number | ((message: Message<true>) => Promise<number | null>);
 
   /**
    * A list of string guards to be checked when it's attempted

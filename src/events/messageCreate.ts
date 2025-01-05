@@ -155,22 +155,24 @@ client.on("messageCreate", async (message) => {
       typeof command.ratelimit === "function"
         ? await command.ratelimit(message)
         : command.ratelimit;
-    let ms = ratelimit - (Date.now() - lastUsed.getTime());
+    if (ratelimit !== null) {
+      let ms = ratelimit - (Date.now() - lastUsed.getTime());
 
-    if (ms > 0)
-      return await message.reply({
-        embeds: [
-          createEmbed()
-            .setTitle(`Hey! You can't do that!`)
-            .setColor("#FF0000")
-            .setDescription(
-              `You need to wait **${msToHowLong(ms)}** to use the **${
-                command.name
-              }** command!`
-            ),
-        ],
-      });
-    await setRatelimit(message.author.id, command.name, new Date());
+      if (ms > 0)
+        return await message.reply({
+          embeds: [
+            createEmbed()
+              .setTitle(`Hey! You can't do that!`)
+              .setColor("#FF0000")
+              .setDescription(
+                `You need to wait **${msToHowLong(ms)}** to use the **${
+                  command.name
+                }** command!`
+              ),
+          ],
+        });
+      await setRatelimit(message.author.id, command.name, new Date());
+    }
   }
 
   const details: HypnoCommandDetails<any> = {

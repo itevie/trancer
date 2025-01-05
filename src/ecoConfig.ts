@@ -85,7 +85,7 @@ const ecoConfig = {
 
     mine: {
       name: "mining",
-      limit: 1000 * 60 * 60,
+      limit: 1000 * 60 * 30,
     },
 
     work: {
