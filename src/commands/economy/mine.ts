@@ -34,7 +34,9 @@ const command: HypnoCommand = {
 
   handler: async (message) => {
     // Generate minerals and fallback rock
-    const minerals = await actions.items.getByTag("mineral");
+    const minerals = (await actions.items.getByTag("mineral")).filter(
+      (x) => x.name !== "rock"
+    );
     const rock = itemMap[ecoConfig.mining.defaultSpace];
     const generateMineral = () =>
       minerals.find((mineral) => Math.random() < mineral.weight) || rock;
@@ -86,6 +88,7 @@ const command: HypnoCommand = {
 
     // Update message with mined results
     await msg.edit({
+      components: [],
       embeds: [
         createEmbed()
           .setTitle("You yearned for the mines")

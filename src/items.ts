@@ -136,6 +136,7 @@ const items: Record<string, Partial<Item>> = {
     description: "A rock.",
     weight: 0.5,
     emoji: "<:rock:1321761504386744391>",
+    tag: "mineral",
   },
 
   // ----- Minerals -----

@@ -1,6 +1,6 @@
 import { HypnoCommand } from "../../types/util";
 import { addTriggerFor } from "../../util/actions/imposition";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 import fs from "fs";
 import { createEmbed } from "../../util/other";
 
@@ -48,9 +48,11 @@ const command: HypnoCommand<{ trigger: string; bombard?: boolean }> = {
       const triggers = fs
         .readFileSync(__dirname + "/../../data/impo.txt", "utf-8")
         .split("\n");
+      const userTriggers = await actions.triggers.getFor(message.author.id);
 
       for await (const trigger of triggers)
-        await addTriggerFor(message.author.id, trigger, false);
+        if (!userTriggers.some((x) => x.what === trigger))
+          await addTriggerFor(message.author.id, trigger, false);
 
       return message.reply({
         embeds: [

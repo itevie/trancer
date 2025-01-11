@@ -1,5 +1,6 @@
 import { HypnoCommand } from "../../types/util";
 import { database } from "../../util/database";
+import { calculateItemPrice } from "../../util/items";
 import { createEmbed, paginate } from "../../util/other";
 import { currency, itemText } from "../../util/textProducer";
 
@@ -32,13 +33,13 @@ const command: HypnoCommand<{ tag?: string }> = {
       type: "description",
       data: items.map(
         (item) =>
-          `${itemText(item)} - ${!item.buyable ? "~~" : ""}${currency(
+          `${itemText(item)} - ${!item.buyable ? "~~" : ""}buy ${currency(
             item.price
-          )}${!item.buyable ? "~~" : ""} (${(item.weight * 100).toFixed(
-            0
-          )}%)\n- *${item.description ?? "No description"}${
-            item.tag ? ` [${item.tag}]` : ""
-          }*`
+          )}${!item.buyable ? "~~" : ""} sell ${currency(
+            calculateItemPrice(item)
+          )} (${(item.weight * 100).toFixed(0)}% weight)\n- *${
+            item.description ?? "No description"
+          }${item.tag ? ` [${item.tag}]` : ""}*`
       ),
     });
   },

@@ -4,7 +4,6 @@ import {
   getEconomyFor,
   removeMoneyFor,
 } from "../../util/actions/economy";
-import config from "../../config";
 import { currency } from "../../util/textProducer";
 
 const command: HypnoCommand<{ amount: number; confirm?: string }> = {

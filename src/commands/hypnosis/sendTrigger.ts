@@ -20,7 +20,7 @@ const command: HypnoCommand<{ user?: User }> = {
     ],
   },
 
-  handler: async (message, { args }) => {
+  handler: async (message, { args, serverSettings }) => {
     const user = args.user ? args.user.id : message.author.id;
     const userData = await actions.userData.getFor(user, message.guild.id);
 
@@ -32,9 +32,13 @@ const command: HypnoCommand<{ user?: User }> = {
       user !== message.author.id ? "by others" : null,
     ]);
 
-    if (!random)
+    if (!random && user === args.user.id)
       return message.reply(
         `:warning: Could not get a random trigger for that user.\nTheir status is **${userData.hypno_status}**`
+      );
+    if (!random && user === message.author.id)
+      return message.reply(
+        `:warning: I couldn't get a random trigger for you. Either:\n1. You have no imposition setup (use \`${serverSettings.prefix}addi defaults\` to add defaults)\n2. Your hypno status is not green`
       );
 
     return message.reply(random.what);

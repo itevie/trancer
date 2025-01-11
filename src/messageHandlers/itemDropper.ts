@@ -37,6 +37,14 @@ const words = [
   "fish",
   "agency",
   ".fish",
+  ".mine",
+  ".daily",
+  ".work",
+  ":cyclone:",
+  "among us",
+  "skibidi sigma",
+  "skibidi ohio rizzler",
+  ".pay <@395877903998648322> 1",
 ];
 
 const handler: HypnoMessageHandler = {

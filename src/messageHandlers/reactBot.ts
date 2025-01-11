@@ -214,6 +214,8 @@ const phrases = [
   "everyone knows im in the thick of it",
   "Want a break from the ads?",
   "Bro's speaking Yapanese",
+  "https://tenor.com/view/yuh-uh-meme-funny-nuh-uh-gif-4499945910302690705",
+  "https://tenor.com/view/nuh-uh-beocord-no-lol-gif-24435520",
 ];
 
 const brainrot = (
@@ -268,7 +270,7 @@ const handler: HypnoMessageHandler = {
           },
           () =>
             phrase
-              .split("")
+              .split(" ")
               .reduce(
                 (c, v) =>
                   c +

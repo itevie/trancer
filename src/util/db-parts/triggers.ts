@@ -1,4 +1,5 @@
 import { database } from "../database";
+import { getRandomImpositionFromFile } from "../other";
 
 type TriggerTag =
   | "green"
@@ -39,10 +40,19 @@ const _actions = {
 
   getRandomByTagFor: async (
     userId: string,
-    tags: (TriggerTag | null)[]
+    tags: (TriggerTag | null)[],
+    useRandom = false
   ): Promise<UserImposition | null> => {
     const impositions = await _actions.getList(userId, tags);
-    if (impositions.length === 0) return null;
+    if (impositions.length === 0)
+      return useRandom
+        ? {
+            user_id: "0",
+            what: getRandomImpositionFromFile(),
+            is_bombardable: true,
+            tags: "anywhere,by others",
+          }
+        : null;
     return impositions[Math.floor(Math.random() * impositions.length)];
   },
 } as const;
