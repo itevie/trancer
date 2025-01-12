@@ -64,6 +64,16 @@ CREATE TABLE IF NOT EXISTS role_menu_items (
     role_id TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS qotd_questions (
+    id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
+    server_id INTEGER NOT NULL,
+    suggestor INTEGER NOT NULL,
+    question TEXT NOT NULL,
+    asked BOOLEAN NOT NULL DEFAULT false,
+
+    UNIQUE(server_id, question)
+);
+
 -- User specific stuff
 CREATE TABLE IF NOT EXISTS user_imposition (
     user_id TEXT NOT NULL,

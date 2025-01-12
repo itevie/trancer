@@ -19,7 +19,8 @@ export type HypnoCommandType =
   | "leaderboards"
   | "games"
   | "actions"
-  | "ai";
+  | "ai"
+  | "qotd";
 
 type Guard = "admin" | "bot-server" | "bot-owner";
 

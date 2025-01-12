@@ -10,6 +10,7 @@ import spirals from "./db-parts/spirals";
 import serverSettings from "./db-parts/serverSettings";
 import items from "./db-parts/items";
 import triggers from "./db-parts/triggers";
+import qotd from "./db-parts/qotd";
 
 export let database: Database<sqlite3.Database, Statement>;
 export const databaseLogger = new Logger("database");
@@ -20,6 +21,7 @@ export const actions = {
   serverSettings,
   items,
   triggers,
+  qotd,
 } as const;
 
 export async function connect(): Promise<void> {

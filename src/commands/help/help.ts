@@ -32,6 +32,7 @@ const categoryEmojis: Record<HypnoCommandType, string> = {
   analytics: "📈",
   dawnagotchi: "🏳‍🌈",
   games: "🎮️",
+  qotd: "❓",
 };
 
 const command: HypnoCommand<{ ignoreGuards: boolean }> = {
