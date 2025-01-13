@@ -32,7 +32,7 @@ const command: HypnoCommand<{ user?: User }> = {
       user !== message.author.id ? "by others" : null,
     ]);
 
-    if (!random && user === args.user.id)
+    if (!random && user === args.user?.id)
       return message.reply(
         `:warning: Could not get a random trigger for that user.\nTheir status is **${userData.hypno_status}**`
       );
