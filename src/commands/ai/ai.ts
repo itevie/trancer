@@ -3,9 +3,8 @@ import config from "../../config";
 import { HypnoCommand } from "../../types/util";
 
 export const history: { [key: string]: Message[] } = {};
-
 const helperMessage =
-  "You are the AI, your name is Jenifer. The messages from users will be prefixed by their usernames. Respond to the contents inside the quotes, and you can address users by their usernames if relevant.";
+  "Your name is Trancer. You must act like a normal person, responding casually and using the same tone, slang, abbreviations, and style as the user. Respond to everything inside the quotes, and feel free to address users by their usernames if relevant. If the user uses informal, aggressive, or sarcastic language, respond with a similarly direct, laid-back, or confident style. Avoid being overly polite or formal, and reflect the mood and tone of the user without censoring the conversation too much. Keep it real and true to the user's vibe.";
 
 let isProcessing: boolean = false;
 
@@ -56,14 +55,14 @@ const command: HypnoCommand = {
     try {
       await message.react(`⏳`);
       let response = await ollama.chat({
-        model: "llama3.2",
+        model: "llama3.1",
         messages: history[conversationID],
       });
 
-      if (response.message.content.includes("@"))
-        return message.reply(`Nuh uh! Don't you ping people.`);
+      response.message.content = response.message.content.replace(/@/g, "@ ");
 
       history[conversationID].push(response.message);
+      console.log(response.message);
 
       let parts = response.message.content.match(/.{1,2000}/gs);
 

@@ -214,7 +214,7 @@ client.on("messageCreate", async (message) => {
         return createEmbed()
           .setTitle("Invalid command usage!")
           .setDescription(
-            `You used the command wrong\n${codeblock}\nAbove the arrows (${arg.name}): ${message}\n\nNote: \`<...>\` means it's required, and \`[...]\` means it's optional.`
+            `${codeblock}\n**Above the arrows (*${arg.name}*)**: ${message}\n\nNote: \`<...>\` means it's required, and \`[...]\` means it's optional.`
           );
       };
 
@@ -288,7 +288,9 @@ client.on("messageCreate", async (message) => {
       let result: any;
 
       // Returns null if success (puts it in result)
-      let checkArg = async (a: string): Promise<string | null> => {
+      let checkArg = async (
+        a: string
+      ): Promise<string | { error: string; autocomplete: string[] } | null> => {
         switch (arg.type) {
           case "wholepositivenumber":
             if (isNaN(parseInt(a)) || parseInt(a) % 1 !== 0 || parseInt(a) < 0)
@@ -343,14 +345,22 @@ client.on("messageCreate", async (message) => {
             let card: Card;
             if (a.match(/^([0-9]+)$/)) card = await getCardById(parseInt(a));
             else card = await getCardByName(a);
-            if (!card) return "Invalid card ID/name provided";
+            if (!card)
+              return {
+                error: "Invalid card ID/name provided",
+                autocomplete: (await actions.cards.getAll()).map((x) => x.name),
+              };
             result = card;
             break;
           case "deck":
             let deck: Deck;
             if (a.match(/^([0-9]+)$/)) deck = await getDeckById(parseInt(a));
             else deck = await getDeckByName(a);
-            if (!deck) return "Invalid deck ID/name provided";
+            if (!deck)
+              return {
+                error: "Invalid deck ID/name provided",
+                autocomplete: (await actions.decks.getAll()).map((x) => x.name),
+              };
             result = deck;
             break;
           case "item":
@@ -358,7 +368,11 @@ client.on("messageCreate", async (message) => {
             if (a.match(/^([0-9]+)$/))
               item = await actions.items.get(parseInt(a));
             else item = await actions.items.getByName(a);
-            if (!item) return "Invalid item ID/name provided";
+            if (!item)
+              return {
+                error: "Invalid item ID/name provided",
+                autocomplete: (await actions.items.getAll()).map((x) => x.name),
+              };
             result = item;
             break;
           case "user":
@@ -419,10 +433,34 @@ client.on("messageCreate", async (message) => {
       // Check if it is a valid type
       let checkerResult = await checkArg(givenValue);
       if (checkerResult !== null) {
+        let didYouMean =
+          typeof checkerResult === "object"
+            ? Array.from(
+                new Map(
+                  checkerResult.autocomplete.map((x) => [
+                    x,
+                    [
+                      x,
+                      compareTwoStrings(
+                        givenValue.toLowerCase(),
+                        x.toLowerCase()
+                      ),
+                    ] as [string, number],
+                  ])
+                ).values()
+              )
+                .filter((x) => x[1] > 0.6)
+                .map((x) => `\`${x[0]}\``)
+                .join(", ")
+            : "";
         return await message.reply({
           embeds: [
             generateErrorEmbed(
-              `This part must be a **${arg.type}**\n**Error**: ${checkerResult}`
+              `This part must be a **${arg.type}**\n**Error**: ${
+                typeof checkerResult === "object"
+                  ? checkerResult.error
+                  : checkerResult
+              }${didYouMean ? `\n**Did you mean**: ${didYouMean}?` : ""}`
             ),
           ],
         });

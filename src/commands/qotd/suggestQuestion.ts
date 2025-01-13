@@ -34,7 +34,7 @@ const command: HypnoCommand<{ question: string }> = {
       message.author.id
     );
 
-    return message.reply(`Question added! Thanks :spiral:`);
+    return message.reply(`Question added! Thanks :cyclone:`);
   },
 };
 
