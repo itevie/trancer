@@ -140,22 +140,46 @@ const items: Record<string, Partial<Item>> = {
   },
 
   // ----- Minerals -----
+  dirt: {
+    price: 1,
+    weight: 0.6,
+    emoji: "<:dirt:1328997326932676648>",
+    tag: "mineral",
+  },
   coal: {
-    price: 10,
+    price: 5,
     weight: 0.35,
     emoji: "<:coal:1325546270500196443>",
     tag: "mineral",
   },
   iron: {
-    price: 30,
+    price: 20,
     weight: 0.2,
     emoji: "<:iron:1325546289261318294>",
     tag: "mineral",
   },
   gold: {
-    price: 100,
-    weight: 0.05,
+    price: 50,
+    weight: 0.1,
     emoji: "<:gold:1325546308689199155>",
+    tag: "mineral",
+  },
+  emerald: {
+    price: 70,
+    weight: 0.05,
+    emoji: "<:emerald:1328997361925492828>",
+    tag: "mineral",
+  },
+  diamond: {
+    price: 120,
+    weight: 0.003,
+    emoji: "<:diamond:1328997377889140817>",
+    tag: "mineral",
+  },
+  spiral: {
+    price: 150,
+    weight: 0.001,
+    emoji: "<:spiral:1328997344343228460>",
     tag: "mineral",
   },
 
