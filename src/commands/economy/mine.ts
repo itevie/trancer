@@ -1,19 +1,47 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  Message,
+} from "discord.js";
 import ecoConfig from "../../ecoConfig";
 import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
 import { itemMap } from "../../util/db-parts/items";
-import { createEmbed } from "../../util/other";
+import { createEmbed, englishifyList } from "../../util/other";
+import { currency, itemText } from "../../util/textProducer";
+import { getEconomyFor, removeMoneyFor } from "../../util/actions/economy";
+
+const gambleCost = 60;
 
 const command: HypnoCommand = {
   name: "mine",
-  description:
-    "Mine for minerals, requires a pickaxe. Uses your most expensive pickaxe.",
+  aliases: ["gamblemine"],
+  eachAliasIsItsOwnCommand: true,
+  description: `Mine for minerals, requires a pickaxe. Uses your most expensive pickaxe.\nGamble mining costs ${currency(
+    gambleCost
+  )}`,
   type: "economy",
 
-  ratelimit: ecoConfig.payouts.mine.limit,
+  ratelimit: async (_, { command }) => {
+    if (command === "gamblemine") return null;
+    else return ecoConfig.payouts.mine.limit;
+  },
 
-  preHandler: async (message, { serverSettings }) => {
+  preHandler: async (message, { serverSettings, command }) => {
+    // Check if it is a gamble mine
+    if (command === "gamblemine") {
+      if ((await getEconomyFor(message.author.id)).balance < gambleCost) {
+        await message.reply(
+          `:warning: You do not have ${currency(gambleCost)}!`
+        );
+        return false;
+      } else {
+        await removeMoneyFor(message.author.id, gambleCost);
+        return true;
+      }
+    }
+
     // Resolve user's most expensive pickaxe
     const pickaxe = (
       await actions.items.aquired.resolveFrom(
@@ -81,8 +109,13 @@ const command: HypnoCommand = {
     const selected = parseInt(result.customId) - 1;
     rowMarker[selected] = ":arrow_double_up:";
 
+    const items: { [key: number]: { item: Item; amount: number } } = {};
+
     // Award minerals to user
     for (const row of map) {
+      if (!items[row[selected].id])
+        items[row[selected].id] = { item: row[selected], amount: 0 };
+      items[row[selected].id].amount++;
       await actions.items.aquired.addFor(message.author.id, row[selected].id);
     }
 
@@ -93,11 +126,22 @@ const command: HypnoCommand = {
         createEmbed()
           .setTitle("You yearned for the mines")
           .setDescription(
-            map
-              .map((row) => row.map((item) => item.emoji).join(""))
-              .join("\n") +
+            `${englishifyList(
+              Object.entries(items).map((x) =>
+                itemText(x[1].item, x[1].amount, true)
+              )
+            )} worth ${currency(
+              Object.entries(items).reduce(
+                (p, c) => p + c[1].item.price * c[1].amount,
+                0
+              )
+            )}\n${
+              map
+                .map((row) => row.map((item) => item.emoji).join(""))
+                .join("\n") +
               "\n" +
               rowMarker.join("")
+            }`
           ),
       ],
     });

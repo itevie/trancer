@@ -166,7 +166,7 @@ client.on("messageCreate", async (message) => {
     let lastUsed = await getRatelimit(message.author.id, command.name);
     let ratelimit =
       typeof command.ratelimit === "function"
-        ? await command.ratelimit(message)
+        ? await command.ratelimit(message, details)
         : command.ratelimit;
     if (ratelimit !== null) {
       let ms = ratelimit - (Date.now() - lastUsed.getTime());
