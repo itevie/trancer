@@ -22,3 +22,4 @@ src/website/app/build!
 ./lottery.txt
 lottery.txt
 .env
+qotd.txt

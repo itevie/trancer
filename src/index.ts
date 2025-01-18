@@ -45,6 +45,7 @@ export const client = new Client({
 
 import { initInviteCache } from "./events/guildMemberAdd";
 import { initLottery } from "./util/lottery";
+import { initQotd } from "./util/qotd";
 
 const logger = new Logger("loader");
 export let errors = 0;
@@ -119,6 +120,8 @@ client.on("ready", async () => {
   if (true || config.website.enabled) {
     initServer();
   }
+
+  initQotd();
 });
 
 client.login(process.env.BOT_TOKEN);

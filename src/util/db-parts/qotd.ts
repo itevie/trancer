@@ -25,6 +25,14 @@ const _actions = {
     );
   },
 
+  setAsked: async (questionId: number, asked: boolean): Promise<void> => {
+    await database.run(
+      "UPDATE qotd_questions SET asked = ? WHERE id = ?;",
+      asked,
+      questionId
+    );
+  },
+
   getQuestions: async (serverId: string): Promise<QOTDQuestion[]> => {
     return await database.all<QOTDQuestion[]>(
       "SELECT * FROM qotd_questions WHERE server_id = ?;",

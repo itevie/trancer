@@ -132,7 +132,7 @@ const items: Record<string, Partial<Item>> = {
     emoji: "<:stick:1321761484174524498>",
   },
   rock: {
-    price: 10,
+    price: 1,
     description: "A rock.",
     weight: 0.5,
     emoji: "<:rock:1321761504386744391>",

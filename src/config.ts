@@ -37,6 +37,13 @@ const config = {
     ],
   },
 
+  // ----- Your QOTD options -----
+  qotd: {
+    hour: 14,
+    channel: "1257430062723108865",
+    content: "<@&1257477180858962013>",
+  },
+
   // ----- Channels all messages should be ignores -----
   ignoreChannels: ["1315484267517575168"],
   ignoreHandlersIn: ["1257417603568238684"],
