@@ -89,7 +89,7 @@ const config = {
     // Enable this only if you have ollama installed
     ai: {
       enabled: true,
-      model: "llama3:8b",
+      model: "llama3.2",
     },
 
     // Used for logging how many messages people have sent

@@ -3,6 +3,7 @@ import ollama from "ollama";
 import { actions } from "../../util/database";
 import { shuffle } from "../../util/other";
 import { User } from "discord.js";
+import config from "../../config";
 
 const command: HypnoCommand<{ user?: User; allservers?: boolean }> = {
   name: "generatequote",
@@ -53,7 +54,7 @@ const command: HypnoCommand<{ user?: User; allservers?: boolean }> = {
     try {
       await message.react(`⏳`);
       const streamer = await ollama.chat({
-        model: "llama3.1",
+        model: config.modules.ai.model,
         messages: [
           {
             role: "system",

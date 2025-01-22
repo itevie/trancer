@@ -55,7 +55,7 @@ const command: HypnoCommand = {
     try {
       await message.react(`⏳`);
       let response = await ollama.chat({
-        model: "llama3.1",
+        model: config.modules.ai.model,
         messages: history[conversationID],
       });
 
