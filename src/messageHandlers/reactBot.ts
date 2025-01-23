@@ -268,6 +268,18 @@ const handler: HypnoMessageHandler = {
               text += brainrot[Math.floor(Math.random() * brainrot.length)];
             return text;
           },
+          () => {
+            let words = phrase.split(" ");
+            let newWords: string[] = [];
+            for (const word of words) {
+              if (Math.random() > 0.5) {
+                let letter = word[0];
+                let amount = randomFromRange(1, 5);
+                newWords.push(`${letter}-`.repeat(amount) + word);
+              }
+            }
+            return newWords.join(" ");
+          },
           () =>
             phrase
               .split(" ")
@@ -281,18 +293,18 @@ const handler: HypnoMessageHandler = {
                         } `
                       : ""
                   }${
-                    Math.random() > 0.3
+                    Math.random() > 0.2
                       ? `${
                           brainrot[Math.floor(Math.random() * brainrot.length)]
                         } `
                       : ""
                   }${
-                    Math.random() > 0.3
+                    Math.random() > 0.1
                       ? `${
                           brainrot[Math.floor(Math.random() * brainrot.length)]
                         } `
                       : ""
-                  }${v}`,
+                  }${v} `,
                 ""
               ),
         ];

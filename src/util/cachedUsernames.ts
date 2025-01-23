@@ -4,6 +4,10 @@ let path = __dirname + "/../data/cached_usernames.json";
 if (!fs.existsSync(path)) fs.writeFileSync(path, "{}");
 let usernames = JSON.parse(fs.readFileSync(path, "utf-8"));
 
+export function getUsernameSync(id: string): string {
+  return usernames[id] || `<${id}>`;
+}
+
 export async function getUsername(id: string): Promise<string> {
   let username: string;
 

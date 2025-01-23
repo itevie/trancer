@@ -107,15 +107,26 @@ export async function genQuote(
   let embed = createEmbed().setTitle("Quote");
 
   if (!hideUser) {
-    embed.setDescription(
-      `${
-        quote.content.startsWith("*") ? quote.content : `*${quote.content}*`
-      }\n - ${
-        user ? user.username : "*(failed to get user details)*"
-      } - (${new Date(quote.created_at).toDateString()})${
-        messageLink ? ` - [Message Link](${messageLink})` : ""
-      }`
-    );
+    let text =
+      quote.content.startsWith("*") || quote.content.endsWith("*")
+        ? quote.content
+        : `*${quote.content}*`;
+
+    if (message.reference) {
+      const ref = await message.fetchReference();
+      const refMessageLink = `https://discord.com/channels/${ref.guildId}/${ref.channelId}/${ref.id}`;
+      text += `\n:arrow_right_hook: ${ref.content} (${
+        ref.author.username
+      } - ${new Date(
+        quote.created_at
+      ).toDateString()} - [Message Link](${refMessageLink}))`;
+    }
+
+    text +=
+      `\n - ${user ? user.username : "*(failed to get user)*"} - ` +
+      `${new Date(quote.created_at).toDateString()} - ` +
+      `${messageLink ? `[Message Liink](${messageLink})` : ""}`;
+    embed.setDescription(text);
     embed.setFooter({
       text: `Quote #${quote.id}`,
     });

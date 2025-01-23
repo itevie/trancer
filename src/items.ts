@@ -87,7 +87,7 @@ const items: Record<string, Partial<Item>> = {
   "card-pull": {
     price: 100,
     description: "Buy this, and pull a card using the `pull` command!",
-    weight: 0.3,
+    weight: 0.6,
     emoji: "<:card_pull:1321761564314964010> ",
   },
   "hair-dye": {
@@ -185,7 +185,7 @@ const items: Record<string, Partial<Item>> = {
 
   // ---- Craftables -----
   "stone-pickaxe": {
-    price: 40,
+    price: 10,
     weight: 0.4,
     tag: "pickaxe",
     emoji: "<:stone_pickaxe:1325548046188286053> ",
