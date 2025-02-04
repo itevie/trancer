@@ -199,6 +199,7 @@ client.on("messageCreate", async (message) => {
         for (const i in arg.aliases)
           if (arg.aliases[i] in wickStyle)
             givenValue = wickStyle[arg.aliases[i]] ?? "";
+        continue;
       }
 
       // Generate codeblock for the errors
@@ -580,7 +581,7 @@ export function parseCommand(content: string): {
   let wickKey: string | null = null;
   let currentArg: string[] = [];
 
-  for (const part of parts) {
+  for (let part of parts) {
     if (wickKey) {
       if (part.startsWith("?")) {
         wickStyle[wickKey] = currentArg.join(" ") || "true";
@@ -592,11 +593,15 @@ export function parseCommand(content: string): {
       currentArg.push(part);
       continue;
     }
-
     if (part.startsWith("?")) {
       wickKey = part.substring(1);
       continue;
     }
+
+    console.log(part);
+    if (part.startsWith("\\?")) part = part.replace(/^\\\?/, "?");
+
+    console.log(part);
 
     args.push(part);
   }

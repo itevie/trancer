@@ -25,7 +25,6 @@ const command: HypnoCommand<{ content: string; cow: string }> = {
   },
 
   handler: (message, { args }) => {
-    console.log(args);
     const child = spawn(
       "cowsay",
       args.content.toLowerCase() === "list"
