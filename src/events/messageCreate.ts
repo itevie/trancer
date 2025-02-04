@@ -195,11 +195,17 @@ client.on("messageCreate", async (message) => {
       let givenValue = args[i];
 
       if (arg.wickStyle) {
-        if (arg.name in wickStyle) givenValue = wickStyle[arg.name] ?? "";
+        let found = false;
+        if (arg.name in wickStyle) {
+          givenValue = wickStyle[arg.name] ?? "";
+          found = true;
+        }
         for (const i in arg.aliases)
-          if (arg.aliases[i] in wickStyle)
+          if (arg.aliases[i] in wickStyle) {
             givenValue = wickStyle[arg.aliases[i]] ?? "";
-        continue;
+            found = true;
+          }
+        if (!found) givenValue = "";
       }
 
       // Generate codeblock for the errors
@@ -598,10 +604,7 @@ export function parseCommand(content: string): {
       continue;
     }
 
-    console.log(part);
     if (part.startsWith("\\?")) part = part.replace(/^\\\?/, "?");
-
-    console.log(part);
 
     args.push(part);
   }
