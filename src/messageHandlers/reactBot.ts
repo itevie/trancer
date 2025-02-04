@@ -1,8 +1,10 @@
+import { spawn, spawnSync } from "child_process";
 import { messUpSentence } from "../commands/fun/messUpSentence";
 import { piglatin } from "../commands/fun/pigLatin";
 import config from "../config";
 import { HypnoMessageHandler } from "../types/util";
 import { randomFromRange } from "../util/other";
+import { varients } from "../commands/fun/cowsay";
 
 const phrases = [
   "skibii sigma",
@@ -251,6 +253,14 @@ const handler: HypnoMessageHandler = {
           () => piglatin(phrase),
           () => messUpSentence(phrase),
           () => phrase.toUpperCase(),
+          () => {
+            const child = spawnSync("cowsay", [
+              "-f",
+              varients[Math.floor(Math.random() * varients.length)],
+              phrase,
+            ]);
+            return "```" + child.output.join("") + "```";
+          },
           () =>
             phrase
               .split("")

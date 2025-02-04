@@ -1,6 +1,16 @@
 import { spawn } from "child_process";
 import { HypnoCommand } from "../../types/util";
 
+export const varients =
+  `actually alpaca beavis.zen blowfish bong bud-frogs bunny cheese cower
+cupcake daemon default dragon dragon-and-cow elephant elephant-in-snake
+eyes flaming-sheep fox ghostbusters head-in hellokitty kiss kitty koala
+kosh llama luke-koala mech-and-cow meow milk moofasa moose mutilated ren
+sheep skeleton small stegosaurus stimpy supermilker surgery sus three-eyes
+turkey turtle tux udder vader vader-koala www`
+    .replace(/\n/g, " ")
+    .split(" ");
+
 const command: HypnoCommand<{ content: string; cow: string }> = {
   name: "cowsay",
   type: "fun",
@@ -20,12 +30,12 @@ const command: HypnoCommand<{ content: string; cow: string }> = {
         aliases: ["f", "c"],
         type: "string",
         wickStyle: true,
+        oneOf: [...varients],
       },
     ],
   },
 
   handler: (message, { args }) => {
-    console.log(args);
     const child = spawn(
       "cowsay",
       args.content.toLowerCase() === "list"
