@@ -6,7 +6,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["sqlite3", "canvas"]
+    "onlyBuiltDependencies": [
+      "sqlite3",
+      "canvas"
+    ]
   },
   "keywords": [],
   "author": "",

@@ -1,10 +1,6 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import {
-  calculateLevel,
-  getXPForLevel,
-  xpForNextLevel,
-} from "../../messageHandlers/xp";
+import { calculateLevel, getXPForLevel } from "../../messageHandlers/xp";
 import { makePercentageASCII } from "../../util/other";
 import { actions } from "../../util/database";
 
