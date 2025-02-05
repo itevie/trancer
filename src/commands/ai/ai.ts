@@ -1,6 +1,7 @@
 import ollama, { Message } from "ollama";
 import config from "../../config";
 import { HypnoCommand } from "../../types/util";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 
 export const history: { [key: string]: Message[] } = {};
 const helperMessage =
@@ -20,8 +21,8 @@ const command: HypnoCommand = {
       );
     }
 
-    if (isProcessing)
-      return message.reply(`Sorry! The AI is already processing something.`);
+    //if (isProcessing)
+    //  return message.reply(`Sorry! The AI is already processing something.`);
     isProcessing = true;
 
     const conversationID = message.author.id.toString();
@@ -62,12 +63,38 @@ const command: HypnoCommand = {
       response.message.content = response.message.content.replace(/@/g, "@ ");
 
       history[conversationID].push(response.message);
-      console.log(response.message);
 
-      let parts = response.message.content.match(/.{1,2000}/gs);
+      let think = response.message.content.match(/<think>.+<\/think>/s)?.[0];
+      console.log(response.message.content, think);
+      let actualContent = response.message.content.replace(think, "");
 
-      for (let part of parts) {
-        await message.reply(part);
+      let parts = actualContent.match(/.{1,2000}/gs);
+
+      for (let part in parts) {
+        if (parseInt(part) === parts.length - 1 && think) {
+          let msg = await message.reply({
+            content: parts[part],
+            components: [
+              // @ts-ignore
+              new ActionRowBuilder<ButtonBuilder>().addComponents(
+                new ButtonBuilder()
+                  .setCustomId("think")
+                  .setLabel("Show Thoughts")
+                  .setStyle(ButtonStyle.Primary)
+              ),
+            ],
+          });
+          const collector = msg.createMessageComponentCollector({
+            time: 1000 * 120,
+          });
+          collector.on("collect", async (i) => {
+            await i.deferUpdate();
+            let parts = think.split(/.{1,2000/gs);
+            for await (let part of parts) await msg.reply(`Think: ` + part);
+          });
+          continue;
+        }
+        await message.reply(parts[part]);
       }
     } catch (e) {
       return message.reply(e.toString());

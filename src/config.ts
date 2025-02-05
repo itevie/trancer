@@ -90,6 +90,7 @@ const config = {
     ai: {
       enabled: true,
       model: "llama3.2",
+      //model: "deepseek-r1:8b",
     },
 
     // Used for logging how many messages people have sent

@@ -27,6 +27,7 @@
     "axios": "^1.7.3",
     "body-parser": "^1.20.2",
     "canvas": "^2.11.2",
+    "chartjs-node-canvas": "^4.1.6",
     "command-line-args": "^6.0.1",
     "cors": "^2.8.5",
     "discord-image-generation": "^1.4.25",

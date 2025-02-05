@@ -181,6 +181,7 @@ const items: Record<string, Partial<Item>> = {
     weight: 0.001,
     emoji: "<:spiral:1328997344343228460>",
     tag: "mineral",
+    buyable: false,
   },
 
   // ---- Craftables -----
