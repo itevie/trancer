@@ -23,7 +23,7 @@ export default function LeaderboardPage() {
 
   useEffect(() => {
     const id = window.location.href.match(/servers\/([0-9]+)/)?.[1];
-    axiosClient.get<UserData[]>(`/api/servers/${id}/data`).then((x) => {
+    axiosClient.get<UserData[]>(`/api/servers/${id}/user_data`).then((x) => {
       console.log(x.data[0]);
       setUserData(x.data);
     });

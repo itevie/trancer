@@ -7,29 +7,15 @@ const command: HypnoCommand<{ asked?: boolean }> = {
   type: "qotd",
   description: "Get a list of questions for the QOTD",
 
-  args: {
-    requiredArguments: 0,
-    args: [
-      {
-        name: "asked",
-        wickStyle: true,
-        description: "Show questions that have been asked",
-        type: "boolean",
-      },
-    ],
-  },
-
-  handler: async (message, { args }) => {
+  handler: async (message) => {
     return paginate({
       replyTo: message,
       embed: createEmbed().setTitle("Questions for QOTD"),
       type: "description",
-      data: (await actions.qotd.getQuestions(message.guild.id))
-        .filter((x) => !x.asked && !args.asked)
-        .map(
-          (x) =>
-            `**${x.id}**: ${x.question} *[${x.asked ? "asked" : "not asked"}]*`
-        ),
+      data: (await actions.qotd.getQuestions(message.guild.id)).map(
+        (x) =>
+          `**${x.id}**: ${x.question} *[${x.asked ? "asked" : "not asked"}]*`
+      ),
     });
   },
 };

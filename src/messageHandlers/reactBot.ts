@@ -218,6 +218,11 @@ const phrases = [
   "Bro's speaking Yapanese",
   "https://tenor.com/view/yuh-uh-meme-funny-nuh-uh-gif-4499945910302690705",
   "https://tenor.com/view/nuh-uh-beocord-no-lol-gif-24435520",
+  "im gonna make every channel private, except one",
+  "this is something maxim would say lmao",
+  "<@632951874269478952>",
+  ":wink:",
+  ":face_with_raised_eyebrow:",
 ];
 
 const brainrot = (

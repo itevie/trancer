@@ -23,7 +23,7 @@ export function MakeServerRoutes(): Router {
     );
   });
 
-  router.get("/api/servers/:id/data", async (req, res) => {
+  router.get("/api/servers/:id/usser_data", async (req, res) => {
     if (!client.guilds.cache.get(req.params.id))
       return res.status(400).send({ message: "Invalid server ID provided." });
     if (

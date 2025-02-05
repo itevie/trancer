@@ -42,15 +42,16 @@ const command: HypnoCommand = {
         .replace(/[<@>]/g, "")
         .toLowerCase();
 
+      const username = user.username.replace(/#[1-9]+/, "").toLowerCase();
+
       // Check correctness
       let correct = false;
       if (
-        compareTwoStrings(response, user.username) > 0.8 ||
+        compareTwoStrings(response, username) > 0.8 ||
         (user.displayName &&
           compareTwoStrings(response, user.displayName.replace(/[ ]/g, "")) >
             0.6) ||
-        user.username.toLowerCase().startsWith(response) ||
-        user.username.toLowerCase() === response ||
+        username.startsWith(response) ||
         user.displayName.toLowerCase().startsWith(response) ||
         response == user.id
       )

@@ -14,6 +14,7 @@ const chartJSNodeCanvas = new ChartJSNodeCanvas({
   width,
   height,
   backgroundColour,
+  type: "svg",
 });
 
 const command: HypnoCommand<{ user?: User }> = {
@@ -36,7 +37,6 @@ const command: HypnoCommand<{ user?: User }> = {
     // Get details
     const user = args.user ? args.user : message.author;
     const transations = await getMoneyTransations(user.id);
-    console.log(transations);
 
     // Create graph
     const configuration: ChartConfiguration = {
@@ -54,7 +54,9 @@ const command: HypnoCommand<{ user?: User }> = {
     };
 
     // Create image & attachment
+    // @ts-ignore
     const image = await chartJSNodeCanvas.renderToBuffer(configuration);
+    console.log(image);
     const attachment = new AttachmentBuilder(image).setFile(image);
 
     // Done
