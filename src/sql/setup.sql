@@ -70,8 +70,22 @@ CREATE TABLE IF NOT EXISTS qotd_questions (
     suggestor INTEGER NOT NULL,
     question TEXT NOT NULL,
     asked BOOLEAN NOT NULL DEFAULT false,
-
     UNIQUE(server_id, question)
+);
+
+CREATE TABLE IF NOT EXISTS giveaways (
+    id TEXT UNIQUE PRIMARY KEY NOT NULL,
+    what TEXT NOT NULL,
+    message_id TEXT NOT NULL,
+    channel_id TEXT NOT NULL,
+    author_id TEXT NOT NULL,
+    min_level INT
+);
+
+CREATE TABLE IF NOT EXISTS giveaway_entries (
+    giveaway_id TEXT REFERENCES giveaways(id) NOT NULL,
+    author_id TEXT NOT NULL,
+    UNIQUE (giveaway_id, author_id)
 );
 
 -- User specific stuff

@@ -14,6 +14,7 @@ import qotd from "./db-parts/qotd";
 import quotes from "./db-parts/quotes";
 import cards from "./db-parts/cards";
 import decks from "./db-parts/decks";
+import giveaways from "./db-parts/giveaways";
 
 export let database: Database<sqlite3.Database, Statement>;
 export const databaseLogger = new Logger("database");
@@ -28,6 +29,7 @@ export const actions = {
   quotes,
   cards,
   decks,
+  giveaways,
 } as const;
 
 export async function connect(): Promise<void> {
