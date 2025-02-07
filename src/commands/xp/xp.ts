@@ -37,11 +37,12 @@ const command: HypnoCommand<{ user?: User }> = {
     const nextLevelXP = getXPForLevel(level);
     const neededXP = nextLevelXP - currentLevelXP;
     const progress = ((xp - currentLevelXP) / neededXP) * 100;
+    const amountProgress = neededXP - (xp - currentLevelXP);
 
-    const most = neededXP / (timeBetween * minXP);
-    const least = neededXP / (maxXP * (timeBetween / 60000));
+    const most = amountProgress / (timeBetween * minXP);
+    const least = amountProgress / (maxXP * (timeBetween / 60000));
     const average =
-      neededXP / (Math.floor(maxXP / 2) * ((timeBetween * 2) / 60000));
+      amountProgress / (Math.floor(maxXP / 2) * ((timeBetween * 2) / 60000));
 
     return message.reply(
       `**${
