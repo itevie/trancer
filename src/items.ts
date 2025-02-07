@@ -175,6 +175,7 @@ const items: Record<string, Partial<Item>> = {
     weight: 0.003,
     emoji: "<:diamond:1328997377889140817>",
     tag: "mineral",
+    buyable: false,
   },
   spiral: {
     price: 150,

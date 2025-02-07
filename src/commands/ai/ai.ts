@@ -65,7 +65,6 @@ const command: HypnoCommand = {
       history[conversationID].push(response.message);
 
       let think = response.message.content.match(/<think>.+<\/think>/s)?.[0];
-      console.log(response.message.content, think);
       let actualContent = response.message.content.replace(think, "");
 
       let parts = actualContent.match(/.{1,2000}/gs);
