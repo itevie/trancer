@@ -79,7 +79,7 @@ export function generateEmbed(
     .setDescription(
       `Click the button below to join the giveaway for **${giveaway.what}**` +
         (giveaway.min_level
-          ? `\n\n**You must be at least level **${giveaway.min_level}**`
+          ? `\n\n**You must be at least level ${giveaway.min_level}**`
           : "")
     )
     .setFooter({

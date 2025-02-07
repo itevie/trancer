@@ -1,4 +1,10 @@
-import { Entitlement, TextChannel } from "discord.js";
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  Entitlement,
+  TextChannel,
+} from "discord.js";
 import { client } from "..";
 import { calculateLevel } from "../messageHandlers/xp";
 import { actions } from "../util/database";
@@ -53,7 +59,20 @@ client.on("interactionCreate", async (i) => {
 
         const winner = entries[Math.floor(Math.random() * entries.length)];
         await i.reply({
-          content: `<@${winner.author_id}> has won the giveaway for **${giveaway.what}**, welldone!`,
+          content: `${
+            parts[3] === "reroll" ? "The winner has been re-rolled and " : ""
+          }<@${winner.author_id}> has won the giveaway for **${
+            giveaway.what
+          }**, welldone!`,
+          components: [
+            // @ts-ignore
+            new ActionRowBuilder().addComponents(
+              new ButtonBuilder()
+                .setCustomId(`giveaway-finish-${giveaway.id}-reroll`)
+                .setLabel("Re-roll")
+                .setStyle(ButtonStyle.Secondary)
+            ),
+          ],
         });
 
         const channel = (await client.channels.fetch(
@@ -74,7 +93,7 @@ client.on("interactionCreate", async (i) => {
           components: [],
         });
 
-        await actions.giveaways.delete(giveaway.id);
+        //await actions.giveaways.delete(giveaway.id);
       }
     }
   }
