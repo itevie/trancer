@@ -1,8 +1,15 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { calculateLevel, getXPForLevel } from "../../messageHandlers/xp";
+import {
+  calculateLevel,
+  getXPForLevel,
+  maxXP,
+  minXP,
+  timeBetween,
+} from "../../messageHandlers/xp";
 import { makePercentageASCII } from "../../util/other";
 import { actions } from "../../util/database";
+import ecoConfig from "../../ecoConfig";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "xp",
@@ -28,8 +35,13 @@ const command: HypnoCommand<{ user?: User }> = {
     const level = calculateLevel(xp);
     const currentLevelXP = getXPForLevel(level - 2);
     const nextLevelXP = getXPForLevel(level);
-    const progress =
-      ((xp - currentLevelXP) / (nextLevelXP - currentLevelXP)) * 100;
+    const neededXP = nextLevelXP - currentLevelXP;
+    const progress = ((xp - currentLevelXP) / neededXP) * 100;
+
+    const most = neededXP / (timeBetween * minXP);
+    const least = neededXP / (maxXP * (timeBetween / 60000));
+    const average =
+      neededXP / (Math.floor(maxXP / 2) * ((timeBetween * 2) / 60000));
 
     return message.reply(
       `**${
@@ -37,7 +49,9 @@ const command: HypnoCommand<{ user?: User }> = {
       }** has **${xp} XP** (level ${level})\n\n${level} ${makePercentageASCII(
         progress,
         20
-      )} ${level + 1}`
+      )} ${
+        level + 1
+      }\n\nIt will take:\n> Least: **${least} minutes**\n> Average: **${average} minutes**\n> Most: **${most} minutes**`
     );
   },
 };

@@ -223,6 +223,10 @@ const phrases = [
   "<@632951874269478952>",
   ":wink:",
   ":face_with_raised_eyebrow:",
+  "https://tenor.com/view/termed-discord-banned-discord-mod-discord-tos-discord-disabled-gif-25396768",
+  "https://i1.sndcdn.com/avatars-5FKJrCOt1EWVLDAm-RclDOg-t1080x1080.jpg",
+  "SHMURGR IS A TWINK",
+  "glarbin",
 ];
 
 const brainrot = (

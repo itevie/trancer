@@ -28,9 +28,9 @@ export const rewards: {
   },
 };
 
-const minXP = 0;
-const maxXP = 5;
-const timeBetween = 120000;
+export const minXP = 0;
+export const maxXP = 5;
+export const timeBetween = 120000;
 
 const lastAwards: { [key: string]: number } = {};
 
@@ -96,7 +96,7 @@ export function getXPForLevel(level: number): number {
   if (levels.length - 1 > level) return levels[level];
   let last = levels.length - 1;
   let lvl = levels[last];
-  return lvl * (level - last) * after;
+  return lvl + (level - last) * after;
 }
 
 export function calculateLevel(xp: number): number {
