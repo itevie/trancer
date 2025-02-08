@@ -14,7 +14,7 @@ const command: HypnoCommand<{ what: string; minLevel?: number }> = {
   name: "startgiveaway",
   description: "Starts a giveaway in the current channel",
   type: "admin",
-  guards: ["admin"],
+  permissions: ["ManageMessages"],
 
   args: {
     requiredArguments: 1,
