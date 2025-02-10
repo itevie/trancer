@@ -3,6 +3,7 @@ import { HypnoCommand } from "../../types/util";
 import { getTriggersFor } from "../../util/actions/imposition";
 import { createEmbed, paginate } from "../../util/other";
 import { tagEmojiMap } from "../../util/db-parts/triggers";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "gettriggers",
@@ -23,7 +24,7 @@ const command: HypnoCommand<{ user?: User }> = {
 
   handler: async (message, { args }) => {
     const user = args.user ?? message.author;
-    const triggers = await getTriggersFor(user.id);
+    const triggers = await actions.triggers.getFor(user.id);
 
     return paginate({
       replyTo: message,

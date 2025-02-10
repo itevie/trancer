@@ -20,10 +20,12 @@ export const tagEmojiMap: Record<TriggerTag, string> = {
 
 const _actions = {
   getFor: async (userId: string): Promise<UserImposition[]> => {
-    return await database.all<UserImposition[]>(
-      "SELECT * FROM user_imposition WHERE user_id = ?;",
-      userId
-    );
+    return (
+      await database.all<UserImposition[]>(
+        "SELECT * FROM user_imposition WHERE user_id = ?;",
+        userId
+      )
+    ).filter((x) => !x.what.includes("@"));
   },
 
   getList: async (
@@ -31,10 +33,11 @@ const _actions = {
     tags: (TriggerTag | null)[]
   ): Promise<UserImposition[]> => {
     tags = tags.filter((x) => !!x);
-    return (await _actions.getFor(userId)).filter((x) =>
-      (x.tags.split(";") as TriggerTag[]).some(
-        (y) => y === "anytime" || tags.includes(y)
-      )
+    return (await _actions.getFor(userId)).filter(
+      (x) =>
+        (x.tags.split(";") as TriggerTag[]).some(
+          (y) => y === "anytime" || tags.includes(y)
+        ) && !x.what.includes("@")
     );
   },
 
