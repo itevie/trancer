@@ -67,7 +67,8 @@ client.on("messageCreate", async (message) => {
   // Analytics
   if (
     !message.content.startsWith(settings.prefix) &&
-    !message.content.startsWith(settings.prefix + " ")
+    !message.content.startsWith(settings.prefix + " ") &&
+    message.guild.id === config.botServer.id
   ) {
     await addMessageForCurrentTime();
     return;
