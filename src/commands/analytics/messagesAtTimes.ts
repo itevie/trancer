@@ -43,48 +43,11 @@ const command: HypnoCommand = {
           {
             label: "Messages Sent",
             data: dataset,
-            backgroundColor: "blue",
-            borderColor: "pink",
-            borderWidth: 1,
+            backgroundColor: "#FFB6C1",
+            borderColor: "#FFB6C1",
+            borderWidth: 4,
           },
         ],
-      },
-
-      options: {
-        plugins: {
-          legend: {
-            labels: {
-              color: "white", // Legend text color
-            },
-          },
-        },
-        responsive: true,
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: "Hour of Day",
-              color: "white", // Axis title color
-            },
-            ticks: {
-              color: "white", // Axis tick color
-            },
-          },
-          y: {
-            title: {
-              display: true,
-              text: "Number of Messages",
-              color: "white", // Axis title color
-            },
-            ticks: {
-              color: "white", // Axis tick color
-            },
-          },
-        },
-        layout: {
-          padding: 20, // Padding around the chart
-        },
-        backgroundColor: "rgba(0, 0, 0, 0.2)", // Background color of the entire chart
       },
     };
 
