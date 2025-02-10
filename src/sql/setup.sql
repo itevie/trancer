@@ -96,6 +96,11 @@ CREATE TABLE IF NOT EXISTS user_imposition (
     tags TEXT NOT NULL DEFAULT 'green;yellow;bombard;by others'
 );
 
+CREATE TABLE IF NOT EXISTS user_trusted_tists (
+    user_id TEXT NOT NULL,
+    trusted_user_id TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS user_favourite_spirals (
     id INT REFERENCES spirals(id) NOT NULL,
     user_id TEXT NOT NULL

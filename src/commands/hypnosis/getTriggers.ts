@@ -8,7 +8,7 @@ import { actions } from "../../util/database";
 const command: HypnoCommand<{ user?: User }> = {
   name: "gettriggers",
   type: "hypnosis",
-  aliases: ["getriggers", "getimpos", "getis"],
+  aliases: ["getriggers", "getimpos", "getis", "triggers"],
   description: "Get yours or someone else's triggers",
 
   args: {

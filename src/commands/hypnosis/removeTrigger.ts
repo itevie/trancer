@@ -1,7 +1,12 @@
+import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 
-const command: HypnoCommand<{ trigger: string; confirm?: string }> = {
+const command: HypnoCommand<{
+  trigger: string;
+  confirm?: string;
+  user?: User;
+}> = {
   name: "removetrigger",
   type: "hypnosis",
   aliases: ["removei", "removeimposition"],
@@ -15,10 +20,29 @@ const command: HypnoCommand<{ trigger: string; confirm?: string }> = {
         type: "string",
         takeContent: true,
       },
+      {
+        name: "user",
+        aliases: ["u", "for"],
+        type: "user",
+        wickStyle: true,
+        description: "Which user to set it for",
+      },
     ],
   },
 
   handler: async (message, { args }) => {
+    let user = message.author;
+
+    if (args.user) {
+      if (
+        !(await actions.triggers.trustedTists.getListFor(args.user.id)).some(
+          (x) => x.trusted_user_id === user.id
+        )
+      )
+        return message.reply(`You are not on this person's trusted tist list.`);
+      user = args.user;
+    }
+
     // Check to remove all
     if (args.trigger.startsWith("all")) {
       if (!args.confirm)
@@ -28,7 +52,7 @@ const command: HypnoCommand<{ trigger: string; confirm?: string }> = {
 
       await database.run(
         `DELETE FROM user_imposition WHERE user_id = ?;`,
-        message.author.id
+        user.id
       );
       return message.reply(`All your triggers have been removed!`);
     }
@@ -37,7 +61,7 @@ const command: HypnoCommand<{ trigger: string; confirm?: string }> = {
     if (
       !(await database.get(
         "SELECT 1 FROM user_imposition WHERE user_id = ? AND what = ?",
-        message.author.id,
+        user.id,
         args.trigger
       ))
     )
@@ -46,7 +70,7 @@ const command: HypnoCommand<{ trigger: string; confirm?: string }> = {
     // Remove it
     await database.run(
       `DELETE FROM user_imposition WHERE user_id = ? AND what = ?;`,
-      message.author.id,
+      user.id,
       args.trigger
     );
 

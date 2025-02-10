@@ -3,8 +3,13 @@ import { addTriggerFor } from "../../util/actions/imposition";
 import { actions, database } from "../../util/database";
 import fs from "fs";
 import { createEmbed } from "../../util/other";
+import { User } from "discord.js";
 
-const command: HypnoCommand<{ trigger: string; bombard?: boolean }> = {
+const command: HypnoCommand<{
+  trigger: string;
+  bombard?: boolean;
+  user?: User;
+}> = {
   name: "addtrigger",
   description:
     "Adds a trigger that can be used on you by the bot.\n\nCheck `.topic triggers` to get help on this",
@@ -29,15 +34,34 @@ const command: HypnoCommand<{ trigger: string; bombard?: boolean }> = {
         description:
           "Whether this trigger can only be used in the bombard command",
       },
+      {
+        name: "user",
+        aliases: ["u", "for"],
+        type: "user",
+        wickStyle: true,
+        description: "Which user to set it for",
+      },
     ],
   },
 
   handler: async (message, { args }) => {
+    let user = message.author;
+
+    if (args.user) {
+      if (
+        !(await actions.triggers.trustedTists.getListFor(args.user.id)).some(
+          (x) => x.trusted_user_id === message.author.id
+        )
+      )
+        return message.reply(`You are not on this person's trusted tist list.`);
+      user = args.user;
+    }
+
     // Check if already added
     if (
       await database.get(
         `SELECT 1 FROM user_imposition WHERE user_id = ? AND what = ?;`,
-        message.author.id,
+        user.id,
         args.trigger
       )
     )
@@ -48,11 +72,11 @@ const command: HypnoCommand<{ trigger: string; bombard?: boolean }> = {
       const triggers = fs
         .readFileSync(__dirname + "/../../data/impo.txt", "utf-8")
         .split("\n");
-      const userTriggers = await actions.triggers.getFor(message.author.id);
+      const userTriggers = await actions.triggers.getFor(user.id);
 
       for await (const trigger of triggers)
         if (!userTriggers.some((x) => x.what === trigger))
-          await addTriggerFor(message.author.id, trigger, false);
+          await addTriggerFor(user.id, trigger, false);
 
       return message.reply({
         embeds: [
@@ -64,7 +88,7 @@ const command: HypnoCommand<{ trigger: string; bombard?: boolean }> = {
     }
 
     // Add it
-    await addTriggerFor(message.author.id, args.trigger, args.bombard ?? false);
+    await addTriggerFor(user.id, args.trigger, args.bombard ?? false);
     return message.reply(
       `Added the trigger! :cyclone:\nNote: you can manage your triggers more easier on the site: <https://trancer.dawn.rest/user_settings>`
     );

@@ -58,6 +58,34 @@ const _actions = {
         : null;
     return impositions[Math.floor(Math.random() * impositions.length)];
   },
+
+  trustedTists: {
+    addFor: async (
+      userId: string,
+      recipient: string
+    ): Promise<UserTrustedTist> => {
+      return await database.get<UserTrustedTist>(
+        "INSERT INTO user_trusted_tists (user_id, trusted_user_id) VALUES (?, ?) RETURNING *",
+        userId,
+        recipient
+      );
+    },
+
+    removeFor: async (userId: string, recipient: string): Promise<void> => {
+      await database.get(
+        "DELETE FROM user_trusted_tists WHERE user_id = ? AND trusted_user_id = ?",
+        userId,
+        recipient
+      );
+    },
+
+    getListFor: async (userId: string): Promise<UserTrustedTist[]> => {
+      return await database.all<UserTrustedTist[]>(
+        "SELECT * FROM user_trusted_tists WHERE user_id = $1",
+        userId
+      );
+    },
+  },
 } as const;
 
 export default _actions;

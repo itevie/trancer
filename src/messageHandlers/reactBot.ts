@@ -227,6 +227,12 @@ const phrases = [
   "https://i1.sndcdn.com/avatars-5FKJrCOt1EWVLDAm-RclDOg-t1080x1080.jpg",
   "SHMURGR IS A TWINK",
   "glarbin",
+  `.          へ            ╱| 
+  ૮  -   ՛ )  ♡   (\`   -  7.   
+    /   ⁻  ៸|         |、⁻〵
+乀 (ˍ, ل ل         じしˍ,)ノ
+`,
+  "https://tenor.com/view/cry-about-it-spongebob-popsicle-discord-memes-sus-amogus-gif-24192546",
 ];
 
 const brainrot = (
