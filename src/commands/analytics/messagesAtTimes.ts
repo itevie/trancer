@@ -11,11 +11,7 @@ const chartJSNodeCanvas = new ChartJSNodeCanvas({
   width,
   height,
   backgroundColour,
-  type: "svg",
-  chartCallback: (ChartJS) => {
-    ChartJS.defaults.responsive = true;
-    ChartJS.defaults.maintainAspectRatio = false;
-  },
+  type: "pdf",
 });
 
 const command: HypnoCommand = {
@@ -49,12 +45,22 @@ const command: HypnoCommand = {
             data: dataset,
             backgroundColor: "#FFB6C1",
             borderColor: "#FFB6C1",
-            borderWidth: 4,
+            borderWidth: 1,
           },
         ],
       },
     };
 
+    const chartCallback: ChartCallback = (ChartJS) => {
+      ChartJS.defaults.responsive = true;
+      ChartJS.defaults.maintainAspectRatio = false;
+    };
+    const chartJSNodeCanvas = new ChartJSNodeCanvas({
+      width,
+      height,
+      chartCallback,
+      backgroundColour: "#111111",
+    });
     const buffer = await chartJSNodeCanvas.renderToBuffer(configuration);
 
     /* const chartConfig: ChartConfiguration 
