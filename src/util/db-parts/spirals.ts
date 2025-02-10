@@ -13,10 +13,7 @@ const _actions = {
   },
 
   has: async (link: string): Promise<boolean> => {
-    return (
-      (await database.get("SELECT 1 FROM spirals WHERE link = ?;", link)) !==
-      null
-    );
+    return !(await database.get("SELECT 1 FROM spirals WHERE link = ?;", link));
   },
 
   add: async (
