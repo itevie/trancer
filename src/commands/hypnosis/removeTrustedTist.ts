@@ -28,7 +28,7 @@ const command: HypnoCommand<{ user: User }> = {
     )
       return message.reply(`You have not trusted that peron!`);
 
-    await actions.triggers.trustedTists.addFor(message.author.id, args.user.id);
+    await actions.triggers.trustedTists.removeFor(message.author.id, args.user.id);
     return message.reply(
       `Removed **${args.user.username}** to your trusted tist list!`
     );

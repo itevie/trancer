@@ -1,3 +1,4 @@
+import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { actions, database } from "../../util/database";
 import { getRandomImposition } from "../../util/other";
@@ -34,74 +35,126 @@ const dropping = [
 
 const ups = [["*upupup* all the way up", "nice and aware", "nice and awake"]];
 
-const command: HypnoCommand = {
+const command: HypnoCommand<{
+  user?: User;
+  spirals?: "none" | "all" | "favorite";
+  dropping?: boolean;
+  length: number;
+  imposition?: boolean;
+  confirm?: boolean;
+}> = {
   name: "bombard",
   type: "hypnosis",
-  description:
-    "Sends spirals & imposition for a while, ups you afterwards." +
-    "\n\n**nospirals**: Send no spirals, just imposition" +
-    "\n**allspirals**: Send any spirals, including non-favourites" +
-    "\n**noimposition**: No imposition, just spirals" +
-    "\n**dropping**: Sends a random small induction" +
-    "\n**confirm**: Confirm you want to start it",
+  description: "Sends spirals & imposition for a while, ups you afterwards.",
   examples: [
     [
-      "$cmd 2 dropping confirm",
+      "$cmd 2 ?dropping ?confirm",
       "This will drop you then send spirals/impo for 2 minutes",
     ],
     [
-      "$cmd 1.5 nospirals dropping confirm",
+      "$cmd 1.5 ?spirals none ?dropping ?confirm",
       "This will drop you and send ONLY impo for 1 and a half minutes",
     ],
+    ["$cmd 1.5 ?s none ?d ?c", "Short hand for the previous example"],
   ],
 
-  handler: async (message, { oldArgs: args }) => {
-    /*if (message.author.id === "735109350728663080")
+  args: {
+    requiredArguments: 1,
+    args: [
+      {
+        name: "length",
+        type: "number",
+        description: "How long you want the bombard to go on for",
+      },
+      {
+        name: "spirals",
+        aliases: ["s"],
+        wickStyle: true,
+        type: "string",
+        oneOf: ["none", "all", "favorite"],
+        description:
+          "Disable or add all spirals. Leaving it blank = favourite spirals",
+      },
+      {
+        name: "imposition",
+        wickStyle: true,
+        aliases: ["i"],
+        type: "boolean",
+        description: "Whether or not to send imposition, default is true",
+      },
+      {
+        name: "dropping",
+        wickStyle: true,
+        aliases: ["d"],
+        type: "boolean",
+        description: "Whether or not to add a tiny induction",
+      },
+      {
+        name: "confirm",
+        wickStyle: true,
+        aliases: ["c"],
+        type: "boolean",
+        description: "Confirm the bombard - required",
+      },
+      {
+        name: "user",
+        wickStyle: true,
+        aliases: ["for", "u"],
+        type: "user",
+        description: "The user to the bombard for",
+      },
+    ],
+  },
+
+  handler: async (message, { args }) => {
+    /*if (user.id === "735109350728663080")
             return message.reply("Nuh uh! *mwah mwah mwah!!! tight hug* courtesy of tiny Dawn");*/
 
-    // Check for minutes
-    if (!args[0] || Number.isNaN(parseFloat(args[0])))
-      return message.reply(
-        `Please provide length in minutes as the first argument`
-      );
-    let minutes = parseFloat(args.shift());
+    const minutes = args.length;
+    const _spirals = args.spirals ?? "favorite";
+    const imposition = args.imposition ?? true;
+    const confirm = args.confirm ?? false;
+    const _dropping = args.dropping ?? false;
 
+    let user = message.author;
+
+    if (args.user) {
+      if (
+        !(await actions.triggers.trustedTists.getListFor(args.user.id)).some(
+          (x) => x.trusted_user_id === user.id
+        )
+      )
+        return message.reply(`You are not on this person's trusted tist list.`);
+      user = args.user;
+    }
     if (minutes > 7) return message.reply(`Max amount of minutes is 7`);
 
-    // Validate
-    for (const i in args) {
-      if (!validOptions.includes(args[i]))
-        return message.reply(
-          `${args[i]} is an invalid option!\nValid options: ${validOptions.join(
-            ", "
-          )}`
-        );
-    }
-
     // Check if it can actually send stuff
-    if (args.includes("nospirals") && args.includes("noimposition"))
+    if (!imposition && _spirals === "none")
       return message.reply(
-        `You cannot have both nospirals & noimposition enabled`
+        `You need to have at least imposition or spirals enabled!`
       );
 
     // Get spirals
     let spirals: Spiral[] = [];
-    if (!args.includes("nospirals"))
-      if (args.includes("allspirals"))
-        spirals = await database.all(`SELECT * FROM spirals;`);
-      else spirals = await actions.spirals.favourites.getFor(message.author.id);
+    switch (_spirals) {
+      case "all":
+        spirals = await database.all("SELECT * FROM spirals;");
+        break;
+      case "favorite":
+        spirals = await actions.spirals.favourites.getFor(user.id);
+        break;
+    }
 
-    // Make sure theres at least 3
-    if (!args.includes("nospirals"))
-      if (spirals.length < 3)
-        return message.reply(
-          `There needs to be more than 3 provided spirals. If you are not using "favourite spirals", pass the \`nospirals\` option`
-        );
+    if (_spirals !== "none" && spirals.length < 3)
+      return message.reply(
+        `There needs to be more than 3 spirals provided. Try adding \`?spirals none\` or \`?spirals all\``
+      );
 
     // Check for confirmation
-    if (!message.channel.isDMBased() && !args.includes("confirm"))
+    if (!message.channel.isDMBased() && !confirm)
       return message.reply(
-        `Please add the "confirm" option, to confirm you would like to start this`
+        `Please add \`?confirm\` to your command to make sure you want to start this`
       );
 
     // Check if it should notify the user that they dont have too much setup imposition
@@ -109,7 +162,7 @@ const command: HypnoCommand = {
       (
         await database.all(
           `SELECT * FROM user_imposition WHERE user_id = (?)`,
-          message.author.id
+          user.id
         )
       ).length < 8
     )
@@ -120,7 +173,7 @@ const command: HypnoCommand = {
     // Send the warning / information message that it is about to start
     await message.reply(
       `I will now mess with you for ${minutes} minutes!\nType "stop" or "up" at anytime to cancel this.` +
-        `\n**ANYONE in this channel can say "stop ${message.author.username}" to cancel it too.** :cyclone:`
+        `\n**ANYONE in this channel can say "stop ${user.username}" to cancel it too.** :cyclone:`
     );
     const startTime = Date.now();
     let stop = false;
@@ -164,7 +217,7 @@ const command: HypnoCommand = {
     // Timer before it starts for them to read the intitial message
     setTimeout(async () => {
       // Do a drop if they wanted it
-      if (args.includes("dropping")) {
+      if (_dropping) {
         await execute(dropping[Math.floor(Math.random() * dropping.length)]);
       }
 
@@ -176,17 +229,19 @@ const command: HypnoCommand = {
 
         try {
           // Check what it should do
-          if (args.includes("noimposition"))
+          const toSend: string = "";
+
+          if (!imposition)
             await message.channel.send((await getRandomSpiral()).link);
-          else if (args.includes("nospirals"))
+          else if (_spirals === "none")
             await message.channel.send(
-              await getRandomImposition(message.author.id, true)
+              await getRandomImposition(user.id, true)
             );
           else {
             // It will pick a random thing to do
             if (Math.random() > 0.4)
               await message.channel.send(
-                await getRandomImposition(message.author.id, true)
+                await getRandomImposition(user.id, true)
               );
             else await message.channel.send((await getRandomSpiral()).link);
           }
@@ -206,9 +261,8 @@ const command: HypnoCommand = {
     // Collect messages for if a user tells it to stop
     const collector = message.channel.createMessageCollector({
       filter: (msg) =>
-        (msg.author.id === message.author.id &&
-          /((up)+)|(stop)/i.test(msg.content)) ||
-        msg.content.toLowerCase() == `stop ${message.author.username}`,
+        (msg.author.id === user.id && /((up)+)|(stop)/i.test(msg.content)) ||
+        msg.content.toLowerCase() == `stop ${user.username}`,
     });
 
     // Listen for said collections
