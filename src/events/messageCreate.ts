@@ -74,6 +74,8 @@ client.on("messageCreate", async (message) => {
     return;
   }
 
+  if (!message.content.startsWith(settings.prefix)) return;
+
   // ----- Beyond is actual command handler -----
 
   // Extract command
