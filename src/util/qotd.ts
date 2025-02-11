@@ -21,12 +21,14 @@ async function checkQotd() {
     new Date().getHours() === config.qotd.hour
   ) {
     writeFileSync(dateFile, new Date().toISOString());
-    const questions = await actions.qotd.getQuestions(config.botServer.id);
-    if (questions.length === 0) return;
+    const allQuestions = await actions.qotd.getQuestions(config.botServer.id);
+    const filteredQuestions = allQuestions.filter((x) => !x.asked);
+    if (filteredQuestions.length === 0) return;
 
-    const question = questions[Math.floor(Math.random() * questions.length)];
+    const question =
+      filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)];
     await actions.qotd.setAsked(question.id, true);
-    const remaining = questions.filter((x) => !x.asked).length;
+    const remaining = filteredQuestions.length;
 
     let author: User | null = null;
     try {
