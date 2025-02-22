@@ -4,6 +4,17 @@ import { actions, database, databaseLogger } from "../../util/database";
 import { createEmbed } from "../../util/other";
 import ConfirmAction from "../../util/components/Confirm";
 
+export function englishRelationship(type: RelationshipType) {
+  return {
+    dating: "date",
+    married: "partner",
+    friends: "friend",
+    enemies: "enemy",
+    parent: "child",
+    worships: "deity",
+  }[type];
+}
+
 const command: HypnoCommand<{ user: User }> = {
   name: "_marry_actions",
   description: "Commands to do with changing relationships",
@@ -54,26 +65,15 @@ const command: HypnoCommand<{ user: User }> = {
       worship: "worships",
     }[_c] as RelationshipType;
 
-    function english(type: RelationshipType) {
-      return {
-        dating: "date",
-        married: "partner",
-        friends: "friend",
-        enemies: "enemy",
-        parent: "child",
-        worships: "deity",
-      }[type];
-    }
-
     if (!type) return;
 
     if (
       await actions.relationships.exists(message.author.id, args.user.id, type)
     ) {
       return message.reply(
-        `**${args.user.username}** is already your **${english(type)}**! ${
-          type === "enemies" ? ":broken_heart:" : ":heart:"
-        }`
+        `**${args.user.username}** is already your **${englishRelationship(
+          type
+        )}**! ${type === "enemies" ? ":broken_heart:" : ":heart:"}`
       );
     }
 
@@ -89,9 +89,9 @@ const command: HypnoCommand<{ user: User }> = {
         .setDescription(
           `Are you sure you want to make **${
             args.user.username
-          }** your **${english(type)}**? They are already your **${english(
-            old?.type
-          )}**!`
+          }** your **${englishRelationship(
+            type
+          )}**? They are already your **${englishRelationship(old?.type)}**!`
         ),
       autoYes: !old,
       async callback() {
@@ -107,9 +107,9 @@ const command: HypnoCommand<{ user: User }> = {
               createEmbed()
                 .setTitle("Relationship updated!")
                 .setDescription(
-                  `**${args.user.username}** has been set to your **${english(
-                    type
-                  )}**!` +
+                  `**${
+                    args.user.username
+                  }** has been set to your **${englishRelationship(type)}**!` +
                     (old ? `\n\n**${old.type}** :arrow_right: **${type}**` : "")
                 ),
             ],

@@ -81,6 +81,14 @@ const _actions = {
   getAll: async (): Promise<Relationship[]> => {
     return await database.all<Relationship[]>("SELECT * FROM relationships");
   },
+
+  delete: async (user1: string, user2: string): Promise<void> => {
+    await database.run(
+      `DELETE FROM relationships WHERE user1 = ? AND user2 = ?`,
+      user1,
+      user2
+    );
+  },
 } as const;
 
 export default _actions;
