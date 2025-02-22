@@ -52,6 +52,14 @@ const command: HypnoCommand<{ user: User }> = {
       );
     }
 
+    if (
+      !(await actions.userData.getFor(args.user.id, message.guild.id))
+        .relationships
+    )
+      return message.reply(
+        `**${args.user.username}** has disabled relationships`
+      );
+
     const type: RelationshipType = {
       date: "dating",
       marry: "married",

@@ -16,6 +16,7 @@ interface UserData {
   allow_triggers: boolean;
   count_ruined: number;
   hypno_status: "red" | "yellow" | "green";
+  relationships: boolean;
 }
 
 interface PinnedRating {

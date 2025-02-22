@@ -107,6 +107,11 @@ CREATE TABLE IF NOT EXISTS user_favourite_spirals (
     user_id TEXT NOT NULL
 );
 
+ALTER TABLE
+    user_data
+add
+    relationships BOOL NOT NULL DEFAULT true;
+
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,
     guild_id TEXT NOT NULL,
@@ -125,7 +130,8 @@ CREATE TABLE IF NOT EXISTS user_data (
     allow_triggers BOOLEAN NOT NULL DEFAULT true,
     count_ruined INT NOT NULL DEFAULT 0,
     auto_sell BOOLEAN NOT NULL DEFAULT false,
-    hypno_status TEXT NOT NULL DEFAULT 'green'
+    hypno_status TEXT NOT NULL DEFAULT 'green',
+    relationships BOOL NOT NULL DEFAULT true
 );
 
 CREATE TABLE IF NOT EXISTS pinned_ratings (

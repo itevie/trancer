@@ -35,6 +35,13 @@ const command: HypnoCommand = {
           description: "Whether ot not to auto-sell fishes",
           type: "boolean",
         },
+        {
+          dbName: "relationships",
+          human: "Relationships",
+          description:
+            "Whether or not people can use the relationship commands on you",
+          type: "boolean",
+        },
       ],
       title: "Your Settings",
       onChange: async (key, value) => {
