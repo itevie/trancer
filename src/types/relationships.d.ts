@@ -3,7 +3,8 @@ declare type RelationshipType =
   | "dating"
   | "friends"
   | "enemies"
-  | "parent";
+  | "parent"
+  | "worships";
 
 declare interface Relationship {
   user1: string;

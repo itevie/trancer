@@ -18,6 +18,7 @@ const command: HypnoCommand<{ user: User }> = {
     "adopt",
     "parent",
     "child",
+    "worship",
   ],
   eachAliasIsItsOwnCommand: true,
 
@@ -50,6 +51,7 @@ const command: HypnoCommand<{ user: User }> = {
       adopt: "parent",
       parent: "parent",
       child: "child",
+      worship: "worships",
     }[_c] as RelationshipType;
 
     function english(type: RelationshipType) {
@@ -59,6 +61,7 @@ const command: HypnoCommand<{ user: User }> = {
         friends: "friend",
         enemies: "enemy",
         parent: "child",
+        worships: "deity",
       }[type];
     }
 
@@ -92,7 +95,7 @@ const command: HypnoCommand<{ user: User }> = {
         ),
       autoYes: !old,
       async callback() {
-        if (type === "enemies" || type === "friends") {
+        if (type === "enemies" || type === "friends" || type === "worships") {
           await actions.relationships.set(
             message.author.id,
             args.user.id,

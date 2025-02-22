@@ -30,38 +30,42 @@ const command: HypnoCommand<{ global?: boolean; user?: User; depth?: number }> =
           name: "depth",
           type: "wholepositivenumber",
           description:
-            "The depth of relationships, default = 3. Overwritten with ?global",
+            "The depth of relationships, default = 1. Overwritten with ?global",
           wickStyle: true,
+          min: 1,
+          max: 5,
         },
       ],
     },
 
     handler: async (message, { args }) => {
+      const user = args.user ? args.user : message.author;
       const g = graphviz.digraph("G");
 
       let relationships = await actions.relationships.getAll();
-      const relavent: string[] = [args.user ? args.user.id : message.author.id];
+      const relavent: string[] = [user.id];
+      let _relationships: Relationship[] = [];
 
       if (!args.global) {
-        for (let i = 0; i != (args.depth ?? 3); i++)
+        for (let i = 0; i != (args.depth ?? 1); i++) {
           for (const r of relationships) {
             if (
-              !relavent.includes(r.user1) &&
-              relavent.some((x) => x === r.user2)
-            ) {
-              relavent.push(r.user1);
-            }
-            if (
-              !relavent.includes(r.user2) &&
-              relavent.some((x) => x === r.user1)
-            ) {
-              relavent.push(r.user2);
-            }
+              !_relationships.includes(r) &&
+              relavent.some((x) => x === r.user1 || x === r.user2)
+            )
+              _relationships.push(r);
           }
 
-        relationships = relationships.filter((x) =>
+          for (const r of _relationships) {
+            if (!relavent.includes(r.user1)) relavent.push(r.user1);
+            if (!relavent.includes(r.user2)) relavent.push(r.user2);
+          }
+        }
+
+        relationships = _relationships;
+        /*relationships = relationships.filter((x) =>
           relavent.some((y) => y === x.user1 || y === x.user2)
-        );
+        );*/
       }
 
       const nodesAdded: string[] = [];
@@ -69,11 +73,19 @@ const command: HypnoCommand<{ global?: boolean; user?: User; depth?: number }> =
         const username1 = getUsernameSync(relationship.user1);
         const username2 = getUsernameSync(relationship.user2);
         if (!nodesAdded.includes(relationship.user1)) {
-          g.addNode(username1);
+          let node = g.addNode(username1);
+          if (username1 === user.username) {
+            node.set("style", "filled");
+            node.set("fillcolor", "lightblue");
+          }
           nodesAdded.push(relationship.user1);
         }
         if (!nodesAdded.includes(relationship.user2)) {
-          g.addNode(username2);
+          let node = g.addNode(username2);
+          if (username2 === user.username) {
+            node.set("style", "filled");
+            node.set("fillcolor", "lightblue");
+          }
           nodesAdded.push(relationship.user2);
         }
 
@@ -83,6 +95,7 @@ const command: HypnoCommand<{ global?: boolean; user?: User; depth?: number }> =
           friends: "green",
           enemies: "red",
           parent: "yellow",
+          worships: "grey",
         }[relationship.type];
 
         g.addEdge(username1, username2).set("color", color);
@@ -94,7 +107,7 @@ const command: HypnoCommand<{ global?: boolean; user?: User; depth?: number }> =
         const attachment = new AttachmentBuilder(buffer).setFile(buffer);
 
         return message.reply({
-          content: `:green_heart: = Friends :heart: = Enemies :purple_heart: = Dating :pink_heart: = Partners :yellow_heart: = Parent for`,
+          content: `:green_heart: = Friends :heart: = Enemies :purple_heart: = Dating :pink_heart: = Partners :yellow_heart: = Parent for :grey_heart: = Worships`,
           files: [attachment],
         });
       });
