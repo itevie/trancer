@@ -16,6 +16,7 @@ const command: HypnoCommand<{ user?: User }> = {
       {
         name: "user",
         type: "user",
+        mustHaveEco: true,
       },
     ],
   },

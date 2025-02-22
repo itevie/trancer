@@ -19,16 +19,20 @@ const command: HypnoCommand = {
         {
           dbName: "allow_requests",
           human: "Allow Game Requests",
+          description:
+            "Whether or not people can send you game invites (.ttt, .c4)",
           type: "boolean",
         },
         {
           dbName: "allow_triggers",
           human: "Allow Triggers (.i / .t)",
+          description: "Whether or not people can use any of your triggers",
           type: "boolean",
         },
         {
           dbName: "auto_sell",
           human: "Auto-sell Fishes",
+          description: "Whether ot not to auto-sell fishes",
           type: "boolean",
         },
       ],

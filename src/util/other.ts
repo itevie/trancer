@@ -54,9 +54,12 @@ export default function getAllFiles(
  */
 export function createEmbed(): EmbedBuilder {
   return new EmbedBuilder()
-    .setColor(config.embed.color as HexColorString)
-    .setTimestamp()
-    .setColor(config.embed.color as ColorResolvable);
+    .setColor(
+      (client.user?.id === config.devBot.id
+        ? config.embed.devColor
+        : config.embed.color) as HexColorString
+    )
+    .setTimestamp();
 }
 
 /**

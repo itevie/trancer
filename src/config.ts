@@ -82,6 +82,7 @@ const config = {
   // ----- Embed Defaults -----
   embed: {
     color: "#774b77",
+    devColor: "#8AB5A7",
   },
 
   // ----- Modules -----

@@ -2,9 +2,11 @@ import { client, commands, handlers } from "..";
 import config from "../config";
 import {
   AttachmentArgument,
+  CurrencyArgument,
   HypnoCommandDetails,
   NumberArgument,
   StringArgument,
+  UserArgument,
 } from "../types/util";
 import {
   getCardById,
@@ -12,10 +14,11 @@ import {
   getDeckById,
   getDeckByName,
 } from "../util/actions/cards";
-import { getEconomyFor } from "../util/actions/economy";
+import { economyForUserExists, getEconomyFor } from "../util/actions/economy";
 import { getRatelimit, setRatelimit } from "../util/actions/ratelimit";
 import { addCommandUsage, addMessageForCurrentTime } from "../util/analytics";
 import { generateCommandCodeBlock } from "../util/args";
+import { checkBadges } from "../util/badges";
 import { actions } from "../util/database";
 import { msToHowLong } from "../util/ms";
 import {
@@ -24,6 +27,7 @@ import {
   englishifyList,
   isURL,
 } from "../util/other";
+import { currency } from "../util/textProducer";
 
 client.on("messageCreate", async (message) => {
   // Only listen if in guild
@@ -44,7 +48,11 @@ client.on("messageCreate", async (message) => {
   // Guards
   if (message.author.bot || !message?.author?.id || !message?.guild?.id) return;
 
-  await getEconomyFor(message.author.id);
+  const economy = await getEconomyFor(message.author.id);
+  const userData = await actions.userData.getFor(
+    message.author.id,
+    message.guild.id
+  );
 
   // Fetch data
   const settings = await actions.serverSettings.getFor(message.guild.id);
@@ -62,6 +70,10 @@ client.on("messageCreate", async (message) => {
         continue;
       else handler.handler(message);
     }
+  }
+
+  if (message.guild.id === config.botServer.id) {
+    await checkBadges(message, { ...userData, ...economy });
   }
 
   // Analytics
@@ -153,6 +165,7 @@ client.on("messageCreate", async (message) => {
 
   const details: HypnoCommandDetails<any> = {
     serverSettings: settings,
+    economy,
     command: commandName.toLowerCase(),
     args: {},
     oldArgs: originalArguments,
@@ -305,7 +318,7 @@ client.on("messageCreate", async (message) => {
           case "wholepositivenumber":
             if (isNaN(parseInt(a)) || parseInt(a) % 1 !== 0 || parseInt(a) < 0)
               return "Expected a whole, positive number";
-          case "number":
+          case "number": {
             if (isNaN(parseInt(a))) return "Invalid number provided";
 
             let min = (arg as NumberArgument).min;
@@ -317,6 +330,37 @@ client.on("messageCreate", async (message) => {
             if (max !== undefined || max === 0)
               if (parseInt(a) > max) return `The maximum value is: ${max}`;
             result = parseInt(a);
+            break;
+          }
+          case "currency":
+            let currencyArg = arg as CurrencyArgument;
+            // Check for shortcuts
+            a =
+              {
+                half: Math.round(economy.balance / 2),
+                quarter: Math.round(economy.balance / 4),
+                third: Math.round(economy.balance / 3),
+              }[a.toLowerCase()]?.toString() ?? a;
+
+            // Validate
+            if (isNaN(parseInt(a))) return "Invalid number provided";
+            if (parseInt(a) % 1 !== 0) return "Currency cannot be a decimal";
+            if (!currencyArg.allowNegative && parseInt(a) < 0)
+              return "Currency cannot be negative";
+
+            let amount = parseInt(a);
+
+            // Check if user has amount
+            if (amount > economy.balance)
+              return `You do not have ${currency(amount)}`;
+
+            // Validate
+            if (currencyArg.min && amount < currencyArg.min)
+              return `Minimum amount is ${currency(currencyArg.min)}`;
+            if (currencyArg.max && amount > currencyArg.max)
+              return `Maximum amount is ${currency(currencyArg.max)}`;
+
+            result = amount;
             break;
           case "boolean":
             if (
@@ -397,7 +441,15 @@ client.on("messageCreate", async (message) => {
 
             // Try fetch
             try {
-              result = await client.users.fetch(a.replace(/[<@>]/g, ""));
+              let r = await client.users.fetch(a.replace(/[<@>]/g, ""));
+              let userArg = arg as UserArgument;
+
+              if (userArg.denyBots && r.bot)
+                return "A bot cannot be used for this command";
+              if (userArg.mustHaveEco && !(await economyForUserExists(r.id)))
+                return "This user does not have economy setup";
+
+              result = r;
             } catch {
               return `Failed to fetch the user: ${a}`;
             }

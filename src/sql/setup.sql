@@ -1,3 +1,8 @@
+ALTER TABLE
+    server_settings
+ADD
+    quotes_channel_id TEXT DEFAULT NULL;
+
 -- Server specific stuff
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
@@ -9,6 +14,7 @@ CREATE TABLE IF NOT EXISTS server_settings (
     tist_role_id TEXT DEFAULT NULL,
     switch_role_id TEXT DEFAULT NULL,
     invite_logger_channel_id TEXT DEFAULT NULL,
+    quotes_channel_id TEXT DEFAULT NULL,
     remind_bumps BOOLEAN DEFAULT false,
     bump_channel TEXT DEFAULT NULL,
     level_notifications BOOLEAN DEFAULT true,

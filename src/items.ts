@@ -110,10 +110,10 @@ const items: Record<string, Partial<Item>> = {
     emoji: "<:juicebox:1322129011899502602>",
   },
   pendulum: {
-    price: 50,
+    price: 75,
     description:
       "A pendulum! It goes this way and that. (good for playing with Dawn!)",
-    weight: 0.2,
+    weight: 0.15,
     emoji: "<:pendulum:1325556858869645443>",
   },
   "fishing-rod": {
@@ -153,22 +153,60 @@ const items: Record<string, Partial<Item>> = {
     tag: "mineral",
   },
   iron: {
-    price: 20,
-    weight: 0.2,
+    price: 15,
+    weight: 0.3,
     emoji: "<:iron:1325546289261318294>",
     tag: "mineral",
+    buyable: false,
+  },
+  copper: {
+    price: 25,
+    weight: 0.2,
+    emoji: "<:copper:1342883570259198063>",
+    buyable: false,
+    tag: "mineral",
+  },
+  silver: {
+    price: 40,
+    weight: 0.15,
+    emoji: "<:silver:1342883725796446269>",
+    tag: "mineral",
+    buyable: false,
   },
   gold: {
     price: 50,
     weight: 0.1,
     emoji: "<:gold:1325546308689199155>",
     tag: "mineral",
+    buyable: false,
+  },
+  amethyst: {
+    price: 60,
+    weight: 0.08,
+    emoji: "<:amythest:1342885723749220455>",
+    tag: "mineral",
+    buyable: false,
   },
   emerald: {
     price: 70,
     weight: 0.05,
     emoji: "<:emerald:1328997361925492828>",
     tag: "mineral",
+    buyable: false,
+  },
+  sapphire: {
+    price: 85,
+    weight: 0.03,
+    emoji: "<:sapphire:1342883648482840678>",
+    tag: "mineral",
+    buyable: false,
+  },
+  ruby: {
+    price: 110,
+    weight: 0.009,
+    emoji: "<:ruby:1342883623422132387>",
+    tag: "mineral",
+    buyable: false,
   },
   diamond: {
     price: 120,
@@ -191,6 +229,13 @@ const items: Record<string, Partial<Item>> = {
     weight: 0.4,
     tag: "pickaxe",
     emoji: "<:stone_pickaxe:1325548046188286053> ",
+  },
+  "emerald-pickaxe": {
+    price: 200,
+    weight: 0.0001,
+    tag: "pickaxe",
+    emoji: "<:emerald_pickaxe:1342888386175963248>",
+    description: "Gives you 10% extra luck when mining",
   },
 
   // ----- Collectables -----

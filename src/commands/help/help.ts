@@ -120,7 +120,7 @@ const command: HypnoCommand<{ ignoreGuards: boolean }> = {
             {
               name: "Topics",
               value:
-                `Use \`${serverSettings.prefix}topic <topic>\` to learn more about it!\n\n` +
+                `Below are the list of topics you can read about, use \`${serverSettings.prefix}topic <topic>\` to learn more about it!\n\n` +
                 Object.keys(messages)
                   .filter((x) => x.startsWith("help-"))
                   .map((x) => x.replace("help-", ""))

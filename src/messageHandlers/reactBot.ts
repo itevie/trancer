@@ -235,14 +235,6 @@ const phrases = [
   "https://tenor.com/view/cry-about-it-spongebob-popsicle-discord-memes-sus-amogus-gif-24192546",
 ];
 
-const brainrot = (
-  "baby gronk,ayo,baka,:cap:,ahh,alpha,among us,aura,ayo,backrooms,bussin',before gta 6,cap,chungus,cooked," +
-  "cringe,delulu,discord mod,Dr. DisRespect,fanum-tax,feastables,fent,fortnite battle pass,freaky,gacha life,glazing,glizzy,giddy," +
-  "grimace shake,gyatt,hawk tuah,hear me out,i am Steve,ipad kid,kai cenat,ksi,L,ligma,lil' bro,lock in,looksmaxxing,lock in," +
-  "luckly,mah boi,mid,mewing,minecraft movie,ohio,phonk,poggers,pookie,quandale dingle,ratio,redditor,rizz,the rizzler," +
-  "sigma,skibidi,skibidi toilet,slay,squid game,sus,thick of it,very demure,demure,zesty"
-).split(",");
-
 let messagesSince = 0;
 let messagesRequired = 20;
 
@@ -265,9 +257,13 @@ const handler: HypnoMessageHandler = {
         ].replace(/\$username/g, message.author.username);
 
         let fuckups = [
+          // Turn it into piglatin
           () => piglatin(phrase),
-          () => messUpSentence(phrase),
+
+          // Uppercase
           () => phrase.toUpperCase(),
+
+          // Cowsay
           () => {
             const child = spawnSync("cowsay", [
               "-f",
@@ -276,6 +272,8 @@ const handler: HypnoMessageHandler = {
             ]);
             return "```" + child.output.join("") + "```";
           },
+
+          // Random case
           () =>
             phrase
               .split("")
@@ -284,15 +282,14 @@ const handler: HypnoMessageHandler = {
                   c + (Math.random() > 0.7 ? v.toUpperCase() : v.toLowerCase()),
                 ""
               ),
+
+          // Add question marks
           () => phrase + "?".repeat(randomFromRange(1, 10)),
+
+          // Add exclamation marks
           () => phrase + "!".repeat(randomFromRange(1, 10)),
-          () => {
-            let text = "";
-            const amount = randomFromRange(1, 7);
-            for (let i = 0; i != amount; i++)
-              text += brainrot[Math.floor(Math.random() * brainrot.length)];
-            return text;
-          },
+
+          // Stutter
           () => {
             let words = phrase.split(" ");
             let newWords: string[] = [];
@@ -305,37 +302,8 @@ const handler: HypnoMessageHandler = {
             }
             return newWords.join(" ");
           },
-          () =>
-            phrase
-              .split(" ")
-              .reduce(
-                (c, v) =>
-                  c +
-                  ` ${
-                    Math.random() > 0.3
-                      ? `${
-                          brainrot[Math.floor(Math.random() * brainrot.length)]
-                        } `
-                      : ""
-                  }${
-                    Math.random() > 0.2
-                      ? `${
-                          brainrot[Math.floor(Math.random() * brainrot.length)]
-                        } `
-                      : ""
-                  }${
-                    Math.random() > 0.1
-                      ? `${
-                          brainrot[Math.floor(Math.random() * brainrot.length)]
-                        } `
-                      : ""
-                  }${v} `,
-                ""
-              ),
         ];
         if (Math.random() > 0.5)
-          phrase = fuckups[Math.floor(Math.random() * fuckups.length)]();
-        if (Math.random() > 0.8)
           phrase = fuckups[Math.floor(Math.random() * fuckups.length)]();
 
         await message.reply(phrase);

@@ -17,6 +17,7 @@ const command: HypnoCommand<{ user?: User }> = {
         name: "user",
         type: "user",
         description: "The other user to get the balance of",
+        mustHaveEco: true,
         infer: true,
       },
     ],
@@ -29,7 +30,6 @@ const command: HypnoCommand<{ user?: User }> = {
 
     // Get the economy
     let economy = await getEconomyFor(user.id);
-    if (!economy) return message.reply(`That user has no economy setup.`);
 
     // Done
     return message.reply(`${pronoun} balance is ${currency(economy.balance)}`);

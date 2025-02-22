@@ -61,13 +61,25 @@ const command: HypnoCommand = {
   },
 
   handler: async (message) => {
+    // Resolve user's most expensive pickaxe
+    const pickaxe = (
+      await actions.items.aquired.resolveFrom(
+        await actions.items.aquired.getAllFor(message.author.id)
+      )
+    )
+      .filter((item) => item.tag === "pickaxe")
+      .sort((a, b) => b.price - a.price)[0];
+    const luckMultiplier = pickaxe.name === "emerald-pickaxe" ? 0.1 : 0;
+
     // Generate minerals and fallback rock
     const minerals = (await actions.items.getByTag("mineral")).filter(
       (x) => x.name !== "rock"
     );
     const rock = itemMap[ecoConfig.mining.defaultSpace];
     const generateMineral = () =>
-      minerals.find((mineral) => Math.random() < mineral.weight) || rock;
+      minerals.find(
+        (mineral) => Math.random() - luckMultiplier < mineral.weight
+      ) || rock;
 
     // Create a 5x5 mining map
     const map = Array.from({ length: 5 }, () =>
@@ -82,7 +94,10 @@ const command: HypnoCommand = {
       .setDescription(
         `${ecoConfig.mining.unknownSpace.repeat(5)}\n`.repeat(5) +
           rowMarker.join("")
-      );
+      )
+      .setFooter({
+        text: `Luck multiplier: ${luckMultiplier * 100}%`,
+      });
 
     const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
       [1, 2, 3, 4, 5].map((num) =>
@@ -142,7 +157,10 @@ const command: HypnoCommand = {
               "\n" +
               rowMarker.join("")
             }`
-          ),
+          )
+          .setFooter({
+            text: `Luck multiplier: ${luckMultiplier * 100}%`,
+          }),
       ],
     });
   },

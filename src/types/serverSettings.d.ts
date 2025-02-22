@@ -14,6 +14,7 @@ interface ServerSettings {
   verified_string: string | null;
   verified_channel_id: string | null;
 
+  quotes_channel_id: string | null;
   invite_logger_channel_id: string | null;
   remind_bumps: boolean;
   bump_channel: string | null;

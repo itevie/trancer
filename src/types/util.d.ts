@@ -1,4 +1,4 @@
-import { Message, PermissionResolvable } from "discord.js";
+import { CommandInteraction, Message, PermissionResolvable } from "discord.js";
 
 export type HypnoCommandType =
   | "analytics"
@@ -39,10 +39,12 @@ type ArgumentType =
   | "item"
   | "none"
   | "array"
+  | "currency"
   | "channel";
 
 interface HypnoCommandDetails<Args extends { [key: string]: any } = {}> {
   serverSettings: ServerSettings;
+  economy: Economy;
   command: string;
   args?: Args;
   oldArgs: string[];
@@ -231,11 +233,26 @@ interface ArrayArgument extends BaseArgument {
   inner?: Omit<ArgumentType, "array">;
 }
 
+interface CurrencyArgument extends BaseArgument {
+  type: "currency";
+  min?: number;
+  max?: number;
+  allowNegative?: boolean;
+}
+
+interface UserArgument extends BaseArgument {
+  type: "user";
+  mustHaveEco?: boolean;
+  denyBots?: boolean;
+}
+
 type Argument =
   | AttachmentArgument
   | NumberArgument
   | StringArgument
   | ArrayArgument
+  | CurrencyArgument
+  | UserArgument
   | BaseArgument;
 
 interface HypnoMessageHandler {

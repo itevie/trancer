@@ -1,4 +1,8 @@
-import { HypnoCommand, NumberArgument } from "../../types/util";
+import {
+  CurrencyArgument,
+  HypnoCommand,
+  NumberArgument,
+} from "../../types/util";
 import { commands } from "../..";
 import { createEmbed } from "../../util/other";
 import { generateCommandCodeBlock } from "../../util/args";
@@ -68,17 +72,27 @@ const command: HypnoCommand<{ command: string }> = {
               let text = `**${arg.wickStyle ? "?" : ""}${arg.name}**`;
               if (arg.description) text += `\n*${arg.description}*`;
               text += `\n- Type: ${arg.type}`;
+
+              // Infer
               if (arg.infer)
                 text += `\n- Inferrable: ${arg.infer ? "yes" : "no"}`;
-              if (arg.mustBe) text += `\n- Must be: "${text}"`;
+
+              // Must be
+              if (arg.mustBe) text += `\n- Must be: "${arg.mustBe}"`;
+
+              // One of
               if (arg.oneOf)
                 text += `\n- Must be one of: ${arg.oneOf
                   .map((x) => `**${x}**`)
                   .join(", ")}`;
-              if ((arg as NumberArgument).min)
-                text += `\n- Minimum: ${(arg as NumberArgument).min}`;
-              if ((arg as NumberArgument).max)
-                text += `\n- Maximum: ${(arg as NumberArgument).max}`;
+
+              // Min & max
+              if ((arg as any).min) text += `\n- Minimum: ${(arg as any).min}`;
+              if ((arg as any).max) text += `\n- Maximum: ${(arg as any).max}`;
+
+              // Allow negative
+              if ((arg as CurrencyArgument).allowNegative)
+                text += `\n- Can be negative: yes`;
               return text;
             })
             .join("\n\n")}`,

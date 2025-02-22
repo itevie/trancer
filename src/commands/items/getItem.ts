@@ -5,7 +5,7 @@ import { currency, itemText } from "../../util/textProducer";
 
 const command: HypnoCommand<{ item: Item }> = {
   name: "getitem",
-  aliases: ["itemdetails", "itemdet", "gitem"],
+  aliases: ["item", "itemdetails", "itemdet", "gitem"],
   description: "Get an item's details",
   type: "economy",
 

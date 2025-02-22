@@ -23,6 +23,7 @@ interface BasePageOption {
   type: OptionTypes;
   human: string;
   dbName: string;
+  description: string;
 }
 
 interface PageStringOption extends BasePageOption {
@@ -39,11 +40,13 @@ interface PageBooleanOption extends BasePageOption {
 
 interface PageRoleOption extends BasePageOption {
   type: "role";
+  nullable?: boolean;
 }
 
 interface PageChannelOption extends BasePageOption {
   type: "channel";
   botHasPermissions?: PermissionResolvable;
+  nullable?: boolean;
 }
 
 type PageOption =
@@ -58,7 +61,7 @@ export async function createSettingsPage<D extends any>(
   async function generateMessage(): Promise<
     MessageReplyOptions & MessageEditOptions
   > {
-    let parts: [string, string][] = [];
+    let parts: [string, string, string][] = [];
     let components: ActionRowBuilder[] = [];
     let currentRow: ActionRowBuilder = new ActionRowBuilder();
 
@@ -70,6 +73,7 @@ export async function createSettingsPage<D extends any>(
           option.type,
           _options.message
         ),
+        option.description,
       ]);
 
       if (currentRow.components.length === 5) {
@@ -94,7 +98,9 @@ export async function createSettingsPage<D extends any>(
 
     let embed = createEmbed()
       .setTitle(_options.title)
-      .setDescription(parts.map((x) => `**${x[0]}**: ${x[1]}`).join("\n"))
+      .setDescription(
+        parts.map((x) => `**${x[0]}**: ${x[1]}\n-# ${x[2]}`).join("\n\n")
+      )
       .addFields([
         {
           name: "Note",
@@ -131,7 +137,7 @@ export async function createSettingsPage<D extends any>(
         break;
       case "string":
       case "uservarstring":
-        let stext = "Send teh value as your next message";
+        let stext = "Send the value as your next message";
         if (option.type === "uservarstring")
           stext += `\n\nVariables:\n{mention} - Mentions the target user\n{username} - The taget user's username`;
         if (option.minLength) stext += `\nMinimum length: ${option.minLength}`;

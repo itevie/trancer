@@ -45,6 +45,10 @@ client.on("messageUpdate", async (old, newMsg) => {
               name: "Old Content",
               value: old.content || "*No Content*",
             },
+            {
+              name: "Link",
+              value: `https://discord.com/channels/${newMsg.guildId}/${newMsg.channelId}/${newMsg.id}`,
+            },
           ])
           .setColor("#FFFF00")
           .setAuthor({

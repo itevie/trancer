@@ -4,6 +4,8 @@ import {
   getEconomyFor,
   removeMoneyFor,
 } from "../../util/actions/economy";
+import ConfirmAction from "../../util/components/Confirm";
+import { createEmbed } from "../../util/other";
 import { currency } from "../../util/textProducer";
 
 const command: HypnoCommand<{ amount: number; confirm?: string }> = {
@@ -17,7 +19,8 @@ const command: HypnoCommand<{ amount: number; confirm?: string }> = {
     args: [
       {
         name: "amount",
-        type: "wholepositivenumber",
+        type: "currency",
+        min: 10,
       },
       {
         name: "confirm",
@@ -30,41 +33,51 @@ const command: HypnoCommand<{ amount: number; confirm?: string }> = {
   handler: async (message, args) => {
     let eco = await getEconomyFor(message.author.id);
 
-    // Check if has enough
-    if (args.args.amount > eco.balance)
-      return message.reply(`You do not have ${currency(args.args.amount)}`);
-
-    // Check if below 10
-    if (args.args.amount < 10)
-      return message.reply(`Minimum amount is ${currency(10)}`);
-
-    // Check if requires confirm
-    if (
+    console.log(
+      args,
       args.args.amount > 1000 ||
-      (eco.balance > 100 && args.args.amount > eco.balance / 2)
-    )
-      if (!args.args.confirm)
-        return message.reply(
-          `Please provide the confirm option when coinflipping large amounts of money.`
-        );
+        (eco.balance > 100 && args.args.amount > eco.balance / 2)
+    );
 
-    let win = Math.random() < 0.4;
+    ConfirmAction({
+      message,
+      embed: createEmbed()
+        .setTitle(`Confirm coinflip`)
+        .setDescription(
+          `You are coinflipping a lot of money (${currency(
+            args.args.amount
+          )}), are you sure?`
+        ),
+      autoYes: !(
+        args.args.amount > 1000 ||
+        (eco.balance > 100 && args.args.amount > eco.balance / 2)
+      ),
+      async callback() {
+        let win = Math.random() < 0.4;
 
-    if (win) {
-      await addMoneyFor(message.author.id, args.args.amount, "gambling");
-      return message.reply(
-        `:green_circle: The coin landed in your favour! Your earnt ${currency(
-          args.args.amount
-        )}!`
-      );
-    } else {
-      await removeMoneyFor(message.author.id, args.args.amount, true);
-      return message.reply(
-        `:red_circle: The coin did not land in your favour, you lost ${currency(
-          args.args.amount
-        )} :(`
-      );
-    }
+        if (win) {
+          await addMoneyFor(message.author.id, args.args.amount, "gambling");
+        } else {
+          await removeMoneyFor(message.author.id, args.args.amount, true);
+        }
+
+        return {
+          embeds: [
+            createEmbed()
+              .setTitle("Coinflip Outcome")
+              .setDescription(
+                win
+                  ? `:green_circle: The coin landed in your favour! Your earnt ${currency(
+                      args.args.amount
+                    )}!`
+                  : `:red_circle: The coin did not land in your favour, you lost ${currency(
+                      args.args.amount
+                    )} :(`
+              ),
+          ],
+        };
+      },
+    });
   },
 };
 

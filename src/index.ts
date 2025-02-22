@@ -1,5 +1,11 @@
 import "dotenv/config";
-import { Client, IntentsBitField, Partials, TextChannel } from "discord.js";
+import {
+  BurstHandlerMajorIdKey,
+  Client,
+  IntentsBitField,
+  Partials,
+  TextChannel,
+} from "discord.js";
 import commandLineArgs, { OptionDefinition } from "command-line-args";
 import { HypnoCommand, HypnoMessageHandler } from "./types/util";
 import { connect } from "./util/database";
@@ -108,10 +114,10 @@ client.on("ready", async () => {
     initLottery();
   }
 
-  checkBadges();
-  setTimeout(() => {
-    checkBadges();
-  }, 60000);
+  //checkBadges();
+  //setTimeout(() => {
+  //  checkBadges();
+  //}, 60000);
 
   logger.log(`${client.user?.username} successfully logged in!`);
 

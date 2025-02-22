@@ -5,17 +5,21 @@ import {
   removeBadgeFor,
 } from "./actions/badges";
 import { getAllEconomy } from "./actions/economy";
-import { database } from "./database";
+import { actions, database } from "./database";
 import config from "../config";
 import { calculateLevel } from "../messageHandlers/xp";
 import { currency } from "./textProducer";
+import { Message } from "discord.js";
+import { createEmbed } from "./other";
 
 export interface Badge {
   name: string;
   description: string;
   emoji: string;
-  scan: () => any;
+  scan: (user: UserData & Economy) => Promise<boolean>;
 }
+
+let scans = 0;
 
 async function handleEcoPositionalBadges() {
   let economy = (await getAllEconomy()).sort((a, b) => b.balance - a.balance);
@@ -46,6 +50,8 @@ async function handleEcoPositionalBadges() {
     await removeBadgeFor(dbThird, "eco#3");
     await addBadgeFor(third, "eco#3");
   }
+
+  return false;
 }
 
 const badges: { [key: string]: Badge } = {
@@ -53,42 +59,32 @@ const badges: { [key: string]: Badge } = {
     name: "Yapper",
     description: "Sent 1000 messages",
     emoji: ":speaking_head:",
-    scan: async () => {
-      const users = (await database.all(
-        `SELECT * FROM user_data WHERE guild_id = ?;`,
-        config.botServer.id
-      )) as UserData[];
-      const aquired = await getAllAquiredBadges();
-
-      for (const user of users) {
-        if (
-          user.messages_sent > 1000 &&
-          !aquired.find(
-            (x) => x.user === user.user_id && x.badge_name === "yapper"
-          )
-        )
-          await addBadgeFor(user.user_id, "yapper");
-      }
+    scan: async (user) => {
+      return user.messages_sent > 1000;
+    },
+  },
+  yapper2: {
+    name: "Mega Yapper",
+    description: "Sent 10,000 messages",
+    emoji: ":loud_sound:",
+    scan: async (user) => {
+      return user.messages_sent > 10_000;
     },
   },
   level15: {
     name: "Level 15",
     description: "Get to level 15",
     emoji: ":chart_with_upwards_trend:",
-    scan: async () => {
-      const aquired = await getAllAquiredBadges();
-      const users = (await database.all(
-        "SELECT * FROM user_data;"
-      )) as UserData[];
-      for (const user of users) {
-        if (
-          calculateLevel(user.xp || 0) >= 15 &&
-          !aquired.find(
-            (x) => x.user === user.user_id && x.badge_name === "level15"
-          )
-        )
-          await addBadgeFor(user.user_id, "level15");
-      }
+    scan: async (user) => {
+      return calculateLevel(user.xp || 0) >= 15;
+    },
+  },
+  level30: {
+    name: "Level 30",
+    description: "Get to level 30",
+    emoji: ":fire:",
+    scan: async (user) => {
+      return calculateLevel(user.xp || 0) >= 30;
     },
   },
   botfuckerupper: {
@@ -96,76 +92,31 @@ const badges: { [key: string]: Badge } = {
     description: "Broke the bot (like found a glitch)",
     emoji: ":sob:",
     scan: async () => {
-      /*const users = await getAllEconomy();
-            const aquired = await getAllAquiredBadges();
-
-            for (const user of users)
-                if (user.balance < 0 || user.balance % 1 !== 0)
-                    if (!aquired.find(x => x.user === user.user_id && x.badge_name === "botfuckerupper"))
-                        await addBadgeFor(user.user_id, "botfuckerupper")*/
+      return false;
     },
   },
   "500vcminutes": {
     name: "500 VC Minutes",
     description: "Been in a VC for 500 minutes (about 8 hours)",
     emoji: ":telephone_receiver:",
-    scan: async () => {
-      const users = (await database.all(
-        `SELECT * FROM user_data WHERE guild_id = ?;`,
-        config.botServer.id
-      )) as UserData[];
-      const aquired = await getAllAquiredBadges();
-
-      for (const user of users) {
-        if (
-          user.vc_time > 500 &&
-          !aquired.find(
-            (x) => x.user === user.user_id && x.badge_name === "500vcminutes"
-          )
-        )
-          await addBadgeFor(user.user_id, "500vcminutes");
-      }
+    scan: async (user) => {
+      return user.vc_time > 500;
     },
   },
   "5kmoney": {
     name: "Money Maker",
     description: `Reached ${currency(5000)} at some point`,
     emoji: ":cyclone:",
-    scan: async () => {
-      const users = (await database.all(`SELECT * FROM economy;`)) as Economy[];
-      const aquired = await getAllAquiredBadges();
-
-      for (const user of users) {
-        if (
-          user.balance > 5000 &&
-          !aquired.find(
-            (x) => x.user === user.user_id && x.badge_name === "5kmoney"
-          )
-        )
-          await addBadgeFor(user.user_id, "5kmoney");
-      }
+    scan: async (user) => {
+      return user.balance > 5000;
     },
   },
   bumper: {
     name: "Bumper",
     description: "Bumped the server 15 times",
     emoji: ":right_facing_fist:",
-    scan: async () => {
-      const users = (await database.all(
-        `SELECT * FROM user_data WHERE guild_id = ?;`,
-        config.botServer.id
-      )) as UserData[];
-      const aquired = await getAllAquiredBadges();
-
-      for (const user of users) {
-        if (
-          user.bumps >= 15 &&
-          !aquired.find(
-            (x) => x.user === user.user_id && x.badge_name === "bumper"
-          )
-        )
-          await addBadgeFor(user.user_id, "bumper");
-      }
+    scan: async (user) => {
+      return user.bumps >= 15;
     },
   },
   og: {
@@ -173,55 +124,98 @@ const badges: { [key: string]: Badge } = {
     description: "Joined the server before 100 members",
     emoji: ":snowflake:",
     scan: async () => {
-      return;
+      return false;
     },
   },
   mythiccard: {
     name: "Mythic Card",
     description: "Got a mythic card at some point",
     emoji: ":flower_playing_cards:",
-    scan: async () => {
+    scan: async (user) => {
       const cards = (await database.all(
-        `SELECT * FROM aquired_cards WHERE card_id IN (SELECT id FROM cards WHERE rarity = 'mythic');`
+        `SELECT * FROM aquired_cards WHERE user_id = ? AND card_id IN (SELECT id FROM cards WHERE rarity = 'mythic');`,
+        user.user_id
       )) as AquiredCard[];
-      const aquired = await getAllAquiredBadges();
 
-      for (const card of cards) {
-        if (
-          !aquired.find(
-            (x) => x.user === card.user_id && x.badge_name === "mythiccard"
-          )
-        )
-          await addBadgeFor(card.user_id, "mythiccard");
-      }
+      return cards.length > 0;
     },
   },
   "eco#1": {
     name: "Economy #1",
     description: "At economy position #1",
     emoji: ":first_place:",
-    scan: handleEcoPositionalBadges,
+    scan: async () => {
+      return false;
+    },
   },
   "eco#2": {
     name: "Economy #2",
     description: "At economy position #2",
     emoji: ":second_place:",
-    scan: () => {},
+    scan: async () => {
+      return false;
+    },
   },
   "eco#3": {
     name: "Economy #3",
     description: "At economy position #3",
     emoji: ":third_place:",
-    scan: () => {},
+    scan: async () => {
+      return false;
+    },
   },
 } as const;
 
 export default badges;
 
-export function checkBadges() {
-  for (const i in badges) {
-    badges[i].scan();
+export async function checkBadges(
+  message?: Message<true>,
+  data?: UserData & Economy
+) {
+  const users = data
+    ? [data]
+    : await database.all<(UserData & Economy)[]>(
+        `SELECT 
+     user_data.*, 
+     economy.balance
+   FROM 
+     user_data 
+   INNER JOIN 
+     economy 
+   ON 
+     user_data.user_id = economy.user_id 
+   WHERE 
+     user_data.guild_id = ?;`,
+        config.botServer.id
+      );
+
+  const given: Badge[] = [];
+
+  for await (const user of users) {
+    for await (const [k, badge] of Object.entries(badges)) {
+      const result = await badge.scan(user);
+      if (result) {
+        const giveResult = await addBadgeFor(user.user_id, k);
+        if (giveResult) given.push(badge);
+      }
+    }
   }
+
+  if (given.length > 0 && message) {
+    await message.reply({
+      embeds: [
+        createEmbed()
+          .setTitle("You got the following badges!")
+          .setDescription(
+            given
+              .map((x) => `${x.emoji} **${x.name}**: ${x.description}`)
+              .join("\n")
+          ),
+      ],
+    });
+  }
+
+  handleEcoPositionalBadges();
 }
 
 export function formatBadges(

@@ -22,7 +22,7 @@ const command: HypnoCommand<{ user: User; amount: number }> = {
       },
       {
         name: "amount",
-        type: "wholepositivenumber",
+        type: "currency",
       },
     ],
   },
