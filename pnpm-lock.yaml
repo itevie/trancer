@@ -23,6 +23,9 @@ importers:
       '@types/express-session':
         specifier: ^1.18.1
         version: 1.18.1
+      '@types/graphviz':
+        specifier: ^0.0.39
+        version: 0.0.39
       '@types/jsonwebtoken':
         specifier: ^9.0.7
         version: 9.0.7
@@ -74,6 +77,9 @@ importers:
       express-session-sqlite:
         specifier: ^2.1.1
         version: 2.1.1
+      graphviz:
+        specifier: ^0.0.9
+        version: 0.0.9
       jimp:
         specifier: ^1.6.0
         version: 1.6.0
@@ -474,6 +480,9 @@ packages:
 
   '@types/express@4.17.21':
     resolution: {integrity: sha512-ejlPM315qwLpaQlQDTjPdsUFSc6ZsP4AN6AlWnogPjQ7CVi7PYF3YVz+CY3jE2pwYf7E/7HlDAN0rV2GxTG0HQ==}
+
+  '@types/graphviz@0.0.39':
+    resolution: {integrity: sha512-3sBvki6GxLB4yvxArDQ0jjfuMKWEGVLUttNo3KULoidIstLIaCa2gG8+YkPQdoSUO74Y/ww3cZ7oAnw61dYIbw==}
 
   '@types/http-errors@2.0.4':
     resolution: {integrity: sha512-D0CFMMtydbJAegzOyHjtiKPLlvnm3iTZyZRSZoLq2mRhDdmLfIWOCYPfQJ4cu2erKghU++QvjcUjp/5h7hESpA==}
@@ -942,6 +951,10 @@ packages:
 
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
+
+  graphviz@0.0.9:
+    resolution: {integrity: sha512-SmoY2pOtcikmMCqCSy2NO1YsRfu9OO0wpTlOYW++giGjfX1a6gax/m1Fo8IdUd0/3H15cTOfR1SMKwohj4LKsg==}
+    engines: {node: '>=0.6.8'}
 
   has-property-descriptors@1.0.2:
     resolution: {integrity: sha512-55JNKuIW+vq4Ke1BjOTjM2YctQIvCT7GFzHwmfZPGo5wnrgkid0YQtnAleFSqumZm4az3n2BS+erby5ipJdgrg==}
@@ -1564,6 +1577,10 @@ packages:
   tar@6.2.1:
     resolution: {integrity: sha512-DZ4yORTwrbTj/7MZYq2w+/ZFdI6OZ/f9SFHR+71gIVUZhOQPHzVCLpvRnPgyaMpfWxxk/4ONva3GQSyNIKRv6A==}
     engines: {node: '>=10'}
+
+  temp@0.4.0:
+    resolution: {integrity: sha512-IsFisGgDKk7qzK9erMIkQe/XwiSUdac7z3wYOsjcLkhPBy3k1SlvLoIh2dAHIlEpgA971CgguMrx9z8fFg7tSA==}
+    engines: {'0': node >=0.4.0}
 
   timm@1.7.1:
     resolution: {integrity: sha512-IjZc9KIotudix8bMaBW6QvMuq64BrJWFs1+4V0lXwWGQZwH+LnX87doAYhem4caOEusRP9/g6jVDQmZ8XOk1nw==}
@@ -2279,6 +2296,10 @@ snapshots:
       '@types/qs': 6.9.17
       '@types/serve-static': 1.15.7
 
+  '@types/graphviz@0.0.39':
+    dependencies:
+      '@types/node': 20.17.9
+
   '@types/http-errors@2.0.4': {}
 
   '@types/jsonwebtoken@9.0.7':
@@ -2842,6 +2863,10 @@ snapshots:
 
   graceful-fs@4.2.11:
     optional: true
+
+  graphviz@0.0.9:
+    dependencies:
+      temp: 0.4.0
 
   has-property-descriptors@1.0.2:
     dependencies:
@@ -3561,6 +3586,8 @@ snapshots:
       minizlib: 2.1.2
       mkdirp: 1.0.4
       yallist: 4.0.0
+
+  temp@0.4.0: {}
 
   timm@1.7.1: {}
 

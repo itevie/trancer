@@ -32,3 +32,12 @@ export async function getUsername(id: string): Promise<string> {
 export function getIDByUsername(username: string): string | null {
   return Object.entries(username).find((x) => x[1] === username)?.[0];
 }
+
+// Sweeping for adding to cache
+setInterval(() => {
+  for (const [_, user] of client.users.cache) {
+    usernames[user.id] = user.username;
+  }
+
+  fs.writeFileSync(path, JSON.stringify(usernames));
+}, 30000);

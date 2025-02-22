@@ -4,13 +4,14 @@ import {
   ButtonStyle,
   EmbedBuilder,
   Message,
+  MessageCreateOptions,
   MessageEditOptions,
   MessageReplyOptions,
 } from "discord.js";
 
 interface ConfirmActionOptions {
   message: Message<true>;
-  callback: () => Promise<MessageEditOptions>;
+  callback: () => Promise<MessageEditOptions | null>;
   embed: EmbedBuilder;
   autoYes?: boolean;
 }
@@ -19,9 +20,10 @@ export default async function ConfirmAction(
   options: ConfirmActionOptions
 ): Promise<void> {
   if (options.autoYes) {
-    await options.message.reply(
-      (await options.callback()) as MessageReplyOptions
-    );
+    const result = await options.callback();
+    if (result) {
+      await options.message.reply(result as MessageCreateOptions);
+    }
     return;
   }
 

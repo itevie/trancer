@@ -1,8 +1,3 @@
-ALTER TABLE
-    server_settings
-ADD
-    quotes_channel_id TEXT DEFAULT NULL;
-
 -- Server specific stuff
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
@@ -180,6 +175,12 @@ CREATE TABLE IF NOT EXISTS ratelimits (
     user_id TEXT NOT NULL,
     last_used TEXT NOT NULL,
     UNIQUE (user_id, command)
+);
+
+CREATE TABLE IF NOT EXISTS relationships (
+    user1 TEXT NOT NULL,
+    user2 TEXT NOT NULL,
+    type TEXT NOT NULL
 );
 
 -- Global stuff

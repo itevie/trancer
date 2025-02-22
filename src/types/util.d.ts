@@ -20,6 +20,7 @@ export type HypnoCommandType =
   | "games"
   | "actions"
   | "ai"
+  | "marriage"
   | "qotd";
 
 type Guard = "admin" | "bot-server" | "bot-owner";
