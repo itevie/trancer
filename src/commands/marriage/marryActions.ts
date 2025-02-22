@@ -160,8 +160,18 @@ const command: HypnoCommand<{ user: User }> = {
             time: 1000 * 60 * 30,
           });
 
-          collector.on("collect", async () => {
+          collector.on("collect", async (i) => {
             collector.stop();
+
+            if (i.customId === "deny") {
+              return await msg.edit({
+                embeds: [
+                  createEmbed()
+                    .setTitle("So sad...")
+                    .setDescription("They said no"),
+                ],
+              });
+            }
 
             await actions.relationships.set(
               message.author.id,
