@@ -6,6 +6,7 @@ import { getUsernameSync } from "../../util/cachedUsernames";
 
 const customColors = {
   "728714181192187964": "#FFB6C1",
+  "978754785173983252": "#32e8bf",
 };
 
 const command: HypnoCommand<{
@@ -13,6 +14,8 @@ const command: HypnoCommand<{
   user?: User;
   depth?: number;
   connection?: RelationshipType;
+  nocolors?: boolean;
+  for?: User;
 }> = {
   name: "tree",
   description: "View your marriage tree",
@@ -58,6 +61,20 @@ const command: HypnoCommand<{
           "parent",
         ],
       },
+      {
+        name: "nocolors",
+        type: "boolean",
+        aliases: ["nc"],
+        description: "Turn off colors",
+        wickStyle: true,
+      },
+      {
+        name: "for",
+        type: "user",
+        aliases: ["foruser", "with"],
+        description: "Get the relationship with just you and them",
+        wickStyle: true,
+      },
     ],
   },
 
@@ -95,51 +112,57 @@ const command: HypnoCommand<{
       relationships = relationships.filter((x) => x.type === args.connection);
     }
 
-    const nodesAdded: string[] = [];
-    for (const relationship of relationships) {
-      const username1 = getUsernameSync(relationship.user1);
-      const username2 = getUsernameSync(relationship.user2);
-      if (!nodesAdded.includes(relationship.user1)) {
-        let node = g.addNode(username1);
-        node.set("style", "filled");
-        if (username1 === user.username) {
-          node.set("fillcolor", "lightblue");
-          node.set("shape", "diamond");
-        } else {
-          node.set(
-            "fillcolor",
-            customColors[relationship.user1] ?? usernameToBrightHex(username1)
-          );
-        }
-        nodesAdded.push(relationship.user1);
-      }
-      if (!nodesAdded.includes(relationship.user2)) {
-        let node = g.addNode(username2);
-        node.set("style", "filled");
-        if (username2 === user.username) {
-          node.set("fillcolor", "lightblue");
-          node.set("shape", "diamond");
-        } else {
-          node.set(
-            "fillcolor",
-            customColors[relationship.user2] ?? usernameToBrightHex(username2)
-          );
-        }
-        nodesAdded.push(relationship.user2);
-      }
+    if (args.for) {
+      relationships = relationships.filter(
+        (x) =>
+          (x.user1 === user.id && x.user2 === args.for.id) ||
+          (x.user2 === user.id && x.user1 === args.for.id)
+      );
+    }
 
-      const color = {
+    const nodesAdded: string[] = [];
+    for (const { user1, user2, type } of relationships) {
+      const username1 = getUsernameSync(user1);
+      const username2 = getUsernameSync(user2);
+
+      const addNode = (userId, username) => {
+        if (!nodesAdded.includes(userId)) {
+          let node = g.addNode(username);
+          node.set("style", "filled");
+
+          if (username === user.username) {
+            node.set("fillcolor", "lightblue");
+            node.set("shape", "diamond");
+          } else {
+            if (!args.nocolors)
+              node.set(
+                "fillcolor",
+                customColors[userId] ?? usernameToBrightHex(username)
+              );
+          }
+
+          nodesAdded.push(userId);
+        }
+      };
+
+      addNode(user1, username1);
+      addNode(user2, username2);
+
+      const colorMap = {
         married: "pink",
         dating: "purple",
         friends: "green",
         enemies: "red",
         parent: "yellow",
         worships: "grey",
-      }[relationship.type];
+      };
 
+      const color = colorMap[type];
       g.addEdge(username1, username2).set("color", color);
-      if (relationship.type === "married" || relationship.type === "dating")
+
+      if (type === "married" || type === "dating") {
         g.addEdge(username2, username1).set("color", color);
+      }
     }
 
     g.output("png", (buffer) => {
