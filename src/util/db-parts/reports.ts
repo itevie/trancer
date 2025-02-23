@@ -23,6 +23,24 @@ const _actions = {
     );
   },
 
+  delete: async (id: number): Promise<void> => {
+    await database.run("DELETE FROM reports WHERE id = ?", id);
+  },
+
+  getFor: async (id: string): Promise<TrancerReport[]> => {
+    return await database.all<TrancerReport[]>(
+      "SELECT * FROM reports WHERE user = ?",
+      id
+    );
+  },
+
+  getBy: async (id: string): Promise<TrancerReport[]> => {
+    return await database.all<TrancerReport[]>(
+      "SELECT * FROM reports WHERE author = ?",
+      id
+    );
+  },
+
   getById: async (id: number): Promise<TrancerReport | undefined> => {
     return await database.get<TrancerReport>(
       "SELECT * FROM reports WHERE id = ?",

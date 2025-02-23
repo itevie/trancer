@@ -105,9 +105,9 @@ const command: HypnoCommand<{
         },
         {
           dbName: "report_ban_log_channel",
-          human: "Report Ban LogChannel",
+          human: "Report Ban Log Channel",
           description:
-            "Where Trancer should send successful bans (using the report embed)",
+            "Where Trancer should send successful kicks/bans (using the report embed)",
           type: "channel",
         },
         {

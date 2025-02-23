@@ -11,6 +11,7 @@ import { calculateLevel } from "../messageHandlers/xp";
 import { actions } from "../util/database";
 import { generateEmbed } from "../commands/server/startGiveaway";
 import { createEmbed } from "../util/other";
+import config from "../config";
 
 client.on("interactionCreate", async (i) => {
   if (i.isButton()) {
@@ -97,66 +98,73 @@ client.on("interactionCreate", async (i) => {
         //await actions.giveaways.delete(giveaway.id);
       }
     } else if (i.customId.startsWith("reporting-")) {
+      const serverSettings = await actions.serverSettings.getFor(i.guild.id);
       const member = await i.guild.members.fetch(i.member.user.id);
-      const parts = i.customId.match(/reporting-([0-9]+)-([a-z]+)/);
-      const id = parseInt(parts[1]);
-      const type = parts[2];
-      const report = await actions.reports.getById(id);
+      const parts = i.customId.match(/reporting-(\d+)-([a-z]+)/);
+      if (!parts)
+        return await i.reply({ content: "Invalid action", ephemeral: true });
+
+      const report = await actions.reports.getById(parseInt(parts[1]));
       if (!report)
         return await i.reply({
           content: "Failed to fetch the report",
           ephemeral: true,
         });
+
+      const action = parts[2] as "ban" | "kick" | "incorrect";
+
+      if (action === "incorrect") {
+        return i.reply({
+          content: `Please DM <@${config.owner}> your issue with this report`,
+          ephemeral: true,
+        });
+      }
+
+      const permissionMap = {
+        ban: PermissionFlagsBits.BanMembers,
+        kick: PermissionFlagsBits.KickMembers,
+      };
+
+      const userPermission = permissionMap[action];
+      if (!member.permissions.has(userPermission))
+        return await i.reply({
+          content: `You do not have permission to ${action} members`,
+          ephemeral: true,
+        });
+
+      if (!i.guild.members.me.permissions.has(userPermission))
+        return await i.reply({
+          content: `I do not have permission to ${action} members`,
+          ephemeral: true,
+        });
+
       try {
-        console.log(i.guild.members.me.permissions.toArray());
-        switch (type) {
-          case "ban":
-            if (!member.permissions.has(PermissionFlagsBits.BanMembers))
-              return await i.reply({
-                content: "You do not have the ban members permission",
-                ephemeral: true,
-              });
-            if (
-              !i.guild.members.me.permissions.has(
-                PermissionFlagsBits.BanMembers
-              )
-            )
-              return await i.reply({
-                content: "I do not have permissions to ban members",
-                ephemeral: true,
-              });
-            await member.ban({
-              reason: `${report.reason} - (report ID #${report.id})`,
-            });
-            await i.reply({
-              content: "Member banned!",
-            });
-            break;
-          case "kick":
-            if (!member.permissions.has(PermissionFlagsBits.KickMembers))
-              return await i.reply({
-                content: "You do not have the kick members permission",
-                ephemeral: true,
-              });
-            if (
-              !i.guild.members.me.permissions.has(
-                PermissionFlagsBits.KickMembers
-              )
-            )
-              return await i.reply({
-                content: "I do not have permissions to kick members",
-                ephemeral: true,
-              });
-            await member.kick(`${report.reason} - (report ID #${report.id})`);
-            await i.reply({
-              content: "Member kicked!",
-            });
-            break;
+        if (action === "ban") {
+          await i.guild.members.ban(report.user, {
+            reason: `${report.reason} - (report ID #${report.id})`,
+          });
+        } else {
+          const toKick = await i.guild.members.fetch(report.user);
+          await toKick.kick(`${report.reason} - (report ID #${report.id})`);
+        }
+        await i.reply({
+          content: `Member ${action === "ban" ? "bann" : action}ed!`,
+        });
+
+        if (serverSettings.report_ban_log_channel) {
+          const channel = await i.client.channels.fetch(
+            serverSettings.report_ban_log_channel
+          );
+          if (channel.isTextBased()) {
+            await channel.send(
+              await actions.reports.generateEmbed(report, true)
+            );
+          }
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
         await i.reply({
-          content: e.toString(),
+          content: "An error occurred: " + e.toString(),
           ephemeral: true,
         });
       }

@@ -1,19 +1,4 @@
 -- Server specific stuff
-ALTER TABLE
-    server_settings
-ADD
-    report_channel TEXT DEFAULT null;
-
-ALTER TABLE
-    server_settings
-ADD
-    report_trusted BOOLEAN NOT NULL DEFAULT false;
-
-ALTER TABLE
-    server_settings
-ADD
-    report_ban_log_channel TEXT DEFAULT null;
-
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
