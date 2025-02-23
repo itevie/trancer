@@ -26,8 +26,8 @@ const command: HypnoCommand<{ user: User; amount: number }> = {
         infer: true,
       },
       {
-        type: "number",
-        name: "currency",
+        type: "currency",
+        name: "amount",
         onMissing: `Please provide the amount of ${ecoConfig.currency} you want to give`,
       },
     ],
