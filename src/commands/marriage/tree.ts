@@ -180,7 +180,7 @@ const command: HypnoCommand<{
 
 export default command;
 
-function usernameToBrightHex(username: string) {
+export function usernameToBrightHex(username: string) {
   let hash = 0;
 
   // Hash the username into a numeric value

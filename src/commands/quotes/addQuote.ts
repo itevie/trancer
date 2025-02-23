@@ -43,7 +43,7 @@ const command: HypnoCommand = {
     }
 
     // Add to database
-    const quote = await addQuote(ref);
+    const quote = await addQuote(ref, message.author.id);
 
     let embed = await genQuote(quote);
 

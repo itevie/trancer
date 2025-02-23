@@ -3,14 +3,18 @@ import { database } from "../database";
 import { createEmbed } from "../other";
 import { client } from "../..";
 
-export async function addQuote(message: Message): Promise<Quote> {
+export async function addQuote(
+  message: Message,
+  createdBy: string
+): Promise<Quote> {
   await database.run(
-    `INSERT INTO quotes (content, author_id, server_id, message_id, channel_id) VALUES ((?), (?), (?), (?), (?));`,
+    `INSERT INTO quotes (content, author_id, server_id, message_id, channel_id, created_by) VALUES ((?), (?), (?), (?), (?), (?));`,
     message.content,
     message.author.id,
     message.guild.id,
     message.id,
-    message.channel.id
+    message.channel.id,
+    createdBy
   );
   return (await database.get(
     `SELECT * FROM quotes ORDER BY id DESC LIMIT 1`
