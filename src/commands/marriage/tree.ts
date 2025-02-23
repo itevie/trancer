@@ -33,6 +33,7 @@ const command: HypnoCommand<{
       {
         name: "global",
         type: "boolean",
+        aliases: ["g"],
         description:
           "Whether or not to show all relationships, not ones just somehow related to you",
         wickStyle: true,
@@ -40,6 +41,7 @@ const command: HypnoCommand<{
       {
         name: "depth",
         type: "wholepositivenumber",
+        aliases: ["d"],
         description:
           "The depth of relationships, default = 1. Overwritten with ?global",
         wickStyle: true,
@@ -71,7 +73,7 @@ const command: HypnoCommand<{
       {
         name: "for",
         type: "user",
-        aliases: ["foruser", "with"],
+        aliases: ["f", "foruser", "with"],
         description: "Get the relationship with just you and them",
         wickStyle: true,
       },

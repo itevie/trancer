@@ -11,6 +11,8 @@ import ServerList from "./pages/Servers";
 import ServerOptions from "./pages/ServerOptions";
 import UserSettings from "./pages/UserSettings";
 
+window.document.body.style.setProperty("--dawn-neutral-base-color", "300");
+
 export const apiUrl =
   localStorage.getItem("api-url") || `https://trancer.dawn.rest/`;
 export const axiosClient = new AxiosWrapper();
