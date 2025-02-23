@@ -1,4 +1,16 @@
 -- Server specific stuff
+-- ALTER TABLE
+--     server_settings
+-- ADD
+--     report_channel TEXT DEFAULT null;
+-- ALTER TABLE
+--     server_settings
+-- ADD
+--     report_trusted BOOLEAN NOT NULL DEFAULT false;
+-- ALTER TABLE
+--     server_settings
+-- ADD
+--     report_ban_log_channel TEXT DEFAULT null;
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
@@ -18,7 +30,10 @@ CREATE TABLE IF NOT EXISTS server_settings (
     verified_channel_id TEXT DEFAULT NULL,
     auto_ban_keywords TEXT NOT NULL,
     auto_ban_enabled BOOLEAN DEFAULT false,
-    auto_ban_count INT NOT NULL DEFAULT 0
+    auto_ban_count INT NOT NULL DEFAULT 0,
+    report_channel TEXT DEFAULT null,
+    report_trusted BOOLEAN NOT NULL DEFAULT false,
+    report_ban_log_channel TEXT DEFAULT null
 );
 
 CREATE TABLE IF NOT EXISTS star_board (
@@ -87,6 +102,16 @@ CREATE TABLE IF NOT EXISTS giveaway_entries (
     giveaway_id TEXT REFERENCES giveaways(id) NOT NULL,
     author_id TEXT NOT NULL,
     UNIQUE (giveaway_id, author_id)
+);
+
+CREATE TABLE IF NOT EXISTS reports (
+    id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
+    user TEXT NOT NULL,
+    author TEXT NOT NULL,
+    server TEXT NOT NULL,
+    reason TEXT NOT NULL,
+    attachments TEXT NOT NULL,
+    created_at TET NOT NULL
 );
 
 -- User specific stuff

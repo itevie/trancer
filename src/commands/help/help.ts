@@ -1,7 +1,11 @@
-import { MessageCreateOptions, PermissionFlagsBits } from "discord.js";
+import {
+  EmbedField,
+  MessageCreateOptions,
+  PermissionFlagsBits,
+} from "discord.js";
 import { commands } from "../..";
 import { HypnoCommand, HypnoCommandType } from "../../types/util";
-import getAllFiles, { createEmbed } from "../../util/other";
+import getAllFiles, { createEmbed, paginate } from "../../util/other";
 import config from "../../config";
 
 const messageFiles = getAllFiles(__dirname + "/../../topics");
@@ -33,6 +37,7 @@ const categoryEmojis: Record<HypnoCommandType, string> = {
   dawnagotchi: "🏳‍🌈",
   games: "🎮️",
   qotd: "❓",
+  reporting: "⚔️",
   marriage: "💍",
 };
 
@@ -94,41 +99,45 @@ const command: HypnoCommand<{ ignoreGuards: boolean }> = {
       add();
     }
 
-    let text = "";
+    let fields: EmbedField[] = [];
 
     for (const cat in categories) {
       if (cat === "actions") {
-        text += `**${categoryEmojis[cat] || ""} ${cat}**\nSee \`${
-          serverSettings.prefix
-        }action\` to view actions you can play!\n\n`;
+        fields.push({
+          name: `${categoryEmojis[cat] || ""} Actions`,
+          value: `See \`${serverSettings.prefix}action\` to view the actions you can do!`,
+          inline: true,
+        });
       } else {
-        text += `**${categoryEmojis[cat] || ""} ${cat}**\n${categories[cat]
-          .map((x) => `\`${x}\``)
-          .join(", ")}\n\n`;
+        fields.push({
+          name: `${categoryEmojis[cat] || ""} ${cat}`,
+          value: categories[cat].map((x) => `\`${x}\``).join(", "),
+          inline: true,
+        });
       }
     }
 
-    return message.reply({
-      embeds: [
-        createEmbed()
-          .setTitle("Help")
-          .setDescription(
-            `Hello! This is a small bot based around hypnosis, it has a few features, look through them below\n` +
-              `*Use \`${serverSettings.prefix}command <commandname>\` to get details on a command*` +
-              `\n\n${text}`
-          )
-          .addFields([
-            {
-              name: "Topics",
-              value:
-                `Below are the list of topics you can read about, use \`${serverSettings.prefix}topic <topic>\` to learn more about it!\n\n` +
-                Object.keys(messages)
-                  .filter((x) => x.startsWith("help-"))
-                  .map((x) => x.replace("help-", ""))
-                  .join(", "),
-            },
-          ]),
-      ],
+    fields.push({
+      name: "Topics",
+      value:
+        `Below are the list of topics you can read about, use \`${serverSettings.prefix}topic <topic>\` to learn more about it!\n\n` +
+        Object.keys(messages)
+          .filter((x) => x.startsWith("help-"))
+          .map((x) => x.replace("help-", ""))
+          .join(", "),
+      inline: true,
+    });
+
+    return paginate({
+      replyTo: message,
+      embed: createEmbed()
+        .setTitle("Help")
+        .setDescription(
+          `Hello! I'm Trancer, I'm a bot based around hypnosis, but I have plenty of other features too!\n` +
+            `*Use \`${serverSettings.prefix}command <commandname>\` to get details on a command*`
+        ),
+      type: "field",
+      data: fields,
     });
   },
 };

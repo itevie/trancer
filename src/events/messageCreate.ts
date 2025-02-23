@@ -384,6 +384,8 @@ client.on("messageCreate", async (message) => {
               a.split(" ").length === 1
             ) {
               result = args.join(" ");
+            } else if ((arg as StringArgument).takeRest) {
+              result = args.slice(parseInt(i)).join(" ");
             } else {
               result = a;
             }

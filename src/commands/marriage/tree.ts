@@ -51,7 +51,7 @@ const command: HypnoCommand<{
       {
         name: "connection",
         type: "string",
-        aliases: ["c", "con", "type"],
+        aliases: ["c", "t", "con", "type"],
         description: "The kind of relationships to show",
         wickStyle: true,
         oneOf: [

@@ -21,6 +21,7 @@ export type HypnoCommandType =
   | "actions"
   | "ai"
   | "marriage"
+  | "reporting"
   | "qotd";
 
 type Guard = "admin" | "bot-server" | "bot-owner";
@@ -210,6 +211,11 @@ interface StringArgument extends BaseArgument {
    * and put it in this.
    */
   takeContent?: boolean;
+
+  /**
+   * Take the rest of the arguments after this one
+   */
+  takeRest?: boolean;
 }
 
 interface AttachmentArgument extends BaseArgument {

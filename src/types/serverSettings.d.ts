@@ -23,6 +23,10 @@ interface ServerSettings {
   auto_ban_keywords: string;
   auto_ban_enabled: string;
   auto_ban_count: number;
+
+  report_channel: string | null;
+  report_trusted: boolean;
+  report_ban_log_channel: string | null;
 }
 
 interface ChannelImposition {

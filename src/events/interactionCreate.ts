@@ -3,6 +3,7 @@ import {
   ButtonBuilder,
   ButtonStyle,
   Entitlement,
+  PermissionFlagsBits,
   TextChannel,
 } from "discord.js";
 import { client } from "..";
@@ -94,6 +95,70 @@ client.on("interactionCreate", async (i) => {
         });
 
         //await actions.giveaways.delete(giveaway.id);
+      }
+    } else if (i.customId.startsWith("reporting-")) {
+      const member = await i.guild.members.fetch(i.member.user.id);
+      const parts = i.customId.match(/reporting-([0-9]+)-([a-z]+)/);
+      const id = parseInt(parts[1]);
+      const type = parts[2];
+      const report = await actions.reports.getById(id);
+      if (!report)
+        return await i.reply({
+          content: "Failed to fetch the report",
+          ephemeral: true,
+        });
+      try {
+        console.log(i.guild.members.me.permissions.toArray());
+        switch (type) {
+          case "ban":
+            if (!member.permissions.has(PermissionFlagsBits.BanMembers))
+              return await i.reply({
+                content: "You do not have the ban members permission",
+                ephemeral: true,
+              });
+            if (
+              !i.guild.members.me.permissions.has(
+                PermissionFlagsBits.BanMembers
+              )
+            )
+              return await i.reply({
+                content: "I do not have permissions to ban members",
+                ephemeral: true,
+              });
+            await member.ban({
+              reason: `${report.reason} - (report ID #${report.id})`,
+            });
+            await i.reply({
+              content: "Member banned!",
+            });
+            break;
+          case "kick":
+            if (!member.permissions.has(PermissionFlagsBits.KickMembers))
+              return await i.reply({
+                content: "You do not have the kick members permission",
+                ephemeral: true,
+              });
+            if (
+              !i.guild.members.me.permissions.has(
+                PermissionFlagsBits.KickMembers
+              )
+            )
+              return await i.reply({
+                content: "I do not have permissions to kick members",
+                ephemeral: true,
+              });
+            await member.kick(`${report.reason} - (report ID #${report.id})`);
+            await i.reply({
+              content: "Member kicked!",
+            });
+            break;
+        }
+      } catch (e) {
+        console.log(e);
+        await i.reply({
+          content: e.toString(),
+          ephemeral: true,
+        });
       }
     }
   }

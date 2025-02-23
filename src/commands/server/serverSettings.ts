@@ -1,3 +1,4 @@
+import { PermissionFlagsBits } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { createSettingsPage } from "../../util/components/settingsPanel";
 import { actions, database } from "../../util/database";
@@ -15,6 +16,7 @@ const settingsToSql = {
   verifiedmessage: "verified_string",
   verifiedchannel: "verified_channel_id",
   quoteschannel: "quotes_channel_id",
+  reportchannel: "report_channel",
 } as const;
 
 const command: HypnoCommand<{
@@ -94,7 +96,20 @@ const command: HypnoCommand<{
           description: "The contents of the verified message",
           type: "uservarstring",
         },
-
+        {
+          dbName: "report_channel",
+          human: "Report Channel",
+          description:
+            "Where user reports should be sent (needs send, attach and embed perms)",
+          type: "channel",
+        },
+        {
+          dbName: "report_ban_log_channel",
+          human: "Report Ban LogChannel",
+          description:
+            "Where Trancer should send successful bans (using the report embed)",
+          type: "channel",
+        },
         {
           dbName: "sub_role_id",
           human: "Sub Role",
