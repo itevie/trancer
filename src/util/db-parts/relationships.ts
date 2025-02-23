@@ -89,6 +89,17 @@ const _actions = {
       user2
     );
   },
+
+  getFor: async (
+    userId: string,
+    type: RelationshipType
+  ): Promise<Relationship[]> => {
+    return await database.all(
+      `SELECT * FROM relationships WHERE user2 = ? AND type = ?`,
+      userId,
+      type
+    );
+  },
 } as const;
 
 export default _actions;

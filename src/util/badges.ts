@@ -140,6 +140,18 @@ const badges: { [key: string]: Badge } = {
       return cards.length > 0;
     },
   },
+  cult: {
+    name: "Cult Leader",
+    description: "Get 5 people to worship you with the tree feature",
+    emoji: ":pray:",
+    scan: async (user) => {
+      const amount = await actions.relationships.getFor(
+        user.user_id,
+        "worships"
+      );
+      return amount.length >= 5;
+    },
+  },
   "eco#1": {
     name: "Economy #1",
     description: "At economy position #1",
