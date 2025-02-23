@@ -107,11 +107,6 @@ CREATE TABLE IF NOT EXISTS user_favourite_spirals (
     user_id TEXT NOT NULL
 );
 
-ALTER TABLE
-    user_data
-add
-    relationships BOOL NOT NULL DEFAULT true;
-
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,
     guild_id TEXT NOT NULL,

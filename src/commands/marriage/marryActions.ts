@@ -69,7 +69,7 @@ const command: HypnoCommand<{ user: User }> = {
       enemy: "enemies",
       adopt: "parent",
       parent: "parent",
-      child: "child",
+      child: "parent",
       worship: "worships",
     }[_c] as RelationshipType;
 
