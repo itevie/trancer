@@ -176,8 +176,11 @@ const command: HypnoCommand<{ user: User }> = {
                 embeds: [
                   createEmbed()
                     .setTitle("So sad...")
-                    .setDescription("They said no"),
+                    .setDescription(
+                      "Sorry to break it to you... but they said no :broken_heart:"
+                    ),
                 ],
+                components: [],
               });
             }
 

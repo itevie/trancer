@@ -4,6 +4,10 @@ import graphviz from "graphviz";
 import { actions } from "../../util/database";
 import { getUsernameSync } from "../../util/cachedUsernames";
 
+const customColors = {
+  "728714181192187964": "#FFB6C1",
+};
+
 const command: HypnoCommand<{
   global?: boolean;
   user?: User;
@@ -97,17 +101,29 @@ const command: HypnoCommand<{
       const username2 = getUsernameSync(relationship.user2);
       if (!nodesAdded.includes(relationship.user1)) {
         let node = g.addNode(username1);
+        node.set("style", "filled");
         if (username1 === user.username) {
-          node.set("style", "filled");
           node.set("fillcolor", "lightblue");
+          node.set("shape", "diamond");
+        } else {
+          node.set(
+            "fillcolor",
+            customColors[relationship.user1] ?? usernameToBrightHex(username1)
+          );
         }
         nodesAdded.push(relationship.user1);
       }
       if (!nodesAdded.includes(relationship.user2)) {
         let node = g.addNode(username2);
+        node.set("style", "filled");
         if (username2 === user.username) {
-          node.set("style", "filled");
           node.set("fillcolor", "lightblue");
+          node.set("shape", "diamond");
+        } else {
+          node.set(
+            "fillcolor",
+            customColors[relationship.user2] ?? usernameToBrightHex(username2)
+          );
         }
         nodesAdded.push(relationship.user2);
       }
@@ -138,3 +154,33 @@ const command: HypnoCommand<{
 };
 
 export default command;
+
+function usernameToBrightHex(username: string) {
+  let hash = 0;
+
+  // Hash the username into a numeric value
+  for (let i = 0; i < username.length; i++) {
+    hash = username.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  // Extract RGB components from hash
+  let r = (hash >> 16) & 0xff;
+  let g = (hash >> 8) & 0xff;
+  let b = hash & 0xff;
+
+  // **Ensure brightness is above a threshold**
+  const minBrightness = 100; // 0 = black, 255 = white
+
+  // Calculate brightness (perceived luminance formula)
+  let brightness = 0.299 * r + 0.587 * g + 0.114 * b;
+
+  // If too dark, shift values upward
+  if (brightness < minBrightness) {
+    r = (r + minBrightness) % 256;
+    g = (g + minBrightness) % 256;
+    b = (b + minBrightness) % 256;
+  }
+
+  // Convert to hex format
+  return `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
+}
