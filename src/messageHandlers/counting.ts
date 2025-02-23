@@ -6,6 +6,14 @@ import { createEmbed } from "../util/other";
 import config from "../config";
 import Mexp from "math-expression-evaluator";
 
+export function fixMathExpr(content: string) {
+  return content
+    .replace(/[×x]/g, "*")
+    .replace(/[÷]/, "/")
+    .replace(/²/g, "^2")
+    .replace(/\./g, "*");
+}
+
 const handler: HypnoMessageHandler = {
   name: "counter",
   description: "Detects and updates the counting feature in a server",
@@ -19,7 +27,7 @@ const handler: HypnoMessageHandler = {
     // Check if it contains a number
     let number: number | null = null;
     try {
-      number = new Mexp().eval(message.content);
+      number = new Mexp().eval(fixMathExpr(message.content));
     } catch {
       return;
     }
