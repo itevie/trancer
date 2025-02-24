@@ -234,6 +234,7 @@ const items: Record<string, Partial<Item>> = {
     price: 200,
     weight: 0.0001,
     tag: "pickaxe",
+    buyable: false,
     emoji: "<:emerald_pickaxe:1342888386175963248>",
     description: "Gives you 10% extra luck when mining",
   },

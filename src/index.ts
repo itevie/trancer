@@ -50,7 +50,7 @@ export const client = new Client({
 });
 
 import { initInviteCache } from "./events/guildMemberAdd";
-import { initLottery } from "./util/lottery";
+import { initLottery } from "./managers/lottery";
 import { initQotd } from "./util/qotd";
 
 const logger = new Logger("loader");

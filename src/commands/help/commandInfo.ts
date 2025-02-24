@@ -71,6 +71,12 @@ const command: HypnoCommand<{ command: string }> = {
             .map((arg) => {
               let text = `**${arg.wickStyle ? "?" : ""}${arg.name}**`;
               if (arg.description) text += `\n*${arg.description}*`;
+
+              if (arg.aliases)
+                text += `\n- Aliases: ${arg.aliases
+                  .map((x) => `\`?${x}\``)
+                  .join(", ")}`;
+
               text += `\n- Type: ${arg.type}`;
 
               // Infer

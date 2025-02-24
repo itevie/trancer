@@ -1,21 +1,35 @@
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import config from "../config";
-import { actions } from "./database";
+import { actions } from "../util/database";
 import { client } from "..";
 import { TextChannel } from "discord.js";
-import { createEmbed } from "./other";
-import { msToHowLong } from "./ms";
-import { addMoneyFor } from "./actions/economy";
+import { createEmbed } from "../util/other";
+import { msToHowLong } from "../util/ms";
+import { addMoneyFor } from "../util/actions/economy";
 import ecoConfig from "../ecoConfig";
-import { currency } from "./textProducer";
+import { currency } from "../util/textProducer";
+import Manager from "./Manager";
 
 const lotteryFileLocation = __dirname + "/../../lottery.txt";
 
+/*class LotteryManager extends Manager {
+  public name: "lottery";
+
+  public async init() {
+    if (!ecoConfig.lottery.enabled) return false;
+
+    if (!existsSync(lotteryFileLocation))
+      writeFileSync(lotteryFileLocation, new Date(0).toISOString());
+
+    return true;
+  }
+}
+
+const lotteryManager = new LotteryManager();
+export default lotteryManager;*/
+
 export async function initLottery() {
   if (!ecoConfig.lottery.enabled) return;
-
-  if (!existsSync(lotteryFileLocation))
-    writeFileSync(lotteryFileLocation, new Date(0).toISOString());
 
   setInterval(() => {
     checkLottery();
