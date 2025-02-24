@@ -16,6 +16,8 @@ const command: HypnoCommand<{
   connection?: RelationshipType;
   nocolors?: boolean;
   for?: User;
+  outgoing?: boolean;
+  incoming?: boolean;
 }> = {
   name: "tree",
   description: "View your marriage tree",
@@ -77,6 +79,20 @@ const command: HypnoCommand<{
         description: "Get the relationship with just you and them",
         wickStyle: true,
       },
+      {
+        name: "incoming",
+        type: "boolean",
+        aliases: ["i", "inc"],
+        description: "Only show incoming relationships",
+        wickStyle: true,
+      },
+      {
+        name: "outgoing",
+        type: "boolean",
+        aliases: ["o", "out"],
+        description: "Only show outgoing relationships",
+        wickStyle: true,
+      },
     ],
   },
 
@@ -114,6 +130,14 @@ const command: HypnoCommand<{
       relationships = relationships.filter((x) => x.type === args.connection);
     }
 
+    if (args.outgoing) {
+      relationships = relationships.filter((x) => x.user1 === user.id);
+    }
+
+    if (args.incoming) {
+      relationships = relationships.filter((x) => x.user2 === user.id);
+    }
+
     if (args.for) {
       relationships = relationships.filter(
         (x) =>
@@ -127,7 +151,7 @@ const command: HypnoCommand<{
       const username1 = getUsernameSync(user1);
       const username2 = getUsernameSync(user2);
 
-      const addNode = (userId, username) => {
+      const addNode = (userId: string, username: string) => {
         if (!nodesAdded.includes(userId)) {
           let node = g.addNode(username);
           node.set("style", "filled");
