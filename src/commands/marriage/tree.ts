@@ -7,6 +7,12 @@ import { getUsernameSync } from "../../util/cachedUsernames";
 const customColors = {
   "728714181192187964": "#FFB6C1",
   "978754785173983252": "#32e8bf",
+  "1211609576437317652": "#59CEFA",
+};
+
+export const customShapes = {
+  "978754785173983252": "hexagon",
+  "395877903998648322": "cylinder",
 };
 
 const command: HypnoCommand<{
@@ -157,15 +163,17 @@ const command: HypnoCommand<{
         if (!nodesAdded.includes(userId)) {
           let node = g.addNode(username);
           node.set("style", "filled");
+          if (customShapes[userId]) node.set("shape", customShapes[userId]);
 
           if (username === user.username) {
             node.set("fillcolor", "lightblue");
             node.set("shape", "diamond");
+            node.set("penwidth", "3");
           } else {
             if (!args.nocolors)
               node.set(
                 "fillcolor",
-                customColors[userId] ?? usernameToBrightHex(username)
+                customColors[userId] ?? usernameToBrightHex(username, userId)
               );
           }
 
@@ -206,7 +214,9 @@ const command: HypnoCommand<{
 
 export default command;
 
-export function usernameToBrightHex(username: string) {
+export function usernameToBrightHex(username: string, userId?: string) {
+  if (userId && customColors[userId]) return customColors[userId];
+
   let hash = 0;
 
   // Hash the username into a numeric value

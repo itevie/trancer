@@ -3,10 +3,11 @@ import graphviz from "graphviz";
 import { actions } from "../../util/database";
 import { getUsernameSync } from "../../util/cachedUsernames";
 import { AttachmentBuilder } from "discord.js";
-import { usernameToBrightHex } from "../marriage/tree";
+import { customShapes, usernameToBrightHex } from "../marriage/tree";
 
 const command: HypnoCommand = {
   name: "quotegraph",
+  aliases: ["qgraph"],
   description: "Show who quoted who",
   type: "quotes",
 
@@ -25,15 +26,24 @@ const command: HypnoCommand = {
       if (!addedNodes.includes(authorUsername)) {
         addedNodes.push(authorUsername);
         let node = g.addNode(authorUsername);
-        node.set("color", usernameToBrightHex(authorUsername));
+        node.set(
+          "color",
+          usernameToBrightHex(authorUsername, quote.created_by)
+        );
         node.set("style", "filled");
+
+        if (customShapes[quote.created_by])
+          node.set("shape", customShapes[quote.created_by]);
       }
 
       if (!addedNodes.includes(quoteUsername)) {
         addedNodes.push(quoteUsername);
         let node = g.addNode(quoteUsername);
-        node.set("color", usernameToBrightHex(quoteUsername));
+        node.set("color", usernameToBrightHex(quoteUsername, quote.author_id));
         node.set("style", "filled");
+
+        if (customShapes[quote.author_id])
+          node.set("shape", customShapes[quote.author_id]);
       }
 
       g.addEdge(authorUsername, quoteUsername);
