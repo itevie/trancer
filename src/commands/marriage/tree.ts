@@ -115,8 +115,10 @@ const command: HypnoCommand<{
         }
 
         for (const r of _relationships) {
-          if (!relavent.includes(r.user1)) relavent.push(r.user1);
-          if (!relavent.includes(r.user2)) relavent.push(r.user2);
+          if (!relavent.includes(r.user1) && relavent.includes(r.user2))
+            relavent.push(r.user1);
+          if (!relavent.includes(r.user2) && relavent.includes(r.user1))
+            relavent.push(r.user2);
         }
       }
 
