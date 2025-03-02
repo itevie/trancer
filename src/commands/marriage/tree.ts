@@ -13,6 +13,9 @@ const customColors = {
 export const customShapes = {
   "978754785173983252": "hexagon",
   "395877903998648322": "cylinder",
+  "538666562878439435": "star",
+  "1172150765150806046": "tripleoctagon",
+  "506978166657646593": "triangle",
 };
 
 const command: HypnoCommand<{
@@ -167,7 +170,7 @@ const command: HypnoCommand<{
 
           if (username === user.username) {
             node.set("fillcolor", "lightblue");
-            node.set("shape", "diamond");
+            //node.set("shape", "diamond");
             node.set("penwidth", "3");
           } else {
             if (!args.nocolors)

@@ -1,13 +1,28 @@
 import { HypnoCommand } from "../../types/util";
-import { addQuote, genQuote } from "../../util/actions/quotes";
+import { addQuote, genQuote, getQuote } from "../../util/actions/quotes";
 import { database } from "../../util/database";
 import config from "../../config";
+import ConfirmAction from "../../util/components/Confirm";
+import { createEmbed } from "../../util/other";
 
-const command: HypnoCommand = {
+const command: HypnoCommand<{ force?: boolean }> = {
   name: "quote",
   aliases: ["q", "createquote"],
   type: "quotes",
   description: `Reply to a funny message and it will be saved!`,
+
+  args: {
+    requiredArguments: 0,
+    args: [
+      {
+        name: "force",
+        type: "boolean",
+        description: "Force quote",
+        wickStyle: true,
+        aliases: ["f"],
+      },
+    ],
+  },
 
   handler: async (message, { serverSettings }) => {
     // Check for ref
@@ -36,34 +51,36 @@ const command: HypnoCommand = {
       ref.author.id
     );
 
-    if (messageIsSimilar) {
-      return message.reply(
-        `That message is too similar to a quote they already have! (id #${messageIsSimilar.id})`
-      );
-    }
+    ConfirmAction({
+      message,
+      embed: messageIsSimilar
+        ? (await genQuote(messageIsSimilar)).setTitle(
+            "That quote is too similar to this quote! Is it worth it?"
+          )
+        : createEmbed(),
+      autoYes: !messageIsSimilar,
+      async callback() {
+        // Add to database
+        const quote = await addQuote(ref, message.author.id);
 
-    // Add to database
-    const quote = await addQuote(ref, message.author.id);
+        let embed = await genQuote(quote);
 
-    let embed = await genQuote(quote);
-
-    // Check if should send in quotes channel
-    if (serverSettings.quotes_channel_id) {
-      try {
-        let channel = await message.guild.channels.fetch(
-          serverSettings.quotes_channel_id
-        );
-        if (channel.isTextBased()) {
-          await channel.send({
-            embeds: [embed],
-          });
+        // Check if should send in quotes channel
+        if (serverSettings.quotes_channel_id) {
+          try {
+            let channel = await message.guild.channels.fetch(
+              serverSettings.quotes_channel_id
+            );
+            if (channel.isTextBased()) {
+              await channel.send({
+                embeds: [embed],
+              });
+            }
+          } catch {}
         }
-      } catch {}
-    }
 
-    // Done
-    return message.reply({
-      embeds: [embed],
+        return { embeds: [embed] };
+      },
     });
   },
 };
