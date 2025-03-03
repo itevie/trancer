@@ -3,6 +3,7 @@ import { HypnoCommand } from "../../types/util";
 import graphviz from "graphviz";
 import { actions } from "../../util/database";
 import { getUsernameSync } from "../../util/cachedUsernames";
+import { colorMap } from "../../util/marriage";
 
 const customColors = {
   "728714181192187964": "#FFB6C1",
@@ -131,6 +132,22 @@ const command: HypnoCommand<{
         }
       }
 
+      if (args.depth) {
+        for (const r of relationships) {
+          if (
+            !_relationships.includes(r) &&
+            _relationships.some(
+              (x) => x.user1 === r.user1 || x.user2 === r.user1
+            ) &&
+            _relationships.some(
+              (x) => x.user1 === r.user2 || x.user2 === r.user2
+            )
+          ) {
+            _relationships.push(r);
+          }
+        }
+      }
+
       relationships = _relationships;
       /*relationships = relationships.filter((x) =>
           relavent.some((y) => y === x.user1 || y === x.user2)
@@ -187,15 +204,6 @@ const command: HypnoCommand<{
       addNode(user1, username1);
       addNode(user2, username2);
 
-      const colorMap = {
-        married: "pink",
-        dating: "purple",
-        friends: "green",
-        enemies: "red",
-        parent: "yellow",
-        worships: "grey",
-      };
-
       const color = colorMap[type];
       g.addEdge(username1, username2).set("color", color);
 
@@ -208,7 +216,7 @@ const command: HypnoCommand<{
       const attachment = new AttachmentBuilder(buffer).setFile(buffer);
 
       return message.reply({
-        content: `:green_heart: = Friends :heart: = Enemies :purple_heart: = Dating :pink_heart: = Partners :yellow_heart: = Parent for :grey_heart: = Worships`,
+        content: `:green_heart: = Friends :heart: = Enemies :purple_heart: = Dating :pink_heart: = Partners :yellow_heart: = Parent for :grey_heart: = Worships :light_blue_heart: = Owner of`,
         files: [attachment],
       });
     });

@@ -5,7 +5,7 @@ import { createEmbed, getUser, paginate } from "../../util/other";
 const command: HypnoCommand<{ query: string }> = {
   name: "searchquotes",
   aliases: ["squote", "quotesearch"],
-  description: "Search quotes by words",
+  description: "Search quotes by words in the current server",
   type: "quotes",
 
   args: {

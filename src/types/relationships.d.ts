@@ -4,6 +4,7 @@ declare type RelationshipType =
   | "friends"
   | "enemies"
   | "parent"
+  | "owner"
   | "worships";
 
 declare interface Relationship {

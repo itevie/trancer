@@ -2,7 +2,7 @@ import { HypnoCommand } from "../../types/util";
 import { database } from "../../util/database";
 
 const command: HypnoCommand<{ state: boolean }> = {
-  name: "showmyquotes",
+  name: "showmyquotesonsite",
   aliases: ["showmyquotesonsite", "siteopt"],
   description: "Opt out of your quotes being shown on the website",
   type: "quotes",

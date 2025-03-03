@@ -3,8 +3,12 @@ import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
 import ConfirmAction from "../../util/components/Confirm";
 import { createEmbed } from "../../util/other";
+import {
+  marriageEmojis,
+  relationshipArrayToEmojiArray,
+} from "../../util/marriage";
 
-const command: HypnoCommand<{ user?: User }> = {
+const command: HypnoCommand<{ user: User; type?: RelationshipType }> = {
   name: "removerelationship",
   aliases: ["rmrelationship", "rmr", "remover"],
   description: "Deletes a relationship (two way)",
@@ -17,6 +21,11 @@ const command: HypnoCommand<{ user?: User }> = {
         name: "user",
         type: "user",
         infer: true,
+      },
+      {
+        name: "type",
+        type: "string",
+        oneOf: Object.keys(marriageEmojis),
       },
     ],
   },
@@ -34,28 +43,58 @@ const command: HypnoCommand<{ user?: User }> = {
     if (!relationship && !relationship2)
       return message.reply(`You two do not have any sort of relationship.`);
 
+    if (args.type) {
+      if (
+        !relationship.some((x) => x.type === args.type) &&
+        !relationship2.some((x) => x.type === args.type)
+      )
+        return message.reply(
+          `You do not have that type of relationship with them!`
+        );
+
+      ConfirmAction({
+        message,
+        embed: createEmbed()
+          .setTitle("Are you sure?")
+          .setDescription(
+            `Are you sure you want to remove that type of connection?`
+          ),
+        async callback() {
+          await actions.relationships.deleteType(
+            message.author.id,
+            args.user.id,
+            args.type
+          );
+          return {
+            embeds: [
+              createEmbed()
+                .setTitle("Connection removed!")
+                .setDescription("That type of connection has been removed!"),
+            ],
+          };
+        },
+      });
+
+      return;
+    }
+
     ConfirmAction({
       message,
       embed: createEmbed()
         .setTitle(`Remove relationship`)
         .setDescription(
           `Are you sure you want to remove your relationship?\n\nYou :arrow_right: them: ${
-            relationship ? `${relationship.type}` : ":x:"
+            relationship
+              ? `${relationshipArrayToEmojiArray(relationship).join("")}`
+              : ":x:"
           }\nThem :arrow_right: you: ${
-            relationship2 ? `${relationship2.type}` : ":x:"
+            relationship2
+              ? `${relationshipArrayToEmojiArray(relationship2).join("")}`
+              : ":x:"
           }`
         ),
       async callback() {
-        if (relationship)
-          await actions.relationships.delete(
-            relationship.user1,
-            relationship.user2
-          );
-        if (relationship2)
-          await actions.relationships.delete(
-            relationship2.user1,
-            relationship2.user2
-          );
+        await actions.relationships.deleteFor(message.author.id, args.user.id);
 
         return {
           embeds: [

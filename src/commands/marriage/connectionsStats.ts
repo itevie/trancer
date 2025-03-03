@@ -1,14 +1,9 @@
 import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
-
-const emojis: Record<RelationshipType, string> = {
-  dating: ":purple_heart:",
-  married: ":pink_heart:",
-  friends: ":green_heart:",
-  enemies: ":red_heart:",
-  worships: ":grey_heart:",
-  parent: ":yellow_heart:",
-};
+import {
+  marriageEmojis,
+  relationshipArrayToEmojiArray,
+} from "../../util/marriage";
 
 const command: HypnoCommand = {
   name: "connectionstats",
@@ -30,15 +25,17 @@ const command: HypnoCommand = {
 
       if (done.includes(p1) || done.includes(p2)) continue;
 
-      const secondary = relationships.find(
-        (x) => x.user1 === part.user2 && x.user2 === part.user1
+      const all = relationships.filter(
+        (x) =>
+          (x.user1 === part.user1 && x.user2 === part.user2) ||
+          (x.user1 === part.user2 && x.user2 === part.user1)
       );
 
-      if (!secondary) continue;
+      if (all.length === 1) continue;
 
       done.push(p1, p2);
 
-      const key = [emojis[part.type], emojis[secondary.type]].sort().join("-");
+      const key = relationshipArrayToEmojiArray(all).join("");
       if (!muturals[key]) muturals[key] = 0;
       muturals[key]++;
     }
@@ -47,7 +44,7 @@ const command: HypnoCommand = {
       "**List of relationships:**\n" +
         Object.entries(singles)
           .sort((a, b) => b[1] - a[1])
-          .map((x) => `${emojis[x[0]]}: ${x[1]}`)
+          .map((x) => `${marriageEmojis[x[0]]}: ${x[1]}`)
           .join("\n") +
         `\n\n**Mutural relationship types:**\n` +
         Object.entries(muturals)

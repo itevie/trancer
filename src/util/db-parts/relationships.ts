@@ -40,11 +40,16 @@ const _actions = {
     );
   },
 
-  current: async (
-    user1: string,
-    user2: string
-  ): Promise<Relationship | undefined> => {
-    return await database.get<Relationship>(
+  current: async (user1: string, user2: string): Promise<Relationship[]> => {
+    return await database.all<Relationship[]>(
+      "SELECT * FROM relationships WHERE user1 = ? AND user2 = ?",
+      user1,
+      user2
+    );
+  },
+
+  currentFor: async (user1: string, user2: string): Promise<Relationship[]> => {
+    return await database.all<Relationship[]>(
       "SELECT * FROM relationships WHERE user1 = ? AND user2 = ?",
       user1,
       user2
@@ -78,6 +83,33 @@ const _actions = {
     );
   },
 
+  add: async (
+    user1: string,
+    user2: string,
+    type: RelationshipType
+  ): Promise<void> => {
+    if (type === "married" || type === "dating" || type === "parent") {
+      await database.run(
+        "DELETE FROM relationships WHERE user1 = ? AND user2 = ?",
+        user2,
+        user1
+      );
+    }
+
+    /*await database.run(
+      "DELETE FROM relationships WHERE user1 = ? AND user2 = ?",
+      user1,
+      user2
+    );*/
+
+    await database.run(
+      `INSERT INTO relationships (user1, user2, type) VALUES (?, ?, ?)`,
+      user1,
+      user2,
+      type
+    );
+  },
+
   getAll: async (): Promise<Relationship[]> => {
     return await database.all<Relationship[]>("SELECT * FROM relationships");
   },
@@ -87,6 +119,31 @@ const _actions = {
       `DELETE FROM relationships WHERE user1 = ? AND user2 = ?`,
       user1,
       user2
+    );
+  },
+
+  deleteFor: async (user1: string, user2: string): Promise<void> => {
+    await database.run(
+      `DELETE FROM relationships WHERE (user1 = ? AND user2 = ?) OR (user2 = ? AND user1 = ?) `,
+      user1,
+      user2,
+      user1,
+      user2
+    );
+  },
+
+  deleteType: async (
+    user1: string,
+    user2: string,
+    type: RelationshipType
+  ): Promise<void> => {
+    await database.run(
+      `DELETE FROM relationships WHERE ((user1 = ? AND user2 = ?) OR (user2 = ? AND user1 = ?)) AND type = ?`,
+      user1,
+      user2,
+      user1,
+      user2,
+      type
     );
   },
 

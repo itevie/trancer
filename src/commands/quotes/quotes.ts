@@ -6,7 +6,7 @@ import { createEmbed, paginate } from "../../util/other";
 const command: HypnoCommand<{ user?: User; all?: boolean; search?: string }> = {
   name: "quotes",
   description: "Get amount of quotes / IDs from a user",
-  aliases: ["qs"],
+  aliases: ["qs", "getquotes", "getquotefor", "myquotes"],
   type: "quotes",
   args: {
     requiredArguments: 0,
@@ -34,7 +34,7 @@ const command: HypnoCommand<{ user?: User; all?: boolean; search?: string }> = {
     const user = args.user ? args.user : message.author;
 
     if (args.all && user.id !== message.author.id)
-      return message.reply(`You cannot add "all"`);
+      return message.reply(`You cannot add \`?all\``);
 
     const list = (
       args.all
@@ -48,7 +48,9 @@ const command: HypnoCommand<{ user?: User; all?: boolean; search?: string }> = {
             message.guild.id
           )
     )
-      .filter((x) => !["1274172930380664963"].includes(x.server_id))
+      .filter((x) =>
+        args.all ? true : !["1274172930380664963"].includes(x.server_id)
+      )
       .filter(
         (x) =>
           !args.search ||
