@@ -3,7 +3,7 @@ import { HypnoCommand } from "../../types/util";
 import graphviz from "graphviz";
 import { actions } from "../../util/database";
 import { getUsernameSync } from "../../util/cachedUsernames";
-import { colorMap } from "../../util/marriage";
+import { colorMap, marriageEmojis } from "../../util/marriage";
 
 const customColors = {
   "728714181192187964": "#FFB6C1",
@@ -66,14 +66,7 @@ const command: HypnoCommand<{
         aliases: ["c", "t", "con", "type"],
         description: "The kind of relationships to show",
         wickStyle: true,
-        oneOf: [
-          "dating",
-          "married",
-          "friends",
-          "enemies",
-          "worships",
-          "parent",
-        ],
+        oneOf: Object.keys(marriageEmojis),
       },
       {
         name: "nocolors",

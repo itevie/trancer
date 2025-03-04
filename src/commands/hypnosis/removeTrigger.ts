@@ -1,6 +1,8 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { actions, database } from "../../util/database";
+import ConfirmAction from "../../util/components/Confirm";
+import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand<{
   trigger: string;
@@ -49,12 +51,27 @@ const command: HypnoCommand<{
         return message.reply(
           `:warning: Dangerous action! Please provide the confirm option that you want to **delete all your triggers** from the bot.`
         );
-
-      await database.run(
-        `DELETE FROM user_imposition WHERE user_id = ?;`,
-        user.id
-      );
-      return message.reply(`All your triggers have been removed!`);
+      return ConfirmAction({
+        message,
+        embed: createEmbed()
+          .setTitle("Confirm action")
+          .setDescription(
+            "Are you sure you want to delete all of your triggers?"
+          ),
+        async callback() {
+          await database.run(
+            `DELETE FROM user_imposition WHERE user_id = ?;`,
+            user.id
+          );
+          return {
+            embeds: [
+              createEmbed()
+                .setTitle("Deleted triggers")
+                .setDescription("Deleted all of your triggers!"),
+            ],
+          };
+        },
+      });
     }
 
     // Check if already has it

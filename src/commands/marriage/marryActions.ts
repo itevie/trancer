@@ -186,7 +186,7 @@ const command: HypnoCommand<{ user: User }> = {
         const title = {
           parent: "Adoption Report",
           owner: "Pet Adoption Report",
-          date: "The beginning of something great",
+          dating: "The beginning of something great",
           married: "Together forever",
         }[type];
 
@@ -194,7 +194,7 @@ const command: HypnoCommand<{ user: User }> = {
           parent: `**${message.author.username}** is now the legal (fake legal for legal purposes) guardian of **${args.user.username}**`,
           owner: `**${message.author.username}** is now the owner of **${args.user.username}**`,
           married: `You two are now married together forever <3`,
-          date: "You two are now dating! How sweet! <3",
+          dating: "You two are now dating! How sweet! <3",
         }[type];
 
         await msg.edit({
