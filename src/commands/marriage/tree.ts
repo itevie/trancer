@@ -17,6 +17,7 @@ export const customShapes = {
   "538666562878439435": "star",
   "1172150765150806046": "tripleoctagon",
   "506978166657646593": "triangle",
+  "1317564797214134296": "folder",
 };
 
 const command: HypnoCommand<{
