@@ -1,4 +1,9 @@
 -- Server specific stuff
+ALTER TABLE
+    server_settings
+ADD
+    status_theme TEXT NOT NULL DEFAULT 'circles';
+
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
@@ -21,7 +26,8 @@ CREATE TABLE IF NOT EXISTS server_settings (
     auto_ban_count INT NOT NULL DEFAULT 0,
     report_channel TEXT DEFAULT null,
     report_trusted BOOLEAN NOT NULL DEFAULT false,
-    report_ban_log_channel TEXT DEFAULT null
+    report_ban_log_channel TEXT DEFAULT null,
+    status_theme TEXT NOT NULL DEFAULT 'circles'
 );
 
 CREATE TABLE IF NOT EXISTS blacklisted (

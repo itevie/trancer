@@ -1,15 +1,16 @@
 import { HypnoCommand } from "../../types/util";
 import { database } from "../../util/database";
+import statusThemes from "../../util/statusThemes";
 
 const typeMap = {
-  red: "🔴",
-  r: "🔴",
-  yellow: "🟡",
-  orange: "🟡",
-  y: "🟡",
-  o: "🟡",
-  green: "🟢",
-  g: "🟢",
+  red: "red",
+  r: "red",
+  yellow: "orange",
+  orange: "orange",
+  y: "orange",
+  o: "orange",
+  green: "green",
+  g: "green",
 } as const;
 
 const dbMap = {
@@ -47,7 +48,9 @@ const command: HypnoCommand<{
     ],
   },
 
-  handler: async (message, { args }) => {
+  handler: async (message, { args, serverSettings }) => {
+    const emojis = statusThemes[serverSettings.status_theme];
+
     await database.run(
       `UPDATE user_data SET hypno_status = ? WHERE user_id = ?;`,
       dbMap[args.type],
@@ -77,7 +80,7 @@ const command: HypnoCommand<{
 
       try {
         await message.member.setNickname(
-          currentNickname.trim() + ` (${typeMap[args.type]})`
+          currentNickname.trim() + ` (${emojis[typeMap[args.type]]})`
         );
       } catch (e) {
         return await message.reply(

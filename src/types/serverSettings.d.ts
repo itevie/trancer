@@ -27,6 +27,8 @@ interface ServerSettings {
   report_channel: string | null;
   report_trusted: boolean;
   report_ban_log_channel: string | null;
+
+  status_theme: string;
 }
 
 interface ChannelImposition {

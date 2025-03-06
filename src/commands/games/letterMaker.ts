@@ -141,7 +141,7 @@ const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
     }
 
     collector.on("collect", async (m) => {
-      if (!check(m.content, requiredLetters)) return;
+      if (!check(m.content.toLowerCase(), requiredLetters)) return;
       const reward =
         randomFromRange(
           ecoConfig.payouts.letterMaker.min,
