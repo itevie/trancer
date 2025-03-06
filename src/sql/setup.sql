@@ -1,9 +1,4 @@
 -- Server specific stuff
-ALTER TABLE
-    server_settings
-ADD
-    status_theme TEXT NOT NULL DEFAULT 'circles';
-
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',

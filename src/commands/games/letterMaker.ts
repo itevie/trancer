@@ -153,7 +153,7 @@ const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
           createEmbed()
             .setTitle("Make The Word")
             .setDescription(
-              `Welldone! **${message.author.username}** made the word **${
+              `Welldone! **${m.author.username}** made the word **${
                 m.content
               }**! You got ${currency(
                 reward
