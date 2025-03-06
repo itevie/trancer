@@ -113,6 +113,12 @@ const ecoConfig = {
       max: 15,
       punishment: 15,
     },
+
+    letterMaker: {
+      name: "playing Letter Maker",
+      min: 5,
+      max: 7,
+    },
   },
 } as const;
 

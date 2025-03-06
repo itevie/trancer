@@ -33,3 +33,9 @@ CREATE TABLE IF NOT EXISTS member_count (
     server_id TEXT NOT NULL,
     amount INT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS word_usage (
+    word TEXT NOT NULL,
+    amount INT NOT NULL DEFAULT 0,
+    date TEXT NOT NULL
+);

@@ -1,0 +1,197 @@
+import { readFileSync } from "fs";
+import { HypnoCommand } from "../../types/util";
+
+import { createEmbed, randomFromRange } from "../../util/other";
+import ecoConfig from "../../ecoConfig";
+import { currency } from "../../util/textProducer";
+import { addMoneyFor } from "../../util/actions/economy";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
+const words = new Set(
+  readFileSync(__dirname + "/../../data/words.txt", "utf8")
+    .split("\n")
+    .map((word) => word.trim())
+);
+const sortedWords = Array.from(words).sort((a, b) => a.length - b.length);
+
+const modes = {
+  easy: {
+    letters: "abcdefghijklmnoprstu",
+    min: 2,
+    max: 3,
+    period: 30000,
+  },
+  normal: {
+    letters: "abcdefghijklmnoprstuvyz",
+    min: 2,
+    max: 4,
+    period: 20000,
+  },
+  hard: {
+    letters: "abcdefghijklmnopqrstuvwxyz",
+    min: 2,
+    max: 5,
+    period: 15000,
+  },
+} as const;
+
+const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
+  name: "lettermaker",
+  aliases: ["lm"],
+  description:
+    "You are given some letters and must provide a word with all of them in it!",
+  type: "games",
+
+  args: {
+    requiredArguments: 0,
+    args: [
+      {
+        name: "mode",
+        type: "string",
+        oneOf: Object.keys(modes),
+      },
+    ],
+  },
+
+  handler: async (message, { args }) => {
+    const modeName = args.mode ?? "easy";
+    const mode = modes[modeName];
+    const vowels = "aeiou";
+    const consonants = mode.letters.replace(/[aeiou]/g, "");
+
+    const requiredLetters: string[] = [];
+    const addLetter = () => {
+      requiredLetters.push(
+        Math.random() < 0.6
+          ? vowels[Math.floor(Math.random() * vowels.length)]
+          : consonants[Math.floor(Math.random() * consonants.length)]
+      );
+    };
+
+    addLetter();
+    addLetter();
+
+    for (let i = 0; i < mode.max && requiredLetters.length < mode.max; i++) {
+      if (Math.random() > 0.8) {
+        addLetter();
+      }
+    }
+
+    const msg = await message.reply({
+      embeds: [
+        createEmbed()
+          .setTitle("Make The Word!")
+          .setDescription(
+            `Make a word with the following letters:\n\n**${requiredLetters
+              .join(" ")
+              .toUpperCase()}**\n\nYou have **${
+              mode.period / 1000
+            } seconds** to make a word!`
+          ),
+      ],
+      components: [
+        // @ts-ignore
+        new ActionRowBuilder().addComponents(
+          new ButtonBuilder()
+            .setCustomId("give-up")
+            .setLabel("Give Up")
+            .setStyle(ButtonStyle.Danger)
+        ),
+      ],
+    });
+
+    const collector = msg.channel.createMessageCollector({
+      time: mode.period,
+    });
+
+    const interactionCollector = msg.createMessageComponentCollector({
+      time: mode.period,
+    });
+
+    interactionCollector.on("collect", async (interaction) => {
+      if (interaction.customId === "give-up") {
+        collector.stop("time");
+        interactionCollector.stop();
+        await interaction.deferUpdate();
+      }
+    });
+
+    function check(word: string, letters: string[]): boolean {
+      const neededLetters = [...letters];
+      if (!words.has(word)) return false;
+      for (const [k, v] of neededLetters.entries()) {
+        if (word.includes(v)) {
+          word = word.replace(v, "");
+          neededLetters[k] = null;
+        }
+      }
+
+      return !neededLetters.some((x) => x !== null);
+    }
+
+    function makeExamples(): string[] {
+      let examples: string[] = [];
+      for (const word of sortedWords) {
+        if (check(word, requiredLetters)) {
+          examples.push(word);
+          if (examples.length >= 15) break;
+        }
+      }
+
+      return examples;
+    }
+
+    collector.on("collect", async (m) => {
+      if (!check(m.content, requiredLetters)) return;
+      const reward =
+        randomFromRange(
+          ecoConfig.payouts.letterMaker.min,
+          ecoConfig.payouts.letterMaker.max
+        ) * requiredLetters.length;
+
+      await msg.edit({
+        embeds: [
+          createEmbed()
+            .setTitle("Make The Word")
+            .setDescription(
+              `Welldone! **${message.author.username}** made the word **${
+                m.content
+              }**! You got ${currency(
+                reward
+              )}\n\nThe required letters were: **${requiredLetters
+                .join(" ")
+                .toUpperCase()}**`
+            ),
+        ],
+      });
+      await addMoneyFor(m.author.id, reward);
+      await m.react("✅");
+      collector.stop();
+    });
+
+    collector.on("end", async (_, reason) => {
+      const examples = makeExamples();
+
+      if (reason === "time") {
+        await msg.edit({
+          embeds: [
+            createEmbed()
+              .setTitle("Make The Word")
+              .setDescription(
+                `Time's up! No one made a word!\n\nThe required letters were:\n\n **${requiredLetters
+                  .join(" ")
+                  .toUpperCase()}**${
+                  examples.length !== 0
+                    ? "\n\nHere are some examples of words you could have made:\n\n" +
+                      examples.map((x) => `**${x}**`).join(", ")
+                    : ""
+                }`
+              ),
+          ],
+          components: [],
+        });
+      }
+    });
+  },
+};
+
+export default command;

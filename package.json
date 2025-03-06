@@ -48,6 +48,7 @@
     "passport-discord": "^0.1.4",
     "pretty-ms": "^9.1.0",
     "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "word-list": "^4.1.0"
   }
 }
