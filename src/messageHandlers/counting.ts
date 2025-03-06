@@ -7,11 +7,7 @@ import config from "../config";
 import Mexp from "math-expression-evaluator";
 
 export function fixMathExpr(content: string) {
-  return content
-    .replace(/[×x]/g, "*")
-    .replace(/[÷]/, "/")
-    .replace(/²/g, "^2")
-    .replace(/\./g, "*");
+  return content.replace(/[×x]/g, "*").replace(/[÷]/, "/").replace(/²/g, "^2");
 }
 
 const handler: HypnoMessageHandler = {
