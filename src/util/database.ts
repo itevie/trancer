@@ -17,6 +17,7 @@ import decks from "./db-parts/decks";
 import giveaways from "./db-parts/giveaways";
 import relationships from "./db-parts/relationships";
 import reports from "./db-parts/reports";
+import blacklist from "./db-parts/blacklist";
 
 export let database: Database<sqlite3.Database, Statement>;
 export const databaseLogger = new Logger("database");
@@ -34,6 +35,7 @@ export const actions = {
   giveaways,
   relationships,
   reports,
+  blacklist,
 } as const;
 
 export async function connect(): Promise<void> {

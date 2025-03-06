@@ -28,6 +28,28 @@ const command: HypnoCommand<{ command?: string; value?: string }> = {
 
   handler: async (message, { args, serverSettings }) => {
     if (!args.command) {
+      const commands = [
+        { name: "enable", description: "Enables the autoban" },
+        { name: "disable", description: "Disables the autoban" },
+        { name: "list", description: "List the keywords that are blocked" },
+        { name: "add phrase", description: 'Adds "phrase" to the ban list' },
+        {
+          name: "remove phrase",
+          description: 'Removes "phrase" from the ban list',
+        },
+        {
+          name: "test username",
+          description: "Check if autoban detects a username",
+        },
+      ];
+
+      const commandList = commands
+        .map(
+          (cmd) =>
+            `\`${serverSettings.prefix}autoban ${cmd.name}\` - ${cmd.description}`
+        )
+        .join("\n");
+
       return message.reply({
         embeds: [
           createEmbed()
@@ -43,18 +65,11 @@ const command: HypnoCommand<{ command?: string; value?: string }> = {
             .addFields([
               {
                 name: "Commands",
-                value: [
-                  `\`${serverSettings.prefix}autoban enable\` - Enables the autoban`,
-                  `\`${serverSettings.prefix}autoban disable\` - Disables the autoban`,
-                  `\`${serverSettings.prefix}autoban list\` - List the keywords that are blocked`,
-                  `\`${serverSettings.prefix}autoban add phrase\` - Adds "phrase" to the ban list`,
-                  `\`${serverSettings.prefix}autoban remove phrase\` - Removes "phrase" from the ban list`,
-                  `\`${serverSettings.prefix}autoban test username\` - Check if autoban detects a username`,
-                ].join("\n"),
+                value: commandList,
               },
               {
                 name: "How",
-                value: `When a user joins, it removes all whitespace from a their username & display name, and checks if any of the registered phrases match it, then bans them if so.`,
+                value: `When a user joins, it removes all whitespace from their username & display name, and checks if any of the registered phrases match it, then bans them if so.`,
               },
               {
                 name: "Count",

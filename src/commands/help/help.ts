@@ -16,7 +16,7 @@ for (const messageFile of messageFiles) {
   messages[name] = messageImport;
 }
 
-const categoryEmojis: Record<HypnoCommandType, string> = {
+export const categoryEmojis: Record<HypnoCommandType, string> = {
   ai: "🤖",
   actions: "👊",
   uncategorised: "❓",

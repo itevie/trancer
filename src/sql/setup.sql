@@ -24,6 +24,12 @@ CREATE TABLE IF NOT EXISTS server_settings (
     report_ban_log_channel TEXT DEFAULT null
 );
 
+CREATE TABLE IF NOT EXISTS blacklisted (
+    server_id TEXT NOT NULL,
+    type TEXT NOT NULL,
+    key TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS star_board (
     server_id TEXT NOT NULL,
     emoji TEXT NOT NULL DEFAULT '⭐',

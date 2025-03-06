@@ -124,6 +124,14 @@ client.on("messageCreate", async (message) => {
     return;
   }
 
+  // Check blacklisted
+  if (
+    await actions.blacklist.getFor("category", message.guild.id, command.type)
+  )
+    return message.reply(
+      `Sorry! But the category of this command (${command.type}) is disabled!`
+    );
+
   // Check guards
   if (command.type === "ai" && !config.modules.ai.enabled)
     return await message.reply("AI is disabled!");
