@@ -16,7 +16,7 @@ const sortedWords = Array.from(words).sort((a, b) => a.length - b.length);
 const modes = {
   easy: {
     letters: "abcdefghijklmnoprstu",
-    min: 2,
+    min: 1,
     max: 3,
     period: 30000,
   },
@@ -28,7 +28,7 @@ const modes = {
   },
   hard: {
     letters: "abcdefghijklmnopqrstuvwxyz",
-    min: 2,
+    min: 3,
     max: 5,
     period: 15000,
   },
@@ -67,8 +67,9 @@ const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
       );
     };
 
-    addLetter();
-    addLetter();
+    for (let i = 0; i < mode.min; i++) {
+      addLetter();
+    }
 
     for (let i = 0; i < mode.max && requiredLetters.length < mode.max; i++) {
       if (Math.random() > 0.8) {
