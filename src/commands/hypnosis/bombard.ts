@@ -64,6 +64,8 @@ const command: HypnoCommand<{
       {
         name: "length",
         type: "number",
+        min: 0.1,
+        max: 5,
         description: "How long you want the bombard to go on for",
       },
       {
