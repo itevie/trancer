@@ -162,6 +162,7 @@ const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
                 .toUpperCase()}**`
             ),
         ],
+        components: [],
       });
       await addMoneyFor(m.author.id, reward);
       await m.react("✅");
