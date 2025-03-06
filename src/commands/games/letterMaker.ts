@@ -36,7 +36,7 @@ const modes = {
 
 const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
   name: "lettermaker",
-  aliases: ["lm"],
+  aliases: ["lm", "im", "wordmaker", "wm"],
   description:
     "You are given some letters and must provide a word with all of them in it!",
   type: "games",
