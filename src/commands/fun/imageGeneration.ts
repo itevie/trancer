@@ -2,6 +2,7 @@ import { AttachmentBuilder, Message, User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import DIG from "discord-image-generation";
 import {
+  createRotatingGifBuffer,
   generateNotImmuneImage,
   generateSpeechbubbleImage,
 } from "../../util/imageGeneration";
@@ -18,6 +19,7 @@ let imageFunctions = {
   ...DIG,
   NotImmune: genClass(generateNotImmuneImage),
   SpeechBubble: genClass(generateSpeechbubbleImage),
+  Rotate: genClass(createRotatingGifBuffer),
 };
 
 export let allowed: Record<string, string> = {
@@ -49,6 +51,7 @@ export let allowed: Record<string, string> = {
   notimmune: "NotImmune",
   speechbubble: "SpeechBubble",
   bubble: "SpeechBubble",
+  rotate: "Rotate",
 };
 
 const command: HypnoCommand<{

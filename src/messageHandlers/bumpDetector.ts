@@ -52,6 +52,7 @@ const handler: HypnoMessageHandler = {
   botsOnly: true,
 
   handler: async (message) => {
+    const settings = await actions.serverSettings.getFor(message.guild.id);
     // Check if the message is sent by Disboard & the embed contains "Bump done!"
     if (
       message.author.id === "302050872383242240" &&
@@ -101,7 +102,7 @@ const handler: HypnoMessageHandler = {
               ),
           ],
         });
-      } else {
+      } else if (settings.remind_bumps) {
         await message.reply({
           embeds: [
             createEmbed()

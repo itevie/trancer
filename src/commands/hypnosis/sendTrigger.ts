@@ -41,7 +41,10 @@ const command: HypnoCommand<{ user?: User }> = {
         `:warning: I couldn't get a random trigger for you. Either:\n1. You have no imposition setup (use \`${serverSettings.prefix}addi defaults\` to add defaults)\n2. Your hypno status is not green`
       );
 
-    return message.reply(random.what);
+    return message.reply(
+      `${user !== message.author.id ? `${args.user.username}:` : ""}` +
+        random.what
+    );
   },
 };
 

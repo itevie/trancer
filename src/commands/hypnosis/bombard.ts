@@ -31,6 +31,12 @@ const dropping = [
     "with every exhale... it's as if... you're blowing away those thoughts",
     "until you finally... *drop*",
   ],
+  [
+    "imaagine a hand...",
+    "fluttering around your vision...",
+    "this way and that...",
+    "until it finally... *drops*",
+  ],
 ];
 
 const ups = [["*upupup* all the way up", "nice and aware", "nice and awake"]];
@@ -65,7 +71,7 @@ const command: HypnoCommand<{
         name: "length",
         type: "number",
         min: 0.1,
-        max: 5,
+        max: 7,
         description: "How long you want the bombard to go on for",
       },
       {
@@ -129,7 +135,6 @@ const command: HypnoCommand<{
         return message.reply(`You are not on this person's trusted tist list.`);
       user = args.user;
     }
-    if (minutes > 7) return message.reply(`Max amount of minutes is 7`);
 
     // Check if it can actually send stuff
     if (!imposition && _spirals === "none")
@@ -150,7 +155,7 @@ const command: HypnoCommand<{
 
     if (_spirals !== "none" && spirals.length < 3)
       return message.reply(
-        `There needs to be more than 3 spirals provided. Try adding \`?spirals none\` or \`?spirals all\``
+        `There needs to be more than 3 spirals provided. You might not have any favourite spirals. Try adding \`?spirals none\` or \`?spirals all\``
       );
 
     // Check for confirmation

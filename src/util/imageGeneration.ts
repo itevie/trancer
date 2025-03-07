@@ -1,6 +1,7 @@
 import { Jimp } from "jimp";
-import Canvas from "canvas";
+import Canvas, { createCanvas, loadImage } from "canvas";
 import { readFileSync } from "fs";
+import GIFEncoder from "gifencoder";
 
 export async function generateNotImmuneImage(imageUrl: string) {
   // Load stuff
@@ -52,4 +53,42 @@ export async function generateSpeechbubbleImage(imageUrl: string) {
   );
 
   return canvas.toBuffer();
+}
+
+export async function createRotatingGifBuffer(
+  inputPath: string,
+  frameCount = 30,
+  duration = 3
+) {
+  console.log(inputPath);
+  const image = await loadImage(inputPath);
+  const size = Math.max(image.width, image.height);
+
+  const canvas = createCanvas(size, size);
+  const ctx = canvas.getContext("2d");
+  const encoder = new GIFEncoder(size, size);
+
+  const bufferStream = [];
+  const stream = encoder.createReadStream();
+  stream.on("data", (chunk) => bufferStream.push(chunk));
+
+  encoder.start();
+  encoder.setRepeat(0);
+  encoder.setDelay((duration * 1000) / frameCount);
+  encoder.setQuality(10);
+
+  for (let i = 0; i < frameCount; i++) {
+    ctx.clearRect(0, 0, size, size);
+    ctx.save();
+    ctx.translate(size / 2, size / 2);
+    ctx.rotate(((2 * Math.PI) / frameCount) * i);
+    ctx.drawImage(image, -image.width / 2, -image.height / 2);
+    ctx.restore();
+    // @ts-ignore
+    encoder.addFrame(ctx);
+  }
+
+  encoder.finish();
+
+  return Buffer.concat(bufferStream);
 }
