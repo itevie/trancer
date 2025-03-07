@@ -35,6 +35,11 @@ let message: MessageCreateOptions = {
           value: `Check out the other commands Trancer has with the simple \`.help\` command! Get info on a command with \`.command (command name)\``,
         },
         {
+          name: "Dashboard",
+          value:
+            "You can also change all the above settings with the `.dashboard` command!",
+        },
+        {
           name: "Support",
           value: `Have an issue / suggestion for the bot? Or need general assistance? Join the bot's server [here](${config.botServer.invite}).`,
         },
