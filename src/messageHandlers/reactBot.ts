@@ -5,6 +5,7 @@ import config from "../config";
 import { HypnoMessageHandler } from "../types/util";
 import { randomFromRange } from "../util/other";
 import { varients } from "../commands/fun/cowsay";
+import { commands } from "..";
 
 const phrases = [
   "skibii sigma",
@@ -306,6 +307,13 @@ const handler: HypnoMessageHandler = {
               phrase,
             ]);
             return "```" + child.output.join("") + "```";
+          },
+
+          // Random command
+          () => {
+            const obj = Object.values(commands);
+            const cmd = obj[Math.floor(Math.random() * obj.length)];
+            return `Checkout the \`.${cmd.name}\` command! It's really cool!\n> ${cmd.description}`;
           },
 
           // Random case
