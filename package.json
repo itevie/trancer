@@ -51,6 +51,7 @@
     "pretty-ms": "^9.1.0",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7",
+    "word-definition": "^2.1.6",
     "word-list": "^4.1.0"
   }
 }

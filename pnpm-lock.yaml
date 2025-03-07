@@ -113,6 +113,9 @@ importers:
       sqlite3:
         specifier: ^5.1.7
         version: 5.1.7
+      word-definition:
+        specifier: ^2.1.6
+        version: 2.1.6
       word-list:
         specifier: ^4.1.0
         version: 4.1.0
@@ -1692,6 +1695,9 @@ packages:
 
   wide-align@1.1.5:
     resolution: {integrity: sha512-eDMORYaPNZ4sQIuuYPDHdQvf4gyCF9rEEV/yPxGfwPkRodwEgiMUUXTx/dex+Me0wxx53S+NgUHaP7y3MGlDmg==}
+
+  word-definition@2.1.6:
+    resolution: {integrity: sha512-y+no9vMqF/9mOWSY4r/aU4rW8H/zDyegW6ZQ7ppEkJThyhnmzwVVNO10eAYbeJlU6+O27WCEtI54nuxbV23wsA==}
 
   word-list@4.1.0:
     resolution: {integrity: sha512-4vtKyH8lGfaY8DHLTKQDfDxPixdK6BC/2W38TsPE07Wc8uPrMIbEO3quxBFSa2BfsDyG6pW47UEN/9tfYxN6BA==}
@@ -3694,6 +3700,8 @@ snapshots:
   wide-align@1.1.5:
     dependencies:
       string-width: 4.2.3
+
+  word-definition@2.1.6: {}
 
   word-list@4.1.0: {}
 

@@ -35,6 +35,9 @@ importers:
       axios:
         specifier: ^1.7.7
         version: 1.7.7
+      dict:
+        specifier: ^1.4.0
+        version: 1.4.0
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.2
@@ -2261,6 +2264,9 @@ packages:
     resolution: {integrity: sha512-5tQykt+LqfJFBEYaDITx7S7cR7mJ/zQmLXZ2qt5w04ainYZw6tBf9dBunMjVeVOdYVRUzUOE4HkY5J7+uttb5Q==}
     engines: {node: '>= 4.2.1'}
     hasBin: true
+
+  dict@1.4.0:
+    resolution: {integrity: sha512-iJZcYCUwg0vDqo/CSc96qd08CKRagnQniCpcwfzGDuR/3fyilTFdS8/f0ft95aVGZkoQNuwgpTxs4FtD4jH5Fw==}
 
   didyoumean@1.2.2:
     resolution: {integrity: sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw==}
@@ -8297,6 +8303,8 @@ snapshots:
       debug: 2.6.9
     transitivePeerDependencies:
       - supports-color
+
+  dict@1.4.0: {}
 
   didyoumean@1.2.2: {}
 

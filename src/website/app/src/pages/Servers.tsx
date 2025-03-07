@@ -24,7 +24,7 @@ export default function ServerList() {
               style={{ width: "fit-content" }}
               onClick={() => (window.location.href = `/servers/${s.id}`)}
             >
-              <Column util={["align-center", "justify-center"]}>
+              <Column util={["align-center", "justify-center", "flex-grow"]}>
                 <Icon
                   src={s.avatar ?? "https://dawn.rest/cdn/no_pfp.png"}
                   size={"96px"}
