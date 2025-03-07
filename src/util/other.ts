@@ -400,7 +400,8 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
         .toLowerCase();
       let index = options.data.findIndex(
         (x: any) =>
-          (typeof x === "object" && x.name === query) ||
+          (typeof x === "object" && x.name.includes(query)) ||
+          (typeof x === "object" && x.value.includes(query)) ||
           (typeof x !== "object" &&
             x.replace(/\\\\/g, "").toLowerCase().includes(query))
       );

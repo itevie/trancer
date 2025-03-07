@@ -545,6 +545,14 @@ client.on("messageCreate", async (message) => {
         });
 
       // Check one of
+      if (arg.oneOf) {
+        for (let i in arg.oneOf)
+          if (
+            arg.oneOf[i].toString().toLowerCase() ===
+            result.toString().toLowerCase()
+          )
+            result = arg.oneOf[i];
+      }
       if (arg.oneOf && !arg.oneOf.includes(result))
         return await message.reply({
           embeds: [

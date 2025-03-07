@@ -39,6 +39,7 @@ export const categoryEmojis: Record<HypnoCommandType, string> = {
   qotd: "❓",
   reporting: "⚔️",
   marriage: "💍",
+  "file-directory": "📁",
 };
 
 const command: HypnoCommand<{ ignoreGuards: boolean }> = {

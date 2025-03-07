@@ -22,7 +22,8 @@ export type HypnoCommandType =
   | "ai"
   | "marriage"
   | "reporting"
-  | "qotd";
+  | "qotd"
+  | "file-directory";
 
 type Guard = "admin" | "bot-server" | "bot-owner";
 

@@ -23,3 +23,4 @@ src/website/app/build!
 lottery.txt
 .env
 qotd.txt
+src/data/file_directory

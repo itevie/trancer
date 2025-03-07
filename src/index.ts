@@ -52,6 +52,7 @@ export const client = new Client({
 import { initInviteCache } from "./events/guildMemberAdd";
 import { initLottery } from "./managers/lottery";
 import { initQotd } from "./util/qotd";
+import { loadAllSources } from "./util/fileDirectoryLoader";
 
 const logger = new Logger("loader");
 export let errors = 0;
@@ -93,6 +94,8 @@ for (const eventFile of eventFiles) {
 }
 
 client.on("ready", async () => {
+  loadAllSources();
+
   const guilds = await client.guilds.fetch();
   for await (const [_, guild] of guilds) {
     const g = await guild.fetch();
