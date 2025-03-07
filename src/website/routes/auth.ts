@@ -2,9 +2,18 @@ import { NextFunction, Request, Response, Router } from "express";
 import { baseUrl } from "..";
 import axios from "axios";
 import jwt from "jsonwebtoken";
+import { client } from "../..";
+import config from "../../config";
 
 export function Authenticate(req: Request, res: Response, next: NextFunction) {
   if (req.url.startsWith("/login")) return next();
+
+  // Check if development
+  if (client.user.id === config.devBot.id) {
+    // @ts-ignore
+    req.user = config.owner;
+    return next();
+  }
 
   const token = req.headers.cookie
     ?.match(/trancer-token=[a-zA-Z0-9\._\-]+/)?.[0]
@@ -14,7 +23,6 @@ export function Authenticate(req: Request, res: Response, next: NextFunction) {
     // @ts-ignore
     req.user = result.id;
   } catch (e) {
-    console.log(req.method, req.url, token, req.headers.cookie, e);
     if (req.method.toLowerCase() === "get" && !req.url.includes("/api"))
       return res.redirect("/login");
     else

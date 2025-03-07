@@ -136,7 +136,7 @@ export async function genQuote(
     });
   } else {
     embed.setDescription(`*${quote.content}*`);
-    embed.setFooter({ text: `Use guess (guess) to guess!` });
+    embed.setFooter({ text: `Use guess (guess) to guess! (NO PREFIX)` });
   }
 
   // Add image to embed if there was one

@@ -93,6 +93,12 @@ for (const eventFile of eventFiles) {
 }
 
 client.on("ready", async () => {
+  const guilds = await client.guilds.fetch();
+  for await (const [_, guild] of guilds) {
+    const g = await guild.fetch();
+    logger.log(`Loaded server: ${g.name}`);
+  }
+
   if (
     !args["no-handlers"] &&
     !(

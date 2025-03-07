@@ -51,7 +51,9 @@ client.on("guildMemberAdd", async (member) => {
   let serverSettings = await actions.serverSettings.getFor(member.guild.id);
 
   if (serverSettings.auto_ban_enabled) {
-    let abk = serverSettings.auto_ban_keywords.split(";");
+    let abk = serverSettings.auto_ban_keywords
+      .split(";")
+      .filter((x) => x.length > 1);
     if (
       checkAutoban(member.user.username, abk) ||
       checkAutoban(member.user.displayName, abk)

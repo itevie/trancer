@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { axiosClient } from ".";
+import { axiosClient } from "..";
 
 export default function useUsernames() {
   const [usernames, setUsernames] = useState<{ [key: string]: string }>({});

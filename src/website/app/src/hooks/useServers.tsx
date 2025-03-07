@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { axiosClient } from ".";
+import { axiosClient } from "..";
 
 export interface Server {
   id: string;
   name: string;
   avatar: string;
+  can_manage: boolean;
 }
 
 export function useServers() {

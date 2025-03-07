@@ -1,8 +1,6 @@
 import Page from "./dawn-ui/components/Page";
 import Container from "./dawn-ui/components/Container";
 import AppNavbar from "./Navbar";
-import Button from "./dawn-ui/components/Button";
-import { apiUrl } from ".";
 
 export default function App() {
   return (

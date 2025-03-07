@@ -8,7 +8,7 @@ import Icon from "../dawn-ui/components/Icon";
 import Column from "../dawn-ui/components/Column";
 import Words from "../dawn-ui/components/Words";
 import Hoverable from "../dawn-ui/components/Hoverable";
-import { useServers } from "../useServers";
+import { useServers } from "../hooks/useServers";
 
 export default function ServerList() {
   const servers = useServers();

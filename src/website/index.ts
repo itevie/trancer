@@ -16,6 +16,7 @@ import path from "path";
 import { MakeServerRoutes } from "./routes/api/serverRoutes";
 import MakeAuthRoutes, { Authenticate } from "./routes/auth";
 import MakeSettingsRoutes from "./routes/api/settingsRoutes";
+import MakeBasicRoutes from "./routes/api/basicRoutes";
 
 const logger = new Logger("website");
 const codes: { [key: string]: string } = {};
@@ -31,6 +32,7 @@ export default function initServer() {
   app.use(MakeAuthRoutes());
   app.use(MakeServerRoutes());
   app.use(MakeSettingsRoutes());
+  app.use(MakeBasicRoutes());
 
   app.get("/api/data/:type", async (req, res) => {
     /*if (!req.headers.authorization)
@@ -99,23 +101,6 @@ export default function initServer() {
       return res.sendFile(__dirname + "/app/build/index.html");
     }
   );
-
-  app.get("/gifs/:type/:id", async (req, res) => {
-    if (!["spirals"].includes(req.params.type))
-      return res.status(400).send({ message: "Invalid GIF type" });
-    if (!req.params["id"].match(/[0-9]+-[a-zA-Z_0-9.]+\.gif/)) {
-      return res.status(404).send({ message: "Unknown spiral" });
-    }
-
-    let p = path.normalize(
-      `${__dirname}/../data/${req.params.type}/${req.params.id}`
-    );
-    if (!existsSync(p)) {
-      return res.status(404).send({ message: "Unknown spiral" });
-    }
-
-    return res.status(200).sendFile(p);
-  });
 
   app.listen(config.website.port, () => {
     logger.log(`Website listening on port ${config.website.port}`);

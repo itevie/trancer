@@ -6,7 +6,7 @@ import { axiosClient } from "..";
 import Column from "../dawn-ui/components/Column";
 import Row from "../dawn-ui/components/Row";
 import Words from "../dawn-ui/components/Words";
-import useUsernames from "../useUsernames";
+import useUsernames from "../hooks/useUsernames";
 import MultiSelect from "../dawn-ui/components/MultiSelect";
 
 export default function LeaderboardPage() {

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Page from "../dawn-ui/components/Page";
 import Words from "../dawn-ui/components/Words";
 import AppNavbar from "../Navbar";
-import { Server, useServers } from "../useServers";
+import { Server, useServers } from "../hooks/useServers";
 import Row from "../dawn-ui/components/Row";
 import Container from "../dawn-ui/components/Container";
 
@@ -36,6 +36,18 @@ export default function ServerOptions() {
           >
             View this server's leaderboards.
           </Container>
+          {selectedServer?.can_manage && (
+            <Container
+              hover
+              title="Dashboard"
+              util={["fit-content"]}
+              onClick={() =>
+                (window.location.href = `/servers/${selectedServer?.id}/dashboard`)
+              }
+            >
+              Manage Trancer for this server.
+            </Container>
+          )}
         </Row>
       </Page>
     </>

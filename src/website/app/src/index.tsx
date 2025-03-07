@@ -10,6 +10,7 @@ import "./style.css";
 import ServerList from "./pages/Servers";
 import ServerOptions from "./pages/ServerOptions";
 import UserSettings from "./pages/UserSettings";
+import Dashboard from "./pages/Dashboard";
 
 window.document.body.style.setProperty("--dawn-neutral-base-color", "300");
 
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
   {
     path: "/servers/:id/leaderboards",
     element: <LeaderboardPage />,
+  },
+  {
+    path: "/servers/:id/dashboard",
+    element: <Dashboard />,
   },
   {
     path: "/user_settings",
