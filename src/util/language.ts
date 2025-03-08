@@ -25,6 +25,7 @@ export function replaceVarString(
     mention: `<@${user.id}>`,
     username: user.username,
     member_count: server.memberCount.toString(),
+    member_count_ord: toOrdinal(server.memberCount),
   };
 
   for (const [k, v] of Object.entries(parts)) {
@@ -46,4 +47,16 @@ export function replaceVarString(
   return {
     content: str,
   };
+}
+
+export function toOrdinal(n: number) {
+  const suffixes = ["th", "st", "nd", "rd"];
+  const mod = n % 10;
+  const exceptions = [11, 12, 13];
+
+  if (exceptions.includes(n % 100)) {
+    return n + "th";
+  }
+
+  return n + (suffixes[(mod - 1) % 10] || suffixes[0]);
 }

@@ -34,6 +34,9 @@ export default function TrancerStringInput({
                 <br />
                 {"{member_count}"} for the member count of the server.
                 <br />
+                {
+                  "{member_count_ord} member count but in ordinals (1st, 2nd, 3rd...)"
+                }
               </label>
             )
           }
