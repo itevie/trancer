@@ -96,9 +96,35 @@ const settingsUpdate: {
   },
   verified_channel: {
     type: "channel",
-    botNeeds: ["SendMessages"],
+    botNeeds: ["SendMessages", "EmbedLinks"],
     table: "server_settings",
     row: "verified_channel_id",
+  },
+  welcome_message: {
+    type: "varstring",
+    table: "server_settings",
+    row: "welcome_message",
+    min: 1,
+    max: 1000,
+  },
+  welcome_channel: {
+    type: "channel",
+    botNeeds: ["SendMessages", "EmbedLinks"],
+    table: "server_settings",
+    row: "welcome_channel_id",
+  },
+  leave_message: {
+    type: "varstring",
+    table: "server_settings",
+    row: "leave_message",
+    min: 1,
+    max: 1000,
+  },
+  leave_channel: {
+    type: "channel",
+    botNeeds: ["SendMessages", "EmbedLinks"],
+    table: "server_settings",
+    row: "leave_channel_id",
   },
   auto_ban_keywords: {
     type: "string",
@@ -123,6 +149,11 @@ const settingsUpdate: {
     table: "server_settings",
     botNeeds: ["SendMessages", "EmbedLinks"],
     row: "report_ban_log_channel",
+  },
+  allow_nsfw_sources: {
+    type: "boolean",
+    table: "server_settings",
+    row: "allow_nsfw_file_directory_sources",
   },
 };
 

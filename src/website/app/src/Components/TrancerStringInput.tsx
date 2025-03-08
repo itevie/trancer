@@ -1,3 +1,4 @@
+import { showInfoAlert } from "../dawn-ui/components/AlertManager";
 import Column from "../dawn-ui/components/Column";
 import useServerResources from "../hooks/useServerResources";
 
@@ -22,9 +23,22 @@ export default function TrancerStringInput({
         placeholder={placeholder}
       ></input>
       {(varstring ?? false) && (
-        <small>
-          Use {"{mention}"} to mention the user.<br></br>Use {"{username}"} for
-          the username.
+        <small
+          className="dawn-link underline"
+          onClick={() =>
+            showInfoAlert(
+              <label>
+                {"{mention}"} to mention the user.
+                <br />
+                {"{username}"} to get the user's username.
+                <br />
+                {"{member_count}"} for the member count of the server.
+                <br />
+              </label>
+            )
+          }
+        >
+          {"{placeholders}"}
         </small>
       )}
     </Column>

@@ -1,6 +1,6 @@
 import config from "../../config";
 import { HypnoCommand } from "../../types/util";
-import { sources } from "./_util";
+import { getSources, sources } from "./_util";
 import { createEmbed } from "../../util/other";
 import { paginate } from "../../util/components/pagination";
 
@@ -10,7 +10,7 @@ const command: HypnoCommand = {
   description: "Get a list of sources in the file directory",
   type: "file-directory",
 
-  handler: async (message) => {
+  handler: async (message, { serverSettings }) => {
     return paginate({
       replyTo: message,
       embed: createEmbed()
@@ -19,7 +19,9 @@ const command: HypnoCommand = {
           `Want to see your own files here? DM me on Discord! <@${config.owner}>`
         ),
       type: "field",
-      data: Object.entries(sources).map((x) => {
+      data: Object.entries(
+        getSources(serverSettings.allow_nsfw_file_directory_sources)
+      ).map((x) => {
         return {
           name: `${x[0]}`,
           value: `${x[1].description}\n> ${x[1].websites

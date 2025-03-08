@@ -18,10 +18,13 @@ const command: HypnoCommand<{ source: string }> = {
     ],
   },
 
-  handler: async (message, { args }) => {
+  handler: async (message, { args, serverSettings }) => {
     return paginateFileList(
       message,
-      await getFilesFrom(args.source),
+      await getFilesFrom(
+        args.source,
+        serverSettings.allow_nsfw_file_directory_sources
+      ),
       `Files from ${args.source}`
     );
   },

@@ -7,6 +7,8 @@ import useServerResources from "../hooks/useServerResources";
 import AppNavbar from "../Navbar";
 import AutobanSettings from "./DashboardPages/AutobanSettings";
 import BasicSettings from "./DashboardPages/BasicSettings";
+import FileDirectorySettings from "./DashboardPages/FileDirectorySettings";
+import MessageSettings from "./DashboardPages/MessagesSettings";
 import ReportSettings from "./DashboardPages/ReportSettings";
 import VerificationSettings from "./DashboardPages/VerificationSettings";
 import XPSettings from "./DashboardPages/XPSettings";
@@ -34,10 +36,12 @@ export default function Dashboard() {
           <Tabbed>
             {{
               "Basic Settings": <BasicSettings server={server} />,
+              "Welcome Messages": <MessageSettings server={server} />,
               Verification: <VerificationSettings server={server} />,
               Reporting: <ReportSettings server={server} />,
               Autoban: <AutobanSettings server={server} />,
               XP: <XPSettings server={server} />,
+              "File Directory": <FileDirectorySettings server={server} />,
             }}
           </Tabbed>
         </Container>

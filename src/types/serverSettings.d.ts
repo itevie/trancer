@@ -14,6 +14,11 @@ interface ServerSettings {
   verified_string: string | null;
   verified_channel_id: string | null;
 
+  welcome_channel_id: string | null;
+  welcome_message: string;
+  leave_channel_id: string | null;
+  leave_message: string;
+
   quotes_channel_id: string | null;
   invite_logger_channel_id: string | null;
   remind_bumps: boolean;
@@ -29,6 +34,8 @@ interface ServerSettings {
   report_ban_log_channel: string | null;
 
   status_theme: string;
+
+  allow_nsfw_file_directory_sources: boolean;
 }
 
 interface ChannelImposition {

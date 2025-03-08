@@ -24,10 +24,13 @@ const command: HypnoCommand<{ query: string }> = {
     ],
   },
 
-  handler: async (message, { args }) => {
+  handler: async (message, { args, serverSettings }) => {
     paginateFileList(
       message,
-      await searchFiles(args.query),
+      await searchFiles(
+        args.query,
+        serverSettings.allow_nsfw_file_directory_sources
+      ),
       `Files matching ${args.query}`
     );
   },

@@ -1,6 +1,5 @@
 import { Guild, MessageCreateOptions, User } from "discord.js";
 import ecoConfig from "../ecoConfig";
-import { Server } from "http";
 
 export function currency(amount: number): string {
   return `**${amount}${ecoConfig.currency}**`;

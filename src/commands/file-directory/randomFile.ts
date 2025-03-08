@@ -6,8 +6,11 @@ const command: HypnoCommand = {
   description: "Get a random file from the Trancer file directory",
   type: "file-directory",
 
-  handler: async (message) => {
-    handleFileMessage(message, await getRandomFile());
+  handler: async (message, { serverSettings }) => {
+    handleFileMessage(
+      message,
+      await getRandomFile(serverSettings.allow_nsfw_file_directory_sources)
+    );
   },
 };
 
