@@ -3,7 +3,7 @@ import { HypnoCommand } from "../../types/util";
 
 import { createEmbed, randomFromRange } from "../../util/other";
 import ecoConfig from "../../ecoConfig";
-import { currency } from "../../util/textProducer";
+import { currency } from "../../util/language";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { actions } from "../../util/database";
 const words = new Set(

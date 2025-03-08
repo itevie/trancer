@@ -12,7 +12,7 @@ import { createEmbed } from "../../util/other";
 import config from "../../config";
 import wrapGame from "./_util";
 import { client } from "../..";
-import { currency } from "../../util/textProducer";
+import { currency } from "../../util/language";
 
 type State = "o" | "x" | "-";
 

@@ -19,7 +19,7 @@ import {
   englishifyList,
   isURL,
 } from "../util/other";
-import { currency } from "../util/textProducer";
+import { currency } from "../util/language";
 
 client.on("messageCreate", async (message) => {
   // Only listen if in guild

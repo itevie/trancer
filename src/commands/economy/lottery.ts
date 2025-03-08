@@ -3,7 +3,7 @@ import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
 import { msToHowLong } from "../../util/ms";
 import ecoConfig from "../../ecoConfig";
-import { currency } from "../../util/textProducer";
+import { currency } from "../../util/language";
 
 const command: HypnoCommand = {
   name: "lottery",

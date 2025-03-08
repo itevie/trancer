@@ -7,7 +7,7 @@ import { createWriteStream } from "fs";
 import Logger from "../../util/Logger";
 import { actions } from "../../util/database";
 import ecoConfig from "../../ecoConfig";
-import { currency } from "../../util/textProducer";
+import { currency } from "../../util/language";
 
 let spiralLogger = new Logger("spirals");
 

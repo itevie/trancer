@@ -9,7 +9,7 @@ import {
 import { createEmbed } from "../../util/other";
 import { actions, database } from "../../util/database";
 import { client } from "../..";
-import { currency } from "../../util/textProducer";
+import { currency } from "../../util/language";
 
 interface GameWrapperOptions {
   callback: (op: {

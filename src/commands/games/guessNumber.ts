@@ -2,7 +2,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { createEmbed, randomFromRange } from "../../util/other";
 import ecoConfig from "../../ecoConfig";
-import { currency } from "../../util/textProducer";
+import { currency } from "../../util/language";
 import { actions } from "../../util/database";
 
 export const guessNumberGames: { [key: string]: boolean } = {};

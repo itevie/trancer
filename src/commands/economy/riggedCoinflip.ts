@@ -2,7 +2,7 @@ import { HypnoCommand } from "../../types/util";
 import ConfirmAction from "../../util/components/Confirm";
 import { actions } from "../../util/database";
 import { createEmbed } from "../../util/other";
-import { currency } from "../../util/textProducer";
+import { currency } from "../../util/language";
 
 const command: HypnoCommand<{ amount: number; confirm?: string }> = {
   name: "riggedcoinflip",

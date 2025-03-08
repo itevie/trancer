@@ -13,16 +13,20 @@ CREATE TABLE IF NOT EXISTS server_settings (
     remind_bumps BOOLEAN DEFAULT false,
     bump_channel TEXT DEFAULT NULL,
     level_notifications BOOLEAN DEFAULT true,
-    verification_role_id TEXT DEFAULT NULL,
-    verified_string TEXT DEFAULT '{mention} has been verified! Welcome!',
-    verified_channel_id TEXT DEFAULT NULL,
     auto_ban_keywords TEXT NOT NULL,
     auto_ban_enabled BOOLEAN DEFAULT false,
     auto_ban_count INT NOT NULL DEFAULT 0,
     report_channel TEXT DEFAULT null,
     report_trusted BOOLEAN NOT NULL DEFAULT false,
     report_ban_log_channel TEXT DEFAULT null,
-    status_theme TEXT NOT NULL DEFAULT 'circles'
+    status_theme TEXT NOT NULL DEFAULT 'circles',
+    verification_role_id TEXT DEFAULT NULL,
+    verified_string TEXT DEFAULT '{mention} has been verified! Welcome!',
+    verified_channel_id TEXT DEFAULT NULL,
+    welcome_channel_id TEXT DEFAULT NULL,
+    welcome_message TEXT NOT NULL DEFAULT '{mention} joined our server! We now have {member_count} members!',
+    leave_channel_id TEXT DEFAULT NULL,
+    leave_message TEXT NOT NULL DEFAULT '**{username}** left our server :( We now have {member_count} members'
 );
 
 CREATE TABLE IF NOT EXISTS blacklisted (

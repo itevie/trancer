@@ -3,7 +3,7 @@ import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
 import { itemMap } from "../../util/db-parts/items";
 import { englishifyList } from "../../util/other";
-import { itemText } from "../../util/textProducer";
+import { itemText } from "../../util/language";
 
 const command: HypnoCommand<{ item: Item; amount?: number }> = {
   name: "craft",

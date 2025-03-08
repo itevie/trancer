@@ -2,7 +2,7 @@ import { AquiredBadge } from "../types/aquiredBadge";
 import { actions, database } from "./database";
 import config from "../config";
 import { calculateLevel } from "../messageHandlers/xp";
-import { currency } from "./textProducer";
+import { currency } from "./language";
 import { Message } from "discord.js";
 import { createEmbed } from "./other";
 

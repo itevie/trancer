@@ -1,6 +1,6 @@
 import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
-import { currency, itemText } from "../../util/textProducer";
+import { currency, itemText } from "../../util/language";
 
 const command: HypnoCommand<{ item: Item; amount?: number }> = {
   name: "buy",

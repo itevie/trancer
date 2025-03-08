@@ -6,7 +6,7 @@ import getInviteDetails from "../util/getInviteDetails";
 import { createEmbed } from "../util/other";
 import { actions, database } from "../util/database";
 import ecoConfig from "../ecoConfig";
-import { currency } from "../util/textProducer";
+import { currency } from "../util/language";
 
 let inviteCache: { [key: string]: { [key: string]: number } } = {};
 export async function initInviteCache() {

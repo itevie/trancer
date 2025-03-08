@@ -1,6 +1,6 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { currency } from "../../util/textProducer";
+import { currency } from "../../util/language";
 import { actions } from "../../util/database";
 
 const command: HypnoCommand<{ user: User; amount: number }> = {

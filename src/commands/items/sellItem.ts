@@ -3,7 +3,7 @@ import ConfirmAction from "../../util/components/Confirm";
 import { actions } from "../../util/database";
 import { calculateItemPrice } from "./_util";
 import { createEmbed } from "../../util/other";
-import { currency, itemText } from "../../util/textProducer";
+import { currency, itemText } from "../../util/language";
 
 const command: HypnoCommand<{ item: Item; amount?: number }> = {
   name: "sellitem",

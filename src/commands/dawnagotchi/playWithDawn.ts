@@ -7,7 +7,7 @@ import {
   calculateRequirementFromDate,
   generateDawnagotchiEmbed,
 } from "./_util";
-import { currency } from "../../util/textProducer";
+import { currency } from "../../util/language";
 
 const command: HypnoCommand = {
   name: "play",

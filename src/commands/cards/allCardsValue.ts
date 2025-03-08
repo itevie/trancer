@@ -2,7 +2,7 @@ import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { computeCardPrice } from "./_util";
 import config from "../../config";
-import { currency } from "../../util/textProducer";
+import { currency } from "../../util/language";
 import { actions } from "../../util/database";
 
 const command: HypnoCommand<{ user?: User }> = {

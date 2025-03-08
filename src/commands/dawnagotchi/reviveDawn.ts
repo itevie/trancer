@@ -1,6 +1,6 @@
 import { HypnoCommand } from "../../types/util";
 import { actions, database } from "../../util/database";
-import { currency } from "../../util/textProducer";
+import { currency } from "../../util/language";
 
 const command: HypnoCommand = {
   name: "revivedawn",

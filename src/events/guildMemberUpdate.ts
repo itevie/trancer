@@ -2,7 +2,7 @@ import { TextChannel } from "discord.js";
 import { client } from "..";
 import config from "../config";
 import { createEmbed } from "../util/other";
-import { currency } from "../util/textProducer";
+import { currency } from "../util/language";
 import ecoConfig from "../ecoConfig";
 import { actions } from "../util/database";
 

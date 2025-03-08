@@ -5,7 +5,7 @@ import { TextChannel } from "discord.js";
 import { createEmbed } from "../util/other";
 import { msToHowLong } from "../util/ms";
 import ecoConfig from "../ecoConfig";
-import { currency } from "../util/textProducer";
+import { currency } from "../util/language";
 import Manager from "./Manager";
 
 const lotteryFileLocation = __dirname + "/../../lottery.txt";

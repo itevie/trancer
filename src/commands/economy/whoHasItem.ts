@@ -3,7 +3,7 @@ import { getUsernameSync } from "../../util/cachedUsernames";
 import { paginate } from "../../util/components/pagination";
 import { actions, database } from "../../util/database";
 import { createEmbed } from "../../util/other";
-import { itemText } from "../../util/textProducer";
+import { itemText } from "../../util/language";
 
 const command: HypnoCommand<{ item: Item }> = {
   name: "whohasitem",

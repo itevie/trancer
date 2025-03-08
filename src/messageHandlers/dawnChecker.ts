@@ -4,7 +4,7 @@ import {
   generateDawnagotchiEmbed,
   getDawnagotchiRequirements,
 } from "../commands/dawnagotchi/_util";
-import { currency } from "../util/textProducer";
+import { currency } from "../util/language";
 import { actions } from "../util/database";
 
 const handler: HypnoMessageHandler = {

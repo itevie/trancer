@@ -5,7 +5,7 @@ import badges from "../../util/badges";
 import { actions, database } from "../../util/database";
 import { calculateLevel } from "../../messageHandlers/xp";
 import { createRating } from "../fun/rate";
-import { currency } from "../../util/textProducer";
+import { currency } from "../../util/language";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "profile",

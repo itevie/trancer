@@ -1,6 +1,6 @@
 import { HypnoCommand } from "../../types/util";
 import { computeCardPrice } from "./_util";
-import { currency } from "../../util/textProducer";
+import { currency } from "../../util/language";
 
 const command: HypnoCommand<{ card: Card }> = {
   name: "cardvalue",

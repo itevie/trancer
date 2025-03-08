@@ -5,7 +5,7 @@ import {
   randomFromRange,
   shuffle,
 } from "../../util/other";
-import { currency, itemText } from "../../util/textProducer";
+import { currency, itemText } from "../../util/language";
 
 interface RewardDetails {
   currency: number;

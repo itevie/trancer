@@ -3,7 +3,7 @@ import { computeCardPrice, convertAquiredCardsToCards } from "./_util";
 import ConfirmAction from "../../util/components/Confirm";
 import { actions, database } from "../../util/database";
 import { createEmbed } from "../../util/other";
-import { currency } from "../../util/textProducer";
+import { currency } from "../../util/language";
 
 const command: HypnoCommand = {
   name: "sellduplicates",

@@ -1,7 +1,7 @@
 import { HypnoCommand } from "../../types/util";
 import { createEmbed } from "../../util/other";
 import ecoConfig from "../../ecoConfig";
-import { currency } from "../../util/textProducer";
+import { currency } from "../../util/language";
 
 // Do it here to not waste shit
 let embed = createEmbed().setTitle(`Ways to get ${ecoConfig.currency}!`);

@@ -9,7 +9,7 @@ import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
 import { itemMap } from "../../util/db-parts/items";
 import { createEmbed, englishifyList } from "../../util/other";
-import { currency, itemText } from "../../util/textProducer";
+import { currency, itemText } from "../../util/language";
 
 const gambleCost = 60;
 

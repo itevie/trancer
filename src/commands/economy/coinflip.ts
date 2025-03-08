@@ -1,7 +1,7 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { createEmbed } from "../../util/other";
-import { currency } from "../../util/textProducer";
+import { currency } from "../../util/language";
 import wrapGame from "../games/_util";
 
 export const existingGames: { [key: string]: string } = {};

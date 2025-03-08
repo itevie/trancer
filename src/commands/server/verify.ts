@@ -1,6 +1,7 @@
 import { PermissionsBitField, TextChannel } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { addRole } from "../../util/other";
+import { replaceVarString } from "../../util/language";
 
 const command: HypnoCommand = {
   name: "verify",
@@ -40,14 +41,15 @@ const command: HypnoCommand = {
         o.serverSettings.verified_string
       ) {
         let user = (await message.fetchReference()).member.user;
-        (
-          await (message.client.channels.fetch(
-            o.serverSettings.verified_channel_id
-          ) as Promise<TextChannel>)
-        ).send(
-          o.serverSettings.verified_string
-            .replace(/\{mention\}/g, `<@${user.id}>`)
-            .replace(/\{username\}/g, user.username)
+        let channel = await (message.client.channels.fetch(
+          o.serverSettings.verified_channel_id
+        ) as Promise<TextChannel>);
+        await channel.send(
+          replaceVarString(
+            o.serverSettings.verified_string,
+            member.user,
+            member.guild
+          )
         );
       }
     } catch (e) {

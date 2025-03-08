@@ -2,7 +2,7 @@ import { HypnoCommand } from "../../types/util";
 import { database } from "../../util/database";
 import { calculateItemPrice } from "./_util";
 import { createEmbed } from "../../util/other";
-import { currency, itemText } from "../../util/textProducer";
+import { currency, itemText } from "../../util/language";
 import { paginate } from "../../util/components/pagination";
 
 const command: HypnoCommand<{ tag?: string }> = {

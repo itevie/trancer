@@ -1,7 +1,7 @@
 import { HypnoCommand } from "../../types/util";
 import { calculateItemPrice } from "./_util";
 import { createEmbed } from "../../util/other";
-import { currency, itemText } from "../../util/textProducer";
+import { currency, itemText } from "../../util/language";
 
 const command: HypnoCommand<{ item: Item }> = {
   name: "getitem",

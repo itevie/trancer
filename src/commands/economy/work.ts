@@ -2,7 +2,7 @@ import ecoConfig from "../../ecoConfig";
 import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
 import { createEmbed, randomFromRange } from "../../util/other";
-import { currency } from "../../util/textProducer";
+import { currency } from "../../util/language";
 
 // $r = Reward
 // $c = Currency Symbol
