@@ -138,6 +138,16 @@ export async function getFilesFrom(
   return (await loadAllSources()).filter((x) => x.directory === directory);
 }
 
+export async function searchFiles(query: string): Promise<FileDirectoryFile[]> {
+  query = query.toLowerCase();
+  return (await loadAllSources()).filter(
+    (x) =>
+      x.description.toLowerCase().includes(query) ||
+      x.tags.some((y) => y.toLowerCase() === query) ||
+      x.name.toLowerCase().includes(query)
+  );
+}
+
 export async function getRandomFile(): Promise<FileDirectoryFile> {
   const files = await getFilesFrom(
     Object.keys(sources)[
