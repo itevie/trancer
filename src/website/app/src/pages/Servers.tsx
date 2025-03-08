@@ -17,7 +17,7 @@ export default function ServerList() {
     <>
       <AppNavbar full />
       <Page full>
-        <Row util={["justify-center"]}>
+        <Row util={["justify-center", "flex-wrap"]}>
           {servers.map((s) => (
             <Container
               hover
