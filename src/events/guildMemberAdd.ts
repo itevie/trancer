@@ -3,10 +3,10 @@ import { client } from "..";
 import config from "../config";
 import { addToMemberCount } from "../util/analytics";
 import getInviteDetails from "../util/getInviteDetails";
-import { createEmbed } from "../util/other";
+import { addRole, createEmbed } from "../util/other";
 import { actions, database } from "../util/database";
 import ecoConfig from "../ecoConfig";
-import { currency } from "../util/language";
+import { currency, replaceVarString } from "../util/language";
 
 let inviteCache: { [key: string]: { [key: string]: number } } = {};
 export async function initInviteCache() {
@@ -42,13 +42,12 @@ export function checkAutoban(u: string, keywords: string[]): boolean {
 client.on("guildMemberAdd", async (member) => {
   // Add to analytics
   await addToMemberCount(member.guild.id, member.guild.memberCount);
+  let serverSettings = await actions.serverSettings.getFor(member.guild.id);
 
   // Guards
   if (client.user.id === config.devBot.id) return;
 
-  // Check invite logger
-  let serverSettings = await actions.serverSettings.getFor(member.guild.id);
-
+  // Check autoban
   if (serverSettings.auto_ban_enabled) {
     let abk = serverSettings.auto_ban_keywords
       .split(";")
@@ -73,6 +72,22 @@ client.on("guildMemberAdd", async (member) => {
     }
   }
 
+  // Check for unverified role
+  if (serverSettings.unverified_role_id) {
+    try {
+      const roles = await member.guild.roles.fetch(
+        serverSettings.unverified_role_id
+      );
+      await addRole(member, roles);
+    } catch (e) {
+      console.log(
+        `Failed to give unverified role in server ${member.guild.id}`,
+        e
+      );
+    }
+  }
+
+  // Check invite logger
   if (serverSettings.invite_logger_channel_id) {
     let usedCode: Invite | null = null;
     for await (const [_, invite] of await member.guild.invites.fetch()) {
@@ -101,8 +116,28 @@ client.on("guildMemberAdd", async (member) => {
     }
   }
 
-  // Check for welcome messages only in bot server
-  if (member.guild.id !== config.botServer.id) return;
+  // Check for welcome message in other servers
+  if (member.guild.id !== config.botServer.id) {
+    if (serverSettings.welcome_channel_id) {
+      try {
+        const channel = await client.channels.fetch(
+          serverSettings.welcome_channel_id
+        );
+        if (channel.isTextBased()) {
+          await channel.send(
+            replaceVarString(
+              serverSettings.welcome_message,
+              member.user,
+              member.guild
+            )
+          );
+        }
+      } catch (e) {
+        console.log(`Failed to send welcome message in ${member.guild.id}`, e);
+      }
+    }
+    return;
+  }
 
   // Send welcome message
   (

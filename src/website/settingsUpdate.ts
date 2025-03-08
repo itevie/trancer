@@ -81,6 +81,12 @@ const settingsUpdate: {
     table: "server_settings",
     row: "level_notifications",
   },
+  unverified_role: {
+    type: "role",
+    botMustBeAbove: true,
+    table: "server_settings",
+    row: "unverified_role_id",
+  },
   verified_role: {
     type: "role",
     botMustBeAbove: true,

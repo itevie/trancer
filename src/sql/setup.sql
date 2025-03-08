@@ -1,3 +1,8 @@
+ALTER TABLE
+    server_settings
+ADD
+    unverified_role_id TEXT DEFAULT NULL;
+
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
@@ -19,6 +24,7 @@ CREATE TABLE IF NOT EXISTS server_settings (
     report_trusted BOOLEAN NOT NULL DEFAULT false,
     report_ban_log_channel TEXT DEFAULT null,
     status_theme TEXT NOT NULL DEFAULT 'circles',
+    unverified_role_id TEXT DEFAULT NULL,
     verification_role_id TEXT DEFAULT NULL,
     verified_string TEXT DEFAULT '{mention} has been verified! Welcome!',
     verified_channel_id TEXT DEFAULT NULL,

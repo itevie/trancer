@@ -18,6 +18,16 @@ export default function VerificationSettings({
         user with <code>.v</code> or <code>.verify</code> and you're good to go!
       </label>
       <FullWidthInput
+        name="Unverified Role"
+        description="The role Trancer will give when someone joins the server. When .v is used, this role will be removed!"
+      >
+        <TrancerMultiInput
+          k="unverified_role"
+          server={server}
+          v={server.resources.roles.map((x) => [x.id, x.name])}
+        />
+      </FullWidthInput>
+      <FullWidthInput
         name="Verified Role"
         description="The role Trancer should give upon verifying someone"
       >

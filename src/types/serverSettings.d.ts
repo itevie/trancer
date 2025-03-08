@@ -10,6 +10,7 @@ interface ServerSettings {
   tist_role_id: string | null;
   switch_role_id: string | null;
 
+  unverified_role_id: string | null;
   verification_role_id: string | null;
   verified_string: string | null;
   verified_channel_id: string | null;
