@@ -1,9 +1,9 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { getAllAquiredCardsFor, getCardById } from "../../util/actions/cards";
-import { computeCardPrice } from "../../util/cards";
+import { computeCardPrice } from "./_util";
 import config from "../../config";
 import { currency } from "../../util/textProducer";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "allcardvalue",
@@ -24,13 +24,13 @@ const command: HypnoCommand<{ user?: User }> = {
 
   handler: async (message, { args }) => {
     let user = args.user ? args.user : message.author;
-    let cards = (await getAllAquiredCardsFor(user.id)).filter(
+    let cards = (await actions.cards.aquired.getAllFor(user.id)).filter(
       (x) => x.amount !== 0
     );
     let cardPrice = 0;
 
     for await (const card of cards) {
-      let actualCard = await getCardById(card.card_id);
+      let actualCard = await actions.cards.getById(card.card_id);
       cardPrice += computeCardPrice(actualCard) * card.amount;
     }
 

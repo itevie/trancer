@@ -1,8 +1,7 @@
 import config from "../../config";
 import ecoConfig from "../../ecoConfig";
 import { HypnoCommand } from "../../types/util";
-import { addCardFor } from "../../util/actions/cards";
-import { generateCardEmbed } from "../../util/cards";
+import { generateCardEmbed } from "./_util";
 import { actions, database } from "../../util/database";
 import { createEmbed } from "../../util/other";
 
@@ -80,7 +79,7 @@ const command: HypnoCommand<{ deck: Deck; amount: number }> = {
       let card = await getCard();
       if (typeof card === "string")
         return message.reply(`Failed to fetch card rarity in that deck!`);
-      await addCardFor(message.author.id, card.id);
+      await actions.cards.addFor(message.author.id, card.id);
       await actions.items.aquired.removeFor(
         message.author.id,
         await actions.items.getId(ecoConfig.items.cardPull)

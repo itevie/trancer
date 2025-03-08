@@ -1,5 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import { clearFileDirectoryCache } from "../../util/fileDirectoryLoader";
+import { clearFileDirectoryCache } from "./_util";
 
 const command: HypnoCommand = {
   name: "clearfiledirectorycache",

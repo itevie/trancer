@@ -9,7 +9,7 @@ import {
 import { HypnoCommand } from "../../types/util";
 import { createEmbed } from "../../util/other";
 import config from "../../config";
-import wrapGame from "../../util/GameWrapper";
+import wrapGame from "./_util";
 import { currency } from "../../util/textProducer";
 
 const _pieces = {

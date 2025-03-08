@@ -18,6 +18,12 @@ import giveaways from "./db-parts/giveaways";
 import relationships from "./db-parts/relationships";
 import reports from "./db-parts/reports";
 import blacklist from "./db-parts/blacklist";
+import badges from "./db-parts/badges";
+import serverCount from "./db-parts/serverCount";
+import dawnagotchi from "./db-parts/dawnagotchi";
+import ranks from "./db-parts/ranks";
+import ratelimits from "./db-parts/ratelimits";
+import eco from "./db-parts/economy";
 
 export let database: Database<sqlite3.Database, Statement>;
 export const databaseLogger = new Logger("database");
@@ -36,6 +42,12 @@ export const actions = {
   relationships,
   reports,
   blacklist,
+  badges,
+  serverCount,
+  dawnagotchi,
+  ranks,
+  ratelimits,
+  eco,
 } as const;
 
 export async function connect(): Promise<void> {

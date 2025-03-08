@@ -3,10 +3,7 @@ import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
 import ConfirmAction from "../../util/components/Confirm";
 import { createEmbed } from "../../util/other";
-import {
-  marriageEmojis,
-  relationshipArrayToEmojiArray,
-} from "../../util/marriage";
+import { marriageEmojis, relationshipArrayToEmojiArray } from "./_util";
 
 const command: HypnoCommand<{ user: User; type?: RelationshipType }> = {
   name: "removerelationship",

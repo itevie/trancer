@@ -1,5 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import { genQuote, randomQuote } from "../../util/actions/quotes";
+import { actions } from "../../util/database";
 import { compareTwoStrings } from "../../util/other";
 
 let games = [];
@@ -14,7 +14,7 @@ const command: HypnoCommand = {
     if (games.includes(message.author.id))
       return message.reply(`You're already in a game!`);
 
-    const quote = await randomQuote(message.guild.id);
+    const quote = await actions.quotes.getRandomQuote(message.guild.id);
     if (!quote) return message.reply(`Looks like this server has no quotes!`);
 
     const user = await message.client.users.fetch(quote.author_id);
@@ -25,7 +25,7 @@ const command: HypnoCommand = {
     });
 
     await message.reply({
-      embeds: [await genQuote(quote, true)],
+      embeds: [await actions.quotes.generateEmbed(quote, true)],
     });
 
     games.push(message.author.id);
@@ -61,13 +61,13 @@ const command: HypnoCommand = {
       if (!correct)
         return m.reply({
           content: "You got it wrong! :cyclone:",
-          embeds: [await genQuote(quote)],
+          embeds: [await actions.quotes.generateEmbed(quote)],
         });
 
       // Success
       return m.reply({
         content: `**${m.author.username}** got it right! Welldone :cyclone:`,
-        embeds: [await genQuote(quote)],
+        embeds: [await actions.quotes.generateEmbed(quote)],
       });
     });
   },

@@ -1,5 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import { calculateItemPrice } from "../../util/items";
+import { calculateItemPrice } from "./_util";
 import { createEmbed } from "../../util/other";
 import { currency, itemText } from "../../util/textProducer";
 

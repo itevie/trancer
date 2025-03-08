@@ -1,7 +1,8 @@
 import recipies from "../../craftingRecipies";
 import { HypnoCommand } from "../../types/util";
+import { paginate } from "../../util/components/pagination";
 import { itemMap } from "../../util/db-parts/items";
-import { createEmbed, englishifyList, paginate } from "../../util/other";
+import { createEmbed, englishifyList } from "../../util/other";
 import { itemText } from "../../util/textProducer";
 
 const command: HypnoCommand = {

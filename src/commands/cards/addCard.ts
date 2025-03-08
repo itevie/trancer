@@ -1,9 +1,9 @@
 import { resolve } from "path";
 import { HypnoCommand } from "../../types/util";
-import { addCard } from "../../util/actions/cards";
-import { generateCardEmbed, rarities } from "../../util/cards";
+import { generateCardEmbed, rarities } from "./_util";
 import { Attachment } from "discord.js";
 import { downloadFile } from "../../util/other";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand<{ deck: Deck; name: string; rarity: string }> = {
   name: "+card",
@@ -60,7 +60,7 @@ const command: HypnoCommand<{ deck: Deck; name: string; rarity: string }> = {
     }
 
     // Add card
-    let card = await addCard(
+    let card = await actions.cards.add(
       args.name,
       args.deck.id,
       args.rarity,

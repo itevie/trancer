@@ -3,7 +3,7 @@ import { HypnoCommand } from "../../types/util";
 import graphviz from "graphviz";
 import { actions } from "../../util/database";
 import { getUsernameSync } from "../../util/cachedUsernames";
-import { colorMap, marriageEmojis } from "../../util/marriage";
+import { colorMap, marriageEmojis } from "./_util";
 
 const customColors = {
   "728714181192187964": "#FFB6C1",

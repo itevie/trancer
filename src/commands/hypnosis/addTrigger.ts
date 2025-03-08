@@ -1,5 +1,4 @@
 import { HypnoCommand } from "../../types/util";
-import { addTriggerFor } from "../../util/actions/imposition";
 import { actions, database } from "../../util/database";
 import fs from "fs";
 import { createEmbed } from "../../util/other";
@@ -72,11 +71,11 @@ const command: HypnoCommand<{
       const triggers = fs
         .readFileSync(__dirname + "/../../data/impo.txt", "utf-8")
         .split("\n");
-      const userTriggers = await actions.triggers.getFor(user.id);
+      const userTriggers = await actions.triggers.getAllFor(user.id);
 
       for await (const trigger of triggers)
         if (!userTriggers.some((x) => x.what === trigger))
-          await addTriggerFor(user.id, trigger, false);
+          await actions.triggers.addFor(user.id, trigger, false);
 
       return message.reply({
         embeds: [
@@ -88,7 +87,7 @@ const command: HypnoCommand<{
     }
 
     // Add it
-    await addTriggerFor(user.id, args.trigger, args.bombard ?? false);
+    await actions.triggers.addFor(user.id, args.trigger, args.bombard ?? false);
     return message.reply(
       `Added the trigger! :cyclone:\nNote: you can manage your triggers more easier on the site: <https://trancer.dawn.rest/user_settings>`
     );

@@ -1,12 +1,12 @@
 import { TextChannel } from "discord.js";
 import { client } from "..";
 import config from "../config";
-import { getServerCount } from "../util/actions/serverCount";
 import { createEmbed } from "../util/other";
+import { actions } from "../util/database";
 
 client.on("messageUpdate", async (old, newMsg) => {
   // Check if channel has a count
-  let count = await getServerCount(old.guild.id);
+  let count = await actions.serverCount.getFor(old.guild.id);
   if (count && old.channel.id === count.channel_id) {
     const channel = (await client.channels.fetch(
       count.channel_id

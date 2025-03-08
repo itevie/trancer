@@ -1,10 +1,7 @@
-import config from "../../config";
 import { HypnoCommand } from "../../types/util";
-import { getAllAquiredCardsFor } from "../../util/actions/cards";
-import { addMoneyFor } from "../../util/actions/economy";
-import { computeCardPrice, convertAquiredCardsToCards } from "../../util/cards";
+import { computeCardPrice, convertAquiredCardsToCards } from "./_util";
 import ConfirmAction from "../../util/components/Confirm";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 import { createEmbed } from "../../util/other";
 import { currency } from "../../util/textProducer";
 
@@ -16,9 +13,9 @@ const command: HypnoCommand = {
 
   handler: async (message) => {
     // Collect all the data
-    let acards = (await getAllAquiredCardsFor(message.author.id)).filter(
-      (x) => x.amount > 1
-    );
+    let acards = (
+      await actions.cards.aquired.getAllFor(message.author.id)
+    ).filter((x) => x.amount > 1);
     if (acards.length === 0)
       return message.reply(`You have no duplicate cards!`);
 
@@ -54,7 +51,7 @@ const command: HypnoCommand = {
           );
         }
 
-        await addMoneyFor(message.author.id, worth);
+        await actions.eco.addMoneyFor(message.author.id, worth);
 
         return {
           embeds: [

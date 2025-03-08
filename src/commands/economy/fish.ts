@@ -1,7 +1,6 @@
 import { HypnoCommand } from "../../types/util";
-import config from "../../config";
 import { createEmbed } from "../../util/other";
-import { awardRandomThings } from "../../util/items";
+import { awardRandomThings } from "../items/_util";
 import { actions } from "../../util/database";
 import ecoConfig from "../../ecoConfig";
 

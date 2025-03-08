@@ -1,6 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import { database } from "../../util/database";
-import { rankExists } from "../../util/actions/ranks";
+import { actions, database } from "../../util/database";
 
 const command: HypnoCommand<{ rank: string }> = {
   name: "unvote",
@@ -21,7 +20,7 @@ const command: HypnoCommand<{ rank: string }> = {
     const rank = args.rank.toLowerCase();
 
     // Check if the rank exists
-    if (!(await rankExists(rank)))
+    if (!(await actions.ranks.exists(rank)))
       return message.reply(
         `That rank does not exist! But can be created using \`${serverSettings.prefix}createrank ${rank}\``
       );

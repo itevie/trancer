@@ -1,8 +1,5 @@
-import config from "../../config";
 import { HypnoCommand } from "../../types/util";
-import { getAllAquiredCardsFor } from "../../util/actions/cards";
-import { addMoneyFor } from "../../util/actions/economy";
-import { computeCardPrice } from "../../util/cards";
+import { computeCardPrice } from "./_util";
 import ConfirmAction from "../../util/components/Confirm";
 import { actions, database } from "../../util/database";
 import { createEmbed } from "../../util/other";
@@ -29,7 +26,9 @@ const command: HypnoCommand<{ card: Card; amount?: number }> = {
 
   handler: async (message, { args }) => {
     // Get the card inv
-    let aquired = (await getAllAquiredCardsFor(message.author.id)).find(
+    let aquired = (
+      await actions.cards.aquired.getAllFor(message.author.id)
+    ).find(
       (x) => x.user_id === message.author.id && x.card_id === args.card.id
     );
 
@@ -60,7 +59,7 @@ const command: HypnoCommand<{ card: Card; amount?: number }> = {
           message.author.id,
           args.card.id
         );
-        await addMoneyFor(message.author.id, price);
+        await actions.eco.addMoneyFor(message.author.id, price);
         return {
           content: `You sold **${amount} ${args.card.name}**(s) for ${currency(
             price

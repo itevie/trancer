@@ -1,8 +1,8 @@
 import { HypnoMessageHandler } from "../types/util";
 import config from "../config";
 import { randomFromRange } from "../util/other";
-import { addMoneyFor } from "../util/actions/economy";
 import ecoConfig from "../ecoConfig";
+import { actions } from "../util/database";
 
 const timeouts: { [key: string]: number } = {};
 
@@ -23,7 +23,7 @@ const handler: HypnoMessageHandler = {
         ecoConfig.payouts.message.min,
         ecoConfig.payouts.message.max
       );
-      await addMoneyFor(message.author.id, money, "messaging");
+      await actions.eco.addMoneyFor(message.author.id, money, "messaging");
       timeouts[message.author.id] = Date.now();
     }
   },

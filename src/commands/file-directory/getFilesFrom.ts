@@ -1,9 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import {
-  getFilesFrom,
-  paginateFileList,
-  sources,
-} from "../../util/fileDirectoryLoader";
+import { getFilesFrom, paginateFileList, sources } from "./_util";
 
 const command: HypnoCommand<{ source: string }> = {
   name: "filesfrom",

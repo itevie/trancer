@@ -1,10 +1,9 @@
 import { HypnoMessageHandler } from "../types/util";
 import config from "../config";
-import { addMoneyFor } from "../util/actions/economy";
-import { createEmbed, randomFromRange } from "../util/other";
+import { createEmbed } from "../util/other";
 import { actions, database } from "../util/database";
 import { client } from "..";
-import { awardRandomThings } from "../util/items";
+import { awardRandomThings } from "../commands/items/_util";
 import ecoConfig from "../ecoConfig";
 
 setInterval(async () => {

@@ -1,5 +1,6 @@
 import { HypnoCommand } from "../../types/util";
-import { createEmbed, paginate } from "../../util/other";
+import { paginate } from "../../util/components/pagination";
+import { createEmbed } from "../../util/other";
 import axios from "axios";
 
 const command: HypnoCommand<{ word: string }> = {

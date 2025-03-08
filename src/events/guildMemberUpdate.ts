@@ -4,13 +4,13 @@ import config from "../config";
 import { createEmbed } from "../util/other";
 import { currency } from "../util/textProducer";
 import ecoConfig from "../ecoConfig";
-import { addMoneyFor } from "../util/actions/economy";
+import { actions } from "../util/database";
 
 client.on("guildMemberUpdate", async (oldMember, newMember) => {
   if (newMember.guild.id !== config.botServer.id) return;
 
   if (!oldMember.premiumSince && newMember.premiumSince) {
-    await addMoneyFor(
+    await actions.eco.addMoneyFor(
       newMember.user.id,
       ecoConfig.payouts.boosts.max,
       "helping"

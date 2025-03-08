@@ -1,8 +1,8 @@
 import { HypnoCommand } from "../../types/util";
-import { getAllEconomy } from "../../util/actions/economy";
 import { createEmbed } from "../../util/other";
 import config from "../../config";
 import ecoConfig from "../../ecoConfig";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand = {
   name: "globalmoneyfromwhat",
@@ -27,7 +27,7 @@ const command: HypnoCommand = {
       last_fish: 0,
     };
 
-    let ecos = await getAllEconomy();
+    let ecos = await actions.eco.getAll();
 
     // Add all the shit to it
     for (const eco of ecos) {

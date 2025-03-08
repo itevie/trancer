@@ -10,6 +10,8 @@ const config = {
   // ----- Bot & Creator details -----
   owner: "395877903998648322",
 
+  dataDirectory: __dirname + "/data",
+
   // ----- Details to do with the bots server -----
   botServer: {
     id: "1257416273520758814",

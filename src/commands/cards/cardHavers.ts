@@ -1,5 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import { getAllAquiredCards } from "../../util/actions/cards";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand<{ card: Card }> = {
   name: "whohascard",
@@ -17,7 +17,7 @@ const command: HypnoCommand<{ card: Card }> = {
   },
 
   handler: async (message, { args }) => {
-    let aquired = (await getAllAquiredCards()).filter(
+    let aquired = (await actions.cards.aquired.getAll()).filter(
       (x) => x.card_id === args.card.id && x.amount > 0
     );
     let usernames: string[] = [];

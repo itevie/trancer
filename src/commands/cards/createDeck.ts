@@ -1,6 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import { getDeckByName } from "../../util/actions/cards";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 
 const command: HypnoCommand<{ name: string }> = {
   name: "+deck",
@@ -21,12 +20,12 @@ const command: HypnoCommand<{ name: string }> = {
 
   handler: async (message, { args }) => {
     // Check if deck already exists
-    if (await getDeckByName(args.name))
+    if (await actions.cards.decks.getByName(args.name))
       return message.reply(`That deck already exists!`);
 
     // Create deck
     await database.run(`INSERT INTO decks (name) VALUES (?)`, args.name);
-    let deck = await getDeckByName(args.name);
+    let deck = await actions.cards.decks.getByName(args.name);
     return message.reply(`Deck created! ID: **${deck.id}**`);
   },
 };

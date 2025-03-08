@@ -1,13 +1,12 @@
 import config from "../../config";
 import ecoConfig from "../../ecoConfig";
 import { HypnoCommand } from "../../types/util";
-import { getDawnagotchi } from "../../util/actions/dawnagotchi";
 import { actions, database } from "../../util/database";
 import {
   awardMoneyForCaringForDawn,
   calculateRequirementFromDate,
   generateDawnagotchiEmbed,
-} from "../../util/dawnagotchi";
+} from "./_util";
 import { currency } from "../../util/textProducer";
 
 const command: HypnoCommand = {
@@ -17,7 +16,7 @@ const command: HypnoCommand = {
 
   handler: async (message) => {
     // Check if they have a Dawn
-    let dawn = await getDawnagotchi(message.author.id);
+    let dawn = await actions.dawnagotchi.getFor(message.author.id);
     if (!dawn) return message.reply(`You don't have a Dawn!`);
 
     // Check if allowed to feed
@@ -60,7 +59,9 @@ const command: HypnoCommand = {
     return message.reply({
       content: money ? `You got ${currency(money)}` : "",
       embeds: [
-        generateDawnagotchiEmbed(await getDawnagotchi(message.author.id)),
+        generateDawnagotchiEmbed(
+          await actions.dawnagotchi.getFor(message.author.id)
+        ),
       ],
     });
   },

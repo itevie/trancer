@@ -5,7 +5,7 @@ import {
   createRotatingGifBuffer,
   generateNotImmuneImage,
   generateSpeechbubbleImage,
-} from "../../util/imageGeneration";
+} from "./_image_util";
 
 function genClass(func: any) {
   return class Temp {

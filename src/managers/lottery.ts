@@ -1,11 +1,9 @@
-import { existsSync, readFileSync, writeFileSync } from "fs";
-import config from "../config";
+import { readFileSync, writeFileSync } from "fs";
 import { actions } from "../util/database";
 import { client } from "..";
 import { TextChannel } from "discord.js";
 import { createEmbed } from "../util/other";
 import { msToHowLong } from "../util/ms";
-import { addMoneyFor } from "../util/actions/economy";
 import ecoConfig from "../ecoConfig";
 import { currency } from "../util/textProducer";
 import Manager from "./Manager";
@@ -104,5 +102,5 @@ async function checkLottery() {
   }
 
   // Award
-  await addMoneyFor(winner.id, prize, "gambling");
+  await actions.eco.addMoneyFor(winner.id, prize, "gambling");
 }

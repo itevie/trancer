@@ -1,7 +1,6 @@
 import { Invite, TextChannel } from "discord.js";
 import { client } from "..";
 import config from "../config";
-import { addMoneyFor } from "../util/actions/economy";
 import { addToMemberCount } from "../util/analytics";
 import getInviteDetails from "../util/getInviteDetails";
 import { createEmbed } from "../util/other";
@@ -156,7 +155,11 @@ client.on("guildMemberAdd", async (member) => {
           if (user.bot) return;
 
           // Add money
-          await addMoneyFor(user.id, ecoConfig.payouts.inviting.min, "helping");
+          await actions.eco.addMoneyFor(
+            user.id,
+            ecoConfig.payouts.inviting.min,
+            "helping"
+          );
           await user.send(
             `Thanks for inviting ** ${
               member.user.username

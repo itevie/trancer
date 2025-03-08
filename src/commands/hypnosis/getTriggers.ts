@@ -1,9 +1,9 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { getTriggersFor } from "../../util/actions/imposition";
-import { createEmbed, paginate } from "../../util/other";
+import { createEmbed } from "../../util/other";
 import { tagEmojiMap } from "../../util/db-parts/triggers";
 import { actions } from "../../util/database";
+import { paginate } from "../../util/components/pagination";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "gettriggers",
@@ -24,7 +24,7 @@ const command: HypnoCommand<{ user?: User }> = {
 
   handler: async (message, { args }) => {
     const user = args.user ?? message.author;
-    const triggers = await actions.triggers.getFor(user.id);
+    const triggers = await actions.triggers.getAllFor(user.id);
 
     return paginate({
       replyTo: message,

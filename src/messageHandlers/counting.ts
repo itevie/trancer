@@ -1,7 +1,6 @@
 import { client } from "..";
 import { HypnoMessageHandler } from "../types/util";
-import { getServerCount } from "../util/actions/serverCount";
-import { database } from "../util/database";
+import { actions, database } from "../util/database";
 import { createEmbed } from "../util/other";
 import config from "../config";
 import Mexp from "math-expression-evaluator";
@@ -16,7 +15,7 @@ const handler: HypnoMessageHandler = {
 
   handler: async (message) => {
     // Get count & do guards
-    let count = await getServerCount(message.guild.id);
+    let count = await actions.serverCount.getFor(message.guild.id);
     if (!count) return;
     if (message.channel.id !== count.channel_id) return;
 

@@ -1,12 +1,8 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { createEmbed } from "../../util/other";
-import { getTriggersFor } from "../../util/actions/imposition";
-import { getAllAquiredBadgesFor } from "../../util/actions/badges";
 import badges from "../../util/badges";
 import { actions, database } from "../../util/database";
-import { getAllEconomy, getEconomyFor } from "../../util/actions/economy";
-import config from "../../config";
 import { calculateLevel } from "../../messageHandlers/xp";
 import { createRating } from "../fun/rate";
 import { currency } from "../../util/textProducer";
@@ -33,16 +29,16 @@ const command: HypnoCommand<{ user?: User }> = {
     let member = await message.guild.members.fetch(user.id);
 
     // Get details
-    const economy = await getEconomyFor(user.id);
+    const economy = await actions.eco.getFor(user.id);
     const userData = await actions.userData.getFor(user.id, message.guild.id);
-    const imposition = await getTriggersFor(user.id);
+    const imposition = await actions.triggers.getAllFor(user.id);
     const spiralsGiven = (
       await database.all(`SELECT * FROM spirals WHERE sent_by = ?`, user.id)
     ).length;
-    const aquiredBadges = (await getAllAquiredBadgesFor(user.id)).map(
+    const aquiredBadges = (await actions.badges.aquired.getAllFor(user.id)).map(
       (x) => badges[x.badge_name].emoji
     );
-    const ecoPosition = (await getAllEconomy())
+    const ecoPosition = (await actions.eco.getAll())
       .sort((a, b) => b.balance - a.balance)
       .findIndex((x) => x.user_id === user.id);
 

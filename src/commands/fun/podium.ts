@@ -2,11 +2,9 @@ import { AttachmentBuilder, User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { Podium } from "discord-image-generation";
 import { client } from "../..";
-import { getAllEconomy } from "../../util/actions/economy";
 import { actions, database } from "../../util/database";
 import { accumlateSortLeaderboardData } from "../../util/createLeaderboard";
 import { lbTypes, lbUserDataMap } from "../leaderboards/lb";
-import { rankExists } from "../../util/actions/ranks";
 import path from "path";
 import { readFileSync } from "fs";
 
@@ -37,10 +35,10 @@ const command: HypnoCommand<{
     let data: [string, number][];
     switch (args.type) {
       case "economy":
-        data = (await getAllEconomy()).map((x) => [x.user_id, x.balance]) as [
-          string,
-          number
-        ][];
+        data = (await actions.eco.getAll()).map((x) => [
+          x.user_id,
+          x.balance,
+        ]) as [string, number][];
         break;
       case "bumps":
       case "xp":
@@ -59,7 +57,7 @@ const command: HypnoCommand<{
         break;
       case "rank":
         if (!args.rank) return message.reply("Please provide a rank name!");
-        if (!(await rankExists(args.rank)))
+        if (!(await actions.ranks.exists(args.rank)))
           return message.reply("That rank does not exist!");
         const dbResults = (await database.all(
           `SELECT * FROM votes WHERE rank_name = (?);`,

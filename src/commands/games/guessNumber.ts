@@ -1,10 +1,9 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
-import config from "../../config";
 import { HypnoCommand } from "../../types/util";
 import { createEmbed, randomFromRange } from "../../util/other";
-import { addMoneyFor, removeMoneyFor } from "../../util/actions/economy";
 import ecoConfig from "../../ecoConfig";
 import { currency } from "../../util/textProducer";
+import { actions } from "../../util/database";
 
 export const guessNumberGames: { [key: string]: boolean } = {};
 
@@ -29,7 +28,7 @@ const command: HypnoCommand<{ cancel?: string }> = {
     let cancelGame = async () => {
       // Check if penalty
       if (guessNumberGames[message.author.id]) {
-        await removeMoneyFor(message.author.id, 15, true);
+        await actions.eco.removeMoneyFor(message.author.id, 15, true);
         delete guessNumberGames[message.author.id];
         return message.reply(
           `The game was cancelled. But because you played in the last game and have now cancelled it, you lost ${currency(
@@ -152,7 +151,11 @@ const command: HypnoCommand<{ cancel?: string }> = {
         let multipliedReward = baseReward * (3 - guessed);
 
         // Give money
-        await addMoneyFor(message.author.id, multipliedReward, "gambling");
+        await actions.eco.addMoneyFor(
+          message.author.id,
+          multipliedReward,
+          "gambling"
+        );
         await message.reply(
           `Welldone! You guessed the number **${botsNumber}** in **${guessed}** guesses! You got ${currency(
             multipliedReward
@@ -169,7 +172,7 @@ const command: HypnoCommand<{ cancel?: string }> = {
 
         // Remove money
         let amount = ecoConfig.payouts.guessNumber.punishment;
-        await removeMoneyFor(message.author.id, amount, true);
+        await actions.eco.removeMoneyFor(message.author.id, amount, true);
         await message.reply(
           `Oops... you weren't able to get the number correct in 3 guesses! The number was **${botsNumber}**! You lost ${currency(
             amount

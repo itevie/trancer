@@ -1,0 +1,27 @@
+import { HypnoCommandType } from "../../types/util";
+
+export const categoryEmojis: Record<HypnoCommandType, string> = {
+  ai: "🤖",
+  actions: "👊",
+  uncategorised: "❓",
+  badges: "🥇",
+  help: "📖",
+  admin: "🛠️",
+  fun: "🎮",
+  counting: "🔢",
+  economy: "🌀",
+  hypnosis: "😵‍💫",
+  leaderboards: "🏆",
+  messages: "💬",
+  quotes: "🗨️",
+  spirals: "😵‍💫",
+  cards: "🎴",
+  ranks: "🌭",
+  analytics: "📈",
+  dawnagotchi: "🏳‍🌈",
+  games: "🎮️",
+  qotd: "❓",
+  reporting: "⚔️",
+  marriage: "💍",
+  "file-directory": "📁",
+};

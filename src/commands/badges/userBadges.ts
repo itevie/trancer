@@ -1,7 +1,7 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { getAllAquiredBadgesFor } from "../../util/actions/badges";
 import { formatAquiredBadges } from "../../util/badges";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "badges",
@@ -21,11 +21,15 @@ const command: HypnoCommand<{ user?: User }> = {
 
   handler: async (message, args) => {
     let user = args.args.user ? args.args.user : message.author;
-    let badges = formatAquiredBadges(await getAllAquiredBadgesFor(user.id));
+    let badges = formatAquiredBadges(
+      await actions.badges.aquired.getAllFor(user.id)
+    );
+
     if (badges.length === 0)
       return message.reply(
         `${user.id === message.author.id ? "You" : "They"} have no badges :(`
       );
+
     return message.reply(
       `${
         user.id === message.author.id ? "Your" : "Their"

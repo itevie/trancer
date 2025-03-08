@@ -1,6 +1,7 @@
 import { HypnoCommand } from "../../types/util";
+import { paginate } from "../../util/components/pagination";
 import { database } from "../../util/database";
-import { createEmbed, getUser, paginate } from "../../util/other";
+import { createEmbed, getUser } from "../../util/other";
 
 const command: HypnoCommand<{ query: string }> = {
   name: "searchquotes",

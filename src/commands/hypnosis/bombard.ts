@@ -2,7 +2,6 @@ import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { actions, database } from "../../util/database";
 import { getRandomImposition } from "../../util/other";
-import { getRandomSpiral } from "../../util/spirals";
 
 const validOptions = [
   "nospirals",
@@ -239,7 +238,11 @@ const command: HypnoCommand<{
           const toSend: string = "";
 
           if (!imposition)
-            await message.channel.send((await getRandomSpiral()).link);
+            await message.channel.send(
+              (
+                await actions.spirals.getRandom()
+              ).link
+            );
           else if (_spirals === "none")
             await message.channel.send(
               await getRandomImposition(user.id, true)
@@ -250,7 +253,12 @@ const command: HypnoCommand<{
               await message.channel.send(
                 await getRandomImposition(user.id, true)
               );
-            else await message.channel.send((await getRandomSpiral()).link);
+            else
+              await message.channel.send(
+                (
+                  await actions.spirals.getRandom()
+                ).link
+              );
           }
         } catch (e) {
           console.log(e);

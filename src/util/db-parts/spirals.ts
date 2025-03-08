@@ -12,6 +12,11 @@ const _actions = {
     );
   },
 
+  getRandom: async (): Promise<Spiral> => {
+    const spirals = await _actions.getAll();
+    return spirals[Math.floor(Math.random() * spirals.length)];
+  },
+
   has: async (link: string): Promise<boolean> => {
     return !!(await database.get(
       "SELECT 1 FROM spirals WHERE link = ?;",

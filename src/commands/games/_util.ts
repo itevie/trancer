@@ -3,19 +3,13 @@ import {
   ButtonBuilder,
   ButtonStyle,
   ChatInputCommandInteraction,
-  ComponentType,
-  InteractionCollector,
-  MappedInteractionTypes,
   Message,
-  RepliableInteraction,
   User,
 } from "discord.js";
-import { addMoneyFor, getEconomyFor, removeMoneyFor } from "./actions/economy";
-import config from "../config";
-import { createEmbed } from "./other";
-import { database } from "./database";
-import { client } from "..";
-import { currency } from "./textProducer";
+import { createEmbed } from "../../util/other";
+import { actions, database } from "../../util/database";
+import { client } from "../..";
+import { currency } from "../../util/textProducer";
 
 interface GameWrapperOptions {
   callback: (op: {
@@ -72,8 +66,8 @@ export default async function wrapGame(options: GameWrapperOptions) {
   // Check bets
   if (options.bet) {
     let bet = options.bet;
-    let pEco = await getEconomyFor(player.id);
-    let oEco = await getEconomyFor(opponent.id);
+    let pEco = await actions.eco.getFor(player.id);
+    let oEco = await actions.eco.getFor(opponent.id);
     if (pEco.balance < options.bet)
       return await options.message.reply(
         `You do not have ${currency(bet)} to bet!`
@@ -191,12 +185,12 @@ export default async function wrapGame(options: GameWrapperOptions) {
 
       // Check if there was a bet
       if (options.bet && winner !== "t") {
-        await addMoneyFor(
+        await actions.eco.addMoneyFor(
           winner === "p" ? player.id : opponent.id,
           options.bet,
           "gambling"
         );
-        await removeMoneyFor(
+        await actions.eco.removeMoneyFor(
           winner === "o" ? player.id : opponent.id,
           options.bet,
           true

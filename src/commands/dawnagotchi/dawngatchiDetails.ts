@@ -1,7 +1,7 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { getDawnagotchi } from "../../util/actions/dawnagotchi";
-import { generateDawnagotchiEmbed } from "../../util/dawnagotchi";
+import { generateDawnagotchiEmbed } from "./_util";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand<{ user?: User; extraDetails?: boolean }> = {
   name: "dawngotchidetails",
@@ -28,7 +28,7 @@ const command: HypnoCommand<{ user?: User; extraDetails?: boolean }> = {
     let user = args.user ? args.user : message.author;
 
     // Check if they have one
-    let dawn = await getDawnagotchi(user.id);
+    let dawn = await actions.dawnagotchi.getFor(user.id);
     if (!dawn)
       return message.reply(
         `${user.id === message.author.id ? "You" : "They"} do not have a Dawn!`

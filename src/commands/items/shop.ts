@@ -1,8 +1,9 @@
 import { HypnoCommand } from "../../types/util";
 import { database } from "../../util/database";
-import { calculateItemPrice } from "../../util/items";
-import { createEmbed, paginate } from "../../util/other";
+import { calculateItemPrice } from "./_util";
+import { createEmbed } from "../../util/other";
 import { currency, itemText } from "../../util/textProducer";
+import { paginate } from "../../util/components/pagination";
 
 const command: HypnoCommand<{ tag?: string }> = {
   name: "shop",

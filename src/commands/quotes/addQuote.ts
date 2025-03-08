@@ -1,6 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import { addQuote, genQuote, getQuote } from "../../util/actions/quotes";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 import config from "../../config";
 import ConfirmAction from "../../util/components/Confirm";
 import { createEmbed } from "../../util/other";
@@ -54,16 +53,16 @@ const command: HypnoCommand<{ force?: boolean }> = {
     ConfirmAction({
       message,
       embed: messageIsSimilar
-        ? (await genQuote(messageIsSimilar)).setTitle(
+        ? (await actions.quotes.generateEmbed(messageIsSimilar)).setTitle(
             "That quote is too similar to this quote! Is it worth it?"
           )
         : createEmbed(),
       autoYes: !messageIsSimilar,
       async callback() {
         // Add to database
-        const quote = await addQuote(ref, message.author.id);
+        const quote = await actions.quotes.add(ref, message.author.id);
 
-        let embed = await genQuote(quote);
+        let embed = await actions.quotes.generateEmbed(quote);
 
         // Check if should send in quotes channel
         if (serverSettings.quotes_channel_id) {

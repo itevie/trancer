@@ -1,13 +1,11 @@
-import config from "../config";
 import ecoConfig from "../ecoConfig";
 import { HypnoMessageHandler } from "../types/util";
-import { getDawnagotchi, removeDawnagotchi } from "../util/actions/dawnagotchi";
-import { removeMoneyFor } from "../util/actions/economy";
 import {
   generateDawnagotchiEmbed,
   getDawnagotchiRequirements,
-} from "../util/dawnagotchi";
+} from "../commands/dawnagotchi/_util";
 import { currency } from "../util/textProducer";
+import { actions } from "../util/database";
 
 const handler: HypnoMessageHandler = {
   name: "dawn-checker",
@@ -15,7 +13,7 @@ const handler: HypnoMessageHandler = {
 
   handler: async (message) => {
     // Fetch and check if they have a Dawn
-    let dawn = await getDawnagotchi(message.author.id);
+    let dawn = await actions.dawnagotchi.getFor(message.author.id);
     if (!dawn) return;
 
     // Get requirements
@@ -27,7 +25,7 @@ const handler: HypnoMessageHandler = {
       requirements.feed === 0 ||
       requirements.play === 0
     ) {
-      await removeDawnagotchi(message.author.id);
+      await actions.dawnagotchi.removeFor(message.author.id);
       let messages: string[] = [];
 
       // Add messages
@@ -38,7 +36,7 @@ const handler: HypnoMessageHandler = {
         messages.push(`Your Dawn didn't get enough attention...`);
 
       // Remove money
-      await removeMoneyFor(
+      await actions.eco.removeMoneyFor(
         message.author.id,
         ecoConfig.payouts.dawn.punishment
       );

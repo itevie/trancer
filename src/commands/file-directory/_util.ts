@@ -14,9 +14,11 @@ import {
   rmSync,
   writeFileSync,
 } from "fs";
-import { createEmbed, paginate } from "./other";
+import { createEmbed } from "../../util/other";
+import config from "../../config";
+import { paginate } from "../../util/components/pagination";
 
-const cacheDirectory = __dirname + "/../data/file_directory";
+const cacheDirectory = config.dataDirectory + "/file_directory";
 if (!existsSync(cacheDirectory)) mkdirSync(cacheDirectory);
 
 const BASE_URL = "https://www.googleapis.com/youtube/v3";

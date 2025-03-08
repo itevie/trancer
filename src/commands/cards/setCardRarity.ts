@@ -1,5 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import { generateCardEmbed, rarities } from "../../util/cards";
+import { generateCardEmbed, rarities } from "./_util";
 import { database } from "../../util/database";
 
 const command: HypnoCommand<{ card: Card; rarity: Rarity }> = {

@@ -8,7 +8,7 @@ import {
 import { HypnoCommand } from "../../types/util";
 import { createEmbed, generateCode } from "../../util/other";
 import { actions } from "../../util/database";
-import { giveRewardDeteils } from "../../util/items";
+import { giveRewardDeteils } from "../items/_util";
 
 const command: HypnoCommand<{ what: string; minLevel?: number }> = {
   name: "startgiveaway",

@@ -1,13 +1,11 @@
-import config from "../config";
-import { addMoneyFor } from "./actions/economy";
-import { actions, database } from "./database";
+import { actions, database } from "../../util/database";
 import {
   biasedRandomFromRange,
   englishifyList,
   randomFromRange,
   shuffle,
-} from "./other";
-import { currency, itemText } from "./textProducer";
+} from "../../util/other";
+import { currency, itemText } from "../../util/textProducer";
 
 interface RewardDetails {
   currency: number;
@@ -44,7 +42,7 @@ export async function giveRewardDeteils(
   userId: string,
   details: RewardDetails
 ): Promise<void> {
-  if (details.currency) await addMoneyFor(userId, details.currency);
+  if (details.currency) await actions.eco.addMoneyFor(userId, details.currency);
   for await (const [item, amount] of Object.entries(details.items)) {
     await actions.items.aquired.addFor(userId, parseInt(item), amount);
   }

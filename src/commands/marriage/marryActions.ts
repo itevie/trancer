@@ -3,7 +3,7 @@ import { HypnoCommand } from "../../types/util";
 import { actions, database, databaseLogger } from "../../util/database";
 import { createEmbed } from "../../util/other";
 import ConfirmAction from "../../util/components/Confirm";
-import { englishifyRelationship } from "../../util/marriage";
+import { englishifyRelationship } from "./_util";
 
 const command: HypnoCommand<{ user: User }> = {
   name: "_marry_actions",

@@ -4,7 +4,6 @@ import { Attachment, Message } from "discord.js";
 import axios from "axios";
 import { resolve } from "path";
 import { createWriteStream } from "fs";
-import { addMoneyFor } from "../../util/actions/economy";
 import Logger from "../../util/Logger";
 import { actions } from "../../util/database";
 import ecoConfig from "../../ecoConfig";
@@ -108,7 +107,7 @@ const command: HypnoCommand = {
               spiral = await actions.spirals.add(link, msg.author.id, fileName);
             }
 
-            await addMoneyFor(
+            await actions.eco.addMoneyFor(
               msg.author.id,
               ecoConfig.payouts.spirals.max,
               "helping"

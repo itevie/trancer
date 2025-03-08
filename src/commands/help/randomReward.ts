@@ -1,9 +1,6 @@
 import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
-import {
-  englishifyRewardDetails,
-  generateRandomReward,
-} from "../../util/items";
+import { englishifyRewardDetails, generateRandomReward } from "../items/_util";
 
 const command: HypnoCommand<{
   itemtag?: string;

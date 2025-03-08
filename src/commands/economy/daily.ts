@@ -1,6 +1,6 @@
 import { HypnoCommand } from "../../types/util";
 import { createEmbed } from "../../util/other";
-import { awardRandomThings } from "../../util/items";
+import { awardRandomThings } from "../items/_util";
 import ecoConfig from "../../ecoConfig";
 
 const command: HypnoCommand = {

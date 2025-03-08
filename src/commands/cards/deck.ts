@@ -1,8 +1,8 @@
 import { HypnoCommand } from "../../types/util";
-import { getAllAquiredCardsFor } from "../../util/actions/cards";
-import { rarities } from "../../util/cards";
-import { database } from "../../util/database";
-import { createEmbed, paginate } from "../../util/other";
+import { rarities } from "./_util";
+import { actions, database } from "../../util/database";
+import { createEmbed } from "../../util/other";
+import { paginate } from "../../util/components/pagination";
 
 const command: HypnoCommand<{ deck: Deck; rarity?: Rarity }> = {
   name: "deck",
@@ -33,7 +33,7 @@ const command: HypnoCommand<{ deck: Deck; rarity?: Rarity }> = {
       `SELECT * FROM cards WHERE deck = ?`,
       args.deck.id
     );
-    let aquired = (await getAllAquiredCardsFor(message.author.id))
+    let aquired = (await actions.cards.aquired.getAllFor(message.author.id))
       .filter((x) => x.amount > 0)
       .map((x) => x.card_id);
 

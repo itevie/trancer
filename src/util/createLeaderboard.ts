@@ -1,7 +1,8 @@
 import { EmbedBuilder, Message } from "discord.js";
 import { client } from "..";
-import { createEmbed, paginate } from "./other";
-import { getUsername, getUsernameSync } from "./cachedUsernames";
+import { createEmbed } from "./other";
+import { getUsernameSync } from "./cachedUsernames";
+import { paginate } from "./components/pagination";
 
 export function accumlateSortLeaderboardData(data: string[]) {
   const result: { [key: string]: number } = {};

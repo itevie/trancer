@@ -1,7 +1,8 @@
 import { HypnoCommand } from "../../types/util";
 import { getUsernameSync } from "../../util/cachedUsernames";
+import { paginate } from "../../util/components/pagination";
 import { actions, database } from "../../util/database";
-import { createEmbed, paginate } from "../../util/other";
+import { createEmbed } from "../../util/other";
 import { itemText } from "../../util/textProducer";
 
 const command: HypnoCommand<{ item: Item }> = {

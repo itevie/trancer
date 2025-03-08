@@ -6,7 +6,7 @@ import {
   englishifyRewardDetails,
   generateRandomReward,
   giveRewardDeteils,
-} from "../util/items";
+} from "../commands/items/_util";
 import { piglatin } from "../commands/fun/pigLatin";
 import ecoConfig from "../ecoConfig";
 

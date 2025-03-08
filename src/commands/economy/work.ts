@@ -1,6 +1,6 @@
 import ecoConfig from "../../ecoConfig";
 import { HypnoCommand } from "../../types/util";
-import { addMoneyFor } from "../../util/actions/economy";
+import { actions } from "../../util/database";
 import { createEmbed, randomFromRange } from "../../util/other";
 import { currency } from "../../util/textProducer";
 
@@ -75,7 +75,7 @@ const command: HypnoCommand = {
       )
       .replace(/\$r/g, `**${currency(reward)}**`)
       .replace(/\$c/g, ecoConfig.currency);
-    await addMoneyFor(message.author.id, reward, "commands");
+    await actions.eco.addMoneyFor(message.author.id, reward, "commands");
 
     return message.reply({
       embeds: [createEmbed().setTitle("You Worked!").setDescription(response)],

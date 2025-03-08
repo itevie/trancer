@@ -1,9 +1,7 @@
-import config from "../../config";
 import { HypnoCommand } from "../../types/util";
-import { addMoneyFor } from "../../util/actions/economy";
 import ConfirmAction from "../../util/components/Confirm";
 import { actions } from "../../util/database";
-import { calculateItemPrice } from "../../util/items";
+import { calculateItemPrice } from "./_util";
 import { createEmbed } from "../../util/other";
 import { currency, itemText } from "../../util/textProducer";
 
@@ -49,7 +47,7 @@ const command: HypnoCommand<{ tag: string }> = {
           message.author.id,
           Object.fromEntries(items.map((x) => [x.id, x.amount]))
         );
-        await addMoneyFor(message.author.id, price);
+        await actions.eco.addMoneyFor(message.author.id, price);
         return {
           embeds: [createEmbed().setTitle("Sold items!").setDescription(msg)],
         };

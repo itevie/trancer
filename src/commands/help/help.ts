@@ -4,9 +4,11 @@ import {
   PermissionFlagsBits,
 } from "discord.js";
 import { commands } from "../..";
-import { HypnoCommand, HypnoCommandType } from "../../types/util";
-import getAllFiles, { createEmbed, paginate } from "../../util/other";
+import { HypnoCommand } from "../../types/util";
+import getAllFiles, { createEmbed } from "../../util/other";
 import config from "../../config";
+import { paginate } from "../../util/components/pagination";
+import { categoryEmojis } from "./_util";
 
 const messageFiles = getAllFiles(__dirname + "/../../topics");
 export const messages: { [key: string]: MessageCreateOptions } = {};
@@ -15,32 +17,6 @@ for (const messageFile of messageFiles) {
   const messageImport = require(messageFile).default as MessageCreateOptions;
   messages[name] = messageImport;
 }
-
-export const categoryEmojis: Record<HypnoCommandType, string> = {
-  ai: "🤖",
-  actions: "👊",
-  uncategorised: "❓",
-  badges: "🥇",
-  help: "📖",
-  admin: "🛠️",
-  fun: "🎮",
-  counting: "🔢",
-  economy: "🌀",
-  hypnosis: "😵‍💫",
-  leaderboards: "🏆",
-  messages: "💬",
-  quotes: "🗨️",
-  spirals: "😵‍💫",
-  cards: "🎴",
-  ranks: "🌭",
-  analytics: "📈",
-  dawnagotchi: "🏳‍🌈",
-  games: "🎮️",
-  qotd: "❓",
-  reporting: "⚔️",
-  marriage: "💍",
-  "file-directory": "📁",
-};
 
 const command: HypnoCommand<{ ignoreGuards: boolean }> = {
   name: "help",

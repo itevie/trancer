@@ -1,7 +1,7 @@
 import { HypnoCommand } from "../../types/util";
-import { getEconomyFor } from "../../util/actions/economy";
 import { User } from "discord.js";
 import { currency } from "../../util/textProducer";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "balance",
@@ -28,7 +28,7 @@ const command: HypnoCommand<{ user?: User }> = {
     let pronoun = args.user ? "Their" : "Your";
 
     // Get the economy
-    let economy = await getEconomyFor(user.id);
+    let economy = await actions.eco.getFor(user.id);
 
     // Done
     return message.reply(`${pronoun} balance is ${currency(economy.balance)}`);

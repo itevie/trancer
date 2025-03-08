@@ -1,9 +1,8 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, User } from "discord.js";
+import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { addMoneyFor, removeMoneyFor } from "../../util/actions/economy";
 import { createEmbed } from "../../util/other";
 import { currency } from "../../util/textProducer";
-import wrapGame from "../../util/GameWrapper";
+import wrapGame from "../games/_util";
 
 export const existingGames: { [key: string]: string } = {};
 
@@ -46,8 +45,6 @@ const command: HypnoCommand<{ user: User; amount: number }> = {
         });
 
         const winner = Math.random() > 0.5 ? message.author : args.user;
-        const loser =
-          winner.id === message.author.id ? args.user : message.author;
 
         setTimeout(async () => {
           await op.message.edit({

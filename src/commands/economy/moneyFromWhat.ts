@@ -1,8 +1,8 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { getEconomyFor } from "../../util/actions/economy";
 import { createEmbed } from "../../util/other";
 import ecoConfig from "../../ecoConfig";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "moneyfromwhat",
@@ -23,7 +23,7 @@ const command: HypnoCommand<{ user?: User }> = {
 
   handler: async (message, { args }) => {
     let user = args.user ? args.user : message.author;
-    let eco = await getEconomyFor(user.id);
+    let eco = await actions.eco.getFor(user.id);
 
     return message.reply({
       embeds: [

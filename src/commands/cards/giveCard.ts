@@ -1,11 +1,7 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import {
-  addCardFor,
-  getAquiredCardsFor,
-  removeCardFor,
-} from "../../util/actions/cards";
-import { generateCardEmbed } from "../../util/cards";
+import { generateCardEmbed } from "./_util";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand<{ card: Card; user: User; amount?: number }> = {
   name: "givecard",
@@ -36,15 +32,18 @@ const command: HypnoCommand<{ card: Card; user: User; amount?: number }> = {
   handler: async (message, { args }) => {
     // Collect details
     let amount = args.amount ? args.amount : 1;
-    let acard = await getAquiredCardsFor(message.author.id, args.card.id);
+    let acard = await actions.cards.aquired.getFor(
+      message.author.id,
+      args.card.id
+    );
     if (amount > acard.amount)
       return message.reply(
         `You do not have **${amount}** **${args.card.name}'s**`
       );
 
     // Give it
-    await addCardFor(args.user.id, args.card.id, amount);
-    await removeCardFor(message.author.id, args.card.id, amount);
+    await actions.cards.addFor(args.user.id, args.card.id, amount);
+    await actions.cards.removeFor(message.author.id, args.card.id, amount);
 
     // Done
     return message.reply({

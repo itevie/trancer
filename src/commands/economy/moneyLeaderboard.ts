@@ -1,9 +1,9 @@
 import { HypnoCommand } from "../../types/util";
 import { createPaginatedLeaderboardFromData } from "../../util/createLeaderboard";
-import { getAllEconomy } from "../../util/actions/economy";
 import { checkBadges } from "../../util/badges";
 import { createEmbed } from "../../util/other";
 import ecoConfig from "../../ecoConfig";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand = {
   name: `moneyleaderboard`,
@@ -12,7 +12,7 @@ const command: HypnoCommand = {
   type: "economy",
 
   handler: async (message, { serverSettings }) => {
-    let data = await getAllEconomy();
+    let data = await actions.eco.getAll();
     let organised = data.map((x) => [x.user_id, x.balance]) as [
       string,
       number

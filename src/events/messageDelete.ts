@@ -2,11 +2,11 @@ import { TextChannel } from "discord.js";
 import { client } from "..";
 import config from "../config";
 import { createEmbed } from "../util/other";
-import { getServerCount } from "../util/actions/serverCount";
+import { actions } from "../util/database";
 
 client.on("messageDelete", async (message) => {
   // Check if channel has a count
-  let count = await getServerCount(message.guild.id);
+  let count = await actions.serverCount.getFor(message.guild.id);
   if (count && message.channel.id === count.channel_id) {
     const channel = (await client.channels.fetch(
       count.channel_id

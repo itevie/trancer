@@ -1,5 +1,5 @@
 import { Router } from "express";
-import statusThemes from "../../../util/statusThemes";
+import statusThemes from "../../../commands/hypnosis/_util";
 import settingsUpdate from "../../settingsUpdate";
 
 export default function MakeBasicRoutes() {

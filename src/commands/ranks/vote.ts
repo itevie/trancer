@@ -1,8 +1,7 @@
 import { User } from "discord.js";
 import { client } from "../..";
 import { HypnoCommand } from "../../types/util";
-import { database } from "../../util/database";
-import { rankExists } from "../../util/actions/ranks";
+import { actions, database } from "../../util/database";
 
 const command: HypnoCommand<{ user: User; rank: string }> = {
   name: "vote",
@@ -28,7 +27,7 @@ const command: HypnoCommand<{ user: User; rank: string }> = {
     const user = args.user;
 
     // Check if the rank exists
-    if (!(await rankExists(rank)))
+    if (!(await actions.ranks.exists(rank)))
       return message.reply(
         `That rank does not exist! But can be created using \`${serverSettings.prefix}createrank ${rank}\``
       );

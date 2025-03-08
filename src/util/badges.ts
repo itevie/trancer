@@ -1,10 +1,4 @@
 import { AquiredBadge } from "../types/aquiredBadge";
-import {
-  addBadgeFor,
-  getAllAquiredBadges,
-  removeBadgeFor,
-} from "./actions/badges";
-import { getAllEconomy } from "./actions/economy";
 import { actions, database } from "./database";
 import config from "../config";
 import { calculateLevel } from "../messageHandlers/xp";
@@ -19,11 +13,11 @@ export interface Badge {
   scan: (user: UserData & Economy) => Promise<boolean>;
 }
 
-let scans = 0;
-
 async function handleEcoPositionalBadges() {
-  let economy = (await getAllEconomy()).sort((a, b) => b.balance - a.balance);
-  let badges = await getAllAquiredBadges();
+  let economy = (await actions.eco.getAll()).sort(
+    (a, b) => b.balance - a.balance
+  );
+  let badges = await actions.badges.aquired.getAll();
 
   // Get current ones
   let first = economy[0].user_id;
@@ -37,18 +31,18 @@ async function handleEcoPositionalBadges() {
 
   // Check if they are same
   if (first !== dbFirst) {
-    await removeBadgeFor(dbFirst, "eco#1");
-    await addBadgeFor(first, "eco#1");
+    await actions.badges.removeFor(dbFirst, "eco#1");
+    await actions.badges.addFor(first, "eco#1");
   }
 
   if (second !== dbSecond) {
-    await removeBadgeFor(dbSecond, "eco#2");
-    await addBadgeFor(second, "eco#2");
+    await actions.badges.removeFor(dbSecond, "eco#2");
+    await actions.badges.addFor(second, "eco#2");
   }
 
   if (third !== dbThird) {
-    await removeBadgeFor(dbThird, "eco#3");
-    await addBadgeFor(third, "eco#3");
+    await actions.badges.removeFor(dbThird, "eco#3");
+    await actions.badges.addFor(third, "eco#3");
   }
 
   return false;
@@ -207,7 +201,7 @@ export async function checkBadges(
     for await (const [k, badge] of Object.entries(badges)) {
       const result = await badge.scan(user);
       if (result) {
-        const giveResult = await addBadgeFor(user.user_id, k);
+        const giveResult = await actions.badges.addFor(user.user_id, k);
         if (giveResult) given.push(badge);
       }
     }

@@ -1,9 +1,11 @@
 import { EmbedBuilder } from "discord.js";
-import { createEmbed, makePercentageASCII, randomFromRange } from "./other";
-import { addMoneyFor, getEconomyFor } from "./actions/economy";
-import config from "../config";
-import { database } from "./database";
-import ecoConfig from "../ecoConfig";
+import {
+  createEmbed,
+  makePercentageASCII,
+  randomFromRange,
+} from "../../util/other";
+import { actions, database } from "../../util/database";
+import ecoConfig from "../../ecoConfig";
 
 interface DawnagotchiRequirements {
   feed: number;
@@ -66,7 +68,7 @@ export function calculateRequirementFromDate(expected: Date): number {
 export async function awardMoneyForCaringForDawn(
   dawn: Dawnagotchi
 ): Promise<number | null> {
-  let eco = await getEconomyFor(dawn.owner_id);
+  let eco = await actions.eco.getFor(dawn.owner_id);
 
   let moneyAwarded: number | null = null;
 
@@ -81,7 +83,7 @@ export async function awardMoneyForCaringForDawn(
       Date.now(),
       dawn.owner_id
     );
-    await addMoneyFor(dawn.owner_id, moneyAwarded, "commands");
+    await actions.eco.addMoneyFor(dawn.owner_id, moneyAwarded, "commands");
   }
 
   // Check 100% dawn
@@ -105,7 +107,7 @@ export async function awardMoneyForCaringForDawn(
         Date.now(),
         dawn.owner_id
       );
-      await addMoneyFor(dawn.owner_id, moneyAwarded, "commands");
+      await actions.eco.addMoneyFor(dawn.owner_id, moneyAwarded, "commands");
     }
   }
 

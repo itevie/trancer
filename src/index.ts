@@ -52,7 +52,7 @@ export const client = new Client({
 import { initInviteCache } from "./events/guildMemberAdd";
 import { initLottery } from "./managers/lottery";
 import { initQotd } from "./util/qotd";
-import { loadAllSources } from "./util/fileDirectoryLoader";
+import { loadAllSources } from "./commands/file-directory/_util";
 
 const logger = new Logger("loader");
 export let errors = 0;
@@ -64,10 +64,11 @@ export let errors = 0;
 })();
 
 // Load commands
-const commandFiles =
+const commandFiles = (
   args["load-cmd"] && args["load-cmd"].length > 0
     ? args["load-cmd"].map((x) => `${__dirname}/commands/${x}`)
-    : getAllFiles(__dirname + "/commands");
+    : getAllFiles(__dirname + "/commands")
+).filter((x) => !x.match(/_[a-zA-Z_]+\.ts/));
 
 for (const commandFile of commandFiles) {
   const commandImport = require(commandFile).default as HypnoCommand;
@@ -95,13 +96,6 @@ for (const eventFile of eventFiles) {
 
 client.on("ready", async () => {
   loadAllSources();
-
-  const guilds = await client.guilds.fetch();
-  for await (const [_, guild] of guilds) {
-    const g = await guild.fetch();
-    await g.members.fetch();
-    logger.log(`Loaded server: ${g.name}`);
-  }
 
   if (
     !args["no-handlers"] &&
@@ -138,6 +132,13 @@ client.on("ready", async () => {
   }
 
   initQotd();
+
+  const guilds = await client.guilds.fetch();
+  for await (const [_, guild] of guilds) {
+    const g = await guild.fetch();
+    await g.members.fetch();
+    logger.log(`Loaded server: ${g.name}`);
+  }
 });
 
 client.login(process.env.BOT_TOKEN);

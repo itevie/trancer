@@ -1,6 +1,6 @@
 import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
-import { categoryEmojis } from "../help/help";
+import { categoryEmojis } from "../help/_util";
 
 const command: HypnoCommand<{ key: string; state: boolean }> = {
   name: "disablecategory",

@@ -6,7 +6,7 @@ import {
 } from "discord.js";
 import { actions, database } from "../util/database";
 import { client } from "..";
-import statusThemes from "../util/statusThemes";
+import statusThemes from "../commands/hypnosis/_util";
 
 const settingsUpdate: {
   [key: string]: {

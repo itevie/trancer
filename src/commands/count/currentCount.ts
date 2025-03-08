@@ -1,5 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import { getServerCount } from "../../util/actions/serverCount";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand = {
   name: "currentcount",
@@ -9,7 +9,7 @@ const command: HypnoCommand = {
     "Get the expected next number in the count and the highest number",
 
   handler: async (message) => {
-    let count = await getServerCount(message.guild.id);
+    let count = await actions.serverCount.getFor(message.guild.id);
     if (!count) {
       return message.reply(
         `This server does not have counting enabled... but what if it did?`

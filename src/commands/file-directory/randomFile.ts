@@ -1,8 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import {
-  getRandomFile,
-  handleFileMessage,
-} from "../../util/fileDirectoryLoader";
+import { getRandomFile, handleFileMessage } from "./_util";
 
 const command: HypnoCommand = {
   name: "randomfile",

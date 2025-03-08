@@ -1,7 +1,8 @@
 import config from "../../config";
 import { HypnoCommand } from "../../types/util";
-import { sources } from "../../util/fileDirectoryLoader";
-import { createEmbed, paginate } from "../../util/other";
+import { sources } from "./_util";
+import { createEmbed } from "../../util/other";
+import { paginate } from "../../util/components/pagination";
 
 const command: HypnoCommand = {
   name: "sources",

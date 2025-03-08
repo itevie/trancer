@@ -1,7 +1,5 @@
-import config from "../../config";
 import { HypnoCommand } from "../../types/util";
-import { getEconomyFor, removeMoneyFor } from "../../util/actions/economy";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 import { currency } from "../../util/textProducer";
 
 const command: HypnoCommand = {
@@ -27,7 +25,7 @@ const command: HypnoCommand = {
       );
     }
 
-    const economy = await getEconomyFor(message.author.id);
+    const economy = await actions.eco.getFor(message.author.id);
     if (economy.balance < 2500)
       return message.reply(
         `You need ${currency(2500)} to revive your Dawn, you horrible person.`
@@ -40,7 +38,7 @@ const command: HypnoCommand = {
       Date.now(),
       dawn.id
     );
-    await removeMoneyFor(message.author.id, 2500);
+    await actions.eco.removeMoneyFor(message.author.id, 2500);
 
     return message.reply(`Your Dawn was revived for ${currency(2500)}`);
   },

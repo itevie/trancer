@@ -1,6 +1,5 @@
 import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
-import { getRandomSpiral } from "../../util/spirals";
 
 export const sentSpirals: { [key: string]: Spiral } = {};
 
@@ -29,7 +28,7 @@ const command: HypnoCommand = {
         return message.reply(`There are not that many spirals!`);
       spiral = spirals[idx];
     } else {
-      spiral = await getRandomSpiral();
+      spiral = await actions.spirals.getRandom();
     }
 
     let msg = await message.channel.send(

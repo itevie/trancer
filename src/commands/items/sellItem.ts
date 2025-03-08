@@ -1,9 +1,7 @@
-import config from "../../config";
 import { HypnoCommand } from "../../types/util";
-import { addMoneyFor } from "../../util/actions/economy";
 import ConfirmAction from "../../util/components/Confirm";
 import { actions } from "../../util/database";
-import { calculateItemPrice } from "../../util/items";
+import { calculateItemPrice } from "./_util";
 import { createEmbed } from "../../util/other";
 import { currency, itemText } from "../../util/textProducer";
 
@@ -59,7 +57,7 @@ const command: HypnoCommand<{ item: Item; amount?: number }> = {
           }** for ${currency(price)}?`
         ),
       callback: async () => {
-        await addMoneyFor(message.author.id, price);
+        await actions.eco.addMoneyFor(message.author.id, price);
         await actions.items.aquired.removeFor(
           message.author.id,
           args.item.id,

@@ -1,8 +1,8 @@
-import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { actions, database } from "../../util/database";
-import { createEmbed, paginate } from "../../util/other";
-import { getUsername, getUsernameSync } from "../../util/cachedUsernames";
+import { actions } from "../../util/database";
+import { createEmbed } from "../../util/other";
+import { getUsernameSync } from "../../util/cachedUsernames";
+import { paginate } from "../../util/components/pagination";
 
 const command: HypnoCommand = {
   name: "trustedtistlist",

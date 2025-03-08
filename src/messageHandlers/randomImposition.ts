@@ -1,5 +1,5 @@
 import { HypnoMessageHandler } from "../types/util";
-import { getChannelAutoImposition } from "../util/actions/imposition";
+import { actions } from "../util/database";
 import { getRandomImpositionFromFile } from "../util/other";
 
 const randomImposition: { [key: string]: number } = {};
@@ -9,7 +9,7 @@ const handler: HypnoMessageHandler = {
   description: "Sends random imposition in the current channel every so often",
   handler: async (message) => {
     // Check random impo
-    const imposition = await getChannelAutoImposition(message.channel.id);
+    const imposition = await actions.triggers.auto.getFor(message.channel.id);
     if (imposition?.is_enabled) {
       // Check if not set
       if (!randomImposition[message.channel.id])

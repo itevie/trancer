@@ -1,5 +1,4 @@
 import { HypnoCommand } from "../../types/util";
-import config from "../../config";
 import { createEmbed } from "../../util/other";
 import ecoConfig from "../../ecoConfig";
 import { currency } from "../../util/textProducer";

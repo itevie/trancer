@@ -1,10 +1,6 @@
 import { HypnoCommand } from "../../types/util";
-import {
-  addMoneyFor,
-  getEconomyFor,
-  removeMoneyFor,
-} from "../../util/actions/economy";
 import ConfirmAction from "../../util/components/Confirm";
+import { actions } from "../../util/database";
 import { createEmbed } from "../../util/other";
 import { currency } from "../../util/textProducer";
 
@@ -31,7 +27,7 @@ const command: HypnoCommand<{ amount: number; confirm?: string }> = {
   },
 
   handler: async (message, args) => {
-    let eco = await getEconomyFor(message.author.id);
+    let eco = await actions.eco.getFor(message.author.id);
 
     console.log(
       args,
@@ -56,9 +52,17 @@ const command: HypnoCommand<{ amount: number; confirm?: string }> = {
         let win = Math.random() < 0.4;
 
         if (win) {
-          await addMoneyFor(message.author.id, args.args.amount, "gambling");
+          await actions.eco.addMoneyFor(
+            message.author.id,
+            args.args.amount,
+            "gambling"
+          );
         } else {
-          await removeMoneyFor(message.author.id, args.args.amount, true);
+          await actions.eco.removeMoneyFor(
+            message.author.id,
+            args.args.amount,
+            true
+          );
         }
 
         return {

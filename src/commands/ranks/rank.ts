@@ -1,10 +1,9 @@
 import { HypnoCommand } from "../../types/util";
-import { rankExists } from "../../util/actions/ranks";
 import {
   accumlateSortLeaderboardData,
   createPaginatedLeaderboardFromData,
 } from "../../util/createLeaderboard";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand<{ name: string }> = {
@@ -27,7 +26,7 @@ const command: HypnoCommand<{ name: string }> = {
     // Validate
     const name = args.name.toLowerCase();
 
-    if (!(await rankExists(name)))
+    if (!(await actions.ranks.exists(name)))
       return message.reply(
         `That rank does not exist, but you can create it using \`${serverSettings.prefix}createrank ${name}\``
       );

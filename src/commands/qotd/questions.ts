@@ -1,6 +1,7 @@
 import { HypnoCommand } from "../../types/util";
+import { paginate } from "../../util/components/pagination";
 import { actions } from "../../util/database";
-import { createEmbed, paginate } from "../../util/other";
+import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand<{ asked?: boolean }> = {
   name: "questions",

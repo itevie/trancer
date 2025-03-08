@@ -1,8 +1,4 @@
-import {
-  CurrencyArgument,
-  HypnoCommand,
-  NumberArgument,
-} from "../../types/util";
+import { CurrencyArgument, HypnoCommand } from "../../types/util";
 import { commands } from "../..";
 import { createEmbed } from "../../util/other";
 import { generateCommandCodeBlock } from "../../util/args";

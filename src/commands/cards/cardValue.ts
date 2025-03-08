@@ -1,6 +1,5 @@
-import config from "../../config";
 import { HypnoCommand } from "../../types/util";
-import { computeCardPrice } from "../../util/cards";
+import { computeCardPrice } from "./_util";
 import { currency } from "../../util/textProducer";
 
 const command: HypnoCommand<{ card: Card }> = {

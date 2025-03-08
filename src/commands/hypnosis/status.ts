@@ -1,6 +1,6 @@
 import { HypnoCommand } from "../../types/util";
 import { database } from "../../util/database";
-import statusThemes from "../../util/statusThemes";
+import statusThemes from "./_util";
 
 const typeMap = {
   red: "red",

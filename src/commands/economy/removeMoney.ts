@@ -1,7 +1,7 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { removeMoneyFor } from "../../util/actions/economy";
 import { currency } from "../../util/textProducer";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand<{ user: User; amount: number }> = {
   name: "-money",
@@ -26,7 +26,7 @@ const command: HypnoCommand<{ user: User; amount: number }> = {
 
   handler: async (message, options) => {
     // Add money
-    await removeMoneyFor(options.args.user.id, options.args.amount);
+    await actions.eco.removeMoneyFor(options.args.user.id, options.args.amount);
 
     // Done
     return message.reply(

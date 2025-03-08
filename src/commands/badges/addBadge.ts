@@ -1,7 +1,7 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import badges from "../../util/badges";
-import { addBadgeFor, getAllAquiredBadges } from "../../util/actions/badges";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand<{ badge: string; user: User }> = {
   name: "addbadge",
@@ -30,7 +30,7 @@ const command: HypnoCommand<{ badge: string; user: User }> = {
     if (!badges[args.badge]) return message.reply(`That badge doesn't exist`);
 
     // Check if user already has it
-    let acquiredBadges = await getAllAquiredBadges();
+    let acquiredBadges = await actions.badges.aquired.getAll();
     if (
       acquiredBadges.find(
         (x) => x.user === args.user.id && x.badge_name === args.badge
@@ -39,7 +39,7 @@ const command: HypnoCommand<{ badge: string; user: User }> = {
       return message.reply(`That user already has that badge!`);
 
     // Add badge
-    await addBadgeFor(args.user.id, args.badge);
+    await actions.badges.addFor(args.user.id, args.badge);
     return message.reply(
       `Gave **${args.user.username}** the badge **${args.badge}**!`
     );

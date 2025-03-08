@@ -1,7 +1,8 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { getAllAquiredCardsFor, getCardById } from "../../util/actions/cards";
-import { createEmbed, paginate } from "../../util/other";
+import { createEmbed } from "../../util/other";
+import { paginate } from "../../util/components/pagination";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand<{ user?: User; sort: "rarity" | "id" }> = {
   name: "cards",
@@ -28,13 +29,13 @@ const command: HypnoCommand<{ user?: User; sort: "rarity" | "id" }> = {
   handler: async (message, { args }) => {
     // Get details
     let user = args.user ? args.user : message.author;
-    let cards = (await getAllAquiredCardsFor(user.id))
+    let cards = (await actions.cards.aquired.getAllFor(user.id))
       .filter((x) => x.amount > 0)
       .sort((a, b) => a.card_id - b.card_id);
     let actualCards: { [key: string]: Card } = {};
     if (args.sort === "rarity") {
       for await (const card of cards) {
-        actualCards[card.card_id] = await getCardById(card.card_id);
+        actualCards[card.card_id] = await actions.cards.getById(card.card_id);
       }
     }
 
@@ -59,7 +60,7 @@ const command: HypnoCommand<{ user?: User; sort: "rarity" | "id" }> = {
 
     let data: string[] = [];
     for await (const card of cards) {
-      let actualCard = await getCardById(card.card_id);
+      let actualCard = await actions.cards.getById(card.card_id);
       data.push(
         `**${actualCard.name}** *${actualCard.rarity} [${actualCard.id}]*: ${card.amount}`
       );

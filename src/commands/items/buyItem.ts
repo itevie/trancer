@@ -1,6 +1,4 @@
-import config from "../../config";
 import { HypnoCommand } from "../../types/util";
-import { getEconomyFor, removeMoneyFor } from "../../util/actions/economy";
 import { actions } from "../../util/database";
 import { currency, itemText } from "../../util/textProducer";
 
@@ -25,7 +23,7 @@ const command: HypnoCommand<{ item: Item; amount?: number }> = {
 
   handler: async (message, { args }) => {
     // Fetch details
-    let eco = await getEconomyFor(message.author.id);
+    let eco = await actions.eco.getFor(message.author.id);
 
     // Check if item exists
     if (!args.item) return message.reply(`That item does not exist!`);
@@ -52,7 +50,7 @@ const command: HypnoCommand<{ item: Item; amount?: number }> = {
     }
 
     // Give the user the item
-    await removeMoneyFor(message.author.id, price);
+    await actions.eco.removeMoneyFor(message.author.id, price);
     await actions.items.aquired.addFor(message.author.id, args.item.id, amount);
 
     // Done

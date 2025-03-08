@@ -10,7 +10,6 @@ import { actions } from "../../util/database";
 import { itemMap } from "../../util/db-parts/items";
 import { createEmbed, englishifyList } from "../../util/other";
 import { currency, itemText } from "../../util/textProducer";
-import { getEconomyFor, removeMoneyFor } from "../../util/actions/economy";
 
 const gambleCost = 60;
 
@@ -31,13 +30,13 @@ const command: HypnoCommand = {
   preHandler: async (message, { serverSettings, command }) => {
     // Check if it is a gamble mine
     if (command === "gamblemine") {
-      if ((await getEconomyFor(message.author.id)).balance < gambleCost) {
+      if ((await actions.eco.getFor(message.author.id)).balance < gambleCost) {
         await message.reply(
           `:warning: You do not have ${currency(gambleCost)}!`
         );
         return false;
       } else {
-        await removeMoneyFor(message.author.id, gambleCost);
+        await actions.eco.removeMoneyFor(message.author.id, gambleCost);
         return true;
       }
     }

@@ -1,7 +1,7 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import badges from "../../util/badges";
-import { removeBadgeFor } from "../../util/actions/badges";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand<{ badge: string; user: User }> = {
   name: "removebadge",
@@ -30,7 +30,7 @@ const command: HypnoCommand<{ badge: string; user: User }> = {
     if (!badges[args.badge]) return message.reply(`That badge doesn't exist`);
 
     // Add badge
-    await removeBadgeFor(args.user.id, args.badge);
+    await actions.badges.removeFor(args.user.id, args.badge);
     return message.reply(
       `Remove **${args.user.username}**'s **${args.badge}** badge!`
     );

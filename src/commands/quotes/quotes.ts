@@ -1,7 +1,8 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { database } from "../../util/database";
-import { createEmbed, paginate } from "../../util/other";
+import { createEmbed } from "../../util/other";
+import { paginate } from "../../util/components/pagination";
 
 const command: HypnoCommand<{ user?: User; all?: boolean; search?: string }> = {
   name: "quotes",

@@ -1,8 +1,6 @@
 import { HypnoCommand } from "../../types/util";
-import { getAllAquiredCards, removeCardFor } from "../../util/actions/cards";
-import { addMoneyFor } from "../../util/actions/economy";
-import { computeCardPrice, generateCardEmbed } from "../../util/cards";
-import { database } from "../../util/database";
+import { computeCardPrice, generateCardEmbed } from "./_util";
+import { actions, database } from "../../util/database";
 
 const command: HypnoCommand<{ card: Card; confirm?: true }> = {
   name: "removecard",
@@ -37,14 +35,14 @@ const command: HypnoCommand<{ card: Card; confirm?: true }> = {
 
     // Auto sell them
     let amount = 0;
-    let cards = await getAllAquiredCards();
+    let cards = await actions.cards.aquired.getAll();
     for await (const card of cards) {
       if (card.card_id === args.card.id && card.amount > 0) {
-        await addMoneyFor(
+        await actions.eco.addMoneyFor(
           card.user_id,
           computeCardPrice(args.card) * card.amount
         );
-        await removeCardFor(card.user_id, card.card_id, card.amount);
+        await actions.cards.removeFor(card.user_id, card.card_id, card.amount);
         amount += card.amount;
       }
     }

@@ -1,7 +1,7 @@
 import message from "../../topics/help-cards";
 import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
-import statusThemes from "../../util/statusThemes";
+import statusThemes from "./_util";
 
 const command: HypnoCommand<{ theme: string }> = {
   name: "setstatustheme",

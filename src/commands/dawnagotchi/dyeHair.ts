@@ -1,9 +1,7 @@
-import config from "../../config";
 import ecoConfig from "../../ecoConfig";
 import { HypnoCommand } from "../../types/util";
-import { getDawnagotchi } from "../../util/actions/dawnagotchi";
 import { actions, database } from "../../util/database";
-import { generateDawnagotchiEmbed } from "../../util/dawnagotchi";
+import { generateDawnagotchiEmbed } from "./_util";
 
 const command: HypnoCommand<{ hex: string }> = {
   name: "dyehair",
@@ -33,7 +31,7 @@ const command: HypnoCommand<{ hex: string }> = {
       return message.reply(`You do not have the **${shopItem.name}** item!`);
 
     // Check if they have a Dawn
-    let dawn = await getDawnagotchi(message.author.id);
+    let dawn = await actions.dawnagotchi.getFor(message.author.id);
     if (!dawn) return message.reply(`You do not have a Dawn!`);
 
     if (!args.args.hex.match(/^((random)|(#[0-9a-fA-F]{6}))$/))
@@ -53,7 +51,9 @@ const command: HypnoCommand<{ hex: string }> = {
     return message.reply({
       content: `Your Dawn's hair has been dyed **${args.args.hex}**!`,
       embeds: [
-        generateDawnagotchiEmbed(await getDawnagotchi(message.author.id)),
+        generateDawnagotchiEmbed(
+          await actions.dawnagotchi.getFor(message.author.id)
+        ),
       ],
     });
   },

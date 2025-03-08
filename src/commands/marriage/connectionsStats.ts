@@ -1,9 +1,6 @@
 import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
-import {
-  marriageEmojis,
-  relationshipArrayToEmojiArray,
-} from "../../util/marriage";
+import { marriageEmojis, relationshipArrayToEmojiArray } from "./_util";
 
 const command: HypnoCommand = {
   name: "connectionstats",

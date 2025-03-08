@@ -1,7 +1,6 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { rankExists } from "../../util/actions/ranks";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 import { getUsername } from "../../util/cachedUsernames";
 
 const command: HypnoCommand<{ rank: string; user?: User }> = {
@@ -27,7 +26,7 @@ const command: HypnoCommand<{ rank: string; user?: User }> = {
   handler: async (message, { args }) => {
     let user = args.user ? args.user : message.author;
 
-    if (!(await rankExists(args.rank)))
+    if (!(await actions.ranks.exists(args.rank)))
       return message.reply("That rank does not exist!");
 
     let votes = await database.all<Vote[]>(

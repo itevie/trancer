@@ -2,7 +2,7 @@ import { resolve } from "path";
 import { Attachment } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { database } from "../../util/database";
-import { generateCardEmbed } from "../../util/cards";
+import { generateCardEmbed } from "./_util";
 import { downloadFile } from "../../util/other";
 
 const command: HypnoCommand<{ card: Card }> = {

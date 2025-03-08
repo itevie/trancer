@@ -5,17 +5,11 @@ import {
   EmbedBuilder,
 } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import GameManager from "../../util/GameManager";
 import {
   createEmbed,
   getRandomImposition,
   randomFromRange,
 } from "../../util/other";
-
-const gameManager = new GameManager<{}>({
-  name: "Trigger Roulette",
-  singleplayer: false,
-});
 
 const command: HypnoCommand = {
   name: "triggerroulette",

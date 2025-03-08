@@ -1,8 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import {
-  getDawnagotchi,
-  setupDawnagotchi,
-} from "../../util/actions/dawnagotchi";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand = {
   name: "obtaindawnagotchi",
@@ -12,11 +9,11 @@ const command: HypnoCommand = {
 
   handler: async (message) => {
     // Check if it is already setup
-    let dawnagotchi = await getDawnagotchi(message.author.id);
+    let dawnagotchi = await actions.dawnagotchi.getFor(message.author.id);
     if (dawnagotchi) return message.reply(`You already have a Dawnagotchi!`);
 
     // Setup
-    await setupDawnagotchi(message.author.id);
+    await actions.dawnagotchi.setupFor(message.author.id);
 
     return message.reply({
       content: `A Dawn came up to you! And you obtained it! This must be the start of an amazing adventure`,

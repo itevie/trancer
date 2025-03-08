@@ -2,8 +2,7 @@ import { client } from "..";
 import config from "../config";
 import ecoConfig from "../ecoConfig";
 import { HypnoMessageHandler } from "../types/util";
-import { addMoneyFor } from "../util/actions/economy";
-import { database } from "../util/database";
+import { actions, database } from "../util/database";
 import { randomFromRange } from "../util/other";
 
 let pastVC1m: string[] = [];
@@ -35,7 +34,7 @@ setInterval(async () => {
   // Award people who are still in it
   for await (const id of inVCrightNow)
     if (pastVCactual.includes(id))
-      await addMoneyFor(
+      await actions.eco.addMoneyFor(
         id,
         randomFromRange(ecoConfig.payouts.vc.min, ecoConfig.payouts.vc.max),
         "vc"

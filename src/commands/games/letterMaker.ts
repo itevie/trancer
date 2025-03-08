@@ -4,8 +4,8 @@ import { HypnoCommand } from "../../types/util";
 import { createEmbed, randomFromRange } from "../../util/other";
 import ecoConfig from "../../ecoConfig";
 import { currency } from "../../util/textProducer";
-import { addMoneyFor } from "../../util/actions/economy";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
+import { actions } from "../../util/database";
 const words = new Set(
   readFileSync(__dirname + "/../../data/words.txt", "utf8")
     .split("\n")
@@ -165,7 +165,7 @@ const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
         ],
         components: [],
       });
-      await addMoneyFor(m.author.id, reward);
+      await actions.eco.addMoneyFor(m.author.id, reward);
       await m.react("✅");
       collector.stop();
     });

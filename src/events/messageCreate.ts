@@ -8,14 +8,6 @@ import {
   StringArgument,
   UserArgument,
 } from "../types/util";
-import {
-  getCardById,
-  getCardByName,
-  getDeckById,
-  getDeckByName,
-} from "../util/actions/cards";
-import { economyForUserExists, getEconomyFor } from "../util/actions/economy";
-import { getRatelimit, setRatelimit } from "../util/actions/ratelimit";
 import { addCommandUsage, addMessageForCurrentTime } from "../util/analytics";
 import { generateCommandCodeBlock } from "../util/args";
 import { checkBadges } from "../util/badges";
@@ -48,7 +40,7 @@ client.on("messageCreate", async (message) => {
   // Guards
   if (message.author.bot || !message?.author?.id || !message?.guild?.id) return;
 
-  const economy = await getEconomyFor(message.author.id);
+  const economy = await actions.eco.getFor(message.author.id);
   const userData = await actions.userData.getFor(
     message.author.id,
     message.guild.id
@@ -187,7 +179,10 @@ client.on("messageCreate", async (message) => {
 
   // Check ratelimit
   if (command.ratelimit) {
-    let lastUsed = await getRatelimit(message.author.id, command.name);
+    let lastUsed = await actions.ratelimits.get(
+      message.author.id,
+      command.name
+    );
     let ratelimit =
       typeof command.ratelimit === "function"
         ? await command.ratelimit(message, details)
@@ -208,7 +203,7 @@ client.on("messageCreate", async (message) => {
               ),
           ],
         });
-      await setRatelimit(message.author.id, command.name, new Date());
+      await actions.ratelimits.set(message.author.id, command.name, new Date());
     }
   }
 
@@ -407,8 +402,9 @@ client.on("messageCreate", async (message) => {
             break;
           case "card":
             let card: Card;
-            if (a.match(/^([0-9]+)$/)) card = await getCardById(parseInt(a));
-            else card = await getCardByName(a);
+            if (a.match(/^([0-9]+)$/))
+              card = await actions.cards.getById(parseInt(a));
+            else card = await actions.cards.getByName(a);
             if (!card)
               return {
                 error: "Invalid card ID/name provided",
@@ -418,8 +414,9 @@ client.on("messageCreate", async (message) => {
             break;
           case "deck":
             let deck: Deck;
-            if (a.match(/^([0-9]+)$/)) deck = await getDeckById(parseInt(a));
-            else deck = await getDeckByName(a);
+            if (a.match(/^([0-9]+)$/))
+              deck = await actions.cards.decks.getById(parseInt(a));
+            else deck = await actions.cards.decks.getByName(a);
             if (!deck)
               return {
                 error: "Invalid deck ID/name provided",
@@ -456,7 +453,7 @@ client.on("messageCreate", async (message) => {
 
               if (userArg.denyBots && r.bot)
                 return "A bot cannot be used for this command";
-              if (userArg.mustHaveEco && !(await economyForUserExists(r.id)))
+              if (userArg.mustHaveEco && !(await actions.eco.existsFor(r.id)))
                 return "This user does not have economy setup";
 
               result = r;

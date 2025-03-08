@@ -1,6 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import { rankExists } from "../../util/actions/ranks";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 
 const command: HypnoCommand<{ name: string }> = {
   name: "createrank",
@@ -29,7 +28,7 @@ const command: HypnoCommand<{ name: string }> = {
     const name = args.name.toLowerCase();
 
     // Check if it already exists
-    if (await rankExists(name))
+    if (await actions.ranks.exists(name))
       return message.reply(`A leaderboard with that name already exists`);
 
     // Create it

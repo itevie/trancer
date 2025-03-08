@@ -1,5 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import { genQuote, getQuote, randomQuote } from "../../util/actions/quotes";
+import { actions } from "../../util/database";
 
 const command: HypnoCommand = {
   name: "getquote",
@@ -11,12 +11,13 @@ const command: HypnoCommand = {
   handler: async (message, { oldArgs: args }) => {
     // Collect quote
     let quote: Quote;
-    if (["r", "random"].includes(args[0])) quote = await randomQuote();
+    if (["r", "random"].includes(args[0]))
+      quote = await actions.quotes.getRandomQuote();
     else {
       const number = parseInt(args[0]?.replace(/#/g, "") ?? "");
       if (Number.isNaN(number))
         return message.reply(`Please provide a valid number ID (or "random")!`);
-      quote = await getQuote(number);
+      quote = await actions.quotes.getById(number);
     }
 
     // Check if it existed
@@ -28,7 +29,7 @@ const command: HypnoCommand = {
 
     // Done
     return message.reply({
-      embeds: [await genQuote(quote)],
+      embeds: [await actions.quotes.generateEmbed(quote)],
     });
   },
 };
