@@ -25,7 +25,9 @@ const command: HypnoCommand = {
 
     // Add role
     try {
-      await (await message.fetchReference()).member.roles.add(role);
+      const msg = await message.fetchReference();
+      const member = await message.guild.members.fetch(msg.member);
+      await member.roles.add(role);
       await message.delete();
 
       if (
