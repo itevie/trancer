@@ -68,10 +68,12 @@ export const sources: { [key: string]: FileDirectorySource } = {
     description: "Sunny's silly files!",
     websites: ["https://www.youtube.com/@sillysunspirals"],
     handler: async () =>
-      await loadSourcesFromYoutubeChannel(
-        "SillySpirals",
-        "UC7vReXXqP-aIjX7mQBnkQIQ"
-      ),
+      (
+        await loadSourcesFromYoutubeChannel(
+          "SillySpirals",
+          "UC7vReXXqP-aIjX7mQBnkQIQ"
+        )
+      ).filter((x) => !x.name.toLowerCase().includes("non-hypnosis")),
   },
 };
 
