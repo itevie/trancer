@@ -11,9 +11,11 @@ const command: HypnoCommand = {
   permissions: [PermissionsBitField.Flags.ManageMessages],
 
   handler: async (message, o) => {
-    let role = o.serverSettings.verification_role_id;
+    let verifiedRole = o.serverSettings.verification_role_id;
+    let unverifiedRole = o.serverSettings.unverified_role_id;
 
-    if (!role) return message.reply(`There is no verified role set up`);
+    if (!verifiedRole && !unverifiedRole)
+      return message.reply(`There is no verified/unverified role set up`);
 
     // Check for reference
     if (!message.reference) {
@@ -29,7 +31,9 @@ const command: HypnoCommand = {
     try {
       const msg = await message.fetchReference();
       const member = await message.guild.members.fetch(msg.member);
-      await addRole(member, await message.guild.roles.fetch(role));
+      if (verifiedRole)
+        await addRole(member, await message.guild.roles.fetch(verifiedRole));
+      if (unverifiedRole) await member.roles.remove(unverifiedRole);
       await message.delete();
 
       try {
@@ -40,7 +44,6 @@ const command: HypnoCommand = {
         o.serverSettings.verified_channel_id &&
         o.serverSettings.verified_string
       ) {
-        let user = (await message.fetchReference()).member.user;
         let channel = await (message.client.channels.fetch(
           o.serverSettings.verified_channel_id
         ) as Promise<TextChannel>);
