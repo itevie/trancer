@@ -217,7 +217,8 @@ export async function getRandomFile(
   const files = await getFilesFrom(
     Object.keys(directories)[
       Math.floor(Math.random() * Object.keys(directories).length)
-    ]
+    ],
+    allowNsfw
   );
   return files[Math.floor(Math.random() * files.length)];
 }
