@@ -269,6 +269,7 @@ const phrases = [
   ".friend",
   ".adopt",
   "https://tenor.com/view/always-has-been-among-us-astronaut-space-betrayal-gif-23836476",
+  "https://tenor.com/view/cat-explosion-sad-explode-gif-15295996165959499721",
 ];
 
 let messagesSince = 0;

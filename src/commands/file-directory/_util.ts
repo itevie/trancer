@@ -209,7 +209,9 @@ export async function paginateFileList(
 ): Promise<void> {
   await paginate({
     replyTo: message,
-    embed: createEmbed().setTitle(title ?? "Here's the list of files!"),
+    embed: createEmbed().setTitle(
+      title.length === 0 ? "Here's the list of files!" : ""
+    ),
     type: "field",
     data: files.map((x) => {
       return {

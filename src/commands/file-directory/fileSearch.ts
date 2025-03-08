@@ -25,7 +25,11 @@ const command: HypnoCommand<{ query: string }> = {
   },
 
   handler: async (message, { args }) => {
-    paginateFileList(message, await searchFiles(args.query));
+    paginateFileList(
+      message,
+      await searchFiles(args.query),
+      `Files matching ${args.query}`
+    );
   },
 };
 
