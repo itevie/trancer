@@ -1,23 +1,28 @@
--- ALTER TABLE
---     server_settings
--- ADD
---     welcome_channel_id TEXT DEFAULT NULL;
--- ALTER TABLE
---     server_settings
--- ADD
---     welcome_message TEXT NOT NULL DEFAULT '{mention} joined our server! We now have {member_count} members!';
--- ALTER TABLE
---     server_settings
--- ADD
---     leave_channel_id TEXT DEFAULT NULL;
--- ALTER TABLE
---     server_settings
--- ADD
---     leave_message TEXT NOT NULL DEFAULT '**{username}** left our server :( We now have {member_count} members';
--- ALTER TABLE
---     server_settings
--- ADD
---     allow_nsfw_file_directory_sources BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE
+    server_settings
+ADD
+    welcome_channel_id TEXT DEFAULT NULL;
+
+ALTER TABLE
+    server_settings
+ADD
+    welcome_message TEXT NOT NULL DEFAULT '{mention} joined our server! We now have {member_count} members!';
+
+ALTER TABLE
+    server_settings
+ADD
+    leave_channel_id TEXT DEFAULT NULL;
+
+ALTER TABLE
+    server_settings
+ADD
+    leave_message TEXT NOT NULL DEFAULT '**{username}** left our server :( We now have {member_count} members';
+
+ALTER TABLE
+    server_settings
+ADD
+    allow_nsfw_file_directory_sources BOOLEAN NOT NULL DEFAULT false;
+
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
