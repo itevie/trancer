@@ -64,6 +64,15 @@ export const sources: { [key: string]: FileDirectorySource } = {
         "UCXUHkFi_dN0pUmlpnMmEzyg"
       ),
   },
+  SillySpirals: {
+    description: "Sunny's silly files!",
+    websites: ["https://www.youtube.com/@sillysunspirals"],
+    handler: async () =>
+      await loadSourcesFromYoutubeChannel(
+        "SillySpirals",
+        "UC7vReXXqP-aIjX7mQBnkQIQ"
+      ),
+  },
 };
 
 export async function loadAllSources(): Promise<FileDirectoryFile[]> {
