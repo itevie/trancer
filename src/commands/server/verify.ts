@@ -1,5 +1,6 @@
 import { PermissionsBitField, TextChannel } from "discord.js";
 import { HypnoCommand } from "../../types/util";
+import { addRole } from "../../util/other";
 
 const command: HypnoCommand = {
   name: "verify",
@@ -27,8 +28,9 @@ const command: HypnoCommand = {
     try {
       const msg = await message.fetchReference();
       const member = await message.guild.members.fetch(msg.member);
-      await member.roles.add(role);
+      await addRole(member, await message.guild.roles.fetch(role));
       await message.delete();
+
       try {
         await msg.react("✅");
       } catch {}
@@ -49,7 +51,6 @@ const command: HypnoCommand = {
         );
       }
     } catch (e) {
-      console.log(e);
       return message.reply(`Error: ${e.toString()}`);
     }
   },

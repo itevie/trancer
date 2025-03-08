@@ -1,4 +1,11 @@
-import { EmbedBuilder, HexColorString, User } from "discord.js";
+import {
+  EmbedBuilder,
+  GuildMember,
+  HexColorString,
+  PermissionResolvable,
+  Role,
+  User,
+} from "discord.js";
 import config from "../config";
 import * as fs from "fs";
 import path from "path";
@@ -311,4 +318,30 @@ export function shuffle<T extends any[]>(array: T) {
       array[currentIndex],
     ];
   }
+}
+
+const dissallowedPermissions: PermissionResolvable[] = [
+  "ManageChannels",
+  "ManageMessages",
+  "Administrator",
+  "KickMembers",
+  "BanMembers",
+  "ManageGuild",
+  "ManageRoles",
+];
+export async function addRole(member: GuildMember, role: Role): Promise<void> {
+  for (const d of dissallowedPermissions)
+    if (role.permissions.has(d))
+      throw `I cannot give the role as it has a dangerous permission. (${d})`;
+
+  if (
+    !member.guild.members.me.permissions.has("ManageRoles") &&
+    !member.guild.members.me.permissions.has("Administrator")
+  )
+    throw `I do not have permissions to give roles.`;
+
+  if (member.guild.members.me.roles.highest.position < role.position)
+    throw `I cannot give the role as the role is higher than my role. Please move ${role.name} below mine.`;
+
+  await member.roles.add(role);
 }
