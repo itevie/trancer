@@ -29,6 +29,9 @@ const command: HypnoCommand = {
       const member = await message.guild.members.fetch(msg.member);
       await member.roles.add(role);
       await message.delete();
+      try {
+        await msg.react("✅");
+      } catch {}
 
       if (
         o.serverSettings.verified_channel_id &&
