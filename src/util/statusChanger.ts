@@ -19,7 +19,7 @@ const statuses: [ActivityType | null, string][] = [
 ];
 
 export function initStatusChanger() {
-  setTimeout(changeStatus, 1000 * 60 * 10);
+  setInterval(changeStatus, 1000 * 60 * 10);
   changeStatus();
 }
 

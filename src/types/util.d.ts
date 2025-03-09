@@ -1,4 +1,12 @@
-import { CommandInteraction, Message, PermissionResolvable } from "discord.js";
+import {
+  CommandInteraction,
+  InteractionResponse,
+  Message,
+  PermissionResolvable,
+  SlashCommandBooleanOption,
+  SlashCommandBuilder,
+  User,
+} from "discord.js";
 
 export type HypnoCommandType =
   | "analytics"
@@ -150,6 +158,20 @@ interface HypnoCommand<Args extends { [key: string]: any } = {}> {
    * A list of Discord permissions that the user must have to run the command.
    */
   permissions?: PermissionResolvable[];
+}
+
+interface MessageLike {
+  author: User;
+  reply: Message["reply"];
+}
+
+interface HypnoInteractionCommand<Args extends { [key: string]: any } = {}>
+  extends HypnoCommand<Args> {
+  slash: SlashCommandBuilder;
+  handler: (
+    message: MessageLike,
+    options: HypnoCommandDetails<Args>
+  ) => Promise<any>;
 }
 
 interface BaseArgument {

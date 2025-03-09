@@ -2,18 +2,72 @@ import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
+  CommandInteractionOption,
   Entitlement,
+  InteractionReplyOptions,
+  Message,
+  MessagePayload,
+  MessagePayloadOption,
   PermissionFlagsBits,
   TextChannel,
 } from "discord.js";
-import { client } from "..";
+import { client, commands } from "..";
 import { calculateLevel } from "../messageHandlers/xp";
 import { actions } from "../util/database";
 import { generateEmbed } from "../commands/server/startGiveaway";
 import { createEmbed } from "../util/other";
 import config from "../config";
+import {
+  HypnoCommandDetails,
+  HypnoInteractionCommand,
+  MessageLike,
+} from "../types/util";
 
 client.on("interactionCreate", async (i) => {
+  if (i.isCommand()) {
+    const command = commands[i.commandName] as HypnoInteractionCommand;
+
+    const details: HypnoCommandDetails = {
+      command: command.name,
+      args: {},
+      serverSettings: await actions.serverSettings.getFor(i.guild.id),
+      economy: await actions.eco.getFor(i.user.id),
+      oldArgs: [],
+      originalContent: "",
+    };
+
+    // Check for subcommand
+    if (command.eachAliasIsItsOwnCommand) {
+      let sub = i.options.data.find((x) => x.type === 1);
+      details.command = sub.name;
+
+      for (const o of sub.options) {
+        if (o.user) details.args[o.name] = o.user;
+      }
+    }
+
+    try {
+      await command.handler(
+        {
+          reply: async (options) =>
+            (await i.reply(
+              options as InteractionReplyOptions
+            )) as unknown as ReturnType<Message["reply"]>,
+          author: i.user,
+        },
+        details
+      );
+    } catch (e) {
+      console.log(e);
+      return i.reply({
+        ephemeral: true,
+        content: `Sorry! I failed to run the command :(`,
+      });
+    }
+
+    return;
+  }
+
   if (i.isButton()) {
     if (i.customId.startsWith("giveaway-")) {
       const parts = i.customId.split("-");

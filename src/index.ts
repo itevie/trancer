@@ -32,6 +32,7 @@ const cliArgsDefinitio: OptionDefinition[] = [
 let args = commandLineArgs(cliArgsDefinitio) as any;
 
 export const commands: { [key: string]: HypnoCommand } = {};
+export const uniqueCommands: { [key: string]: HypnoCommand } = {};
 export const handlers: HypnoMessageHandler[] = [];
 
 // Setup client shit
@@ -54,6 +55,7 @@ import { initLottery } from "./managers/lottery";
 import { initQotd } from "./util/qotd";
 import { loadAllSources } from "./commands/file-directory/_util";
 import { initStatusChanger } from "./util/statusChanger";
+import { loadSlashCommands } from "./util/slashCommands";
 
 const logger = new Logger("loader");
 export let errors = 0;
@@ -75,6 +77,7 @@ for (const commandFile of commandFiles) {
   const commandImport = require(commandFile).default as HypnoCommand;
   if (commandImport.ignore) continue;
   commands[commandImport.name] = commandImport;
+  uniqueCommands[commandImport.name] = commandImport;
   for (const alias of commandImport.aliases || []) {
     if (commandImport.eachAliasIsItsOwnCommand) {
       commands[alias] = {
@@ -98,6 +101,7 @@ for (const eventFile of eventFiles) {
 client.on("ready", async () => {
   loadAllSources();
   initStatusChanger();
+  loadSlashCommands();
 
   if (
     !args["no-handlers"] &&
