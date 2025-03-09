@@ -25,7 +25,7 @@ export function replaceVarString(
     mention: `<@${user.id}>`,
     username: user.username,
     member_count: server.memberCount.toString(),
-    member_count_ord: toOrdinal(server.memberCount),
+    member_count_ord: ordinalSuffixOf(server.memberCount),
   };
 
   for (const [k, v] of Object.entries(parts)) {
@@ -49,14 +49,17 @@ export function replaceVarString(
   };
 }
 
-export function toOrdinal(n: number) {
-  const suffixes = ["th", "st", "nd", "rd"];
-  const mod = n % 10;
-  const exceptions = [11, 12, 13];
-
-  if (exceptions.includes(n % 100)) {
-    return n + "th";
+export function ordinalSuffixOf(i: number) {
+  let j = i % 10,
+    k = i % 100;
+  if (j === 1 && k !== 11) {
+    return i + "st";
   }
-
-  return n + (suffixes[(mod - 1) % 10] || suffixes[0]);
+  if (j === 2 && k !== 12) {
+    return i + "nd";
+  }
+  if (j === 3 && k !== 13) {
+    return i + "rd";
+  }
+  return i + "th";
 }
