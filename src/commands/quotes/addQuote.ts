@@ -28,6 +28,13 @@ const command: HypnoCommand<{ force?: boolean }> = {
     if (!message.reference) return message.reply(`Please reply to a message!`);
     const ref = await message.fetchReference();
 
+    if (
+      message.author.id === message.client.user.id &&
+      (message.content.startsWith("According to") ||
+        message.content.startsWith("amazing rizz"))
+    ) {
+    }
+
     // Validate
     if (ref.author.id === message.author.id)
       return message.reply(`You cannot quote yourself! :cyclone:`);
