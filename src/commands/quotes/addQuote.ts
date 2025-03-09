@@ -33,6 +33,7 @@ const command: HypnoCommand<{ force?: boolean }> = {
       (message.content.startsWith("According to") ||
         message.content.startsWith("amazing rizz"))
     ) {
+      return message.reply(`Nuh uh! Can't quote the results of those commands`);
     }
 
     // Validate
