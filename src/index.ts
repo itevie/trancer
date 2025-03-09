@@ -53,6 +53,7 @@ import { initInviteCache } from "./events/guildMemberAdd";
 import { initLottery } from "./managers/lottery";
 import { initQotd } from "./util/qotd";
 import { loadAllSources } from "./commands/file-directory/_util";
+import { initStatusChanger } from "./util/statusChanger";
 
 const logger = new Logger("loader");
 export let errors = 0;
@@ -96,6 +97,7 @@ for (const eventFile of eventFiles) {
 
 client.on("ready", async () => {
   loadAllSources();
+  initStatusChanger();
 
   if (
     !args["no-handlers"] &&
