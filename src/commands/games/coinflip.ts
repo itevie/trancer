@@ -2,7 +2,7 @@ import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { createEmbed } from "../../util/other";
 import { currency } from "../../util/language";
-import wrapGame from "../games/_util";
+import wrapGame from "./_util";
 
 export const existingGames: { [key: string]: string } = {};
 
@@ -10,7 +10,7 @@ const command: HypnoCommand<{ user: User; amount: number }> = {
   name: "coinflip",
   aliases: ["cf"],
   description: "Coinflip with another user",
-  type: "economy",
+  type: "games",
 
   args: {
     requiredArguments: 2,
