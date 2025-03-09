@@ -4,7 +4,7 @@ import { client, commands } from "..";
 const statuses: [ActivityType | null, string][] = [
   [0, "type .help for help"],
   [0, "with your mind"],
-  [0, "join my server with .inivte"],
+  [0, "join my server with .invite"],
   [0, "with spirals"],
   [0, "with pendulums"],
   [0, "*patpat if green*"],

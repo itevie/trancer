@@ -209,6 +209,7 @@ const command: HypnoInteractionCommand<{ user?: User }> = {
       {
         name: "user",
         type: "user",
+        infer: true,
       },
     ],
   },

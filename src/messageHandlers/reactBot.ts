@@ -270,6 +270,10 @@ const phrases = [
   ".adopt",
   "https://tenor.com/view/always-has-been-among-us-astronaut-space-betrayal-gif-23836476",
   "https://tenor.com/view/cat-explosion-sad-explode-gif-15295996165959499721",
+  "https://images-ext-1.discordapp.net/external/0F_UqunDEos2X-Mw8noDkbE60_XD8dKp0nWm3Ptg0Ik/https/media.tenor.com/5RzWf6XhOm8AAAPo/strelin-tongue-out.mp4",
+  "https://tenor.com/view/sprigatito-pokemon-weed-cat-gif-25019907",
+  "Who the hell do you think you are?",
+  "Well then, my goal becomes clear. The broccoli must die.",
 ];
 
 let messagesSince = 0;

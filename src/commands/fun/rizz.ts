@@ -13,16 +13,13 @@ const command: HypnoCommand<{ user?: User }> = {
       {
         type: "user",
         name: "user",
+        infer: true,
       },
     ],
   },
 
   handler: async (message, { args }) => {
     let user = args.user;
-
-    if (!user && message.reference) {
-      user = (await message.fetchReference()).author;
-    }
 
     if (!user) {
       return message.reply(
