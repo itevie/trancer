@@ -29,9 +29,9 @@ const command: HypnoCommand<{ force?: boolean }> = {
     const ref = await message.fetchReference();
 
     if (
-      message.author.id === message.client.user.id &&
-      (message.content.startsWith("According to") ||
-        message.content.startsWith("amazing rizz"))
+      ref.author.id === message.client.user.id &&
+      (ref.content.startsWith("According to") ||
+        ref.content.startsWith("amazing rizz"))
     ) {
       return message.reply(`Nuh uh! Can't quote the results of those commands`);
     }
