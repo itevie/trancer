@@ -1,6 +1,6 @@
 import { Jimp } from "jimp";
 import Canvas, { createCanvas, loadImage } from "canvas";
-import { existsSync, readFileSync, rmSync } from "fs";
+import { exists, existsSync, readFileSync, rmSync } from "fs";
 import GIFEncoder from "gifencoder";
 import { execSync } from "child_process";
 
@@ -94,6 +94,16 @@ export async function createRotatingGifBuffer(
   return Buffer.concat(bufferStream);
 }
 
+export function getFontFile() {
+  const fonts = [
+    "/usr/share/fonts/TTF/Impact.TTF",
+    "/usr/share/fonts/msttcore/impact.ttf",
+  ];
+
+  for (const font of fonts) if (existsSync(font)) return font;
+  throw new Error("No impact font found...");
+}
+
 export function addCaptionToGif(inputPath: string, caption: string) {
   const safeCaption = caption.replace(/'/g, "\\'");
   const output = __dirname + "/output.gif";
@@ -104,7 +114,7 @@ export function addCaptionToGif(inputPath: string, caption: string) {
     throw new Error(`Input file not found: ${inputPath}`);
   }
 
-  const ffmpegCmd = `ffmpeg -i "${inputPath}" -vf "pad=iw:ih+50:0:50:white, drawtext=text='${safeCaption}':fontfile='/usr/share/fonts/TTF/Impact.TTF':x=(w-text_w)/2:y=10:fontsize=36:fontcolor=black" "${output}"`;
+  const ffmpegCmd = `ffmpeg -i "${inputPath}" -vf "pad=iw:ih+50:0:50:white, drawtext=text='${safeCaption}':fontfile='${getFontFile()}':x=(w-text_w)/2:y=10:fontsize=36:fontcolor=black" "${output}"`;
 
   try {
     execSync(ffmpegCmd, { stdio: "inherit" });
