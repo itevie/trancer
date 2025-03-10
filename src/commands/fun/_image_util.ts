@@ -1,11 +1,8 @@
 import { Jimp } from "jimp";
-import * as gif from "@jimp/gif";
 import Canvas, { createCanvas, loadImage } from "canvas";
 import { existsSync, readFileSync, rmSync } from "fs";
 import GIFEncoder from "gifencoder";
-import axios from "axios";
 import { execSync } from "child_process";
-import config from "../../config";
 
 export async function generateNotImmuneImage(imageUrl: string) {
   // Load stuff
