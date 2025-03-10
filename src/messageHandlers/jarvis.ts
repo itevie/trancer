@@ -9,8 +9,8 @@ const handler: HypnoMessageHandler = {
 
   handler: async (message) => {
     if (
-      !message.content.startsWith("Jarvis,") &&
-      !message.content.startsWith("Jarfish,")
+      !message.content.toLowerCase().startsWith("Jarvis,") &&
+      !message.content.toLowerCase().startsWith("Jarfish,")
     )
       return;
     const file = addCaptionToGif(
