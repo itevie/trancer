@@ -117,9 +117,9 @@ export function addCaptionToGif(inputPath: string, caption: string) {
   let lines = safeCaption.match(/.{1,30}/g);
   let whitespace = 50 * lines.length;
 
-  const ffmpegCmd = `ffmpeg -i "${inputPath}" -vf "pad=iw:ih+${whitespace}:0:${whitespace}:white, drawtext=fontfile='${getFontFile()}':x=(w-text_w)/2:y=10:fontsize=36:fontcolor=black:text='${lines.join(
+  const ffmpegCmd = `ffmpeg -i "${inputPath}" -vf "pad=iw:ih+${whitespace}:0:${whitespace}:white, drawtext=text='${lines.join(
     "\n"
-  )}'" "${output}"`;
+  )}':fontfile='${getFontFile()}':x=(w-text_w)/2:y=10:fontsize=36:fontcolor=black" "${output}"`;
 
   try {
     execSync(ffmpegCmd, { stdio: "inherit" });
