@@ -16,6 +16,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@jimp/gif": "^0.22.12",
     "@types/chart.js": "^2.9.41",
     "@types/command-line-args": "^5.2.3",
     "@types/cors": "^2.8.17",

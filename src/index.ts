@@ -71,7 +71,9 @@ const commandFiles = (
   args["load-cmd"] && args["load-cmd"].length > 0
     ? args["load-cmd"].map((x) => `${__dirname}/commands/${x}`)
     : getAllFiles(__dirname + "/commands")
-).filter((x) => !x.match(/_[a-zA-Z_]+\.[tj]s/));
+)
+  .filter((x) => !x.match(/_[a-zA-Z_]+\.[tj]s/))
+  .filter((x) => x.match(/(\.[tj]s)$/));
 
 for (const commandFile of commandFiles) {
   const commandImport = require(commandFile).default as HypnoCommand;

@@ -1,7 +1,11 @@
 import { Jimp } from "jimp";
+import * as gif from "@jimp/gif";
 import Canvas, { createCanvas, loadImage } from "canvas";
-import { readFileSync } from "fs";
+import { existsSync, readFileSync, rmSync } from "fs";
 import GIFEncoder from "gifencoder";
+import axios from "axios";
+import { execSync } from "child_process";
+import config from "../../config";
 
 export async function generateNotImmuneImage(imageUrl: string) {
   // Load stuff
@@ -91,4 +95,26 @@ export async function createRotatingGifBuffer(
   encoder.finish();
 
   return Buffer.concat(bufferStream);
+}
+
+export function addCaptionToGif(inputPath: string, caption: string) {
+  const safeCaption = caption.replace(/'/g, "\\'");
+  const output = __dirname + "/output.gif";
+
+  if (existsSync(output)) rmSync(output);
+
+  if (!existsSync(inputPath)) {
+    throw new Error(`Input file not found: ${inputPath}`);
+  }
+
+  const ffmpegCmd = `ffmpeg -i "${inputPath}" -vf "pad=iw:ih+50:0:50:white, drawtext=text='${safeCaption}':fontfile='/usr/share/fonts/TTF/Impact.TTF':x=(w-text_w)/2:y=10:fontsize=36:fontcolor=black" "${output}"`;
+
+  try {
+    execSync(ffmpegCmd, { stdio: "inherit" });
+    const read = readFileSync(output);
+    return { buffer: read, name: output };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }

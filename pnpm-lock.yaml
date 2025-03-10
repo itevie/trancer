@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@jimp/gif':
+        specifier: ^0.22.12
+        version: 0.22.12(@jimp/custom@0.16.13)
       '@types/chart.js':
         specifier: ^2.9.41
         version: 2.9.41
@@ -186,6 +189,11 @@ packages:
 
   '@jimp/gif@0.16.13':
     resolution: {integrity: sha512-yFAMZGv3o+YcjXilMWWwS/bv1iSqykFahFMSO169uVMtfQVfa90kt4/kDwrXNR6Q9i6VHpFiGZMlF2UnHClBvg==}
+    peerDependencies:
+      '@jimp/custom': '>=0.3.5'
+
+  '@jimp/gif@0.22.12':
+    resolution: {integrity: sha512-y6BFTJgch9mbor2H234VSjd9iwAhaNf/t3US5qpYIs0TSbAvM02Fbc28IaDETj9+4YB4676sz4RcN/zwhfu1pg==}
     peerDependencies:
       '@jimp/custom': '>=0.3.5'
 
@@ -433,6 +441,9 @@ packages:
 
   '@jimp/utils@0.16.13':
     resolution: {integrity: sha512-VyCpkZzFTHXtKgVO35iKN0sYR10psGpV6SkcSeV4oF7eSYlR8Bl6aQLCzVeFjvESF7mxTmIiI3/XrMobVrtxDA==}
+
+  '@jimp/utils@0.22.12':
+    resolution: {integrity: sha512-yJ5cWUknGnilBq97ZXOyOS0HhsHOyAyjHwYfHxGbSyMTohgQI6sVyE8KPgDwH8HHW/nMKXk8TrSwAE71zt716Q==}
 
   '@jimp/utils@1.6.0':
     resolution: {integrity: sha512-gqFTGEosKbOkYF/WFj26jMHOI5OH2jeP1MmC/zbK6BF6VJBf8rIC5898dPfSzZEbSA0wbbV5slbntWVc5PKLFA==}
@@ -1859,6 +1870,13 @@ snapshots:
       gifwrap: 0.9.4
       omggif: 1.0.10
 
+  '@jimp/gif@0.22.12(@jimp/custom@0.16.13)':
+    dependencies:
+      '@jimp/custom': 0.16.13
+      '@jimp/utils': 0.22.12
+      gifwrap: 0.10.1
+      omggif: 1.0.10
+
   '@jimp/jpeg@0.16.13(@jimp/custom@0.16.13)':
     dependencies:
       '@babel/runtime': 7.26.0
@@ -2233,6 +2251,10 @@ snapshots:
   '@jimp/utils@0.16.13':
     dependencies:
       '@babel/runtime': 7.26.0
+      regenerator-runtime: 0.13.11
+
+  '@jimp/utils@0.22.12':
+    dependencies:
       regenerator-runtime: 0.13.11
 
   '@jimp/utils@1.6.0':

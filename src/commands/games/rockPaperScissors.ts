@@ -1,4 +1,10 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, User } from "discord.js";
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  Collection,
+  User,
+} from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { createEmbed } from "../../util/other";
 import { currency } from "../../util/language";
@@ -115,6 +121,7 @@ const command: HypnoCommand<{ user: User; amount?: number }> = {
               win = "o";
             }
 
+            collector.stop();
             await op.removePlayers(win);
             await op.message.edit({
               components: [],
