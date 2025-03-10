@@ -114,7 +114,12 @@ export function addCaptionToGif(inputPath: string, caption: string) {
     throw new Error(`Input file not found: ${inputPath}`);
   }
 
-  const ffmpegCmd = `ffmpeg -i "${inputPath}" -vf "pad=iw:ih+50:0:50:white, drawtext=text='${safeCaption}':fontfile='${getFontFile()}':x=(w-text_w)/2:y=10:fontsize=36:fontcolor=black" "${output}"`;
+  let lines = safeCaption.match(/.{1,30}/g);
+  let whitespace = 50 * lines.length;
+
+  const ffmpegCmd = `ffmpeg -i "${inputPath}" -vf "pad=iw:ih+${whitespace}:0:${whitespace}:white, drawtext=text='${lines.join(
+    "\n"
+  )}':fontfile='${getFontFile()}':x=(w-text_w)/2:y=10:fontsize=36:fontcolor=black" "${output}"`;
 
   try {
     execSync(ffmpegCmd, { stdio: "inherit" });
