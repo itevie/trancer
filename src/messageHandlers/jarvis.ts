@@ -8,7 +8,11 @@ const handler: HypnoMessageHandler = {
   description: 'Sends a jarvis message when a message starts with "Jarvis"',
 
   handler: async (message) => {
-    if (!message.content.startsWith("Jarvis,")) return;
+    if (
+      !message.content.startsWith("Jarvis,") &&
+      !message.content.startsWith("Jarfish,")
+    )
+      return;
     const file = addCaptionToGif(
       config.dataDirectory + "/jarvis.gif",
       message.content
