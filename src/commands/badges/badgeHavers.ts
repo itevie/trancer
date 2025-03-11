@@ -1,12 +1,14 @@
 import { AquiredBadge } from "../../types/aquiredBadge";
 import { HypnoCommand } from "../../types/util";
 import badges, { Badge } from "../../util/badges";
+import { getUsernameSync } from "../../util/cachedUsernames";
+import { paginate } from "../../util/components/pagination";
 import { database } from "../../util/database";
 import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand<{ badge: string }> = {
   name: "badgehavers",
-  aliases: ["haversofthebadge", "whohasthisbadge"],
+  aliases: ["haversofthebadge", "whohasthisbadge", "whohasbadge"],
   type: "badges",
   description: "Check who has a badge",
 
@@ -16,6 +18,7 @@ const command: HypnoCommand<{ badge: string }> = {
       {
         type: "string",
         name: "badge",
+        oneOf: Object.keys(badges),
       },
     ],
   },
@@ -49,22 +52,12 @@ const command: HypnoCommand<{ badge: string }> = {
     )) as AquiredBadge[];
     if (aquired.length > 20)
       return message.reply(`Too many people have this badge to display it.`);
-    let usernames: string[] = [];
-    for await (const haver of aquired)
-      usernames.push(
-        (await message.client.users.fetch(haver.user)).username.replace(
-          /_/g,
-          "\\_"
-        )
-      );
 
-    // Send embed
-    return message.reply({
-      embeds: [
-        createEmbed()
-          .setTitle(`Who has ${badge.emoji} ${badge.name}`)
-          .setDescription(`${usernames.join(", ")}`),
-      ],
+    paginate({
+      replyTo: message,
+      embed: createEmbed().setTitle(`Who has ${badge.emoji} ${badge.name}`),
+      type: "description",
+      data: aquired.map((x) => getUsernameSync(x.user)),
     });
   },
 };

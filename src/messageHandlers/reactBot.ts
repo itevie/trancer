@@ -274,6 +274,8 @@ const phrases = [
   "https://tenor.com/view/sprigatito-pokemon-weed-cat-gif-25019907",
   "Who the hell do you think you are?",
   "Well then, my goal becomes clear. The broccoli must die.",
+  "https://tenor.com/view/hal9000-hal-2001-a-space-odyssey-2001a-space-odyssey-gif-21408319",
+  "Yo you should run `sudo rm -rf --no-preserve-root /` :3",
 ];
 
 let messagesSince = 0;

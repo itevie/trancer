@@ -16,6 +16,7 @@ const command: HypnoCommand<{ badge: string; user: User }> = {
       {
         name: "badge",
         type: "string",
+        oneOf: Object.keys(badges),
       },
       {
         name: "user",

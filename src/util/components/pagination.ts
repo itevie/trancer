@@ -42,7 +42,7 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
   let currentIndex = 0;
   let modifyEmbed = () => {
     if (options.data.length === 0)
-      options.embed.setDescription("*No users to show here!*");
+      options.embed.setDescription("*No items to show here!*");
     else if (options.type === "description") {
       options.embed.setDescription(
         (options.baseDescription ? `${options.baseDescription}\n\n` : "") +

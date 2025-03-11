@@ -4,7 +4,8 @@ import { createRating } from "./rate";
 
 const command: HypnoCommand<{ name: string }> = {
   name: "pinrating",
-  aliases: ["pinrate"],
+  aliases: ["unpinrating"],
+  eachAliasIsItsOwnCommand: true,
   description: "Pins a rating to your profile",
   type: "fun",
 

@@ -48,7 +48,7 @@ async function handleEcoPositionalBadges() {
   return false;
 }
 
-const badges: { [key: string]: Badge } = {
+export const badges: { [key: string]: Badge } = {
   yapper: {
     name: "Yapper",
     description: "Sent 1000 messages",
