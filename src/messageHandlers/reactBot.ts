@@ -296,7 +296,16 @@ const phrases = [
   "https://tenor.com/view/rat-dance-dance-gif-gif-7064682401296407403",
   "I'm sending you to the backrooms.",
   "Mods, get 'em.",
+  "https://tenor.com/view/protogen-proto-furry-furries-kitsuon-gif-18748611",
   "<@395877903998648322>, they're dealing drugs again...",
+  "https://tenor.com/view/protogen-moose-furry-furries-oc-gif-19307396",
+  "https://tenor.com/view/protogen-primagen-sudo-furry-fursona-gif-17178338",
+  "https://tenor.com/view/protogen-vrchat-hello-hi-jumping-gif-18406743932972249866",
+  "https://tenor.com/view/petting-protogen-sh-4rk-cute-gif-1071500990573410959",
+  "https://tenor.com/view/protogen-omg-ram-ram-excited-proto-gif-22034497",
+  "https://tenor.com/view/vr-chat-cheese-phybogen-protogen-gif-26299847",
+  "https://tenor.com/view/protogen-boop-gif-22738025",
+  "https://tenor.com/view/danny-proto-protogen-you-have-alerted-the-protogen-gif-26933055",
 ];
 
 let messagesSince = 0;
