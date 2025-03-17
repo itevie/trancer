@@ -88,32 +88,36 @@ client.on("guildMemberAdd", async (member) => {
   }
 
   // Check invite logger
-  if (serverSettings.invite_logger_channel_id) {
-    let usedCode: Invite | null = null;
-    for await (const [_, invite] of await member.guild.invites.fetch()) {
-      if (invite.uses !== inviteCache[member.guild.id][invite.code]) {
-        usedCode = invite;
-        inviteCache[member.guild.id][invite.code] = invite.uses;
-        break;
+  try {
+    if (serverSettings.invite_logger_channel_id) {
+      let usedCode: Invite | null = null;
+      for await (const [_, invite] of await member.guild.invites.fetch()) {
+        if (invite.uses !== inviteCache[member.guild.id][invite.code]) {
+          usedCode = invite;
+          inviteCache[member.guild.id][invite.code] = invite.uses;
+          break;
+        }
+      }
+
+      if (usedCode) {
+        // Send it
+        let channel = (await member.guild.channels.fetch(
+          serverSettings.invite_logger_channel_id
+        )) as TextChannel;
+        await channel.send({
+          embeds: [
+            createEmbed()
+              .setTitle(`${member.user.username} invite details`)
+              .setDescription(
+                `**Invited By**: ${usedCode.inviter.username} (<@${usedCode.inviter.id}>)` +
+                  `\n**Invite Code**: ${usedCode.code} (${usedCode.uses} uses)`
+              ),
+          ],
+        });
       }
     }
-
-    if (usedCode) {
-      // Send it
-      let channel = (await member.guild.channels.fetch(
-        serverSettings.invite_logger_channel_id
-      )) as TextChannel;
-      await channel.send({
-        embeds: [
-          createEmbed()
-            .setTitle(`${member.user.username} invite details`)
-            .setDescription(
-              `**Invited By**: ${usedCode.inviter.username} (<@${usedCode.inviter.id}>)` +
-                `\n**Invite Code**: ${usedCode.code} (${usedCode.uses} uses)`
-            ),
-        ],
-      });
-    }
+  } catch (e) {
+    console.log("Failed to send invite log");
   }
 
   // Check for welcome message in other servers

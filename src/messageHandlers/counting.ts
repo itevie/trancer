@@ -2,11 +2,24 @@ import { client } from "..";
 import { HypnoMessageHandler } from "../types/util";
 import { actions, database } from "../util/database";
 import { createEmbed } from "../util/other";
-import config from "../config";
 import Mexp from "math-expression-evaluator";
+import wordsToNumbers from "words-to-numbers";
 
 export function fixMathExpr(content: string) {
-  return content.replace(/[×x]/g, "*").replace(/[÷]/, "/").replace(/²/g, "^2");
+  content = wordsToNumbers(content).toString();
+  return content
+    .replace(/[×x]/g, "*")
+    .replace(/[÷]/, "/")
+    .replace(/²/g, "^2")
+    .replace(/plus/g, "+")
+    .replace(/minus/g, "-")
+    .replace(/times/g, "*")
+    .replace(/multiplied by/g, "*")
+    .replace(/divided by/g, "/")
+    .replace(/to the power of 2/g, "^2")
+    .replace(/to the power of 3/g, "^3")
+    .replace(/to the power of 4/g, "^4")
+    .replace(/to the power of 5/g, "^5");
 }
 
 const handler: HypnoMessageHandler = {

@@ -9,7 +9,6 @@ import {
 } from "../../messageHandlers/xp";
 import { makePercentageASCII } from "../../util/other";
 import { actions } from "../../util/database";
-import ecoConfig from "../../ecoConfig";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "xp",

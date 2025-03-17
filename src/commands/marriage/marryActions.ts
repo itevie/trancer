@@ -132,7 +132,7 @@ const command: HypnoCommand<{ user: User }> = {
               .setDescription(
                 `**${message.author.username}** bent down on one knee... and asked: "${args.user.username}, will you marry me?"\n\nSo, what do you say?`
               ),
-            date: createEmbed()
+            dating: createEmbed()
               .setTitle(
                 `${message.author.username} has something special to say...`
               )

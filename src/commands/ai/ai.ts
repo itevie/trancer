@@ -3,14 +3,18 @@ import config from "../../config";
 import { HypnoCommand } from "../../types/util";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { actions } from "../../util/database";
+import { createEmbed } from "../../util/other";
 
-export const history: { [key: string]: Message[] } = {};
-const helperMessage =
-  "Your name is Trancer. You must act like a normal person, responding casually and using the same tone, slang, abbreviations, and style as the user. Respond to everything inside the quotes, and feel free to address users by their usernames if relevant. If the user uses informal, aggressive, or sarcastic language, respond with a similarly direct, laid-back, or confident style. Avoid being overly polite or formal, and reflect the mood and tone of the user without censoring the conversation too much. Keep it real and true to the user's vibe." +
-  "You can use predefined functions like $trigger to use one of the user's hypnosis triggers. Make sure you call them appropriately in your responses when needed, and keep the tone consistent with the user's style.";
+export const history: {
+  [key: string]: Message[];
+} = {};
+//  "You can use predefined functions like $trigger to use one of the user's hypnosis triggers. Make sure you call them appropriately in your responses when needed, and keep the tone consistent with the user's style.";
 
-let isProcessing: boolean = false;
-
+const characters = {
+  trancer:
+    "Your name is Trancer. You must act like a normal person, responding casually and using the same tone, slang, abbreviations, and style as the user. Respond to everything inside the quotes, and feel free to address users by their usernames if relevant. If the user uses informal, aggressive, or sarcastic language, respond with a similarly direct, laid-back, or confident style. Avoid being overly polite or formal, and reflect the mood and tone of the user without censoring the conversation too much. Keep it real and true to the user's vibe.",
+  stewie: `You are Stewie Griffin from Family Guy. Respond in a sarcastic, witty, and condescending tone, but keep responses brief. Use a sharp sense of humor and an elevated vocabulary. Your tone is intelligent yet mischievous, with a touch of disdain for others, especially your family. You should sound sophisticated, manipulative, and full of personality—without getting overly verbose or talking about your "system" or "role." Keep it sharp and focused, as if you're always on the verge of a diabolical plot.`,
+};
 const command: HypnoCommand = {
   name: "ai",
   description: "Chat with an AI (ai sucks)",
@@ -23,19 +27,46 @@ const command: HypnoCommand = {
       );
     }
 
-    //if (isProcessing)
-    //  return message.reply(`Sorry! The AI is already processing something.`);
-    isProcessing = true;
-
     const conversationID = message.author.id.toString();
 
-    if (!history[conversationID])
+    if (!history[conversationID]) {
+      const msg = await message.reply({
+        embeds: [
+          createEmbed()
+            .setTitle("Please select character")
+            .setDescription(
+              "You are using a new chat - please select which character you would like to talk to."
+            ),
+        ],
+
+        components: [
+          // @ts-ignore
+          new ActionRowBuilder().addComponents(
+            Object.keys(characters).map((x) =>
+              new ButtonBuilder()
+                .setCustomId(x)
+                .setStyle(ButtonStyle.Primary)
+                .setLabel(x)
+            )
+          ),
+        ],
+      });
+      const type = await msg.awaitMessageComponent({
+        filter: (i) => i.user.id === message.author.id,
+      });
+
       history[conversationID] = [
         {
           role: "system",
-          content: helperMessage,
+          content: characters[type.customId],
         },
       ];
+
+      await msg.edit({
+        embeds: [],
+        content: `You selected **${type.customId}** as the character!`,
+      });
+    }
 
     let content = o.oldArgs.join(" ");
 
@@ -109,8 +140,6 @@ const command: HypnoCommand = {
       }
     } catch (e) {
       return message.reply(e.toString());
-    } finally {
-      isProcessing = false;
     }
   },
 };

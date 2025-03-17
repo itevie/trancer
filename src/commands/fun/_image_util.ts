@@ -3,13 +3,14 @@ import Canvas, { createCanvas, loadImage } from "canvas";
 import { exists, existsSync, readFileSync, rmSync } from "fs";
 import GIFEncoder from "gifencoder";
 import { execSync } from "child_process";
+import config from "../../config";
 
 export async function generateNotImmuneImage(imageUrl: string) {
   // Load stuff
   const canvas = Canvas.createCanvas(465, 658);
   const ctx = canvas.getContext("2d");
   const image = await Canvas.loadImage(
-    readFileSync(__dirname + "/../data/not_immune.png")
+    readFileSync(config.dataDirectory + "/not_immune.png")
   );
 
   // Make avatar a circle
