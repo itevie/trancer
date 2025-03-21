@@ -436,6 +436,18 @@ client.on("messageCreate", async (message) => {
               };
             result = item;
             break;
+          case "rank":
+            let rank = await actions.ranks.get(a);
+            if (!rank) {
+              return {
+                error: `That rank does not exist, try creating it with ${settings.prefix}createrank ${a}!`,
+                autocomplete: (await actions.ranks.getAll()).map(
+                  (x) => x.rank_name
+                ),
+              };
+            }
+            result = rank;
+            break;
           case "user":
             if (a.toLowerCase() === "me") {
               result = message.author;

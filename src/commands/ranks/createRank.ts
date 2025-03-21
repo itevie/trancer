@@ -29,17 +29,13 @@ const command: HypnoCommand<{ name: string }> = {
 
     // Check if it already exists
     if (await actions.ranks.exists(name))
-      return message.reply(`A leaderboard with that name already exists`);
+      return message.reply(`A rank with that name already exists`);
 
     // Create it
-    await database.run(
-      `INSERT INTO ranks (rank_name, created_by) VALUES ((?), (?))`,
-      name,
-      message.author.id
-    );
+    await actions.ranks.create(name, message.author.id);
 
     return message.reply(
-      `Leaderboard created! use \`${serverSettings.prefix}vote ${name} <user mention>\` to vote!`
+      `Rank created! use \`${serverSettings.prefix}vote ${name} <user mention>\` to vote!`
     );
   },
 };

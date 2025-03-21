@@ -1,32 +1,30 @@
 import { HypnoCommand } from "../../types/util";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 import config from "../../config";
 
-const command: HypnoCommand = {
+const command: HypnoCommand<{ rank: Rank; description: string }> = {
   name: "setrankdescription",
   aliases: ["srankdesc", "setrankdesc"],
   type: "ranks",
   description: "Set a ranks's description",
 
-  handler: async (message, { oldArgs: args, serverSettings }) => {
-    if (!args[0] || !args[1])
-      return message.reply(
-        `Please provide a rank name and a description, example: \`${serverSettings.prefix}slbdesc fish Who is the most fishiest?\``
-      );
-    const name = args[0].toLowerCase();
-    args.shift();
-    const desc = args.join(" ");
+  args: {
+    requiredArguments: 2,
+    args: [
+      {
+        name: "rank",
+        type: "rank",
+      },
+      {
+        name: "description",
+        type: "string",
+      },
+    ],
+  },
 
-    // Get
-    const rank = await database.get(
-      `SELECT * FROM ranks WHERE rank_name = (?);`,
-      name
-    );
-
-    // Checks
-    if (!rank) return message.reply(`That rank does not exist`);
+  handler: async (message, { args }) => {
     if (
-      rank.created_by !== message.author.id &&
+      args.rank.created_by !== message.author.id &&
       !config.exceptions.includes(message.author.id)
     )
       return message.reply(`You did not create this rank!`);
@@ -34,8 +32,8 @@ const command: HypnoCommand = {
     // Update
     await database.run(
       `UPDATE ranks SET description = (?) WHERE rank_name = (?);`,
-      desc,
-      name
+      args.description,
+      args.rank.rank_name
     );
 
     return message.reply(`Updated rank description!`);

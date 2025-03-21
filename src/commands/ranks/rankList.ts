@@ -1,5 +1,8 @@
 import { HypnoCommand } from "../../types/util";
-import { database } from "../../util/database";
+import { getUsernameSync } from "../../util/cachedUsernames";
+import { paginate } from "../../util/components/pagination";
+import { actions, database } from "../../util/database";
+import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand = {
   name: "ranklist",
@@ -7,15 +10,30 @@ const command: HypnoCommand = {
   type: "ranks",
   description: "Get a list of active ranks",
 
-  handler: async (message) => {
-    const ranks = (await database.all(`SELECT rank_name FROM ranks;`)).map(
-      (x) => x.rank_name
-    );
-    return message.reply(
-      `Here are the ranks you can vote on: ${ranks
-        .map((x) => `**${x}**`)
-        .join(", ")}`
-    );
+  handler: async (message, { serverSettings }) => {
+    const ranks = await actions.ranks.getAll();
+    const votes = await actions.ranks.votes.getAllBy(message.author.id);
+
+    paginate({
+      replyTo: message,
+      embed: createEmbed()
+        .setTitle(`All the ranks`)
+        .setFooter({
+          text: `Use ${serverSettings.prefix}vote rank @user to vote`,
+        }),
+      pageLength: 25,
+      type: "description",
+      data: ranks.map(
+        (x) =>
+          `**${x.rank_name}**: ${
+            votes.some((y) => y.rank_name === x.rank_name)
+              ? getUsernameSync(
+                  votes.find((y) => y.rank_name === x.rank_name).votee
+                )
+              : "*Not voted*"
+          }`
+      ),
+    });
   },
 };
 

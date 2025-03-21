@@ -6,7 +6,7 @@ import {
 import { actions, database } from "../../util/database";
 import { createEmbed } from "../../util/other";
 
-const command: HypnoCommand<{ name: string }> = {
+const command: HypnoCommand<{ rank: Rank }> = {
   name: "rank",
   aliases: ["r"],
   description: "Get the top 10 users on a specific rank",
@@ -16,38 +16,22 @@ const command: HypnoCommand<{ name: string }> = {
     requiredArguments: 1,
     args: [
       {
-        name: "name",
-        type: "string",
+        name: "rank",
+        type: "rank",
       },
     ],
   },
 
   handler: async (message, { args, serverSettings }) => {
-    // Validate
-    const name = args.name.toLowerCase();
-
-    if (!(await actions.ranks.exists(name)))
-      return message.reply(
-        `That rank does not exist, but you can create it using \`${serverSettings.prefix}createrank ${name}\``
-      );
-    const lb = await database.get<Rank>(
-      `SELECT * FROM ranks WHERE rank_name = (?)`,
-      name
-    );
-
-    // Fetch results
-    const dbResults = (await database.all(
-      `SELECT * FROM votes WHERE rank_name = (?);`,
-      name
-    )) as Vote[];
+    const votes = await actions.ranks.votes.getForRank(args.rank.rank_name);
 
     await createPaginatedLeaderboardFromData({
-      data: accumlateSortLeaderboardData(dbResults.map((x) => x.votee)),
-      description: `*${lb.description}*`,
+      data: accumlateSortLeaderboardData(votes.map((x) => x.votee)),
+      description: args.rank.description ? `*${args.rank.description}*` : null,
       embed: createEmbed()
-        .setTitle(`Rank ${name}`)
+        .setTitle(`Rank ${args.rank.rank_name}`)
         .setFooter({
-          text: `Use ${serverSettings.prefix}vote ${name} <user> to vote!`,
+          text: `Use ${serverSettings.prefix}vote ${args.rank.rank_name} <user> to vote!`,
         }),
       entryName: "votes",
       replyTo: message,

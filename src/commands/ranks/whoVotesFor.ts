@@ -1,9 +1,12 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { actions, database } from "../../util/database";
-import { getUsername } from "../../util/cachedUsernames";
+import { describe } from "node:test";
+import { actions } from "../../util/database";
+import { paginate } from "../../util/components/pagination";
+import { createEmbed } from "../../util/other";
+import { getUsernameSync } from "../../util/cachedUsernames";
 
-const command: HypnoCommand<{ rank: string; user?: User }> = {
+const command: HypnoCommand<{ rank: Rank; user?: User }> = {
   name: "whovotedfor",
   aliases: ["whovoted", "wvf"],
   description: "See who voted for someone on a rank",
@@ -13,7 +16,7 @@ const command: HypnoCommand<{ rank: string; user?: User }> = {
     requiredArguments: 1,
     args: [
       {
-        type: "string",
+        type: "rank",
         name: "rank",
       },
       {
@@ -24,26 +27,20 @@ const command: HypnoCommand<{ rank: string; user?: User }> = {
   },
 
   handler: async (message, { args }) => {
-    let user = args.user ? args.user : message.author;
-
-    if (!(await actions.ranks.exists(args.rank)))
-      return message.reply("That rank does not exist!");
-
-    let votes = await database.all<Vote[]>(
-      "SELECT * FROM votes WHERE votee = ? AND rank_name = ?;",
-      user.id,
-      args.rank
+    let user = args.user || message.author;
+    let votes = await actions.ranks.votes.getAllForOn(
+      args.rank.rank_name,
+      user.id
     );
-    let users: string[] = [];
-    for await (const vote of votes) {
-      users.push(await getUsername(vote.voter));
-    }
 
-    return message.reply(
-      `The following voted for **${user.username}** on rank **${
-        args.rank
-      }**\n\n${users.join("\n")}`
-    );
+    paginate({
+      replyTo: message,
+      embed: createEmbed().setTitle(
+        `Who voted ${args.rank.rank_name} for ${user.username}?`
+      ),
+      type: "description",
+      data: votes.map((x) => getUsernameSync(x)),
+    });
   },
 };
 

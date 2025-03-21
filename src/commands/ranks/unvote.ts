@@ -1,7 +1,7 @@
 import { HypnoCommand } from "../../types/util";
 import { actions, database } from "../../util/database";
 
-const command: HypnoCommand<{ rank: string }> = {
+const command: HypnoCommand<{ rank: Rank }> = {
   name: "unvote",
   description: "Unvote on a rank",
   type: "ranks",
@@ -11,27 +11,17 @@ const command: HypnoCommand<{ rank: string }> = {
     args: [
       {
         name: "rank",
-        type: "string",
+        type: "rank",
       },
     ],
   },
 
-  handler: async (message, { args, serverSettings }) => {
-    const rank = args.rank.toLowerCase();
+  handler: async (message, { args }) => {
+    await actions.ranks.votes.remove(args.rank.rank_name, message.author.id);
 
-    // Check if the rank exists
-    if (!(await actions.ranks.exists(rank)))
-      return message.reply(
-        `That rank does not exist! But can be created using \`${serverSettings.prefix}createrank ${rank}\``
-      );
-
-    await database.run(
-      `DELETE FROM votes WHERE rank_name = ? AND voter = ?`,
-      rank,
-      message.author.id
+    return message.reply(
+      `Your vote on **${args.rank.rank_name}** has been removed`
     );
-
-    return message.reply(`Your vote on **${rank}** has been removed`);
   },
 };
 

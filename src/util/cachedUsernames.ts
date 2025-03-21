@@ -1,10 +1,21 @@
 import fs from "fs";
 import { client } from "..";
+import { getUser } from "./other";
 let path = __dirname + "/../data/cached_usernames.json";
 if (!fs.existsSync(path)) fs.writeFileSync(path, "{}");
 let usernames = JSON.parse(fs.readFileSync(path, "utf-8"));
 
 export function getUsernameSync(id: string): string {
+  if (!usernames[id]) {
+    setTimeout(() => {
+      try {
+        getUser(id);
+      } catch (e) {
+        console.log(e);
+      }
+    }, 1);
+  }
+
   return usernames[id] || `<${id}>`;
 }
 

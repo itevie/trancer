@@ -1,8 +1,10 @@
 import { HypnoCommand } from "../../types/util";
-import { database } from "../../util/database";
+import { actions, database } from "../../util/database";
 import config from "../../config";
+import ConfirmAction from "../../util/components/Confirm";
+import { createEmbed } from "../../util/other";
 
-const command: HypnoCommand<{ name: string; confirm?: string }> = {
+const command: HypnoCommand<{ rank: Rank }> = {
   name: "deleterank",
   description: "Delete a rank",
   type: "ranks",
@@ -11,51 +13,34 @@ const command: HypnoCommand<{ name: string; confirm?: string }> = {
     requiredArguments: 1,
     args: [
       {
-        name: "name",
-        type: "string",
-      },
-      {
-        name: "confirm",
-        type: "string",
-        mustBe: "confirm",
+        name: "rank",
+        type: "rank",
       },
     ],
   },
 
-  handler: async (message, { args, serverSettings }) => {
-    // Check for rank
-    const rankName = args.name.toLowerCase();
-
-    // Fetch rank
-    const rank = (await database.get(
-      `SELECT * FROM ranks WHERE rank_name = (?);`,
-      rankName
-    )) as Rank | undefined;
-
-    // Check if exists
-    if (!rank) return message.reply(`That leaderboard does not exist!`);
-
-    // Check if owns it
+  handler: async (message, { args }) => {
     if (
-      rank.created_by !== message.author.id &&
-      rank.created_by === config.owner
+      args.rank.created_by !== message.author.id &&
+      args.rank.created_by !== config.owner
     )
-      return message.reply(
-        `You need to be the leaderboard creator to delete it!`
-      );
+      return message.reply(`You need to be the rank creator to delete it!`);
 
-    // Check confirm
-    if (!args.confirm)
-      return message.reply(
-        `Please provide confirm as the last arguemnt: \`${serverSettings.prefix}deleterank ${rankName} confirm\``
-      );
-
-    // Delete
-    await database.run(`DELETE FROM votes WHERE rank_name = (?);`, rankName);
-    await database.run(`DELETE FROM ranks WHERE rank_name = (?);`, rankName);
-
-    // Done
-    return message.reply(`Leaderboard deleted. :cyclone:`);
+    ConfirmAction({
+      message,
+      embed: createEmbed()
+        .setTitle("Are you sure?")
+        .setDescription(
+          `Are you sure you want to delete the **${args.rank.rank_name}** rank?`
+        ),
+      async callback() {
+        await actions.ranks.delete(args.rank.rank_name);
+        return {
+          content: `Rank **${args.rank.rank_name}** was deleted!`,
+          embeds: [],
+        };
+      },
+    });
   },
 };
 

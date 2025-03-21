@@ -1,13 +1,12 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { actions, database } from "../../util/database";
-import { createEmbed } from "../../util/other";
+import { actions } from "../../util/database";
 import { paginate } from "../../util/components/pagination";
-import { getUsernameSync } from "../../util/cachedUsernames";
+import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand<{ user?: User }> = {
-  name: "votes",
-  description: "View the things you have voted for on all the ranks",
+  name: "votesfor",
+  description: "See all the votes for a specific user",
   type: "ranks",
 
   args: {
@@ -23,13 +22,15 @@ const command: HypnoCommand<{ user?: User }> = {
 
   handler: async (message, { args }) => {
     let user = args.user || message.author;
-    let votes = await actions.ranks.votes.getAllBy(user.id);
+    let votes = await actions.ranks.votes.getAllForUser(user.id);
 
     paginate({
       replyTo: message,
-      embed: createEmbed().setTitle(`All your votes!`),
+      embed: createEmbed().setTitle(`Who has voted for ${user.username}?`),
       type: "description",
-      data: votes.map((x) => `**${x.rank_name}**: ${getUsernameSync(x.votee)}`),
+      data: votes
+        .sort((a, b) => b.amount - a.amount)
+        .map((x) => `**${x.rank_name}**: ${x.amount} votes`),
     });
   },
 };
