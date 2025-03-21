@@ -65,6 +65,12 @@ const command: HypnoCommand<{ amount: number; confirm?: string }> = {
           );
         }
 
+        if (!win && args.args.amount > 1000) {
+          await message.reply(
+            "https://tenor.com/view/not-stonks-profit-down-sad-frown-arms-crossed-gif-15684535"
+          );
+        }
+
         return {
           embeds: [
             createEmbed()
