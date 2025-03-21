@@ -5,6 +5,7 @@ import { calculateLevel } from "../messageHandlers/xp";
 import { currency } from "./language";
 import { Message } from "discord.js";
 import { createEmbed } from "./other";
+import { client } from "..";
 
 export interface Badge {
   name: string;
@@ -168,6 +169,24 @@ export const badges: { [key: string]: Badge } = {
     emoji: ":third_place:",
     scan: async () => {
       return false;
+    },
+  },
+  "can-request": {
+    name: "Can Request",
+    description: "Reached level 5 on Trancer",
+    emoji: ":fish:",
+    scan: async (user) => {
+      if (user.guild_id !== config.botServer.id) return false;
+      if (calculateLevel(user.xp) < 5) return false;
+      try {
+        const member = (
+          await client.guilds.fetch(config.botServer.id)
+        ).members.fetch(user.user_id);
+        (await member).roles.add(config.botServer.roles.canRequest);
+        return true;
+      } catch {
+        return false;
+      }
     },
   },
 } as const;

@@ -70,7 +70,7 @@ const handler: HypnoMessageHandler = {
     let post = calculateLevel(data.xp + award);
 
     if (pre !== post && settings.level_notifications) {
-      let reward = rewards[post];
+      let reward = null; //  rewards[post];
       if (reward && message.guild.id === config.botServer.id)
         await reward.handle(message);
       try {
