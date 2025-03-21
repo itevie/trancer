@@ -5,7 +5,6 @@ import { HypnoCommand } from "../../types/util";
 
 const command: HypnoCommand<{ category: string; ignoreGuards?: boolean }> = {
   name: "category",
-  aliases: ["cat"],
   type: "help",
   description: "Get the list of commands in a category",
 
