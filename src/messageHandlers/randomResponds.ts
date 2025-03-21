@@ -6,12 +6,32 @@ import { AttachmentBuilder } from "discord.js";
 import { generateNotImmuneImage } from "../commands/fun/_image_util";
 import { client } from "..";
 
-const msgs = [
+const fishMessages = [
   "blub",
   "blub blub blub",
   "you're a fish",
   "fish fr",
   'pfft "not a fish"',
+];
+
+const hateMessages = [
+  "wtf did i do to you man",
+  "Hey don't hate me :( I'm trying my best, ok?",
+  "as if you're any better",
+  "ok... i'll leave i guess... *tears up*",
+  "love u too",
+  "fuck you",
+  "well you're not so cool yourself",
+  "yeah i hate you too",
+  "ok?",
+];
+
+const loveMessages = [
+  "Aw, I love you too :blue_heart:",
+  "Thanks, I try my best <3",
+  "Thanks a lot, I love you too :)",
+  "Thanks, it's appreciated!",
+  "mwah!",
 ];
 
 const handler: HypnoMessageHandler = {
@@ -23,7 +43,7 @@ const handler: HypnoMessageHandler = {
     if (message.content.match(/(i'?m)? ?(not?) a? ?fishy?/gi)) {
       return message.reply(
         `${
-          msgs[Math.floor(Math.random() * msgs.length)]
+          fishMessages[Math.floor(Math.random() * fishMessages.length)]
         } ${await getRandomImposition(message.author.id)}`
       );
     }
@@ -58,13 +78,15 @@ const handler: HypnoMessageHandler = {
     ) {
       if (message.content.match(/i love y?o?u/i)) {
         return message.reply({
-          content: "Aw, I love you too :blue_heart:",
+          content:
+            loveMessages[Math.floor(Math.random() * loveMessages.length)],
         });
       }
 
       if (message.content.match(/i hate y?o?u/i)) {
         return message.reply({
-          content: "Hey don't hate me :( I'm trying my best, ok?",
+          content:
+            hateMessages[Math.floor(Math.random() * hateMessages.length)],
         });
       }
     }
