@@ -76,7 +76,7 @@ const handler: HypnoMessageHandler = {
         (await message.fetchReference()).author.id === client.user.id) ||
       message.content.includes(client.user.id)
     ) {
-      if (message.content.match(/i love y?o?u/i)) {
+      if (message.content.match(/i? ?love y?oa??u/i)) {
         return message.reply({
           content:
             loveMessages[Math.floor(Math.random() * loveMessages.length)],

@@ -123,16 +123,6 @@ const _actions = {
           ? quote.content
           : `*${quote.content}*`;
 
-      if (message.reference) {
-        const ref = await message.fetchReference();
-        const refMessageLink = `https://discord.com/channels/${ref.guildId}/${ref.channelId}/${ref.id}`;
-        text += `\n:arrow_right_hook: ${ref.content} (${
-          ref.author.username
-        } - ${new Date(
-          quote.created_at
-        ).toDateString()} - [Message Link](${refMessageLink}))`;
-      }
-
       text +=
         `\n - ${user ? user.username : "*(failed to get user)*"} - ` +
         `${new Date(quote.created_at).toDateString()} - ` +
@@ -142,7 +132,16 @@ const _actions = {
         text: `Quote #${quote.id}`,
       });
     } else {
-      embed.setDescription(`*${quote.content}*`);
+      let text = `*${quote.content}*`;
+
+      if (message.reference) {
+        try {
+          const ref = await message.fetchReference();
+          text += `\n:arrow_right_hook: ${ref.content}`;
+        } catch {}
+      }
+
+      embed.setDescription(text);
       embed.setFooter({ text: `Use guess (guess) to guess! (NO PREFIX)` });
     }
 
