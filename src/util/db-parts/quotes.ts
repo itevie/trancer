@@ -65,89 +65,87 @@ const _actions = {
     quote: Quote,
     hideUser: boolean = false
   ): Promise<EmbedBuilder> => {
+    // Fetch all deteails
+    const embed = createEmbed().setTitle("Quote");
     let user: User | null = null;
+    let message: Message | null = null;
+    let image: string | null = null;
+    let messageLink = "";
+
+    // Try fetch user so it can show username
     try {
       user = await client.users.fetch(quote.author_id);
-    } catch (e) {
-      1;
-    }
+    } catch {}
 
-    let message: Message | null = null;
+    // Check if it is a newer quote so it can have replies
     if (quote.message_id && quote.channel_id) {
       try {
-        let channel = await client.channels.fetch(quote.channel_id);
+        const channel = await client.channels.fetch(quote.channel_id);
         if (channel.isTextBased()) {
           message = await channel.messages.fetch(quote.message_id);
         }
       } catch {}
     }
 
-    let messageLink: string = "";
     if (message) {
       messageLink = `https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}`;
-    }
 
-    let image: string | null = null;
-    if (message) {
-      for (let embed of message.embeds) {
-        if (embed.data.url) {
-          image =
-            embed.data.image?.proxy_url ||
-            embed.data.thumbnail?.proxy_url ||
-            null;
+      for (const embed of message.embeds) {
+        image =
+          embed.data.image?.proxy_url ||
+          embed.data.thumbnail?.proxy_url ||
+          image;
+      }
+
+      if (message.attachments.size > 0) {
+        const attachment = message.attachments.first();
+        if (
+          attachment &&
+          [
+            "image/png",
+            "image/jpeg",
+            "image/jpg",
+            "image/gif",
+            "image/gifv",
+          ].includes(attachment.contentType)
+        ) {
+          image = attachment.proxyURL;
         }
       }
     }
 
-    if (message?.attachments?.size > 0) {
-      let attachment = message.attachments.entries().next()
-        .value[1] as Attachment;
-      if (
-        [
-          "image/png",
-          "image/jpeg",
-          "image/jpg",
-          "image/gif",
-          "image/gifv",
-        ].includes(attachment.contentType)
-      ) {
-        image = attachment.proxyURL;
-      }
-    }
+    if (image) embed.setImage(image);
 
-    let embed = createEmbed().setTitle("Quote");
-
+    let description = quote.content ? `*${quote.content}*` : "";
     if (!hideUser) {
-      let text =
-        quote.content.startsWith("*") || quote.content.endsWith("*")
-          ? quote.content
-          : `*${quote.content}*`;
+      description += `\n - ${
+        user ? user.username : "*(failed to get user)*"
+      } - ${new Date(quote.created_at).toDateString()}`;
+      if (messageLink) description += ` - [Message Link](${messageLink})`;
 
-      text +=
-        `\n - ${user ? user.username : "*(failed to get user)*"} - ` +
-        `${new Date(quote.created_at).toDateString()} - ` +
-        `${messageLink ? `[Message Link](${messageLink})` : ""}`;
-      embed.setDescription(text);
-      embed.setFooter({
-        text: `Quote #${quote.id}`,
-      });
-    } else {
-      let text = `*${quote.content}*`;
-
-      if (message.reference) {
-        try {
-          const ref = await message.fetchReference();
-          text += `\n:arrow_right_hook: ${ref.content}`;
-        } catch {}
+      if (message && message.embeds.length > 0) {
+        const msgEmbed = message.embeds[0];
+        embed.addFields({
+          name: `Embed: ${msgEmbed.title || "(No title)"}`,
+          value: msgEmbed.description || "(No description)",
+        });
+        if (!image && msgEmbed.image) embed.setImage(msgEmbed.image.url);
+        if (msgEmbed.thumbnail) embed.setThumbnail(msgEmbed.thumbnail.url);
+        if (msgEmbed.fields.length > 0) embed.addFields(...msgEmbed.fields);
       }
-
-      embed.setDescription(text);
-      embed.setFooter({ text: `Use guess (guess) to guess! (NO PREFIX)` });
+    } else if (message?.reference) {
+      try {
+        const ref = await message.fetchReference();
+        description += `\n:arrow_right_hook: ${ref.content}`;
+      } catch {}
     }
 
-    if (image) {
-      embed.setImage(image);
-    }
+    embed.setDescription(description.length === 0 ? "**" : description);
+    embed.setFooter({
+      text: hideUser
+        ? "Use guess (guess) to guess! (NO PREFIX)"
+        : `Quote #${quote.id}`,
+    });
 
     return embed;
   },
