@@ -306,6 +306,12 @@ const phrases = [
   "https://tenor.com/view/vr-chat-cheese-phybogen-protogen-gif-26299847",
   "https://tenor.com/view/protogen-boop-gif-22738025",
   "https://tenor.com/view/danny-proto-protogen-you-have-alerted-the-protogen-gif-26933055",
+  "https://discord.com/channels/1257416273520758814/1257436960461422662/1352768484576202877",
+  "when i say die you die",
+  "quote 1343",
+  ".gq 1343",
+  ".fox",
+  ".duck",
 ];
 
 let messagesSince = 0;
