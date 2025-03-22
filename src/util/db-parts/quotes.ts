@@ -133,7 +133,9 @@ const _actions = {
         if (msgEmbed.thumbnail) embed.setThumbnail(msgEmbed.thumbnail.url);
         if (msgEmbed.fields.length > 0) embed.addFields(...msgEmbed.fields);
       }
-    } else if (message?.reference) {
+    }
+
+    if (message?.reference) {
       try {
         const ref = await message.fetchReference();
         description += `\n:arrow_right_hook: ${ref.content}`;
