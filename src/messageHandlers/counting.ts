@@ -8,6 +8,7 @@ import wordsToNumbers from "words-to-numbers";
 export function fixMathExpr(content: string) {
   content = wordsToNumbers(content).toString();
   return content
+    .replace(/|/g, "")
     .replace(/[×x]/g, "*")
     .replace(/[÷]/, "/")
     .replace(/²/g, "^2")
@@ -35,6 +36,12 @@ const handler: HypnoMessageHandler = {
     // Check if it contains a number
     let number: number | null = null;
     try {
+      if (message.reference) {
+        const ref = await message.fetchReference();
+        message.content = message.content
+          .replace(/that/gi, ref.content)
+          .replace(/ans(wer)?/gi, ref.content);
+      }
       number = new Mexp().eval(fixMathExpr(message.content));
     } catch {
       return;
@@ -42,19 +49,19 @@ const handler: HypnoMessageHandler = {
 
     if (count.last_counter === message.author.id)
       return message.reply(
-        `You cannot count twice in a row - wait for someone else!`
+        `You cannot count twice in a row - wait for someone else!`,
       );
 
     // Check if it is expected
     if (number !== count.current_count + 1) {
       await database.run(
         `UPDATE server_count SET current_count = 0 WHERE server_id = ?`,
-        message.guild.id
+        message.guild.id,
       );
       await database.run(
         `UPDATE user_data SET count_ruined = count_ruined + 1 WHERE user_id = ? AND guild_id = ?;`,
         message.author.id,
-        message.guild.id
+        message.guild.id,
       );
       await message.react(`❌`);
       return message.reply({
@@ -66,7 +73,7 @@ const handler: HypnoMessageHandler = {
                 message.author.id
               }> ruined the count! The next number was **${
                 count.current_count + 1
-              }**\n\nThe count has been reset, next number is **1**`
+              }**\n\nThe count has been reset, next number is **1**`,
             )
             .setColor(`#FF0000`),
         ],
@@ -78,18 +85,18 @@ const handler: HypnoMessageHandler = {
       await database.run(
         `UPDATE server_count SET highest_count = ? WHERE server_id = ?`,
         number,
-        message.guild.id
+        message.guild.id,
       );
 
     // Update & add reaction
     await database.run(
       `UPDATE server_count SET current_count = current_count + 1 WHERE server_id = ?`,
-      message.guild.id
+      message.guild.id,
     );
     await database.run(
       `UPDATE server_count SET last_counter = ? WHERE server_id = ?`,
       message.author.id,
-      message.guild.id
+      message.guild.id,
     );
     await message.react(number < count.highest_count ? `✅` : "☑️");
   },

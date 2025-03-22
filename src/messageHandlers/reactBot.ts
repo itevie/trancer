@@ -228,8 +228,8 @@ const phrases = [
   "https://i1.sndcdn.com/avatars-5FKJrCOt1EWVLDAm-RclDOg-t1080x1080.jpg",
   "SHMURGR IS A TWINK",
   "glarbin",
-  `.          へ            ╱| 
-  ૮  -   ՛ )  ♡   (\`   -  7.   
+  `.          へ            ╱|
+  ૮  -   ՛ )  ♡   (\`   -  7.
     /   ⁻  ៸|         |、⁻〵
 乀 (ˍ, ل ل         じしˍ,)ノ
 `,
@@ -312,6 +312,7 @@ const phrases = [
   ".gq 1343",
   ".fox",
   ".duck",
+  "https://tenor.com/view/uncanny-emoji-angry-hakayaki-hakayaki-angry-emoji-gif-13101565263917230073",
 ];
 
 let messagesSince = 0;
@@ -366,7 +367,7 @@ const handler: HypnoMessageHandler = {
               .reduce(
                 (c, v) =>
                   c + (Math.random() > 0.7 ? v.toUpperCase() : v.toLowerCase()),
-                ""
+                "",
               ),
 
           // Add question marks
