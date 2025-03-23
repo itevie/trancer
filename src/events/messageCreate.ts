@@ -43,7 +43,7 @@ client.on("messageCreate", async (message) => {
   const economy = await actions.eco.getFor(message.author.id);
   const userData = await actions.userData.getFor(
     message.author.id,
-    message.guild.id
+    message.guild.id,
   );
 
   // Fetch data
@@ -52,7 +52,7 @@ client.on("messageCreate", async (message) => {
   // Check if it's just a ping, if so send details
   if (message.content.trim() == `<@${client.user.id}>`)
     return message.reply(
-      `Hey! My prefix is: \`${settings.prefix}\`\nUse \`${settings.prefix}commands\` to view my commands!\nAnd use \`${settings.prefix}about\` to learn about me! :cyclone:`
+      `Hey! My prefix is: \`${settings.prefix}\`\nUse \`${settings.prefix}commands\` to view my commands!\nAnd use \`${settings.prefix}about\` to learn about me! :cyclone:`,
     );
 
   if (!config.ignoreHandlersIn.includes(message.channel.id)) {
@@ -100,17 +100,17 @@ client.on("messageCreate", async (message) => {
             x.name,
             [x.name, compareTwoStrings(commandName, x.name)] as [
               string,
-              number
+              number,
             ],
-          ])
-        ).values()
+          ]),
+        ).values(),
       ).filter((x) => x[1] > 0.6);
       if (suggestions.length > 0)
         return message.reply(
           `Did you mean ${englishifyList(
             suggestions.map((x) => `\`${x[0]}\``),
-            true
-          )}?`
+            true,
+          )}?`,
         );
     }
     return;
@@ -121,7 +121,7 @@ client.on("messageCreate", async (message) => {
     await actions.blacklist.getFor("category", message.guild.id, command.type)
   )
     return message.reply(
-      `Sorry! But the category of this command (${command.type}) is disabled!`
+      `Sorry! But the category of this command (${command.type}) is disabled!`,
     );
 
   // Check guards
@@ -142,7 +142,7 @@ client.on("messageCreate", async (message) => {
       message.guild.id !== config.botServer.id
     )
       return await message.reply(
-        "This command can only be ran in the bot's server!"
+        "This command can only be ran in the bot's server!",
       );
 
     // Check admin only
@@ -151,7 +151,7 @@ client.on("messageCreate", async (message) => {
       !message.member.permissions.has("Administrator")
     )
       return await message.reply(
-        "You must have the administrator permission to run this command!"
+        "You must have the administrator permission to run this command!",
       );
   }
 
@@ -160,11 +160,12 @@ client.on("messageCreate", async (message) => {
     for (const permission of command.permissions)
       if (!message.member.permissions.has(permission))
         return await message.reply(
-          `You do not have the ${permission} permission!`
+          `You do not have the ${permission} permission!`,
         );
 
   const details: HypnoCommandDetails<any> = {
     serverSettings: settings,
+    userData: userData,
     economy,
     command: commandName.toLowerCase(),
     args: {},
@@ -181,7 +182,7 @@ client.on("messageCreate", async (message) => {
   if (command.ratelimit) {
     let lastUsed = await actions.ratelimits.get(
       message.author.id,
-      command.name
+      command.name,
     );
     let ratelimit =
       typeof command.ratelimit === "function"
@@ -199,7 +200,7 @@ client.on("messageCreate", async (message) => {
               .setDescription(
                 `You need to wait **${msToHowLong(ms)}** to use the **${
                   command.name
-                }** command!`
+                }** command!`,
               ),
           ],
         });
@@ -232,7 +233,7 @@ client.on("messageCreate", async (message) => {
         commandName,
         command,
         settings,
-        arg.name
+        arg.name,
       );
 
       // Function to generate the error embed
@@ -240,7 +241,7 @@ client.on("messageCreate", async (message) => {
         return createEmbed()
           .setTitle("Invalid command usage!")
           .setDescription(
-            `${codeblock}\n**Above the arrows (*${arg.name}*)**: ${message}\n\nNote: \`<...>\` means it's required, and \`[...]\` means it's optional.`
+            `${codeblock}\n**Above the arrows (*${arg.name}*)**: ${message}\n\nNote: \`<...>\` means it's required, and \`[...]\` means it's optional.`,
           );
       };
 
@@ -293,8 +294,8 @@ client.on("messageCreate", async (message) => {
                 reference.attachments.size > 0
                   ? reference.attachments.at(0).url
                   : isURL(reference.content)
-                  ? reference.content
-                  : givenValue;
+                    ? reference.content
+                    : givenValue;
             }
             break;
         }
@@ -305,7 +306,7 @@ client.on("messageCreate", async (message) => {
         return await message.reply({
           embeds: [
             generateErrorEmbed(
-              "Parameter is missing, but is required for this command"
+              "Parameter is missing, but is required for this command",
             ),
           ],
         });
@@ -315,7 +316,7 @@ client.on("messageCreate", async (message) => {
 
       // Returns null if success (puts it in result)
       let checkArg = async (
-        a: string
+        a: string,
       ): Promise<string | { error: string; autocomplete: string[] } | null> => {
         switch (arg.type) {
           case "wholepositivenumber":
@@ -368,7 +369,7 @@ client.on("messageCreate", async (message) => {
           case "boolean":
             if (
               !["true", "t", "yes", "false", "f", "no"].includes(
-                a.toLowerCase()
+                a.toLowerCase(),
               )
             )
               return "Expected true or false";
@@ -442,7 +443,7 @@ client.on("messageCreate", async (message) => {
               return {
                 error: `That rank does not exist, try creating it with ${settings.prefix}createrank ${a}!`,
                 autocomplete: (await actions.ranks.getAll()).map(
-                  (x) => x.rank_name
+                  (x) => x.rank_name,
                 ),
               };
             }
@@ -481,7 +482,7 @@ client.on("messageCreate", async (message) => {
             // Try fetch
             try {
               result = await message.guild.channels.fetch(
-                a.replace(/[<#>]/g, "")
+                a.replace(/[<#>]/g, ""),
               );
             } catch {
               return `Failed to fetch the channel: ${a}`;
@@ -524,11 +525,11 @@ client.on("messageCreate", async (message) => {
                       x,
                       compareTwoStrings(
                         givenValue.toLowerCase(),
-                        x.toLowerCase()
+                        x.toLowerCase(),
                       ),
                     ] as [string, number],
-                  ])
-                ).values()
+                  ]),
+                ).values(),
               )
                 .filter((x) => x[1] > 0.6)
                 .map((x) => `\`${x[0]}\``)
@@ -541,7 +542,7 @@ client.on("messageCreate", async (message) => {
                 typeof checkerResult === "object"
                   ? checkerResult.error
                   : checkerResult
-              }${didYouMean ? `\n**Did you mean**: ${didYouMean}?` : ""}`
+              }${didYouMean ? `\n**Did you mean**: ${didYouMean}?` : ""}`,
             ),
           ],
         });
@@ -568,7 +569,7 @@ client.on("messageCreate", async (message) => {
             generateErrorEmbed(
               `This part must be one of the following values: ${arg.oneOf
                 .map((x) => `**${x}**`)
-                .join(", ")}`
+                .join(", ")}`,
             ),
           ],
         });
@@ -611,11 +612,11 @@ client.on("messageCreate", async (message) => {
     } else {
       if (err.message.toLowerCase().includes("timeout")) {
         await message.reply(
-          `:warning: Oops! I ran into an error, but your command *did* sucessfully run!`
+          `:warning: Oops! I ran into an error, but your command *did* sucessfully run!`,
         );
       } else {
         await message.reply(
-          `:warning: Oops! I ran into an error whilst trying to run that command :(`
+          `:warning: Oops! I ran into an error whilst trying to run that command :(`,
         );
       }
     }

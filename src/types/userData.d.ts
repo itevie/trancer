@@ -17,6 +17,7 @@ interface UserData {
   count_ruined: number;
   hypno_status: "red" | "yellow" | "green";
   relationships: boolean;
+  count_banned: boolean;
 }
 
 interface PinnedRating {

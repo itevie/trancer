@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS role_menus (
 
 CREATE TABLE IF NOT EXISTS role_menu_items (
     id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
-    menu_id INTEGER REFERENCES role_menu(id),
+    menu_id INTEGER REFERENCES role_menu (id),
     name TEXT NOT NULL,
     emoji TEXT NOT NULL,
     role_id TEXT NOT NULL
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS qotd_questions (
     suggestor INTEGER NOT NULL,
     question TEXT NOT NULL,
     asked BOOLEAN NOT NULL DEFAULT false,
-    UNIQUE(server_id, question)
+    UNIQUE (server_id, question)
 );
 
 CREATE TABLE IF NOT EXISTS giveaways (
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS giveaways (
 );
 
 CREATE TABLE IF NOT EXISTS giveaway_entries (
-    giveaway_id TEXT REFERENCES giveaways(id) NOT NULL,
+    giveaway_id TEXT REFERENCES giveaways (id) NOT NULL,
     author_id TEXT NOT NULL,
     UNIQUE (giveaway_id, author_id)
 );
@@ -128,9 +128,11 @@ CREATE TABLE IF NOT EXISTS user_trusted_tists (
 );
 
 CREATE TABLE IF NOT EXISTS user_favourite_spirals (
-    id INT REFERENCES spirals(id) NOT NULL,
+    id INT REFERENCES spirals (id) NOT NULL,
     user_id TEXT NOT NULL
 );
+
+ALTER TABLE user_data ADD count_banned BOOLEAN NOT NULL DEFAULT false;
 
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,
@@ -151,13 +153,11 @@ CREATE TABLE IF NOT EXISTS user_data (
     count_ruined INT NOT NULL DEFAULT 0,
     auto_sell BOOLEAN NOT NULL DEFAULT false,
     hypno_status TEXT NOT NULL DEFAULT 'green',
-    relationships BOOL NOT NULL DEFAULT true
+    relationships BOOL NOT NULL DEFAULT true,
+    count_banned BOOLEAN NOT NULL DEFAULT false
 );
 
-CREATE TABLE IF NOT EXISTS pinned_ratings (
-    user_id TEXT NOT NULL,
-    rating TEXT NOT NULL
-);
+CREATE TABLE IF NOT EXISTS pinned_ratings (user_id TEXT NOT NULL, rating TEXT NOT NULL);
 
 CREATE TABLE IF NOT EXISTS dawnagotchi (
     id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -177,14 +177,14 @@ CREATE TABLE IF NOT EXISTS aquired_badges (
 );
 
 CREATE TABLE IF NOT EXISTS aquired_items (
-    item_id INTEGER REFERENCES items(id),
+    item_id INTEGER REFERENCES items (id),
     user_id TEXT NOT NULL,
     amount INT NOT NULL DEFAULT 0,
     protected BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE TABLE IF NOT EXISTS aquired_cards (
-    card_id INTEGER REFERENCES cards(id),
+    card_id INTEGER REFERENCES cards (id),
     user_id TEXT NOT NULL,
     amount INT NOT NULL DEFAULT 0
 );
@@ -256,10 +256,7 @@ CREATE TABLE IF NOT EXISTS leaderboards (
     description TEXT DEFAULT 'A leaderboard'
 );
 
-CREATE TABLE IF NOT EXISTS leaderboard_entries (
-    user TEXT NOT NULL,
-    leaderboard TEXT NOT NULL
-);
+CREATE TABLE IF NOT EXISTS leaderboard_entries (user TEXT NOT NULL, leaderboard TEXT NOT NULL);
 
 CREATE TABLE IF NOT EXISTS decks (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -269,7 +266,7 @@ CREATE TABLE IF NOT EXISTS decks (
 
 CREATE TABLE IF NOT EXISTS cards (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    deck INT NOT NULL REFERENCES decks(ID),
+    deck INT NOT NULL REFERENCES decks (ID),
     description TEXT DEFAULT NULL,
     name TEXT NOT NULL,
     file_name TEXT NOT NULL,

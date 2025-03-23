@@ -56,6 +56,7 @@ type ArgumentType =
 
 interface HypnoCommandDetails<Args extends { [key: string]: any } = {}> {
   serverSettings: ServerSettings;
+  userData: UserData;
   economy: Economy;
   command: string;
   args?: Args;
@@ -126,7 +127,7 @@ interface HypnoCommand<Args extends { [key: string]: any } = {}> {
    */
   preHandler?: (
     message: Message<true>,
-    options: HypnoCommandDetails<Args>
+    options: HypnoCommandDetails<Args>,
   ) => Promise<boolean>;
 
   /**
@@ -141,7 +142,7 @@ interface HypnoCommand<Args extends { [key: string]: any } = {}> {
     | number
     | ((
         message: Message<true>,
-        options: HypnoCommandDetails<Args>
+        options: HypnoCommandDetails<Args>,
       ) => Promise<number | null>);
 
   /**
@@ -171,7 +172,7 @@ interface HypnoInteractionCommand<Args extends { [key: string]: any } = {}>
   slash: SlashCommandBuilder;
   handler: (
     message: MessageLike,
-    options: HypnoCommandDetails<Args>
+    options: HypnoCommandDetails<Args>,
   ) => Promise<any>;
 }
 

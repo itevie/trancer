@@ -31,6 +31,7 @@ client.on("interactionCreate", async (i) => {
       command: command.name,
       args: {},
       serverSettings: await actions.serverSettings.getFor(i.guild.id),
+      userData: await actions.userData.getFor(i.user.id, i.guild.id),
       economy: await actions.eco.getFor(i.user.id),
       oldArgs: [],
       originalContent: "",
@@ -51,11 +52,11 @@ client.on("interactionCreate", async (i) => {
         {
           reply: async (options) =>
             (await i.reply(
-              options as InteractionReplyOptions
+              options as InteractionReplyOptions,
             )) as unknown as ReturnType<Message["reply"]>,
           author: i.user,
         },
-        details
+        details,
       );
     } catch (e) {
       console.log(e);
@@ -99,7 +100,7 @@ client.on("interactionCreate", async (i) => {
         });
 
         const channel = (await client.channels.fetch(
-          giveaway.channel_id
+          giveaway.channel_id,
         )) as TextChannel;
         const message = await channel.messages.fetch(giveaway.message_id);
         await message.edit({
@@ -126,13 +127,13 @@ client.on("interactionCreate", async (i) => {
               new ButtonBuilder()
                 .setCustomId(`giveaway-finish-${giveaway.id}-reroll`)
                 .setLabel("Re-roll")
-                .setStyle(ButtonStyle.Secondary)
+                .setStyle(ButtonStyle.Secondary),
             ),
           ],
         });
 
         const channel = (await client.channels.fetch(
-          giveaway.channel_id
+          giveaway.channel_id,
         )) as TextChannel;
         const message = await channel.messages.fetch(giveaway.message_id);
         await message.edit({
@@ -140,7 +141,7 @@ client.on("interactionCreate", async (i) => {
             createEmbed()
               .setTitle("Giveaway Over!")
               .setDescription(
-                `<@${winner.author_id}> won the giveaway of **${giveaway.what}**`
+                `<@${winner.author_id}> won the giveaway of **${giveaway.what}**`,
               )
               .setFooter({
                 text: `Entries: ${entries.length}`,
@@ -207,11 +208,11 @@ client.on("interactionCreate", async (i) => {
 
         if (serverSettings.report_ban_log_channel) {
           const channel = await i.client.channels.fetch(
-            serverSettings.report_ban_log_channel
+            serverSettings.report_ban_log_channel,
           );
           if (channel.isTextBased()) {
             await channel.send(
-              await actions.reports.generateEmbed(report, true)
+              await actions.reports.generateEmbed(report, true),
             );
           }
         }

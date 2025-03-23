@@ -33,6 +33,12 @@ const handler: HypnoMessageHandler = {
     if (!count) return;
     if (message.channel.id !== count.channel_id) return;
 
+    let userData = await actions.userData.getFor(
+      message.author.id,
+      message.guild.id,
+    );
+    if (userData.count_banned) return;
+
     // Check if it contains a number
     let number: number | null = null;
     try {
@@ -63,6 +69,17 @@ const handler: HypnoMessageHandler = {
         message.author.id,
         message.guild.id,
       );
+      if (userData.count_ruined >= 5) {
+        await database.run(
+          "UPDATE user_data SET count_banned = true WHERE user_id = ? AND guild_id = ?",
+          message.author.id,
+          message.guild.id,
+        );
+        await message.reply(
+          `:warning: You have been banned from counting since you have ruined the count more than 5 times! You must buy a count unban with \`.unbancount\``,
+        );
+      }
+
       await message.react(`❌`);
       return message.reply({
         embeds: [

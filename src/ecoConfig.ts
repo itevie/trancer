@@ -24,6 +24,10 @@ const ecoConfig = {
     announcementChannel: "1257417208024268850",
   },
 
+  counting: {
+    unban: 3000,
+  },
+
   payouts: {
     message: {
       name: "messaging",
