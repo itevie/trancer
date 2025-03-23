@@ -145,7 +145,7 @@ client.on("ready", async () => {
   for await (const [_, guild] of guilds) {
     const g = await guild.fetch();
     await g.members.fetch();
-    logger.log(`Loaded server: ${g.name}`);
+    logger.log(`Loaded server: ${g.name} (${g.id}) owned by ${g.ownerId}`);
   }
 });
 
@@ -156,7 +156,7 @@ process.on("uncaughtException", async (err: any) => {
   errors++;
   try {
     let channel = (await client.channels.fetch(
-      config.botServer.channels.logs
+      config.botServer.channels.logs,
     )) as TextChannel;
     if (channel.isTextBased()) {
       channel.send({

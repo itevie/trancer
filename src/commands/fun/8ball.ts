@@ -34,7 +34,7 @@ const all = [...positive, ...neutral, ...negative];
 
 const command: HypnoCommand<{ question?: string }> = {
   name: "8ball",
-  aliases: ["8b"],
+  aliases: ["8b", "magic8ball"],
   description: "Ask the magical 8ball",
   type: "fun",
 
@@ -62,11 +62,11 @@ const command: HypnoCommand<{ question?: string }> = {
             positive.includes(selected)
               ? "#00FF00"
               : neutral.includes(selected)
-              ? "#FFFF00"
-              : "#FF0000"
+                ? "#FFFF00"
+                : "#FF0000",
           )
           .setThumbnail(
-            "https://cdn.discordapp.com/attachments/1257417475621130351/1353034264257761433/8ball.png?ex=67e02eda&is=67dedd5a&hm=c52e79c925edde50c2c2b14f642931c4305e98c014e6d348f3a6718ca368e580&"
+            "https://cdn.discordapp.com/attachments/1257417475621130351/1353034264257761433/8ball.png?ex=67e02eda&is=67dedd5a&hm=c52e79c925edde50c2c2b14f642931c4305e98c014e6d348f3a6718ca368e580&",
           ),
       ],
     });
