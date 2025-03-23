@@ -28,7 +28,7 @@ const command: HypnoCommand<{ user?: User }> = {
     let user = args.args.user ? args.args.user : message.author;
     let member: GuildMember | null = null;
     try {
-      await message.guild.members.fetch(user.id);
+      member = await message.guild.members.fetch(user.id);
     } catch {}
 
     // Get details
@@ -56,7 +56,7 @@ const command: HypnoCommand<{ user?: User }> = {
         [
           ["Username", user.username],
           ["ID", user.id],
-          ["Joined Server", member.joinedAt.toDateString()],
+          ["Joined Server", member?.joinedAt.toDateString() || "?"],
           ["Status", userData.hypno_status],
           [
             "Level",
