@@ -6,6 +6,8 @@ import { HypnoMessageHandler } from "../types/util";
 import { randomFromRange } from "../util/other";
 import { varients } from "../commands/fun/cowsay";
 import { commands } from "..";
+import { AttachmentBuilder } from "discord.js";
+import { addCaptionToGif } from "../commands/fun/_image_util";
 
 const phrases = [
   "skibii sigma",
@@ -316,6 +318,7 @@ const phrases = [
   "Vine Boom",
   "https://tenor.com/view/cuh-guh-buh-gif-26372267",
   "https://tenor.com/view/uncanny-emoji-angry-hakayaki-hakayaki-angry-emoji-gif-13101565263917230073",
+  "$content",
 ];
 
 let messagesSince = 0;
@@ -337,7 +340,8 @@ const handler: HypnoMessageHandler = {
       try {
         let phrase = phrases[
           Math.floor(Math.random() * phrases.length)
-        ].replace(/\$username/g, message.author.username);
+        ].replace(/\$username/g, message.author.username)
+        .replace(/\$content/g, message.content);
 
         let fuckups = [
           // Turn it into piglatin
@@ -379,6 +383,15 @@ const handler: HypnoMessageHandler = {
           // Add exclamation marks
           () => phrase + "!".repeat(randomFromRange(1, 10)),
 
+          // Jarvis
+          () => {
+            let file = addCaptionToGif(
+              config.dataDirectory + "/jarvis.gif",
+              phrase,
+            );
+            return new AttachmentBuilder(file.buffer, { name: file.name })
+          }
+
           // Stutter
           () => {
             let words = phrase.split(" ");
@@ -393,12 +406,20 @@ const handler: HypnoMessageHandler = {
             return newWords.join(" ");
           },
         ];
-        if (Math.random() > 0.5)
-          phrase = fuckups[Math.floor(Math.random() * fuckups.length)]();
 
-        await message.reply(phrase);
         messagesSince = 0;
         messagesRequired = randomFromRange(20, 70);
+
+        if (Math.random() > 0.5) {
+          let temp = fuckups[Math.floor(Math.random() * fuckups.length)]();
+          if (temp instanceof AttachmentBuilder) {
+            await message.reply({
+              files: [temp]
+            })
+          } else {
+            await message.reply(phrase);
+          }
+        }
       } catch {}
     }
   },
