@@ -1,7 +1,7 @@
 import { createCanvas } from "canvas";
 import { HypnoCommand } from "../../types/util";
 import { AttachmentBuilder } from "discord.js";
-import { Jimp } from "jimp";
+import { runFfmpegCommandWithInput } from "./_image_util";
 
 const command: HypnoCommand = {
   name: "generatespiral",
@@ -20,7 +20,6 @@ const command: HypnoCommand = {
       width,
       height,
       armThickness = 10,
-      rotation = 60,
     ) {
       const centerX = width / 2;
       const centerY = height / 2;
@@ -45,12 +44,6 @@ const command: HypnoCommand = {
 
       ctx.strokeStyle = gradient;
 
-      ctx.save();
-
-      ctx.translate(centerX, centerY);
-      ctx.rotate(rotation); // Rotate the entire spiral
-      ctx.translate(-centerX, -centerY);
-
       // Draw multiple spirals slightly offset to create thick arms
       for (let offset = -armThickness; offset <= armThickness; offset += 2) {
         ctx.beginPath();
@@ -71,29 +64,22 @@ const command: HypnoCommand = {
 
         ctx.stroke();
       }
-
-      ctx.restore();
     }
 
-    let frames: Buffer[] = [];
-
-    for (let i = 0; i != 10; i++) {
-      drawThickSpiral(ctx, width, height, i * 10);
-      frames.push(canvas.toBuffer("image/png"));
-    }
-
-    const images = await Promise.all(frames.map((x) => Jimp.read(x)));
-
-    const gif = new Jimp({ width, height });
-
-    images.forEach((image, _) => {
-      gif.composite(image, 0, 0);
-    });
+    // Draw thick spiral
+    drawThickSpiral(ctx, width, height, 15); // Increase thickness by adjusting last parameter
 
     // Convert canvas to a Buffer
-    const buffer = await gif.getBuffer("image/png");
-    const attachment = new AttachmentBuilder(buffer).setName("spiral.gif");
-
+    const buffer = canvas.toBuffer("image/png");
+    let result = runFfmpegCommandWithInput(
+      buffer,
+      "png",
+      `ffmpeg -loop 1 -i %i -filter_complex "[0]format=rgba,rotate='PI*t/5':c=white@1,scale=300:300" -t 10 -y `,
+      "gif",
+    );
+    const attachment = new AttachmentBuilder(result.buffer).setName(
+      result.name,
+    );
     return message.reply({
       files: [attachment],
     });

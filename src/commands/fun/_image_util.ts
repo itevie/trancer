@@ -1,6 +1,6 @@
 import { Jimp } from "jimp";
 import Canvas, { createCanvas, loadImage } from "canvas";
-import { exists, existsSync, readFileSync, rmSync } from "fs";
+import { exists, existsSync, readFileSync, rmSync, writeFileSync } from "fs";
 import GIFEncoder from "gifencoder";
 import { execSync } from "child_process";
 import config from "../../config";
@@ -10,7 +10,7 @@ export async function generateNotImmuneImage(imageUrl: string) {
   const canvas = Canvas.createCanvas(465, 658);
   const ctx = canvas.getContext("2d");
   const image = await Canvas.loadImage(
-    readFileSync(config.dataDirectory + "/not_immune.png")
+    readFileSync(config.dataDirectory + "/not_immune.png"),
   );
 
   // Make avatar a circle
@@ -33,7 +33,7 @@ export async function generateSpeechbubbleImage(imageUrl: string) {
   // Load image
   const image = await Jimp.read(imageUrl);
   const speechBubble = await Jimp.read(
-    readFileSync(__dirname + "/../data/speech_bubble.png")
+    readFileSync(__dirname + "/../data/speech_bubble.png"),
   );
   speechBubble.resize({ w: image.width });
   image.resize({ h: image.height + offset, w: image.width });
@@ -46,12 +46,12 @@ export async function generateSpeechbubbleImage(imageUrl: string) {
   ctx.drawImage(
     await Canvas.loadImage(await image.getBuffer("image/png")),
     0,
-    offset
+    offset,
   );
   ctx.drawImage(
     await Canvas.loadImage(await speechBubble.getBuffer("image/png")),
     0,
-    0
+    0,
   );
 
   return canvas.toBuffer();
@@ -60,7 +60,7 @@ export async function generateSpeechbubbleImage(imageUrl: string) {
 export async function createRotatingGifBuffer(
   inputPath: string,
   frameCount = 30,
-  duration = 3
+  duration = 3,
 ) {
   console.log(inputPath);
   const image = await loadImage(inputPath);
@@ -119,7 +119,7 @@ export function addCaptionToGif(inputPath: string, caption: string) {
   let whitespace = 50 * lines.length;
 
   const ffmpegCmd = `ffmpeg -i "${inputPath}" -vf "pad=iw:ih+${whitespace}:0:${whitespace}:white, drawtext=text='${lines.join(
-    "\n"
+    "\n",
   )}':fontfile='${getFontFile()}':x=(w-text_w)/2:y=10:fontsize=36:fontcolor=black" "${output}"`;
 
   try {
@@ -130,4 +130,31 @@ export function addCaptionToGif(inputPath: string, caption: string) {
     console.log(error);
     throw error;
   }
+}
+
+export function runFfmpegCommand(command: string, ext: string) {
+  let output = __dirname + "/output." + ext;
+
+  try {
+    execSync(`${command} ${output}`, { stdio: "inherit" });
+    const read = readFileSync(output);
+    return { buffer: read, name: output };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export function runFfmpegCommandWithInput(
+  input: Buffer,
+  inputExt: string,
+  command: string,
+  ext: string,
+) {
+  let temp = __dirname + "/temp." + inputExt;
+  console.log(temp);
+  writeFileSync(temp, input);
+  let result = runFfmpegCommand(command.replace(/%i/g, temp), ext);
+  //rmSync(temp);
+  return result;
 }
