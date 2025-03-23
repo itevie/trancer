@@ -338,10 +338,9 @@ const handler: HypnoMessageHandler = {
 
     if (messagesSince >= messagesRequired) {
       try {
-        let phrase = phrases[
-          Math.floor(Math.random() * phrases.length)
-        ].replace(/\$username/g, message.author.username)
-        .replace(/\$content/g, message.content);
+        let phrase = phrases[Math.floor(Math.random() * phrases.length)]
+          .replace(/\$username/g, message.author.username)
+          .replace(/\$content/g, message.content);
 
         let fuckups = [
           // Turn it into piglatin
@@ -389,8 +388,8 @@ const handler: HypnoMessageHandler = {
               config.dataDirectory + "/jarvis.gif",
               phrase,
             );
-            return new AttachmentBuilder(file.buffer, { name: file.name })
-          }
+            return new AttachmentBuilder(file.buffer, { name: file.name });
+          },
 
           // Stutter
           () => {
@@ -414,8 +413,8 @@ const handler: HypnoMessageHandler = {
           let temp = fuckups[Math.floor(Math.random() * fuckups.length)]();
           if (temp instanceof AttachmentBuilder) {
             await message.reply({
-              files: [temp]
-            })
+              files: [temp],
+            });
           } else {
             await message.reply(phrase);
           }
