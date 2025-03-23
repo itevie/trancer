@@ -247,22 +247,50 @@ client.on("messageCreate", async (message) => {
 
       // Handle attachment argument
       if (arg.type === "attachment") {
-        if (
-          (givenValue?.toLowerCase() === "pfp" ||
-            (!givenValue && (arg as AttachmentArgument).defaultPfp)) &&
-          !(arg.infer && message.reference) &&
-          !givenValue?.match(/<@[0-9]+>/)
-        ) {
-          givenValue = message.author.displayAvatarURL({
-            size: 2048,
-            extension: "png",
-          });
-        } else if (!givenValue || !isURL(givenValue)) {
-          givenValue =
-            message.attachments.size > 0
-              ? message.attachments.at(0).url
-              : givenValue;
-        }
+        let ref = message.reference ? await message.fetchReference() : null;
+        let isPfp = givenValue?.toLowerCase() === "pfp";
+        let self = message.author.displayAvatarURL({
+          size: 2048,
+          extension: "png",
+        });
+
+        // ref + "pfp" = ref pfp
+        // "pfp" = self pfp
+        // ref + url = ref url
+        // url = url
+        // <@user> = user pfp
+        // ref + infer + attachment = ref attachment
+        // ref + infer = ref pfp
+        // attachment = self attachment
+        // self pfp
+
+        let preferences = [
+          arg.infer && ref !== null && isPfp
+            ? ref.author.displayAvatarURL({
+                size: 2048,
+                extension: "png",
+              })
+            : null,
+          ref === null && isPfp ? self : null,
+          ref !== null && isURL(ref.content) ? ref.content : null,
+          isURL(givenValue) ? givenValue : null,
+          givenValue?.match(/<@[0-9]+>/)
+            ? givenValue /* deal with it later  */
+            : null,
+          arg.infer && ref !== null && ref.attachments.size > 0
+            ? ref.attachments.at(0).url
+            : null,
+          arg.infer && ref !== null
+            ? ref.author.displayAvatarURL({
+                size: 2048,
+                extension: "png",
+              })
+            : null,
+          message.attachments.size > 0 ? message.attachments.at(0).url : null,
+          self,
+        ];
+
+        givenValue = preferences.find((x) => x !== null) || givenValue;
       }
 
       // Infer value from message reference if applicable
@@ -280,25 +308,6 @@ client.on("messageCreate", async (message) => {
             break;
           case "user":
             givenValue = reference.author.id;
-            break;
-          case "attachment":
-            if (
-              (givenValue?.toLowerCase() === "pfp" ||
-                (!givenValue && (arg as AttachmentArgument).defaultPfp)) &&
-              !givenValue?.match(/<@[0-9]+>/)
-            ) {
-              givenValue = reference.author.displayAvatarURL({
-                size: 2048,
-                extension: "png",
-              });
-            } else {
-              givenValue =
-                reference.attachments.size > 0
-                  ? reference.attachments.at(0).url
-                  : isURL(reference.content)
-                    ? reference.content
-                    : givenValue;
-            }
             break;
         }
       }

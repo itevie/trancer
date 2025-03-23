@@ -66,7 +66,7 @@ console.log(
   fish
     .filter((x) => !!x[2])
     .map((x) => x[2].match(x[2]))
-    .join("")
+    .join(""),
 );
 
 const fishDescriptions: { [key: string]: string } = {
@@ -275,7 +275,7 @@ const items: Record<string, Partial<Item>> = {
         emoji: x[2],
         tag: "fish",
       },
-    ])
+    ]),
   ),
 } as const;
 
@@ -302,7 +302,7 @@ export async function setupItems(): Promise<void> {
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
       `,
         name,
-        ...Object.entries(defaults).map(([k, v]) => (k in item ? item[k] : v))
+        ...Object.entries(defaults).map(([k, v]) => (k in item ? item[k] : v)),
       );
       databaseLogger.log(`Insert item: ${name}`);
       continue;
@@ -310,11 +310,11 @@ export async function setupItems(): Promise<void> {
 
     // Now check keys
     for (const [k, v] of Object.entries(item)) {
-      if (item[k] !== databaseItem[k]) {
+      if (item[k] != databaseItem[k]) {
         await database.run(
           `UPDATE items SET ${k} = ? WHERE name = ?;`,
           v,
-          name
+          name,
         );
         databaseLogger.log(`Update item ${name}, ${k} = ${v}`);
       }

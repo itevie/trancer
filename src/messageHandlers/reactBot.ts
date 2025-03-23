@@ -312,6 +312,9 @@ const phrases = [
   ".gq 1343",
   ".fox",
   ".duck",
+  "https://cdn.discordapp.com/attachments/1257416274280054967/1353412445925933076/20250323_145549.jpg?ex=67e18f10&is=67e03d90&hm=d6a7cb9e0daf1be9b2334bb3185afac79853f5479d3461f7a1899b970f776eed&",
+  "Vine Boom",
+  "https://tenor.com/view/cuh-guh-buh-gif-26372267",
   "https://tenor.com/view/uncanny-emoji-angry-hakayaki-hakayaki-angry-emoji-gif-13101565263917230073",
 ];
 
