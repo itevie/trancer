@@ -1,4 +1,4 @@
-import { User } from "discord.js";
+import { GuildMember, User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { createEmbed } from "../../util/other";
 import badges from "../../util/badges";
@@ -26,7 +26,10 @@ const command: HypnoCommand<{ user?: User }> = {
   handler: async (message, args) => {
     // Get user
     let user = args.args.user ? args.args.user : message.author;
-    let member = await message.guild.members.fetch(user.id);
+    let member: GuildMember | null = null;
+    try {
+      await message.guild.members.fetch(user.id);
+    } catch {}
 
     // Get details
     const economy = await actions.eco.getFor(user.id);
@@ -36,7 +39,7 @@ const command: HypnoCommand<{ user?: User }> = {
       await database.all(`SELECT * FROM spirals WHERE sent_by = ?`, user.id)
     ).length;
     const aquiredBadges = (await actions.badges.aquired.getAllFor(user.id)).map(
-      (x) => badges[x.badge_name].emoji
+      (x) => badges[x.badge_name].emoji,
     );
     const ecoPosition = (await actions.eco.getAll())
       .sort((a, b) => b.balance - a.balance)
@@ -64,17 +67,20 @@ const command: HypnoCommand<{ user?: User }> = {
           ["Bumps", userData.bumps],
           ["Balance", `${currency(economy.balance).replace(/\*/g, "")}`],
           ["Economy Position", `#${ecoPosition + 1}`],
-          ["Ruined the count", `${userData.count_ruined} times`],
+          [
+            "Ruined the count",
+            `${userData.count_ruined} times${userData.count_banned ? " (count banned)" : ""}`,
+          ],
           ["Imposition Registered", imposition.length],
           ["Spirals Registered", spiralsGiven],
         ]
           .map((x) => `**${x[0]}**: ${x[1]}`)
-          .join("\n")
+          .join("\n"),
       );
 
     let pinnedRatings = await database.all<PinnedRating[]>(
       "SELECT * FROM pinned_ratings WHERE user_id = ?;",
-      user.id
+      user.id,
     );
     if (pinnedRatings.length > 0) {
       embed.addFields([
@@ -85,10 +91,11 @@ const command: HypnoCommand<{ user?: User }> = {
               (x) =>
                 `**${x.rating}**: ${createRating(
                   user.username,
-                  x.rating
-                ).toFixed(0)}%`
+                  x.rating,
+                ).toFixed(0)}%`,
             )
-            .join("\n"),
+            .join("\n")
+            .substring(0, 1020),
           inline: true,
         },
       ]);

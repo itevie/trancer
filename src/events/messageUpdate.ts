@@ -7,9 +7,14 @@ import { actions } from "../util/database";
 client.on("messageUpdate", async (old, newMsg) => {
   // Check if channel has a count
   let count = await actions.serverCount.getFor(old.guild.id);
-  if (count && old.channel.id === count.channel_id) {
+  if (
+    count &&
+    old.channel.id === count.channel_id &&
+    !old.author.bot &&
+    old.content !== newMsg.content
+  ) {
     const channel = (await client.channels.fetch(
-      count.channel_id
+      count.channel_id,
     )) as TextChannel;
     await channel.send({
       embeds: [
@@ -21,7 +26,7 @@ client.on("messageUpdate", async (old, newMsg) => {
               old.author.username
             }** edited their number! The next number is **${
               count.current_count + 1
-            }**`
+            }**`,
           ),
       ],
     });
