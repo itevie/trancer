@@ -394,6 +394,7 @@ const handler: HypnoMessageHandler = {
           // Stutter
           () => {
             let words = phrase.split(" ");
+            let newWords: string[] = [];
 
             for (const word of words) {
               if (Math.random() > 0.5) {
