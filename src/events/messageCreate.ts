@@ -250,7 +250,8 @@ client.on("messageCreate", async (message) => {
         if (
           (givenValue?.toLowerCase() === "pfp" ||
             (!givenValue && (arg as AttachmentArgument).defaultPfp)) &&
-          !(arg.infer && message.reference)
+          !(arg.infer && message.reference) &&
+          !givenValue?.match(/<@[0-9]+>/)
         ) {
           givenValue = message.author.displayAvatarURL({
             size: 2048,
@@ -282,8 +283,9 @@ client.on("messageCreate", async (message) => {
             break;
           case "attachment":
             if (
-              givenValue?.toLowerCase() === "pfp" ||
-              (!givenValue && (arg as AttachmentArgument).defaultPfp)
+              (givenValue?.toLowerCase() === "pfp" ||
+                (!givenValue && (arg as AttachmentArgument).defaultPfp)) &&
+              !givenValue?.match(/<@[0-9]+>/)
             ) {
               givenValue = reference.author.displayAvatarURL({
                 size: 2048,
