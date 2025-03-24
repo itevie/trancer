@@ -7,6 +7,7 @@ const command: HypnoCommand = {
   name: "generatespiral",
   type: "fun",
   description: "Generate spiral",
+  ignore: true,
 
   handler: async (message) => {
     // Canvas size

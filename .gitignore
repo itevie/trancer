@@ -24,3 +24,5 @@ lottery.txt
 .env
 qotd.txt
 src/data/file_directory
+src/commands/fun/temp.png
+src/commands/fun/output.gif

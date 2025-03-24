@@ -24,7 +24,7 @@ import { currency } from "../util/language";
 client.on("messageCreate", async (message) => {
   // Only listen if in guild
   if (!message.inGuild()) return;
-  if (config.ignoreChannels.includes(message.channel.id)) return;
+  if (config.ignore.channels.includes(message.channel.id)) return;
 
   if (!message?.member?.permissions?.has("MentionEveryone"))
     message.content = message.content.replace(/@everyone/gi, "<at>everyone");
@@ -40,13 +40,14 @@ client.on("messageCreate", async (message) => {
   // Guards
   if (message.author.bot || !message?.author?.id || !message?.guild?.id) return;
 
+  // Preload data
   const economy = await actions.eco.getFor(message.author.id);
   const userData = await actions.userData.getFor(
     message.author.id,
     message.guild.id,
   );
 
-  // Fetch data
+  // Fetch server data
   const settings = await actions.serverSettings.getFor(message.guild.id);
 
   // Check if it's just a ping, if so send details
@@ -55,7 +56,7 @@ client.on("messageCreate", async (message) => {
       `Hey! My prefix is: \`${settings.prefix}\`\nUse \`${settings.prefix}commands\` to view my commands!\nAnd use \`${settings.prefix}about\` to learn about me! :cyclone:`,
     );
 
-  if (!config.ignoreHandlersIn.includes(message.channel.id)) {
+  if (!config.ignore.handlers.includes(message.channel.id)) {
     // Run handlers
     for (const handler of Object.values(handlers).filter((x) => !x.botsOnly)) {
       if (handler.noCommands && message.content.startsWith(settings.prefix))
@@ -64,6 +65,7 @@ client.on("messageCreate", async (message) => {
     }
   }
 
+  // Check badges for the user
   if (message.guild.id === config.botServer.id) {
     await checkBadges(message, { ...userData, ...economy });
   }
@@ -125,7 +127,11 @@ client.on("messageCreate", async (message) => {
     );
 
   // Check guards
-  if (command.type === "ai" && !config.modules.ai.enabled)
+  if (
+    command.type === "ai" &&
+    ((client.user.id === config.devBot.id && config.modules.ai.devEnabled) ||
+      (client.user.id !== config.devBot.id && config.modules.ai.enabled))
+  )
     return await message.reply("AI is disabled!");
 
   if (command.guards) {

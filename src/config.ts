@@ -6,11 +6,18 @@
 
 import * as path from "path";
 
-const config = {
-  // ----- Bot & Creator details -----
+let config = {
+  // ----- Basic -----
   owner: "395877903998648322",
-
   dataDirectory: __dirname + "/data",
+
+  // ----- Database -----
+  database: {
+    location: path.resolve(
+      // This is where the database is located
+      __dirname + "/../data.db",
+    ),
+  },
 
   // ----- Details to do with the bots server -----
   botServer: {
@@ -39,6 +46,18 @@ const config = {
     ],
   },
 
+  // ----- Dev Bot Options -----
+  devBot: {
+    id: "1272342864004648981", // Leave empty if you don't have a developmental bot
+    ignoreMessageHandlers: true,
+  },
+
+  // Where things should ignored
+  ignore: {
+    channels: ["1315484267517575168"],
+    handlers: ["1257417603568238684", "1336714957751844874"],
+  },
+
   // ----- Your QOTD options -----
   qotd: {
     hour: 14,
@@ -46,29 +65,11 @@ const config = {
     content: "<@&1257477180858962013>",
   },
 
-  // ----- Channels all messages should be ignored -----
-  ignoreChannels: ["1315484267517575168"],
-  ignoreHandlersIn: ["1257417603568238684", "1336714957751844874"],
-
-  // ----- Dev Toggles -----
-  devBot: {
-    id: "1272342864004648981", // Leave empty if you don't have a developmental bot
-    ignoreMessageHandlers: true,
-  },
-
-  // ----- Database -----
-  database: {
-    location: path.resolve(
-      // This is where the database is located
-      __dirname + "/../data.db"
-    ),
-  },
-
   analytics: {
     enabled: true,
     location: path.resolve(
       // This is where the ANALYTICS database is located
-      __dirname + "/../analytics_data.db"
+      __dirname + "/../analytics_data.db",
     ),
   },
 
@@ -92,6 +93,7 @@ const config = {
     // Enable this only if you have ollama installed
     ai: {
       enabled: true,
+      devEnabled: true,
       model: "llama3.2",
       //model: "deepseek-r1:8b",
     },
@@ -146,7 +148,7 @@ const config = {
   // ----- Credits: do not remove this -----
   credits: {
     creatorId: "395877903998648322",
-    creatorUsername: "dawndownonyou",
+    creatorUsername: "hypnobella",
     serverInvite: "https://discord.gg/zBWq29apsy",
     github: "https://github.com/itevie/hypno-discord-bot",
   },

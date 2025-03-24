@@ -21,12 +21,6 @@ const command: HypnoCommand = {
   type: "ai",
 
   handler: async (message, o) => {
-    if (message.client.user.id !== config.devBot.id) {
-      return message.reply(
-        "Oopsies! Only Trancer Dev can run process this command."
-      );
-    }
-
     const conversationID = message.author.id.toString();
 
     if (!history[conversationID]) {
@@ -35,7 +29,7 @@ const command: HypnoCommand = {
           createEmbed()
             .setTitle("Please select character")
             .setDescription(
-              "You are using a new chat - please select which character you would like to talk to."
+              "You are using a new chat - please select which character you would like to talk to.",
             ),
         ],
 
@@ -46,8 +40,8 @@ const command: HypnoCommand = {
               new ButtonBuilder()
                 .setCustomId(x)
                 .setStyle(ButtonStyle.Primary)
-                .setLabel(x)
-            )
+                .setLabel(x),
+            ),
           ),
         ],
       });
@@ -72,7 +66,7 @@ const command: HypnoCommand = {
 
     if (content.includes("$members")) {
       let members = (await message.guild.members.fetch()).map(
-        (x) => x.user.username
+        (x) => x.user.username,
       );
       content = content.replace(/\$members/g, members.join(", "));
     }
@@ -97,11 +91,11 @@ const command: HypnoCommand = {
       while (response.message.content.includes("$trigger")) {
         const trigger = await actions.triggers.getRandomByTagFor(
           message.author.id,
-          ["green", "anytime"]
+          ["green", "anytime"],
         );
         response.message.content = response.message.content.replace(
           "$trigger",
-          trigger.what
+          trigger.what,
         );
       }
 
@@ -122,7 +116,7 @@ const command: HypnoCommand = {
                 new ButtonBuilder()
                   .setCustomId("think")
                   .setLabel("Show Thoughts")
-                  .setStyle(ButtonStyle.Primary)
+                  .setStyle(ButtonStyle.Primary),
               ),
             ],
           });
