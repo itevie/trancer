@@ -129,8 +129,10 @@ client.on("messageCreate", async (message) => {
   // Check guards
   if (
     command.type === "ai" &&
-    ((client.user.id === config.devBot.id && config.modules.ai.devEnabled) ||
-      (client.user.id !== config.devBot.id && config.modules.ai.enabled))
+    !(
+      (client.user.id === config.devBot.id && config.modules.ai.devEnabled) ||
+      (client.user.id !== config.devBot.id && config.modules.ai.enabled)
+    )
   )
     return await message.reply("AI is disabled!");
 

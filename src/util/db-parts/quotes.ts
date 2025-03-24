@@ -82,7 +82,7 @@ const _actions = {
     ) => {
       return `${
         typeof user === "string" ? getUsernameSync(user) : user.username
-      }${!small ? ` - ${message.createdAt.toDateString()}` : ""}${
+      }${!small ? ` - ${new Date(message?.createdAt || quote.created_at).toDateString()}` : ""}${
         message
           ? ` - [[Message Link]](https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id})`
           : ""

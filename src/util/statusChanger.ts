@@ -25,13 +25,13 @@ export function initStatusChanger() {
 
 export async function changeStatus() {
   const status = statuses[Math.floor(Math.random() * statuses.length)];
-  await client.user.setActivity({
+  client.user.setActivity({
     type: status[0] === 0 ? ActivityType.Playing : status[0],
     name: status[1].replace(
       /\$cmd/,
       Object.values(commands)[
         Math.floor(Math.random() * Object.values(commands).length)
-      ].name
+      ].name,
     ),
   });
 }
