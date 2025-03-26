@@ -24,6 +24,7 @@ import dawnagotchi from "./db-parts/dawnagotchi";
 import ranks from "./db-parts/ranks";
 import ratelimits from "./db-parts/ratelimits";
 import eco from "./db-parts/economy";
+import oneWordStories from "./db-parts/oneWordStories";
 
 export let database: Database<sqlite3.Database, Statement>;
 export const databaseLogger = new Logger("database");
@@ -48,6 +49,7 @@ export const actions = {
   ranks,
   ratelimits,
   eco,
+  oneWordStories,
 } as const;
 
 export async function connect(): Promise<void> {
@@ -63,7 +65,7 @@ export async function connect(): Promise<void> {
 
     // Setup
     await database.exec(
-      fs.readFileSync(path.join(__dirname + "/../sql/setup.sql"), "utf-8")
+      fs.readFileSync(path.join(__dirname + "/../sql/setup.sql"), "utf-8"),
     );
 
     // Init

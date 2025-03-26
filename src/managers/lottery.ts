@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import { actions } from "../util/database";
 import { client } from "..";
 import { TextChannel } from "discord.js";
@@ -7,8 +7,9 @@ import { msToHowLong } from "../util/ms";
 import ecoConfig from "../ecoConfig";
 import { currency } from "../util/language";
 import Manager from "./Manager";
+import config from "../config";
 
-const lotteryFileLocation = __dirname + "/../../lottery.txt";
+const lotteryFileLocation = config.dataDirectory + "/lottery.txt";
 
 /*class LotteryManager extends Manager {
   public name: "lottery";
@@ -29,6 +30,9 @@ export default lotteryManager;*/
 export async function initLottery() {
   if (!ecoConfig.lottery.enabled) return;
 
+  if (!existsSync(lotteryFileLocation))
+    writeFileSync(lotteryFileLocation, new Date().toISOString());
+
   setInterval(() => {
     checkLottery();
   }, 60000);
@@ -41,17 +45,15 @@ async function checkLottery() {
 
   // Get people who bought it
   const items = await actions.items.aquired.get(
-    (
-      await actions.items.getByName("lottery-ticket")
-    ).id
+    (await actions.items.getByName("lottery-ticket")).id,
   );
   const userIDs: string[] = items.reduce(
     (p, c) => [...p, ...Array(c.amount).fill(c.user_id)],
-    [] as string[]
+    [] as string[],
   );
   let prize: number = items.reduce(
     (p, c) => p + ecoConfig.lottery.entryPrice * c.amount,
-    ecoConfig.lottery.basePool
+    ecoConfig.lottery.basePool,
   );
 
   // Pick winner
@@ -59,13 +61,13 @@ async function checkLottery() {
     userIDs.length === 0
       ? null
       : await client.users.fetch(
-          userIDs[Math.floor(Math.random() * userIDs.length)]
+          userIDs[Math.floor(Math.random() * userIDs.length)],
         );
 
   writeFileSync(lotteryFileLocation, new Date().toISOString());
 
   const channel = (await client.channels.fetch(
-    ecoConfig.lottery.announcementChannel
+    ecoConfig.lottery.announcementChannel,
   )) as TextChannel;
   await channel.send({
     content: "<@&1280494604432707585>",
@@ -79,15 +81,15 @@ async function checkLottery() {
               : `There were **${
                   userIDs.length
                 }** entries with a prize pool of ${currency(
-                  prize
+                  prize,
                 )}, and... ||**${winner.username}**|| won!!`
-          }`
+          }`,
         )
         .addFields([
           {
             name: "Enter",
             value: `To enter the new lottery, buy a lottery ticket with \`.buy lottery-ticket\`!\nThe winner will be drawn in **${msToHowLong(
-              ecoConfig.lottery.length
+              ecoConfig.lottery.length,
             )}**!`,
           },
         ]),

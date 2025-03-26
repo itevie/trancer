@@ -5,7 +5,7 @@ import { createEmbed } from "./other";
 import { client } from "..";
 import { User } from "discord.js";
 
-const dateFile = __dirname + "/../../qotd.txt";
+const dateFile = config.dataDirectory + "/qotd.txt";
 
 export function initQotd() {
   if (client.user.id === config.devBot.id) return;

@@ -37,6 +37,8 @@ let config = {
       welcomes: "1257417250395263036",
       howToVerify: "1283861103964717126",
       boosts: "1257417208024268850",
+      oneWordStory: "1353393430558150777",
+      oneWordStorySend: "1353393430558150777",
     },
 
     vcChannels: [
@@ -49,7 +51,7 @@ let config = {
   // ----- Dev Bot Options -----
   devBot: {
     id: "1272342864004648981", // Leave empty if you don't have a developmental bot
-    ignoreMessageHandlers: true,
+    ignoreMessageHandlers: false,
   },
 
   // Where things should ignored
@@ -92,7 +94,7 @@ let config = {
   modules: {
     // Enable this only if you have ollama installed
     ai: {
-      enabled: true,
+      enabled: false,
       devEnabled: true,
       model: "llama3.2",
       //model: "deepseek-r1:8b",

@@ -114,6 +114,15 @@ CREATE TABLE IF NOT EXISTS reports (
     created_at TET NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS one_word_stories (
+    id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
+    guild_id TEXT NOT NULL,
+    sentence TEXT NOT NULL DEFAULT '',
+    done BOOLEAN NOT NULL DEFAULT false,
+    last_user TEXT DEFAULT NULL,
+    created_at TEXT NOT NULL
+);
+
 -- User specific stuff
 CREATE TABLE IF NOT EXISTS user_imposition (
     user_id TEXT NOT NULL,

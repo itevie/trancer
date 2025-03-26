@@ -31,6 +31,7 @@ export type HypnoCommandType =
   | "marriage"
   | "reporting"
   | "qotd"
+  | "voice"
   | "file-directory";
 
 type Guard = "admin" | "bot-server" | "bot-owner";

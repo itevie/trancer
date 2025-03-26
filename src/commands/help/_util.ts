@@ -23,5 +23,6 @@ export const categoryEmojis: Record<HypnoCommandType, string> = {
   qotd: "❓",
   reporting: "⚔️",
   marriage: "💍",
+  voice: "📞",
   "file-directory": "📁",
 };
