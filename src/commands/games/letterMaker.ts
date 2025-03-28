@@ -16,8 +16,8 @@ const sortedWords = Array.from(words).sort((a, b) => a.length - b.length);
 const modes = {
   easy: {
     letters: "abcdefghijklmnoprstu",
-    min: 0,
-    max: 0,
+    min: 1,
+    max: 3,
     period: 30000,
   },
   normal: {
@@ -143,11 +143,13 @@ const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
 
     collector.on("collect", async (m) => {
       if (!check(m.content.toLowerCase(), requiredLetters)) return;
-      const reward =
+      let reward =
         randomFromRange(
           ecoConfig.payouts.letterMaker.min,
           ecoConfig.payouts.letterMaker.max,
         ) * requiredLetters.length;
+
+      if (modeName === "easy") reward = 0;
 
       await msg.edit({
         embeds: [
