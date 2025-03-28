@@ -16,7 +16,7 @@ export interface Badge {
 
 async function handleEcoPositionalBadges() {
   let economy = (await actions.eco.getAll()).sort(
-    (a, b) => b.balance - a.balance
+    (a, b) => b.balance - a.balance,
   );
   let badges = await actions.badges.aquired.getAll();
 
@@ -129,7 +129,7 @@ export const badges: { [key: string]: Badge } = {
     scan: async (user) => {
       const cards = (await database.all(
         `SELECT * FROM aquired_cards WHERE user_id = ? AND card_id IN (SELECT id FROM cards WHERE rarity = 'mythic');`,
-        user.user_id
+        user.user_id,
       )) as AquiredCard[];
 
       return cards.length > 0;
@@ -142,7 +142,7 @@ export const badges: { [key: string]: Badge } = {
     scan: async (user) => {
       const amount = await actions.relationships.getFor(
         user.user_id,
-        "worships"
+        "worships",
       );
       return amount.length >= 5;
     },
@@ -173,11 +173,11 @@ export const badges: { [key: string]: Badge } = {
   },
   "can-request": {
     name: "Can Request",
-    description: "Reached level 5 on Trancer",
+    description: "Reached level 10 on Trancer",
     emoji: ":fish:",
     scan: async (user) => {
       if (user.guild_id !== config.botServer.id) return false;
-      if (calculateLevel(user.xp) < 5) return false;
+      if (calculateLevel(user.xp) < 10) return false;
       try {
         const member = (
           await client.guilds.fetch(config.botServer.id)
@@ -195,23 +195,23 @@ export default badges;
 
 export async function checkBadges(
   message?: Message<true>,
-  data?: UserData & Economy
+  data?: UserData & Economy,
 ) {
   const users = data
     ? [data]
     : await database.all<(UserData & Economy)[]>(
-        `SELECT 
-     user_data.*, 
+        `SELECT
+     user_data.*,
      economy.balance
-   FROM 
-     user_data 
-   INNER JOIN 
-     economy 
-   ON 
-     user_data.user_id = economy.user_id 
-   WHERE 
+   FROM
+     user_data
+   INNER JOIN
+     economy
+   ON
+     user_data.user_id = economy.user_id
+   WHERE
      user_data.guild_id = ?;`,
-        config.botServer.id
+        config.botServer.id,
       );
 
   const given: Badge[] = [];
@@ -234,7 +234,7 @@ export async function checkBadges(
           .setDescription(
             given
               .map((x) => `${x.emoji} **${x.name}**: ${x.description}`)
-              .join("\n")
+              .join("\n"),
           ),
       ],
     });
@@ -244,13 +244,13 @@ export async function checkBadges(
 }
 
 export function formatBadges(
-  badges: Badge[] | { [key: string]: Badge }
+  badges: Badge[] | { [key: string]: Badge },
 ): string[] {
   let result = [];
 
   for (let i in badges) {
     result.push(
-      `${badges[i].emoji} \`${badges[i].name}\`: ${badges[i].description}`
+      `${badges[i].emoji} \`${badges[i].name}\`: ${badges[i].description}`,
     );
   }
 

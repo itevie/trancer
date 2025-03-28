@@ -9,15 +9,15 @@ import { actions } from "../../util/database";
 const words = new Set(
   readFileSync(__dirname + "/../../data/words.txt", "utf8")
     .split("\n")
-    .map((word) => word.trim())
+    .map((word) => word.trim()),
 );
 const sortedWords = Array.from(words).sort((a, b) => a.length - b.length);
 
 const modes = {
   easy: {
     letters: "abcdefghijklmnoprstu",
-    min: 1,
-    max: 3,
+    min: 0,
+    max: 0,
     period: 30000,
   },
   normal: {
@@ -63,7 +63,7 @@ const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
       requiredLetters.push(
         Math.random() < 0.6
           ? vowels[Math.floor(Math.random() * vowels.length)]
-          : consonants[Math.floor(Math.random() * consonants.length)]
+          : consonants[Math.floor(Math.random() * consonants.length)],
       );
     };
 
@@ -86,7 +86,7 @@ const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
               .join(" ")
               .toUpperCase()}**\n\nYou have **${
               mode.period / 1000
-            } seconds** to make a word!`
+            } seconds** to make a word!`,
           ),
       ],
       components: [
@@ -95,7 +95,7 @@ const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
           new ButtonBuilder()
             .setCustomId("give-up")
             .setLabel("Give Up")
-            .setStyle(ButtonStyle.Danger)
+            .setStyle(ButtonStyle.Danger),
         ),
       ],
     });
@@ -146,7 +146,7 @@ const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
       const reward =
         randomFromRange(
           ecoConfig.payouts.letterMaker.min,
-          ecoConfig.payouts.letterMaker.max
+          ecoConfig.payouts.letterMaker.max,
         ) * requiredLetters.length;
 
       await msg.edit({
@@ -157,10 +157,10 @@ const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
               `Welldone! **${m.author.username}** made the word **${
                 m.content
               }**! You got ${currency(
-                reward
+                reward,
               )}\n\nThe required letters were: **${requiredLetters
                 .join(" ")
-                .toUpperCase()}**`
+                .toUpperCase()}**`,
             ),
         ],
         components: [],
@@ -186,7 +186,7 @@ const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
                     ? "\n\nHere are some examples of words you could have made:\n\n" +
                       examples.map((x) => `**${x}**`).join(", ")
                     : ""
-                }`
+                }`,
               ),
           ],
           components: [],
