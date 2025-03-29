@@ -9,7 +9,10 @@ const handler: HypnoMessageHandler = {
 
   handler: async (message) => {
     if (message.channel.id !== config.botServer.channels.oneWordStory) return;
-    if (message.content.includes(" ") || message.content.startsWith("."))
+    if (
+      message.content.includes(" ") ||
+      (message.content.startsWith(".") && message.content.length !== 1)
+    )
       return;
 
     // Only one peron can send it consecutivly
