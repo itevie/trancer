@@ -28,7 +28,7 @@ const _actions = {
       old.id,
     );
 
-    if (word.endsWith(".")) {
+    if (word.endsWith(".") || word.endsWith("?") || word.endsWith("!")) {
       completed = await database.get<OneWordStory>(
         "UPDATE one_word_stories SET done = true WHERE id = ? RETURNING *",
         old.id,
