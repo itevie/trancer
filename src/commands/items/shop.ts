@@ -26,7 +26,7 @@ const command: HypnoCommand<{ tag?: string }> = {
     if (args.tag) items = items.filter((x) => x.tag === args.tag.toLowerCase());
 
     return paginate({
-      replyTo: message,
+      message: message,
       embed: createEmbed()
         .setTitle("The Shop")
         .setFooter({ text: `Buy with ${serverSettings.prefix}buy <item>` })
@@ -35,12 +35,12 @@ const command: HypnoCommand<{ tag?: string }> = {
       data: items.map(
         (item) =>
           `${itemText(item)} - ${!item.buyable ? "~~" : ""}buy ${currency(
-            item.price
+            item.price,
           )}${!item.buyable ? "~~" : ""} sell ${currency(
-            calculateItemPrice(item)
+            calculateItemPrice(item),
           )} (${(item.weight * 100).toFixed(2)}% weight)\n- *${
             item.description ?? "No description"
-          }${item.tag ? ` [${item.tag}]` : ""}*`
+          }${item.tag ? ` [${item.tag}]` : ""}*`,
       ),
     });
   },

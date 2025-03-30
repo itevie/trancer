@@ -30,7 +30,7 @@ export interface LeaderboardOptions {
 }
 
 export async function createPaginatedLeaderboardFromData(
-  options: LeaderboardOptions
+  options: LeaderboardOptions,
 ) {
   const data = options.data
     .filter((x) => x[1] !== 0 && x[1] !== undefined)
@@ -46,14 +46,14 @@ export async function createPaginatedLeaderboardFromData(
           : getUsernameSync(data[i][0]).replace(/_/g, "\\_")
       } (**${data[i][2] || data[i][1]}**${
         options.entryName ? ` ${options.entryName}` : ""
-      })`
+      })`,
     );
   }
 
   return paginate({
     baseDescription: options.description,
     embed: options.embed,
-    replyTo: options.replyTo as any,
+    message: options.replyTo as any,
     type: "description",
     data: displaydData,
   });
@@ -63,7 +63,7 @@ export async function createLeaderboardFromData(
   data: [string, number, any?][],
   description: string | null = null,
   entryName: string | null = "times",
-  rawName: boolean = false
+  rawName: boolean = false,
 ): Promise<EmbedBuilder> {
   data = data
     .filter((x) => x[1] !== 0)
@@ -83,6 +83,6 @@ export async function createLeaderboardFromData(
 
   // Create embed
   return createEmbed().setDescription(
-    data.length === 0 ? "No results :(" : text
+    data.length === 0 ? "No results :(" : text,
   );
 }

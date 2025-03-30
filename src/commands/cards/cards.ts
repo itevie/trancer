@@ -62,12 +62,12 @@ const command: HypnoCommand<{ user?: User; sort: "rarity" | "id" }> = {
     for await (const card of cards) {
       let actualCard = await actions.cards.getById(card.card_id);
       data.push(
-        `**${actualCard.name}** *${actualCard.rarity} [${actualCard.id}]*: ${card.amount}`
+        `**${actualCard.name}** *${actualCard.rarity} [${actualCard.id}]*: ${card.amount}`,
       );
     }
 
     return paginate({
-      replyTo: message,
+      message: message,
       embed: createEmbed()
         .setTitle(`${user.username}'s cards`)
         .setTimestamp(null),

@@ -61,7 +61,7 @@ export const sources: { [key: string]: FileDirectorySource } = {
     handler: async () =>
       await loadSourcesFromYoutubeChannel(
         "DivinityAxo",
-        "UCXUHkFi_dN0pUmlpnMmEzyg"
+        "UCXUHkFi_dN0pUmlpnMmEzyg",
       ),
   },
   SillySpirals: {
@@ -72,7 +72,7 @@ export const sources: { [key: string]: FileDirectorySource } = {
       (
         await loadSourcesFromYoutubeChannel(
           "SillySpirals",
-          "UC7vReXXqP-aIjX7mQBnkQIQ"
+          "UC7vReXXqP-aIjX7mQBnkQIQ",
         )
       ).filter((x) => !x.name.toLowerCase().includes("non-hypnosis")),
   },
@@ -93,7 +93,7 @@ export const sources: { [key: string]: FileDirectorySource } = {
     handler: async () =>
       await loadSourcesFromYoutubeChannel(
         "MrSnake",
-        "UCJetLuqepwRQ5ELnA_18sFA"
+        "UCJetLuqepwRQ5ELnA_18sFA",
       ),
   },
 };
@@ -122,7 +122,7 @@ export async function loadAllSources(): Promise<FileDirectoryFile[]> {
       JSON.stringify({
         fetch: new Date().toISOString(),
         data,
-      })
+      }),
     );
 
     files.push(...data);
@@ -133,7 +133,7 @@ export async function loadAllSources(): Promise<FileDirectoryFile[]> {
 
 export async function loadSourcesFromYoutubeChannel(
   directory: string,
-  id: string
+  id: string,
 ): Promise<FileDirectoryFile[]> {
   const allVideos: FileDirectoryFile[] = [];
   let nextPageToken: string | null = null;
@@ -163,7 +163,7 @@ export async function loadSourcesFromYoutubeChannel(
         description: v.snippet.description,
         tags: [],
         link: `https://www.youtube.com/watch?v=${v.id.videoId}`,
-      }))
+      })),
     );
 
     nextPageToken = data.nextPageToken || null;
@@ -175,7 +175,7 @@ export async function loadSourcesFromYoutubeChannel(
 
 export async function getFilesFrom(
   directory: string,
-  allowNsfw: boolean = false
+  allowNsfw: boolean = false,
 ): Promise<FileDirectoryFile[]> {
   if (sources[directory].nsfw && !allowNsfw) return [];
   return (await loadAllSources()).filter((x) => x.directory === directory);
@@ -183,22 +183,22 @@ export async function getFilesFrom(
 
 export async function searchFiles(
   query: string,
-  allowNsfw: boolean = false
+  allowNsfw: boolean = false,
 ): Promise<FileDirectoryFile[]> {
   query = query.toLowerCase();
   return (await getAllFiles(allowNsfw)).filter(
     (x) =>
       x.description.toLowerCase().includes(query) ||
       x.tags.some((y) => y.toLowerCase() === query) ||
-      x.name.toLowerCase().includes(query)
+      x.name.toLowerCase().includes(query),
   );
 }
 
 export async function getAllFiles(
-  allowNsfw: boolean = false
+  allowNsfw: boolean = false,
 ): Promise<FileDirectoryFile[]> {
   return (await loadAllSources()).filter(
-    (x) => allowNsfw || !sources[x.directory].nsfw
+    (x) => allowNsfw || !sources[x.directory].nsfw,
   );
 }
 
@@ -206,19 +206,19 @@ export function getSources(allowNsfw: boolean = false): {
   [key: string]: FileDirectorySource;
 } {
   return Object.fromEntries(
-    Object.entries(sources).filter((x) => allowNsfw || !x[1].nsfw)
+    Object.entries(sources).filter((x) => allowNsfw || !x[1].nsfw),
   );
 }
 
 export async function getRandomFile(
-  allowNsfw: boolean = false
+  allowNsfw: boolean = false,
 ): Promise<FileDirectoryFile> {
   const directories = getSources(allowNsfw);
   const files = await getFilesFrom(
     Object.keys(directories)[
       Math.floor(Math.random() * Object.keys(directories).length)
     ],
-    allowNsfw
+    allowNsfw,
   );
   return files[Math.floor(Math.random() * files.length)];
 }
@@ -237,7 +237,7 @@ export function fileToEmbed(file: FileDirectoryFile): EmbedBuilder {
 
 export async function handleFileMessage(
   message: Message<true>,
-  file: FileDirectoryFile
+  file: FileDirectoryFile,
 ): Promise<void> {
   const components: ButtonBuilder[] = [
     new ButtonBuilder()
@@ -251,7 +251,7 @@ export async function handleFileMessage(
       new ButtonBuilder()
         .setStyle(ButtonStyle.Link)
         .setLabel("Script Link")
-        .setURL(file.script_link)
+        .setURL(file.script_link),
     );
 
   await message.reply({
@@ -271,12 +271,12 @@ export function clearFileDirectoryCache() {
 export async function paginateFileList(
   message: Message<true>,
   files: FileDirectoryFile[],
-  title: string = ""
+  title: string = "",
 ): Promise<void> {
   await paginate({
-    replyTo: message,
+    message: message,
     embed: createEmbed().setTitle(
-      title.length === 0 ? "Here's the list of files!" : title
+      title.length === 0 ? "Here's the list of files!" : title,
     ),
     type: "field",
     data: files.map((x) => {

@@ -25,8 +25,8 @@ const command: HypnoCommand<{ item: Item }> = {
     const items = await actions.items.aquired.resolveFrom(
       await database.all<AquiredItem[]>(
         "SELECT * FROM aquired_items WHERE item_id = ?;",
-        args.item.id
-      )
+        args.item.id,
+      ),
     );
 
     return paginate({
@@ -38,9 +38,9 @@ const command: HypnoCommand<{ item: Item }> = {
           (x, i) =>
             `**${i + 1}.** ${getUsernameSync(x.user_id)} (**${x.amount}** ${
               x.emoji
-            })`
+            })`,
         ),
-      replyTo: message,
+      message: message,
     });
   },
 };

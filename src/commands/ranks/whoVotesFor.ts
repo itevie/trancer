@@ -30,13 +30,13 @@ const command: HypnoCommand<{ rank: Rank; user?: User }> = {
     let user = args.user || message.author;
     let votes = await actions.ranks.votes.getAllForOn(
       args.rank.rank_name,
-      user.id
+      user.id,
     );
 
     paginate({
-      replyTo: message,
+      message: message,
       embed: createEmbed().setTitle(
-        `Who voted ${args.rank.rank_name} for ${user.username}?`
+        `Who voted ${args.rank.rank_name} for ${user.username}?`,
       ),
       type: "description",
       data: votes.map((x) => getUsernameSync(x)),

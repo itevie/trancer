@@ -20,8 +20,9 @@ import {
   isURL,
 } from "../util/other";
 import { currency } from "../util/language";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 
-client.on("messageCreate", async (message) => {
+client.on("messageCreate", async function handleMessage(message) {
   // Only listen if in guild
   if (!message.inGuild()) return;
   if (config.ignore.channels.includes(message.channel.id)) return;
@@ -107,13 +108,46 @@ client.on("messageCreate", async (message) => {
           ]),
         ).values(),
       ).filter((x) => x[1] > 0.6);
-      if (suggestions.length > 0)
-        return message.reply(
-          `Did you mean ${englishifyList(
-            suggestions.map((x) => `\`${x[0]}\``),
-            true,
-          )}?`,
-        );
+      if (suggestions.length > 0) {
+        if (suggestions.length === 1) {
+          const msg = await message.reply({
+            content: `Did you mean \`${suggestions[0][0]}\`?`,
+            components: [
+              // @ts-ignore
+              new ActionRowBuilder().addComponents(
+                new ButtonBuilder()
+                  .setLabel("Yes")
+                  .setStyle(ButtonStyle.Success)
+                  .setCustomId("yes"),
+              ),
+            ],
+          });
+
+          const collector = msg.createMessageComponentCollector({
+            filter: (i) => i.user.id === message.author.id,
+            time: 1000 * 60 * 10,
+          });
+
+          collector.on("collect", (i) => {
+            let newContent = `${settings.prefix}${suggestions[0][0]} ${originalArguments.join(" ")}`;
+            console.log(newContent);
+            message.content = newContent;
+            handleMessage(message);
+            collector.stop();
+          });
+
+          collector.on("end", async () => {
+            await msg.edit({ components: [] });
+          });
+        } else {
+          return message.reply(
+            `Did you mean ${englishifyList(
+              suggestions.map((x) => `\`${x[0]}\``),
+              true,
+            )}?`,
+          );
+        }
+      }
     }
     return;
   }

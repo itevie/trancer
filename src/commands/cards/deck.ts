@@ -31,7 +31,7 @@ const command: HypnoCommand<{ deck: Deck; rarity?: Rarity }> = {
     // Get the card
     let cards: Card[] = await database.all(
       `SELECT * FROM cards WHERE deck = ?`,
-      args.deck.id
+      args.deck.id,
     );
     let aquired = (await actions.cards.aquired.getAllFor(message.author.id))
       .filter((x) => x.amount > 0)
@@ -47,13 +47,13 @@ const command: HypnoCommand<{ deck: Deck; rarity?: Rarity }> = {
     for (const card of cards) if (aquired.includes(card.id)) has++;
 
     return paginate({
-      replyTo: message,
+      message: message,
       type: "description",
       data: cards.map(
         (x) =>
           `${aquired.includes(x.id) ? ":white_check_mark:" : ":x:"} **${
             x.name
-          }** (${x.id})`
+          }** (${x.id})`,
       ),
       embed: createEmbed()
         .setTitle(`Deck ${args.deck.name}`)

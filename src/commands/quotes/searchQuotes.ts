@@ -22,7 +22,7 @@ const command: HypnoCommand<{ query: string }> = {
   handler: async (message, { args }) => {
     const quotes = await database.all<Quote[]>(
       `SELECT * FROM quotes WHERE server_id = ?;`,
-      message.guild.id
+      message.guild.id,
     );
     const matches: Quote[] = [];
     const query = args.query.toLowerCase();
@@ -42,7 +42,7 @@ const command: HypnoCommand<{ query: string }> = {
     }
 
     return paginate({
-      replyTo: message,
+      message: message,
       embed: createEmbed().setTitle(`Quotes matching that query`),
       type: "field",
       data: list,

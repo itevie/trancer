@@ -22,7 +22,7 @@ const command: HypnoCommand<{ word: string }> = {
   handler: async (message, { args }) => {
     try {
       const result = await axios.get(
-        `https://api.dictionaryapi.dev/api/v2/entries/en/${args.word}`
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${args.word}`,
       );
 
       if (result.status === 404)
@@ -31,7 +31,7 @@ const command: HypnoCommand<{ word: string }> = {
       const word = result.data[0];
 
       paginate({
-        replyTo: message,
+        message: message,
         embed: createEmbed()
           .setTitle(`${word.word} - ${word.phonetic || "/?/"}`)
           .setDescription(word.origin ? `**Origin:** ${word.origin}` : "__ __"),

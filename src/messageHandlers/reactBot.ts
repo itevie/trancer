@@ -319,6 +319,10 @@ const phrases = [
   "https://tenor.com/view/cuh-guh-buh-gif-26372267",
   "https://tenor.com/view/uncanny-emoji-angry-hakayaki-hakayaki-angry-emoji-gif-13101565263917230073",
   "$content",
+  'And god said "$content"',
+  "Dumbass says $content",
+  "$content... blah blah blah we've all heard it before",
+  "https://tenor.com/view/this-is-fine-gif-24177057",
 ];
 
 let messagesSince = 0;

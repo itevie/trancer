@@ -11,7 +11,7 @@ const command: HypnoCommand = {
   handler: async (message) => {
     const quotes = await database.all<Quote[]>(
       `SELECT * FROM quotes WHERE server_id = (?);`,
-      message.guild.id
+      message.guild.id,
     );
     let list = [];
     for await (const quote of quotes) {
@@ -24,7 +24,7 @@ const command: HypnoCommand = {
     }
 
     return paginate({
-      replyTo: message,
+      message: message,
       embed: createEmbed().setTitle(`Quotes from ${message.guild.name}`),
       type: "field",
       data: list,

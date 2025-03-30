@@ -6,7 +6,7 @@ import ecoConfig from "../../ecoConfig";
 import { currency } from "../../util/language";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { actions } from "../../util/database";
-const words = new Set(
+export const words = new Set(
   readFileSync(__dirname + "/../../data/words.txt", "utf8")
     .split("\n")
     .map((word) => word.trim()),

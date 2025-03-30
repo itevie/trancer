@@ -9,9 +9,10 @@ import {
   ActionRowBuilder,
   ModalActionRowComponentBuilder,
 } from "discord.js";
+import { INTERNAL } from "sqlite3";
 
 interface BasePaginationOptions {
-  replyTo: Message;
+  message: Message;
   embed: EmbedBuilder;
   type: "description" | "field";
   pageLength?: number;
@@ -35,7 +36,7 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
   const pageLength = options.pageLength || 10;
   const oldFooter = options.embed.data.footer?.text || "";
   const user = options.data.findIndex((x) =>
-    x.toString().includes(options.replyTo.author.username)
+    x.toString().includes(options.message.author.username),
   );
 
   // Initial
@@ -46,11 +47,13 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
     else if (options.type === "description") {
       options.embed.setDescription(
         (options.baseDescription ? `${options.baseDescription}\n\n` : "") +
-          options.data.slice(currentIndex, currentIndex + pageLength).join("\n")
+          options.data
+            .slice(currentIndex, currentIndex + pageLength)
+            .join("\n"),
       );
     } else {
       options.embed.setFields(
-        options.data.slice(currentIndex, currentIndex + pageLength)
+        options.data.slice(currentIndex, currentIndex + pageLength),
       );
     }
     options.embed.setFooter({
@@ -65,11 +68,11 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
 
   // Check if there is any more to add
   if (options.data.length < pageLength + 1)
-    return options.replyTo.reply({
+    return options.message.reply({
       embeds: [options.embed],
     });
 
-  let message = await options.replyTo.reply({
+  let message = await options.message.reply({
     embeds: [options.embed],
     components: [
       // @ts-ignore
@@ -100,11 +103,15 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
     ],
   });
 
-  let collector = message.createMessageComponentCollector({
-    filter: (i) => i.user.id === options.replyTo.author.id,
-  });
+  let collector = message.createMessageComponentCollector({});
 
   collector.on("collect", async (interaction) => {
+    if (interaction.user.id !== options.message.author.id)
+      return interaction.reply({
+        ephemeral: true,
+        content: "This isn't for you! Try running the command yourself.",
+      });
+
     if (interaction.customId === "page-search") {
       const modal = new ModalBuilder()
         .setCustomId("page-search-modal")
@@ -119,7 +126,7 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
 
       const actionRow =
         new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
-          usernameInput
+          usernameInput,
         );
 
       modal.addComponents(actionRow);
@@ -137,11 +144,11 @@ export async function paginate(options: PaginationOptions): Promise<Message> {
           (typeof x === "object" && x.name.includes(query)) ||
           (typeof x === "object" && x.value.includes(query)) ||
           (typeof x !== "object" &&
-            x.replace(/\\\\/g, "").toLowerCase().includes(query))
+            x.replace(/\\\\/g, "").toLowerCase().includes(query)),
       );
       if (index === -1)
         return await result.reply(
-          `${interaction.user.username}, sorry, but I couldn't find anything matching your query.`
+          `${interaction.user.username}, sorry, but I couldn't find anything matching your query.`,
         );
 
       currentIndex = index - (index % pageLength);

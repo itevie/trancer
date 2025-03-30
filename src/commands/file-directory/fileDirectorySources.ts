@@ -12,15 +12,15 @@ const command: HypnoCommand = {
 
   handler: async (message, { serverSettings }) => {
     return paginate({
-      replyTo: message,
+      message: message,
       embed: createEmbed()
         .setTitle("List of file sources")
         .setDescription(
-          `Want to see your own files here? DM me on Discord! <@${config.owner}>`
+          `Want to see your own files here? DM me on Discord! <@${config.owner}>`,
         ),
       type: "field",
       data: Object.entries(
-        getSources(serverSettings.allow_nsfw_file_directory_sources)
+        getSources(serverSettings.allow_nsfw_file_directory_sources),
       ).map((x) => {
         return {
           name: `${x[0]}`,

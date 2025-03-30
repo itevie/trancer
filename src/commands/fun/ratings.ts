@@ -26,17 +26,17 @@ const command: HypnoCommand<{ user?: User }> = {
     const user = args.user || message.author;
     const ratings = await database.all<PinnedRating[]>(
       "SELECT * FROM pinned_ratings WHERE user_id = ?",
-      user.id
+      user.id,
     );
 
     paginate({
-      replyTo: message,
+      message: message,
       embed: createEmbed().setTitle(
-        `All ${args.user === message.author ? "your" : "their"} ratings`
+        `All ${args.user === message.author ? "your" : "their"} ratings`,
       ),
       type: "description",
       data: ratings.map(
-        (x) => `**${x.rating}**: ${createRating(user.username, x.rating)}%`
+        (x) => `**${x.rating}**: ${createRating(user.username, x.rating)}%`,
       ),
     });
   },

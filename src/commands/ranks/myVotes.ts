@@ -26,7 +26,7 @@ const command: HypnoCommand<{ user?: User }> = {
     let votes = await actions.ranks.votes.getAllBy(user.id);
 
     paginate({
-      replyTo: message,
+      message: message,
       embed: createEmbed().setTitle(`All your votes!`),
       type: "description",
       data: votes.map((x) => `**${x.rank_name}**: ${getUsernameSync(x.votee)}`),

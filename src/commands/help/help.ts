@@ -106,12 +106,12 @@ const command: HypnoCommand<{ ignoreGuards: boolean }> = {
     });
 
     return paginate({
-      replyTo: message,
+      message: message,
       embed: createEmbed()
         .setTitle("Help")
         .setDescription(
           `Hello! I'm Trancer, I'm a bot based around hypnosis, but I have plenty of other features too!\n` +
-            `*Use \`${serverSettings.prefix}command <commandname>\` to get details on a command*`
+            `*Use \`${serverSettings.prefix}command <commandname>\` to get details on a command*`,
         ),
       type: "field",
       data: fields,

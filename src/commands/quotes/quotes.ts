@@ -41,21 +41,21 @@ const command: HypnoCommand<{ user?: User; all?: boolean; search?: string }> = {
       args.all
         ? await database.all<Quote[]>(
             "SELECT * FROM quotes WHERE author_id = (?)",
-            message.author.id
+            message.author.id,
           )
         : await database.all<Quote[]>(
             `SELECT * FROM quotes WHERE author_id = (?) AND server_id = ?;`,
             user.id,
-            message.guild.id
+            message.guild.id,
           )
     )
       .filter((x) =>
-        args.all ? true : !["1274172930380664963"].includes(x.server_id)
+        args.all ? true : !["1274172930380664963"].includes(x.server_id),
       )
       .filter(
         (x) =>
           !args.search ||
-          x.content.toLowerCase().includes(args.search.toLowerCase())
+          x.content.toLowerCase().includes(args.search.toLowerCase()),
       )
       .map((x) => {
         return {
@@ -65,7 +65,7 @@ const command: HypnoCommand<{ user?: User; all?: boolean; search?: string }> = {
       });
 
     return paginate({
-      replyTo: message,
+      message: message,
       embed: createEmbed().setTitle(`Quotes from ${user.username}`),
       type: "field",
       data: list,

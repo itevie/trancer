@@ -10,12 +10,12 @@ const command: HypnoCommand<{ asked?: boolean }> = {
 
   handler: async (message) => {
     return paginate({
-      replyTo: message,
+      message: message,
       embed: createEmbed().setTitle("Questions for QOTD"),
       type: "description",
       data: (await actions.qotd.getQuestions(message.guild.id)).map(
         (x) =>
-          `**${x.id}**: ${x.question} *[${x.asked ? "asked" : "not asked"}]*`
+          `**${x.id}**: ${x.question} *[${x.asked ? "asked" : "not asked"}]*`,
       ),
     });
   },

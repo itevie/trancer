@@ -48,13 +48,13 @@ const command: HypnoCommand<{ badge: string }> = {
     // Fetch the data
     const aquired = (await database.all(
       `SELECT * FROM aquired_badges WHERE badge_name = ?`,
-      badgeId
+      badgeId,
     )) as AquiredBadge[];
     if (aquired.length > 20)
       return message.reply(`Too many people have this badge to display it.`);
 
     paginate({
-      replyTo: message,
+      message: message,
       embed: createEmbed().setTitle(`Who has ${badge.emoji} ${badge.name}`),
       type: "description",
       data: aquired.map((x) => getUsernameSync(x.user)),

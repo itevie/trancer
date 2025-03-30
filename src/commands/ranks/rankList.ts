@@ -15,7 +15,7 @@ const command: HypnoCommand = {
     const votes = await actions.ranks.votes.getAllBy(message.author.id);
 
     paginate({
-      replyTo: message,
+      message: message,
       embed: createEmbed()
         .setTitle(`All the ranks`)
         .setFooter({
@@ -28,10 +28,10 @@ const command: HypnoCommand = {
           `**${x.rank_name}**: ${
             votes.some((y) => y.rank_name === x.rank_name)
               ? getUsernameSync(
-                  votes.find((y) => y.rank_name === x.rank_name).votee
+                  votes.find((y) => y.rank_name === x.rank_name).votee,
                 )
               : "*Not voted*"
-          }`
+          }`,
       ),
     });
   },

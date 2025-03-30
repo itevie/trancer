@@ -27,7 +27,7 @@ const command: HypnoCommand<{ user?: User }> = {
     const triggers = await actions.triggers.getAllFor(user.id);
 
     return paginate({
-      replyTo: message,
+      message: message,
       type: "description",
       data: triggers.map(
         (x) =>
@@ -38,7 +38,7 @@ const command: HypnoCommand<{ user?: User }> = {
                   .map((x) => tagEmojiMap[x])
                   .join("")}]`
               : ""
-          }`
+          }`,
       ),
       embed: createEmbed().setTitle(`Triggers for ${user.username}`),
       pageLength: 20,
