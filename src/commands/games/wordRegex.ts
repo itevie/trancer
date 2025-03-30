@@ -23,6 +23,9 @@ const command: HypnoCommand<{ regex: string }> = {
       .join(", ")
       .substring(0, 1999);
 
+    if (matchedWords.length === 0)
+      return message.reply(`There are no words matching that!`);
+
     return message.reply(matchedWords);
   },
 };

@@ -323,6 +323,10 @@ const phrases = [
   "Dumbass says $content",
   "$content... blah blah blah we've all heard it before",
   "https://tenor.com/view/this-is-fine-gif-24177057",
+  ..."/j,/hj,/srs,/th,/cb,/gen,/gen?,/genq,/hyp,/ij,/l,/ly,/neg,/pos,/p,/r,/ref,/x".split(
+    ",",
+  ),
+  "holy quackamole!",
 ];
 
 let messagesSince = 0;

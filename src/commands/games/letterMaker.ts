@@ -34,6 +34,8 @@ const modes = {
   },
 } as const;
 
+const wordsUsed = new Map<string, string[]>();
+
 const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
   name: "lettermaker",
   aliases: ["lm", "im", "wordmaker", "wm"],
@@ -142,7 +144,19 @@ const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
     }
 
     collector.on("collect", async (m) => {
+      if (!wordsUsed.has(message.author.id)) wordsUsed.set(m.author.id, []);
+      let word = m.content.toLowerCase();
+      let array = wordsUsed.get(m.author.id);
+      if (words.has(word)) {
+        if (array.includes(word)) {
+          return await m.reply({
+            content: "You already used that word - be more original.",
+          });
+        }
+      }
+
       if (!check(m.content.toLowerCase(), requiredLetters)) return;
+      array.push(word);
       let reward =
         randomFromRange(
           ecoConfig.payouts.letterMaker.min,

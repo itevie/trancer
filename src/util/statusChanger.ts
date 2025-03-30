@@ -9,7 +9,7 @@ const statuses: [ActivityType | null, string][] = [
   [0, "with pendulums"],
   [0, "*patpat if green*"],
   [0, "Among Us"],
-  [0, ".hypnoroulette"],
+  [0, ".trou"],
   [0, "with my Dawnagotchi"],
   [0, "checkout .$cmd"],
   [0, "I'm Trancer!"],

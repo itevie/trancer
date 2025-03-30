@@ -130,7 +130,6 @@ client.on("messageCreate", async function handleMessage(message) {
 
           collector.on("collect", (i) => {
             let newContent = `${settings.prefix}${suggestions[0][0]} ${originalArguments.join(" ")}`;
-            console.log(newContent);
             message.content = newContent;
             handleMessage(message);
             collector.stop();
