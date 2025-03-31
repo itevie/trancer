@@ -16,14 +16,16 @@ const command: HypnoCommand = {
       .map((x) => {
         return { ...x, created_at: new Date(x.created_at) };
       })
-      .filter((x) => Date.now() - x.created_at.getTime() <= period);
+      .filter((x) => Date.now() - x.created_at.getTime() <= period)
+      .sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
 
     return paginate({
       message,
       embed: createEmbed().setTitle("Recently Added Commands"),
       type: "description",
       data: list.map(
-        (x) => `**${x.name}**\n-# ${commands[x.name].description}`,
+        (x) =>
+          `**${x.name}**\n-# ${commands[x.name].description} *(${x.created_at.toDateString()})*`,
       ),
     });
   },

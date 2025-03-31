@@ -30,6 +30,15 @@ CREATE TABLE IF NOT EXISTS server_settings (
     allow_nsfw_file_directory_sources BOOLEAN NOT NULL DEFAULT false
 );
 
+CREATE TABLE IF NOT EXISTS trigger_ideas (
+    id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
+    added_by TEXT NOT NULL,
+    added_at TEXT NOT NULL,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    UNIQUE (name, description)
+);
+
 CREATE TABLE IF NOT EXISTS blacklisted (
     server_id TEXT NOT NULL,
     type TEXT NOT NULL,
