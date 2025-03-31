@@ -21,6 +21,7 @@ import {
 } from "../util/other";
 import { currency } from "../util/language";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
+import megaAliases from "../megaAliases";
 
 client.on("messageCreate", async function handleMessage(message) {
   // Only listen if in guild
@@ -86,7 +87,13 @@ client.on("messageCreate", async function handleMessage(message) {
   // ----- Beyond is actual command handler -----
 
   // Extract command
-  const content = message.content.substring(settings.prefix.length).trim();
+  let content = message.content.substring(settings.prefix.length).trim();
+
+  if (megaAliases[content.split(" ")[0].toLowerCase()]) {
+    const key = content.split(" ")[0];
+    content = content.replace(key, megaAliases[key.toLowerCase()]);
+  }
+
   const originalArguments = content.split(" ").slice(1);
 
   const { wickStyle, args } = parseCommand(content);

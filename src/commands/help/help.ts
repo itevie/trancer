@@ -9,6 +9,7 @@ import getAllFiles, { createEmbed } from "../../util/other";
 import config from "../../config";
 import { paginate } from "../../util/components/pagination";
 import { categoryEmojis } from "./_util";
+import megaAliases from "../../megaAliases";
 
 const messageFiles = getAllFiles(__dirname + "/../../topics");
 export const messages: { [key: string]: MessageCreateOptions } = {};
@@ -93,6 +94,16 @@ const command: HypnoCommand<{ ignoreGuards: boolean }> = {
         });
       }
     }
+
+    fields.push({
+      name: "Mega Aliases",
+      value: `The following are commands that contain commands and arguments:\n${Object.entries(
+        megaAliases,
+      )
+        .map((x) => `\`${x[0]}\``)
+        .join(", ")}`,
+      inline: true,
+    });
 
     fields.push({
       name: "Topics",
