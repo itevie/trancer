@@ -286,6 +286,10 @@ client.on("messageCreate", async function handleMessage(message) {
           );
       };
 
+      let members = Array.from(message.guild.members.cache);
+      let randomMember =
+        members[Math.floor(Math.random() * members.length)][1].user;
+
       // Handle attachment argument
       if (arg.type === "attachment") {
         let ref = message.reference ? await message.fetchReference() : null;
@@ -306,6 +310,12 @@ client.on("messageCreate", async function handleMessage(message) {
         // self pfp
 
         let preferences = [
+          givenValue === "@someone"
+            ? randomMember.displayAvatarURL({
+                size: 2048,
+                extension: "png",
+              })
+            : null,
           arg.infer && ref !== null && isPfp
             ? ref.author.displayAvatarURL({
                 size: 2048,
@@ -502,15 +512,13 @@ client.on("messageCreate", async function handleMessage(message) {
             result = rank;
             break;
           case "user":
-            if (a.toLowerCase() === "me") {
-              result = message.author;
+            if (a === "@someone") {
+              result = randomMember;
               return null;
             }
 
-            if (a === "@someone") {
-              let members = Array.from(message.guild.members.cache);
-              result =
-                members[Math.floor(Math.random() * members.length)][1].user;
+            if (a.toLowerCase() === "me") {
+              result = message.author;
               return null;
             }
 

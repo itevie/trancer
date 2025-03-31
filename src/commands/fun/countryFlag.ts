@@ -27,6 +27,7 @@ const command: HypnoCommand<{ code: string; image: string }> = {
   },
 
   handler: async (message, { args }) => {
+    console.log(args);
     try {
       // Load images
       let _bg = await Jimp.read(
