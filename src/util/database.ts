@@ -25,6 +25,7 @@ import ranks from "./db-parts/ranks";
 import ratelimits from "./db-parts/ratelimits";
 import eco from "./db-parts/economy";
 import oneWordStories from "./db-parts/oneWordStories";
+import commandCreations from "./db-parts/commandCreations";
 
 export let database: Database<sqlite3.Database, Statement>;
 export const databaseLogger = new Logger("database");
@@ -50,6 +51,7 @@ export const actions = {
   ratelimits,
   eco,
   oneWordStories,
+  commandCreations,
 } as const;
 
 export async function connect(): Promise<void> {

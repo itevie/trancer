@@ -336,7 +336,9 @@ const excludedChannels = ["1315484267517575168"];
 
 const handler: HypnoMessageHandler = {
   name: "react-bot",
-  description: "Similar to JJJacksFilm's ReactBot",
+  description:
+    "Sends a random message every so often (similar to ReactBot but JJJack)",
+  botServerOnly: true,
 
   handler: async (message) => {
     if (message.guild.id !== config.botServer.id) return;

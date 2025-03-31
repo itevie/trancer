@@ -294,6 +294,7 @@ interface HypnoMessageHandler {
   examples?: string[];
   botsOnly?: boolean;
   noCommands?: boolean;
+  botServerOnly?: boolean;
 
   handler: (message: Message) => void;
 }

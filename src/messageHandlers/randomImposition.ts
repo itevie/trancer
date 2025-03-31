@@ -6,7 +6,9 @@ const randomImposition: { [key: string]: number } = {};
 
 const handler: HypnoMessageHandler = {
   name: "random-imposition-sender",
-  description: "Sends random imposition in the current channel every so often",
+  description:
+    "Sends random imposition in the current channel every so often (if enabled)",
+
   handler: async (message) => {
     // Check random impo
     const imposition = await actions.triggers.auto.getFor(message.channel.id);

@@ -54,6 +54,7 @@ const words = [
 const handler: HypnoMessageHandler = {
   name: "item-dropper",
   description: "Drops items in a channel every so often",
+  botServerOnly: true,
 
   handler: async (message) => {
     // Guards
@@ -107,7 +108,7 @@ const handler: HypnoMessageHandler = {
         collector.stop();
         await giveRewardDeteils(msg.author.id, rewards);
         return msg.reply(
-          `Welldone! You got ${rewardString}, it has been added to your inventory!`
+          `Welldone! You got ${rewardString}, it has been added to your inventory!`,
         );
       });
 
@@ -119,7 +120,7 @@ const handler: HypnoMessageHandler = {
               .setDescription(
                 caughtBy
                   ? `**${caughtBy.username}** caught the drop of ${rewardString}!`
-                  : `No one caught the drop of ${rewardString} in time :(`
+                  : `No one caught the drop of ${rewardString} in time :(`,
               ),
           ],
         });

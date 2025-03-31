@@ -17,10 +17,7 @@ export function fixMathExpr(content: string) {
     .replace(/times/g, "*")
     .replace(/multiplied by/g, "*")
     .replace(/divided by/g, "/")
-    .replace(/to the power of 2/g, "^2")
-    .replace(/to the power of 3/g, "^3")
-    .replace(/to the power of 4/g, "^4")
-    .replace(/to the power of 5/g, "^5");
+    .replace(/to the power of/g, "^");
 }
 
 const handler: HypnoMessageHandler = {

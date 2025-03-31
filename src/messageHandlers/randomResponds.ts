@@ -37,6 +37,11 @@ const loveMessages = [
 const handler: HypnoMessageHandler = {
   name: "random-responder",
   description: "Reacts to certain messages with random responses",
+  examples: [
+    `"I'm not a fish": responds with a random piece of impo`,
+    `"kys" or "fuck you": Hey, that's not very nice! *patpatpat*`,
+    `"I'm immune": responds with random bit of impo + a gif`,
+  ],
 
   handler: async (message) => {
     // "I'm not a fish"
@@ -44,7 +49,7 @@ const handler: HypnoMessageHandler = {
       return message.reply(
         `${
           fishMessages[Math.floor(Math.random() * fishMessages.length)]
-        } ${await getRandomImposition(message.author.id)}`
+        } ${await getRandomImposition(message.author.id)}`,
       );
     }
 
@@ -63,8 +68,8 @@ const handler: HypnoMessageHandler = {
               message.author.displayAvatarURL({
                 forceStatic: true,
                 extension: "png",
-              })
-            )
+              }),
+            ),
           ).setName("YOURE_NOT_IMMUNE.png"),
         ],
       });

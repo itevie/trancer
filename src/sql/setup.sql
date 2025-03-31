@@ -123,6 +123,11 @@ CREATE TABLE IF NOT EXISTS one_word_stories (
     created_at TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS command_creations (
+    name TEXT UNIQUE PRIMARY KEY NOT NULL,
+    created_at TEXT NOT NULL
+);
+
 -- User specific stuff
 CREATE TABLE IF NOT EXISTS user_imposition (
     user_id TEXT NOT NULL,

@@ -9,7 +9,7 @@ import { actions } from "../util/database";
 
 const handler: HypnoMessageHandler = {
   name: "dawn-checker",
-  description: "Checks the message author's Dawn's requirements",
+  description: "Checks if the message author's Dawn has left",
 
   handler: async (message) => {
     // Fetch and check if they have a Dawn
@@ -38,13 +38,13 @@ const handler: HypnoMessageHandler = {
       // Remove money
       await actions.eco.removeMoneyFor(
         message.author.id,
-        ecoConfig.payouts.dawn.punishment
+        ecoConfig.payouts.dawn.punishment,
       );
 
       // Send message
       await message.reply({
         content: `Uh oh... Your Dawn has left you...\n\n${messages.join(
-          "\n"
+          "\n",
         )}\n\nYou lost ${currency(ecoConfig.payouts.dawn.punishment)}`,
         embeds: [generateDawnagotchiEmbed(dawn)],
       });

@@ -5,7 +5,7 @@ import config from "../config";
 
 const handler: HypnoMessageHandler = {
   name: "jarvis",
-  description: 'Sends a jarvis message when a message starts with "Jarvis"',
+  description: 'Sends a jarvis message when a message starts with "Jarvis,"',
 
   handler: async (message) => {
     if (!message.content.match(/^(Jar(vis|fish),)/i)) return;

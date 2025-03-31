@@ -36,7 +36,7 @@ const lastAwards: { [key: string]: number } = {};
 
 const handler: HypnoMessageHandler = {
   name: "xp",
-  description: "Awards XP",
+  description: "Gives XP to the message author",
 
   handler: async (message) => {
     let settings = await actions.serverSettings.getFor(message.guild.id);
@@ -55,7 +55,7 @@ const handler: HypnoMessageHandler = {
 
     let data = await actions.userData.getFor(
       message.author.id,
-      message.guild.id
+      message.guild.id,
     );
     let pre = calculateLevel(data.xp);
 
@@ -64,7 +64,7 @@ const handler: HypnoMessageHandler = {
       message.author.id,
       message.guild.id,
       "xp",
-      award
+      award,
     );
 
     let post = calculateLevel(data.xp + award);
@@ -77,7 +77,7 @@ const handler: HypnoMessageHandler = {
         await message.reply(
           `Welldone! You levelled up from level **${pre}** to **${post}**! :cyclone:${
             reward ? `\n\n${reward.label}` : ""
-          }`
+          }`,
         );
       } catch {}
     }

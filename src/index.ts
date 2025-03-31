@@ -56,6 +56,7 @@ import { initQotd } from "./util/qotd";
 import { loadAllSources } from "./commands/file-directory/_util";
 import { initStatusChanger } from "./util/statusChanger";
 import { loadSlashCommands } from "./util/slashCommands";
+import initAllManagers from "./managers/loadAll";
 
 const logger = new Logger("loader");
 export let errors = 0;
@@ -121,15 +122,7 @@ client.on("ready", async () => {
     }
   }
 
-  if (client.user.id !== config.devBot.id) {
-    initInviteCache();
-    initLottery();
-  }
-
-  //checkBadges();
-  //setTimeout(() => {
-  //  checkBadges();
-  //}, 60000);
+  initAllManagers();
 
   logger.log(`${client.user?.username} successfully logged in!`);
 
@@ -138,8 +131,6 @@ client.on("ready", async () => {
   if (true || config.website.enabled) {
     initServer();
   }
-
-  initQotd();
 
   const guilds = await client.guilds.fetch();
   for await (const [_, guild] of guilds) {

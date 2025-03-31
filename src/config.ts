@@ -39,6 +39,7 @@ let config = {
       boosts: "1257417208024268850",
       oneWordStory: "1353393430558150777",
       oneWordStorySend: "1353393430558150777",
+      suggestions: "1356294574389071970",
     },
 
     vcChannels: [

@@ -10,6 +10,7 @@ const handler: HypnoMessageHandler = {
   name: "economy",
   description: "Handles message economy",
   noCommands: true,
+  botServerOnly: true,
 
   handler: async (message) => {
     if (message.guild.id !== config.botServer.id) return;
@@ -21,7 +22,7 @@ const handler: HypnoMessageHandler = {
     ) {
       let money = randomFromRange(
         ecoConfig.payouts.message.min,
-        ecoConfig.payouts.message.max
+        ecoConfig.payouts.message.max,
       );
       await actions.eco.addMoneyFor(message.author.id, money, "messaging");
       timeouts[message.author.id] = Date.now();

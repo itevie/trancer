@@ -6,6 +6,7 @@ import { createEmbed } from "../util/other";
 const handler: HypnoMessageHandler = {
   name: "one-word-stories",
   description: "Handles the one word story game",
+  botServerOnly: true,
 
   handler: async (message) => {
     if (message.channel.id !== config.botServer.channels.oneWordStory) return;
