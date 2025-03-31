@@ -507,6 +507,13 @@ client.on("messageCreate", async function handleMessage(message) {
               return null;
             }
 
+            if (a === "@someone") {
+              let members = Array.from(message.guild.members.cache);
+              result =
+                members[Math.floor(Math.random() * members.length)][1].user;
+              return null;
+            }
+
             // Check if it matches
             if (!a.match(/<?@?[0-9]+>?/))
               return "Invalid user format provided! Please provide a mention or ID";
