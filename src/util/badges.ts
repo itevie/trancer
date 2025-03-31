@@ -6,6 +6,7 @@ import { currency } from "./language";
 import { Message } from "discord.js";
 import { createEmbed } from "./other";
 import { client } from "..";
+import { units } from "./ms";
 
 export interface Badge {
   name: string;
@@ -187,6 +188,16 @@ export const badges: { [key: string]: Badge } = {
       } catch {
         return false;
       }
+    },
+  },
+  babysitter: {
+    name: "Dawn Babysitter",
+    description: "Have a Dawnagotchi for more than a month",
+    emoji: "<:uppies:1278754282413490259>",
+    scan: async (user) => {
+      const dawn = await actions.dawnagotchi.getFor(user.user_id);
+      if (!dawn) return false;
+      return Date.now() - dawn.created_at.getTime() >= units.day * 30;
     },
   },
 } as const;
