@@ -4,7 +4,7 @@ const _actions = {
   getFor: async (userId: string): Promise<Dawnagotchi | undefined> => {
     let result = (await database.get(
       `SELECT * FROM dawnagotchi WHERE owner_id = ? AND alive = true`,
-      userId
+      userId,
     )) as Dawnagotchi | undefined;
     if (!result) return undefined;
 
@@ -16,20 +16,34 @@ const _actions = {
     return result;
   },
 
+  getAll: async (): Promise<Dawnagotchi[]> => {
+    return (await database.all<Dawnagotchi[]>("SELECT * FROM dawnagotchi")).map(
+      (x) => {
+        return {
+          ...x,
+          next_drink: new Date(x.next_drink),
+          next_feed: new Date(x.next_feed),
+          next_play: new Date(x.next_play),
+          created_at: new Date(x.created_at),
+        };
+      },
+    );
+  },
+
   setupFor: async (userId: string): Promise<Dawnagotchi> => {
     return await database.get<Dawnagotchi>(
       `INSERT INTO dawnagotchi (owner_id, next_feed, next_drink, next_play) VALUES (?, ?, ?, ?) RETURNING *;`,
       userId,
       Date.now(),
       Date.now(),
-      Date.now()
+      Date.now(),
     );
   },
 
   removeFor: async (userId: string): Promise<void> => {
     await database.run(
       `UPDATE dawnagotchi SET alive = false WHERE owner_id = ?`,
-      userId
+      userId,
     );
   },
 } as const;
