@@ -99,7 +99,7 @@ const quirks: { [key: string]: (content: string) => string } = {
     c
       .toLowerCase()
       .split(" ")
-      .map((x) => (x.endsWith("s") ? x.substring(1, -1) + "z" : x))
+      .map((x) => (x.endsWith("s") ? x.slice(0, -1) + "z" : x))
       .join(" "),
   "Tegiri Kalbur": (c) => c.replace(/l/gi, "/"),
   "Mallek Adalov": (c) =>
