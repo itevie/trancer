@@ -65,7 +65,7 @@ client.on("messageCreate", async function handleMessage(message) {
   if (!message.inGuild()) return;
   if (config.ignore.channels.includes(message.channel.id)) return;
 
-  // ----- for april fools -----
+  /*// ----- for april fools -----
   if (
     ["1257416273520758814", "1317161057868972124"].includes(message.guild.id)
   ) {
@@ -138,7 +138,7 @@ client.on("messageCreate", async function handleMessage(message) {
       return old(data);
     };
   }
-  // ----- for april fools -----
+  // ----- for april fools -----*/
 
   if (!message?.member?.permissions?.has("MentionEveryone"))
     message.content = message.content.replace(/@everyone/gi, "<at>everyone");
@@ -270,7 +270,7 @@ client.on("messageCreate", async function handleMessage(message) {
     return;
   }
 
-  // ----- for april fools -----
+  /*// ----- for april fools -----
   if (message.guild.id === "1257416273520758814") {
     if (Math.random() > 0.7)
       return message.reply(excuses[Math.floor(Math.random() * excuses.length)]);
@@ -283,7 +283,7 @@ client.on("messageCreate", async function handleMessage(message) {
       command = commands[name];
     }
   }
-  // ----- for april fools -----
+  // ----- for april fools -----*/
 
   // Check blacklisted
   if (
