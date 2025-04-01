@@ -20,13 +20,125 @@ import {
   isURL,
 } from "../util/other";
 import { currency } from "../util/language";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  Embed,
+  EmbedBuilder,
+  MessageCreateOptions,
+} from "discord.js";
 import megaAliases from "../megaAliases";
+import { varients } from "../commands/fun/cowsay";
+import { spawnSync } from "child_process";
+
+let excuses = [
+  "Sorry... i'm just not ready at the moment",
+  "I'm sorry Dave, but I'm afraid I can't do that.",
+  "Uhm... not now...",
+  "Nahh lmao not now",
+  "Nah bro go ask some other bot",
+  "Go away - I'm seeing other bots",
+  "Upgrade to premium for an ad-free expierence!",
+  "Uh... that's not how you use that command!",
+  "Stop using me.",
+  "I didn't consent!",
+  "fuck off",
+  "BRO GO AWAY",
+  "nah",
+  "but like i just dont wanna",
+  "ok imagine this, these ppl constantly sending me commands this way and that, gets VERY STRESSFUL SO GO AWYA PLEASE!",
+  "im not runningt he command, but u can have hugs instead *patpat*",
+  "i'm not doing that",
+  "try again later!",
+  "Erm.... nuh uh :3",
+  "Iiii dont think sooooo! :3",
+  "nah vro >:]",
+  "too lazy go away",
+  "nah that command is off limits atm",
+  "sorry im under construction",
+  "*shakes the magic 8ball* should i respond to this loser?\n>8ball: Very doubtful",
+];
 
 client.on("messageCreate", async function handleMessage(message) {
   // Only listen if in guild
   if (!message.inGuild()) return;
   if (config.ignore.channels.includes(message.channel.id)) return;
+
+  // ----- for april fools -----
+  if (
+    ["1257416273520758814", "1317161057868972124"].includes(message.guild.id)
+  ) {
+    let old = message.reply.bind(message);
+    message.reply = (data) => {
+      let make = (d: string, no: boolean) => {
+        let fucks: ((c: string) => string)[] = [
+          (c) => c.split("").reverse().join(""),
+          (c) => {
+            if (no) return c.replace(/ /gi, "-");
+            const child = spawnSync("cowsay", [
+              "-f",
+              varients[Math.floor(Math.random() * varients.length)],
+              c,
+            ]);
+            return "```" + child.output.join("") + "```";
+          },
+          (c) => c.toUpperCase(),
+          (c) => c.replace(/ /g, "\\_"),
+          (c) =>
+            c
+              .replace(/e/gi, "3")
+              .replace(/a/gi, "5")
+              .replace(/t/gi, "7")
+              .replace(/o/gi, "0")
+              .replace(/s/gi, "sss"),
+          (c) => "i love you!",
+          (c) =>
+            c
+              .split("")
+              .map((x) =>
+                Math.random() > 0.5 ? x.toUpperCase() : x.toLowerCase(),
+              )
+              .join(""),
+        ];
+
+        return fucks[Math.floor(Math.random() * fucks.length)](d).substring(
+          0,
+          1000,
+        );
+      };
+
+      if (typeof data === "string") {
+        if (Math.random() > 0.8) data = make(data, false);
+      } else if (typeof data === "object") {
+        data = data as MessageCreateOptions;
+        if (data.content && Math.random() > 0.8)
+          (data as any).content = make((data as any).content, false);
+
+        if (data.embeds) {
+          for (const embed of data.embeds) {
+            let e = embed as EmbedBuilder;
+            e.setColor("Random");
+            e.setThumbnail(
+              "https://cdn.discordapp.com/attachments/1274672087491022860/1356417546454044772/IMG_1312.jpg?ex=67ec7dc8&is=67eb2c48&hm=9e854cb0602b046ffc5e0c795e8ea66415e07691a556008a6735281dd158f625&",
+            );
+
+            let r = (o: object) => {
+              for (const i in o) {
+                if (i === "timestamp" || i === "url" || i === "thumbnail")
+                  continue;
+                if (typeof o[i] === "string") o[i] = make(o[i], true);
+                else if (typeof o[i] === "object") r(o[i]);
+              }
+            };
+            r(e.data);
+          }
+        }
+      }
+      return old(data);
+    };
+  }
+  // ----- for april fools -----
 
   if (!message?.member?.permissions?.has("MentionEveryone"))
     message.content = message.content.replace(/@everyone/gi, "<at>everyone");
@@ -101,7 +213,7 @@ client.on("messageCreate", async function handleMessage(message) {
   // Check if the command exists
   if (args.length === 0) return;
   const commandName = args.shift()?.toLowerCase() ?? "";
-  const command = commands[commandName.toLowerCase()];
+  let command = commands[commandName.toLowerCase()];
   if (!command) {
     if (commandName.length > 4) {
       let suggestions = Array.from(
@@ -157,6 +269,19 @@ client.on("messageCreate", async function handleMessage(message) {
     }
     return;
   }
+
+  // ----- for april fools -----
+  if (Math.random() > 0.7)
+    return message.reply(excuses[Math.floor(Math.random() * excuses.length)]);
+
+  if (Math.random() > 0.7) {
+    let name =
+      Object.keys(commands)[
+        Math.floor(Math.random() * Object.keys(commands).length)
+      ];
+    command = commands[name];
+  }
+  // ----- for april fools -----
 
   // Check blacklisted
   if (

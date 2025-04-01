@@ -5,6 +5,7 @@
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 import * as path from "path";
+import { units } from "./util/ms";
 
 let config = {
   // ----- Basic -----
@@ -52,7 +53,7 @@ let config = {
   // ----- Dev Bot Options -----
   devBot: {
     id: "1272342864004648981", // Leave empty if you don't have a developmental bot
-    ignoreMessageHandlers: true,
+    ignoreMessageHandlers: false,
   },
 
   // Where things should ignored
@@ -139,7 +140,8 @@ let config = {
   // ----- Item drop settings -----
   itemDrops: {
     enabled: true,
-    frequency: 1.8e6, // 30 minutes
+    //frequency: 1.8e6, // 30 minutes
+    frequency: units.minute * 5, // 30 minutes
     includeChannels: [
       "1257416274280054967",
       "1271324224077824051",

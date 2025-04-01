@@ -50,9 +50,6 @@ export const client = new Client({
   partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
 
-import { initInviteCache } from "./events/guildMemberAdd";
-import { initLottery } from "./managers/lottery";
-import { initQotd } from "./util/qotd";
 import { loadAllSources } from "./commands/file-directory/_util";
 import { initStatusChanger } from "./util/statusChanger";
 import { loadSlashCommands } from "./util/slashCommands";
@@ -117,6 +114,7 @@ client.on("ready", async () => {
 
     for (const handleFile of handleFiles) {
       const handleImport = require(handleFile).default as HypnoMessageHandler;
+      if (handleImport.disabled) continue;
       handlers.push(handleImport);
       logger.log(`Loaded handler: ${handleImport.name}`);
     }
