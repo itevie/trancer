@@ -23,7 +23,6 @@ export function fixMathExpr(content: string) {
 const handler: HypnoMessageHandler = {
   name: "counter",
   description: "Detects and updates the counting feature in a server",
-  disabled: true,
 
   handler: async (message) => {
     // Get count & do guards
