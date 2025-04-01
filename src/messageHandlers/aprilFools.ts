@@ -3706,7 +3706,9 @@ const handler: HypnoMessageHandler = {
                 ref.author.username),
           )
           .setDescription(ref.content)
-          .setThumbnail(ref.author.displayAvatarURL()),
+          .setThumbnail(
+            ref.member?.displayAvatarURL() || ref.author.displayAvatarURL(),
+          ),
       ];
     }
 
