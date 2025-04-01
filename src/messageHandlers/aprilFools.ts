@@ -3631,14 +3631,14 @@ var emojis = [
 let allowed = [
   "1317161058326020220",
 
-  /*  "1257416274280054967", // general
+  "1257416274280054967", // general
   "1257420441190928567", // memes
   "1257420480953057321", // spam
   "1257424277855010826", // intros,
   "1257430062723108865", // qotd
   "1335404377808048248", // animal noises
   "1350823003054669959", // drunk high
-  "1257417750444507147", // staff general */
+  "1257417750444507147", // staff general
 ];
 let cache = new Map<string, string>([["314822607750955009", "Terezi Pyrope"]]);
 let webhookCache = new Map<string, Webhook>();
