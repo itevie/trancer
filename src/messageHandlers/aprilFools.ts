@@ -35,7 +35,6 @@ const quirks: { [key: string]: (content: string) => string } = {
       .split("")
       .map((x) => (Math.random() > 0.5 ? x.toLowerCase() : x.toUpperCase()))
       .join(""),
-  "Eridan Ampora": (c) => c.toLowerCase(),
   "Feferi Peixes": (c) => c.replace(/h/gi, ")("),
   "Rufioh Nitram": (c) => c.toLowerCase().replace(/i/g, "1"),
   "Mituna Captor": (c) =>
@@ -58,7 +57,6 @@ const quirks: { [key: string]: (content: string) => string } = {
     c.replace(/e/gi, "3").replace(/i/gi, "1").replace(/a/gi, "a"),
   "Araneo Serket": (c) => c.replace(/b/gi, "8"),
   "Horuss Zahhak": (c) => "8=D < " + c,
-  "Kurloz Makara": (c) => c.toUpperCase(),
   "Cronus Ampora": (c) =>
     c
       .replace(/w/g, "w````")
