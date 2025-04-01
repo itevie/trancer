@@ -271,15 +271,17 @@ client.on("messageCreate", async function handleMessage(message) {
   }
 
   // ----- for april fools -----
-  if (Math.random() > 0.7)
-    return message.reply(excuses[Math.floor(Math.random() * excuses.length)]);
+  if (message.guild.id === "1257416273520758814") {
+    if (Math.random() > 0.7)
+      return message.reply(excuses[Math.floor(Math.random() * excuses.length)]);
 
-  if (Math.random() > 0.7) {
-    let name =
-      Object.keys(commands)[
-        Math.floor(Math.random() * Object.keys(commands).length)
-      ];
-    command = commands[name];
+    if (Math.random() > 0.7) {
+      let name =
+        Object.keys(commands)[
+          Math.floor(Math.random() * Object.keys(commands).length)
+        ];
+      command = commands[name];
+    }
   }
   // ----- for april fools -----
 
