@@ -3638,8 +3638,15 @@ let allowed = [
   "1350823003054669959", // drunk high
   "1257417750444507147", // staff general
 ];
-let cache = new Map<string, string>([["314822607750955009", "Terezi Pyrope"]]);
+let cache = new Map<string, string>([
+  ["314822607750955009", "Terezi Pyrope"],
+  ["1211609576437317652", "Kankri Vantas"],
+]);
 let webhookCache = new Map<string, Webhook>();
+
+export function disable() {
+  allowed = [];
+}
 
 const handler: HypnoMessageHandler = {
   name: "april-fools-typing-quirk",
