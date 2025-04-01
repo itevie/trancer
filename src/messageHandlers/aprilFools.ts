@@ -3712,8 +3712,8 @@ const handler: HypnoMessageHandler = {
       ];
     }
 
-    await message.delete();
     let a = await webook.send(data);
+    await message.delete();
     if (Math.random() > 0.7) await a.react(getRandomEmoji());
   },
 };
