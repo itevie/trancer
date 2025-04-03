@@ -1,5 +1,7 @@
 import {
+  Channel,
   CommandInteraction,
+  Guild,
   InteractionResponse,
   Message,
   PermissionResolvable,
@@ -166,6 +168,8 @@ interface HypnoCommand<Args extends { [key: string]: any } = {}> {
 interface MessageLike {
   author: User;
   reply: Message["reply"];
+  channel: Channel;
+  guild: Guild;
 }
 
 interface HypnoInteractionCommand<Args extends { [key: string]: any } = {}>

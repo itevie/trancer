@@ -53,7 +53,7 @@ let config = {
   // ----- Dev Bot Options -----
   devBot: {
     id: "1272342864004648981", // Leave empty if you don't have a developmental bot
-    ignoreMessageHandlers: false,
+    ignoreMessageHandlers: true,
   },
 
   // Where things should ignored

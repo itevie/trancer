@@ -49,6 +49,17 @@ export default function BasicSettings({
           v={server.resources.channels.map((x) => [x.id, x.name])}
         />
       </FullWidthInput>
+      <FullWidthInput
+        name="Confessions Channel"
+        description="Where should confessions made with the confession command be sent?"
+      >
+        <TrancerMultiInput
+          k="confessions_channel"
+          server={server}
+          nullable={true}
+          v={server.resources.channels.map((x) => [x.id, x.name])}
+        />
+      </FullWidthInput>
       <Words type="heading">Bumping</Words>
       <label>
         You don't need another bot to remind for bumps! Use Trancer!

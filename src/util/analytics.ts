@@ -5,6 +5,7 @@ import * as fs from "fs";
 import config from "../config";
 import Logger from "./Logger";
 import { formatDate } from "./other";
+import { Channel, TextChannel } from "discord.js";
 
 export let analyticDatabase: Database<sqlite3.Database, Statement>;
 export const analyticDatabaseLogger = new Logger("analytic-database");
@@ -24,12 +25,12 @@ export async function connectAnalytic(): Promise<void> {
 
     // Setup
     await analyticDatabase.exec(
-      fs.readFileSync(path.join(__dirname + "/../sql/analytics.sql"), "utf-8")
+      fs.readFileSync(path.join(__dirname + "/../sql/analytics.sql"), "utf-8"),
     );
   } catch (e) {
     console.error(e);
     console.log(
-      `Failed to load analytics database, but it is enabled in config.`
+      `Failed to load analytics database, but it is enabled in config.`,
     );
     process.exit();
   }
@@ -40,35 +41,35 @@ export async function connectAnalytic(): Promise<void> {
 // ----- Analytical SQL Functions -----
 export async function addMoneyTransaction(
   userId: string,
-  balance: number
+  balance: number,
 ): Promise<void> {
   if (!config.analytics.enabled) return;
   await analyticDatabase.run(
     `INSERT INTO money_transactions (user_id, balance, added_at) VALUES (?, ?, ?)`,
     userId,
     balance,
-    Date.now()
+    Date.now(),
   );
   return;
 }
 
 export async function getMoneyTransations(
-  userId: string
+  userId: string,
 ): Promise<MoneyTransaction[]> {
   if (!config.analytics.enabled) return [];
   return (await analyticDatabase.all(
     `SELECT * FROM money_transactions WHERE user_id = ?`,
-    userId
+    userId,
   )) as MoneyTransaction[];
 }
 
 export async function getAllMoneyTransations(
-  limit?: number
+  limit?: number,
 ): Promise<MoneyTransaction[]> {
   if (!config.analytics.enabled) return [];
   return (await analyticDatabase.all(
     `SELECT * FROM money_transactions ORDER BY added_at DESC LIMIt ?`,
-    limit || 1_000_000
+    limit || 1_000_000,
   )) as MoneyTransaction[];
 }
 
@@ -77,47 +78,48 @@ export async function addCommandUsage(name: string): Promise<void> {
   if (
     !(await analyticDatabase.get(
       `SELECT * FROM command_usage WHERE command_name = ?`,
-      name
+      name,
     ))
   ) {
     await analyticDatabase.run(
       `INSERT INTO command_usage (command_name) VALUES (?)`,
-      name
+      name,
     );
   }
   await analyticDatabase.run(
     `UPDATE command_usage SET used = used + 1 WHERE command_name = ?`,
-    name
+    name,
   );
 }
 
 export async function getAllCommandUsage(): Promise<CommandUsage[]> {
   if (!config.analytics.enabled) return [];
   return (await analyticDatabase.all(
-    `SELECT * FROM command_usage `
+    `SELECT * FROM command_usage `,
   )) as CommandUsage[];
 }
 
-export async function addMessageForCurrentTime(): Promise<void> {
+export async function addMessageForCurrentTime(
+  channel: TextChannel,
+): Promise<void> {
   if (!config.analytics.enabled) return;
 
   let date = formatDate(new Date());
 
   try {
-    if (
-      !(await analyticDatabase.get(
-        `SELECT * FROM messages_at_time WHERE time = ?`,
-        date
-      ))
-    ) {
-      await analyticDatabase.run(
-        `INSERT INTO messages_at_time (time) VALUES (?)`,
-        date
-      );
-    }
     await analyticDatabase.run(
-      `UPDATE messages_at_time SET amount = amount + 1 WHERE time = ?`,
-      date
+      `INSERT INTO messages_at_time (time) VALUES (?)
+      ON CONFLICT (time)
+      DO UPDATE SET amount = amount + 1`,
+      date,
+    );
+
+    await analyticDatabase.run(
+      `INSERT INTO messages_in_channels (channel_id, guild_id) VALUES (?, ?)
+      ON CONFLICT (channel_id)
+      DO UPDATE SET amount = amount + 1`,
+      channel.id,
+      channel.guild.id,
     );
   } catch {}
 }
@@ -127,24 +129,29 @@ export async function getMessageAtTimes(): Promise<MessagesAtTime[]> {
   return await analyticDatabase.all(`SELECT * FROM messages_at_time;`);
 }
 
+export async function getMessageInChannels(): Promise<MessagesInChannel[]> {
+  if (!config.analytics.enabled) return [];
+  return await analyticDatabase.all(`SELECT * FROM messages_in_channels;`);
+}
+
 export async function addToMemberCount(
   serverId: string,
-  count: number
+  count: number,
 ): Promise<void> {
   if (!config.analytics.enabled) return;
   await analyticDatabase.run(
     `INSERT INTO member_count (time, server_id, amount) VALUES (?, ?, ?);`,
     formatDate(new Date()),
     serverId,
-    count
+    count,
   );
 }
 
 export async function getMemberCounts(
-  serverId: string
+  serverId: string,
 ): Promise<MemberCount[]> {
   return await analyticDatabase.all(
     `SELECT * FROM member_count WHERE server_id = ?;`,
-    serverId
+    serverId,
   );
 }

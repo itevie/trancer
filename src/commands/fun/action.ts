@@ -195,8 +195,8 @@ const command: HypnoInteractionCommand<{ user?: User }> = {
             option
               .setName("user")
               .setDescription("The user to perform the action on.")
-              .setRequired(false)
-          )
+              .setRequired(false),
+          ),
       );
     }
 
@@ -219,7 +219,7 @@ const command: HypnoInteractionCommand<{ user?: User }> = {
       return message.reply(
         `Cool! You wanna use an action! The current actions are: ${command.aliases
           .map((x) => `**${x}**`)
-          .join(", ")}`
+          .join(", ")}`,
       );
     }
 
@@ -233,11 +233,11 @@ const command: HypnoInteractionCommand<{ user?: User }> = {
     const pronoun = !options.args.user
       ? "someone"
       : options.args.user.id === message.author.id
-      ? "themself"
-      : `${options.args.user.username}`;
+        ? "themself"
+        : `${options.args.user.username}`;
 
     const result = await axios.get(
-      `https://api.otakugifs.xyz/gif?reaction=${options.command}`
+      `https://api.otakugifs.xyz/gif?reaction=${options.command}`,
     );
 
     return message.reply({
@@ -246,7 +246,7 @@ const command: HypnoInteractionCommand<{ user?: User }> = {
           .setTitle(
             english[options.command]
               .replace(/1/g, message.author.username)
-              .replace(/2/g, pronoun)
+              .replace(/2/g, pronoun),
           )
           .setImage(result.data.url),
       ],

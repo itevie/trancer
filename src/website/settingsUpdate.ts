@@ -161,10 +161,16 @@ const settingsUpdate: {
     table: "server_settings",
     row: "allow_nsfw_file_directory_sources",
   },
+  confessions_channel: {
+    type: "channel",
+    table: "server_settings",
+    row: "confessions_channel_id",
+    botNeeds: ["SendMessages", "EmbedLinks", "ManageMessages"],
+  },
 };
 
 export async function getWebsiteSettingsFor(
-  serverId: string
+  serverId: string,
 ): Promise<{ [key: string]: string }> {
   const tables = {
     server_settings: await actions.serverSettings.getFor(serverId),
@@ -183,7 +189,7 @@ export async function getWebsiteSettingsFor(
 
 export async function saveWebsiteSettingsFor(
   server: Guild,
-  data: { [key: string]: string }
+  data: { [key: string]: string },
 ): Promise<string | null> {
   if (typeof data !== "object") return "Expected object!";
 
@@ -219,7 +225,7 @@ export async function saveWebsiteSettingsFor(
             for (const perm of setting.botNeeds ?? []) {
               if (
                 !server.members.me.permissionsIn(
-                  channel as GuildTextBasedChannel
+                  channel as GuildTextBasedChannel,
                 )
               )
                 return `Bot needs permission ${perm} in channel ${channel.id} for key ${key}`;
@@ -253,7 +259,7 @@ export async function saveWebsiteSettingsFor(
         case "status_theme":
           if (!Object.keys(statusThemes).includes(value))
             return `Invalid value for ${key}, please give one of ${Object.keys(
-              statusThemes
+              statusThemes,
             )}`;
           v = value;
           break;
@@ -272,7 +278,7 @@ export async function saveWebsiteSettingsFor(
     await database.run(
       `UPDATE ${setting.table} SET ${setting.row} = ? WHERE server_id = ?`,
       v,
-      server.id
+      server.id,
     );
   }
 

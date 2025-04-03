@@ -39,6 +39,7 @@ const handler: HypnoMessageHandler = {
   description: "Gives XP to the message author",
 
   handler: async (message) => {
+    // Don't give Charlie Phillips XP
     if (
       message.guild.id === "1257416273520758814" &&
       message.author.id === "818024289587822603" &&

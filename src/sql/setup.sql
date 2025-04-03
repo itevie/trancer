@@ -1,3 +1,4 @@
+-- ALTER TABLE server_settings ADD confessions_channel_id TEXT DEFAULT NULL;
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
@@ -27,7 +28,8 @@ CREATE TABLE IF NOT EXISTS server_settings (
     welcome_message TEXT NOT NULL DEFAULT '{mention} joined our server! We now have {member_count} members!',
     leave_channel_id TEXT DEFAULT NULL,
     leave_message TEXT NOT NULL DEFAULT '**{username}** left our server :( We now have {member_count} members',
-    allow_nsfw_file_directory_sources BOOLEAN NOT NULL DEFAULT false
+    allow_nsfw_file_directory_sources BOOLEAN NOT NULL DEFAULT false,
+    confessions_channel_id TEXT DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS trigger_ideas (
@@ -134,6 +136,15 @@ CREATE TABLE IF NOT EXISTS one_word_stories (
 
 CREATE TABLE IF NOT EXISTS command_creations (
     name TEXT UNIQUE PRIMARY KEY NOT NULL,
+    created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS confessions (
+    id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
+    user_id TEXT NOT NULL,
+    channel_id TEXT NOT NULL,
+    message_id TEXT NOT NULL,
+    content TEXT NOT NULL,
     created_at TEXT NOT NULL
 );
 

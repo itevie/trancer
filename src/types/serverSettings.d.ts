@@ -37,6 +37,8 @@ interface ServerSettings {
   status_theme: string;
 
   allow_nsfw_file_directory_sources: boolean;
+
+  confessions_channel_id: string | null;
 }
 
 interface ChannelImposition {

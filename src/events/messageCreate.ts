@@ -27,6 +27,7 @@ import {
   Embed,
   EmbedBuilder,
   MessageCreateOptions,
+  TextChannel,
 } from "discord.js";
 import megaAliases from "../megaAliases";
 import { varients } from "../commands/fun/cowsay";
@@ -190,7 +191,7 @@ client.on("messageCreate", async function handleMessage(message) {
     !message.content.startsWith(settings.prefix + " ") &&
     message.guild.id === config.botServer.id
   ) {
-    await addMessageForCurrentTime();
+    await addMessageForCurrentTime(message.channel as TextChannel);
     return;
   }
 

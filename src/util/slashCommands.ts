@@ -2,6 +2,7 @@ import { REST, Routes } from "discord.js";
 import { commands as _commands, client, uniqueCommands } from "..";
 import { HypnoInteractionCommand } from "../types/util";
 import Logger from "./Logger";
+import config from "../config";
 
 const logger = new Logger("slash");
 
@@ -19,9 +20,12 @@ export async function loadSlashCommands() {
       `Started refreshing ${commands.length} application (/) commands.`,
     );
 
-    const data = (await rest.put(Routes.applicationCommands(client.user.id), {
-      body: commands,
-    })) as any;
+    const data = (await rest.put(
+      Routes.applicationGuildCommands(client.user.id, config.botServer.id),
+      {
+        body: commands,
+      },
+    )) as any;
     logger.log(
       `Successfully reloaded ${data.length} application (/) commands.`,
     );

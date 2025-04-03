@@ -5,7 +5,7 @@ import { calculateItemPrice } from "./_util";
 import { createEmbed } from "../../util/other";
 import { currency, itemText } from "../../util/language";
 
-const command: HypnoCommand<{ tag: string }> = {
+const command: HypnoCommand<{ tag: string; but?: number }> = {
   name: "sellitemsbytag",
   aliases: ["sellall", "selltag"],
   type: "economy",
@@ -18,19 +18,33 @@ const command: HypnoCommand<{ tag: string }> = {
         type: "string",
         oneOf: ["fish", "mineral"],
       },
+      {
+        name: "but",
+        type: "wholepositivenumber",
+        min: 1,
+        wickStyle: true,
+        description: "Sell all items, but keep x amount",
+      },
     ],
   },
 
   handler: async (message, { args }) => {
     const items = (
       await actions.items.aquired.resolveFrom(
-        await actions.items.aquired.getAllFor(message.author.id)
+        await actions.items.aquired.getAllFor(message.author.id),
       )
-    ).filter((x) => x.tag === args.tag && !x.protected);
+    )
+      .map((x) => {
+        return {
+          ...x,
+          amount: x.amount - (args.but ?? 0),
+        };
+      })
+      .filter((x) => x.amount > 0 && x.tag === args.tag && !x.protected);
 
     const price = items.reduce(
       (c, v) => c + calculateItemPrice(v) * v.amount,
-      0
+      0,
     );
 
     const msg = `${items
@@ -45,7 +59,7 @@ const command: HypnoCommand<{ tag: string }> = {
       callback: async () => {
         await actions.items.aquired.removeManyFor(
           message.author.id,
-          Object.fromEntries(items.map((x) => [x.id, x.amount]))
+          Object.fromEntries(items.map((x) => [x.id, x.amount])),
         );
         await actions.eco.addMoneyFor(message.author.id, price);
         return {

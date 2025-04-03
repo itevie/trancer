@@ -22,6 +22,7 @@ import {
   HypnoInteractionCommand,
   MessageLike,
 } from "../types/util";
+import exp from "constants";
 
 client.on("interactionCreate", async (i) => {
   if (i.isCommand()) {
@@ -55,6 +56,8 @@ client.on("interactionCreate", async (i) => {
               options as InteractionReplyOptions,
             )) as unknown as ReturnType<Message["reply"]>,
           author: i.user,
+          channel: i.channel,
+          guild: i.guild,
         },
         details,
       );
@@ -221,6 +224,38 @@ client.on("interactionCreate", async (i) => {
         await i.reply({
           content: "An error occurred: " + e.toString(),
           ephemeral: true,
+        });
+      }
+    } else if (i.customId.startsWith("delete-confession-")) {
+      const id = i.customId.match(/[0-9]+/)[0];
+      const confession = await actions.confessions.get(parseInt(id));
+
+      if (confession.user_id !== i.user.id)
+        return i.reply({
+          ephemeral: true,
+          content: `You did not write this confession. If you are a mod, use the \`deleteconfession\` command!`,
+        });
+
+      try {
+        await actions.confessions.delete(confession.id);
+
+        try {
+          const msg = await i.channel.messages.fetch(confession.message_id);
+          await msg.delete();
+          return i.reply({
+            ephemeral: true,
+            content: "Confession deleted!",
+          });
+        } catch (e) {
+          return i.reply({
+            ephemeral: true,
+            content: `Failed to delete the message containing the confession, but it has been deleted from the database`,
+          });
+        }
+      } catch (e) {
+        return i.reply({
+          ephemeral: true,
+          content: "Failed to delete the confession",
         });
       }
     }

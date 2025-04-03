@@ -1,3 +1,4 @@
+import { BUSY } from "sqlite3";
 import config from "./config";
 import ecoConfig from "./ecoConfig";
 import { database, databaseLogger } from "./util/database";
@@ -20,9 +21,9 @@ const fr = {
 } as const;
 
 /**
- * [name, [price, weight], emoji][]
+ * [name, [price, weight], emoji, notBuyable][]
  */
-const fish: [string, readonly [number, number], string | null][] = [
+const fish: [string, readonly [number, number], string | null, boolean?][] = [
   // ----- Standard -----
   ["cod", fr.veryCommon, "<:cod:1322128982027534367>"],
   ["common-fish", fr.common, "<:common_fish:1321758129872048189>"],
@@ -54,20 +55,15 @@ const fish: [string, readonly [number, number], string | null][] = [
     "you-are-never-getting-this-fish",
     [5000, 0.0005],
     "<:you_are_never_getting_this_fish:1321758224222912604>",
+    true,
   ],
   [
     "we-are-number-one-fish",
     [20_000, 0.00001],
     "<:we_are_number_one_fish:1322129116006449234>",
+    true,
   ],
 ];
-
-console.log(
-  fish
-    .filter((x) => !!x[2])
-    .map((x) => x[2].match(x[2]))
-    .join(""),
-);
 
 const fishDescriptions: { [key: string]: string } = {
   "cute-fishy": "Aw... such a cutie patootie fishie",
@@ -274,6 +270,7 @@ const items: Record<string, Partial<Item>> = {
         description: fishDescriptions[x[0]] || null,
         emoji: x[2],
         tag: "fish",
+        buyable: typeof x[3] === "boolean" ? !x[3] : true,
       },
     ]),
   ),

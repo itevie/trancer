@@ -32,7 +32,7 @@ const command: HypnoCommand<{ item: Item }> = {
                 ["Price", currency(args.item.price)],
                 ["Sell Price", currency(calculateItemPrice(args.item))],
                 ["Buyable", args.item.buyable ? "yes" : "no"],
-                ["Weight", `${(args.item.weight * 100).toFixed(0)}%`],
+                ["Weight", `${args.item.weight * 100}%`],
                 ["Tag", args.item.tag ?? "*No Tag*"],
                 ["Emoji", args.item.emoji ?? "*No Emoji*"],
                 ["Max per person", args.item.max ?? "infinity"],
