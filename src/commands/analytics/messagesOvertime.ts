@@ -7,6 +7,7 @@ import { ChartJSNodeCanvas } from "chartjs-node-canvas";
 import { AttachmentBuilder } from "discord.js";
 
 import { getMessageAtTimes } from "../../util/analytics";
+import { units } from "../../util/ms";
 
 const width = 800;
 
@@ -28,6 +29,8 @@ const command: HypnoCommand<{ type?: "hours" | "minutes" | "days" }> = {
   type: "analytics",
 
   description: `Get a graph of the messages in every minute overtime`,
+
+  ratelimit: units.minute * 5,
 
   args: {
     requiredArguments: 0,

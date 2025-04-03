@@ -7,6 +7,7 @@ import { ChartJSNodeCanvas } from "chartjs-node-canvas";
 import { AttachmentBuilder, User } from "discord.js";
 
 import { getMoneyTransations } from "../../util/analytics";
+import { units } from "../../util/ms";
 
 const width = 800;
 
@@ -26,6 +27,8 @@ const command: HypnoCommand<{ user?: User }> = {
   aliases: ["balover"],
 
   type: "analytics",
+
+  ratelimit: units.minute * 2,
 
   description: `Get a graph of the balance of a person overtime`,
 

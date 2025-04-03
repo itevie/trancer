@@ -3,6 +3,7 @@ import { HypnoCommand } from "../../types/util";
 import { getMessageAtTimes } from "../../util/analytics";
 import { AttachmentBuilder } from "discord.js";
 import { ChartCallback, ChartJSNodeCanvas } from "chartjs-node-canvas";
+import { units } from "../../util/ms";
 
 const width = 800;
 const height = 400;
@@ -19,6 +20,7 @@ const command: HypnoCommand = {
   description: "See the average times messages were sent",
   type: "analytics",
   aliases: ["mat"],
+  ratelimit: units.minute * 5,
 
   handler: async (message) => {
     const messages = (await getMessageAtTimes())
@@ -63,7 +65,7 @@ const command: HypnoCommand = {
     });
     const buffer = await chartJSNodeCanvas.renderToBuffer(configuration);
 
-    /* const chartConfig: ChartConfiguration 
+    /* const chartConfig: ChartConfiguration
     console.log(chartConfig);
 
     const image = await chartJSNodeCanvas.renderToBuffer(chartConfig)*/ const attachment =

@@ -4,6 +4,7 @@ import { HypnoCommand } from "../../types/util";
 
 import { getMemberCounts } from "../../util/analytics";
 import { generateSimpleLineChart } from "../../util/graphs";
+import { units } from "../../util/ms";
 
 const command: HypnoCommand = {
   name: "membercountovertime",
@@ -11,6 +12,7 @@ const command: HypnoCommand = {
   aliases: ["mover", "mcover", "memberover"],
 
   description: "Get the server's member count overtime",
+  ratelimit: units.minute * 10,
 
   type: "analytics",
 
