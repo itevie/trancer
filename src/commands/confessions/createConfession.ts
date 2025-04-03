@@ -15,7 +15,7 @@ import { actions } from "../../util/database";
 const command: HypnoCommand<{ confession?: string }> = {
   name: "confess",
   aliases: ["createconfession"],
-  type: "fun",
+  type: "confessions",
   description: "Create a confession",
 
   args: {

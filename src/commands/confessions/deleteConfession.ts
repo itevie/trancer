@@ -5,7 +5,7 @@ import { actions } from "../../util/database";
 const command: HypnoCommand<{ id: number }> = {
   name: "deleteconfession",
   description: "Delete a confession you wrote",
-  type: "fun",
+  type: "confessions",
 
   args: {
     requiredArguments: 1,

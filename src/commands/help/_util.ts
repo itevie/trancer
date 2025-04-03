@@ -24,5 +24,6 @@ export const categoryEmojis: Record<HypnoCommandType, string> = {
   reporting: "⚔️",
   marriage: "💍",
   voice: "📞",
+  confessions: "🤫",
   "file-directory": "📁",
 };
