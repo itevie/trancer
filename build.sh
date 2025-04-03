@@ -12,7 +12,7 @@ rm -rf ./build/sql/*
 mkdir ./build/website/app
 
 # Copy new files
-cp -rf ./sql/sql/* ./build/sql/
+cp -rf ./src/sql/* ./build/sql/
 cp -rf ./src/website/app/build ./build/website/app
 
 # Done
