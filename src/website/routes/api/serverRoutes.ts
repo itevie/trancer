@@ -19,7 +19,7 @@ export function MakeServerRoutes(): Router {
         (x) =>
           client.user.id === config.devBot.id ||
           // @ts-ignore
-          x.members.cache.has(req.user)
+          x.members.cache.has(req.user),
       );
     return res.status(200).send(
       servers.map((x) => {
@@ -31,7 +31,7 @@ export function MakeServerRoutes(): Router {
             .get((req as any).user)
             ?.permissions.has(PermissionsBitField.Flags.ManageGuild),
         };
-      })
+      }),
     );
   });
 
@@ -41,7 +41,7 @@ export function MakeServerRoutes(): Router {
     if (
       !client.guilds.cache.get(req.params.id).members.cache.has(
         //@ts-ignore
-        req.user
+        req.user,
       ) ||
       !client.guilds.cache
         .get(req.params.id)
@@ -57,7 +57,7 @@ export function MakeServerRoutes(): Router {
 
     return res.status(200).send({
       channels: server.channels.cache
-        .filter((x) => !x.isThread() && !x.isVoiceBased() && x.isTextBased())
+        .filter((x) => !x.isVoiceBased() && x.isTextBased())
         // @ts-ignore
         .sort((a, b) => a.position - b.position)
         .map((x) => {
@@ -84,7 +84,7 @@ export function MakeServerRoutes(): Router {
     if (
       !client.guilds.cache.get(req.params.id).members.cache.has(
         //@ts-ignore
-        req.user
+        req.user,
       ) ||
       !client.guilds.cache
         .get(req.params.id)
@@ -111,7 +111,7 @@ export function MakeServerRoutes(): Router {
     if (
       !client.guilds.cache.get(req.params.id).members.cache.has(
         //@ts-ignore
-        req.user
+        req.user,
       )
     )
       return res.status(401).send({ message: "You are not in this server" });

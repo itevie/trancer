@@ -1,5 +1,3 @@
-ALTER TABLE server_settings ADD confessions_channel_id TEXT DEFAULT NULL;
-
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
