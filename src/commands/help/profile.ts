@@ -57,6 +57,7 @@ const command: HypnoCommand<{ user?: User }> = {
           ["Username", user.username],
           ["ID", user.id],
           ["Joined Server", member?.joinedAt.toDateString() || "?"],
+          ["Birthday", userData.birthday ?? "Not Set"],
           ["Status", userData.hypno_status],
           [
             "Level",

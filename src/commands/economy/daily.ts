@@ -5,6 +5,7 @@ import ecoConfig from "../../ecoConfig";
 
 const command: HypnoCommand = {
   name: "daily",
+  aliases: ["d"],
   description: `Get your daily reward of ${ecoConfig.currency}!`,
   type: "economy",
 

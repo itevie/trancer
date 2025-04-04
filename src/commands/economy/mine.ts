@@ -15,10 +15,10 @@ const gambleCost = 60;
 
 const command: HypnoCommand = {
   name: "mine",
-  aliases: ["gamblemine"],
+  aliases: ["gamblemine", "m"],
   eachAliasIsItsOwnCommand: true,
   description: `Mine for minerals, requires a pickaxe. Uses your most expensive pickaxe.\nGamble mining costs ${currency(
-    gambleCost
+    gambleCost,
   )}`,
   type: "economy",
 
@@ -32,7 +32,7 @@ const command: HypnoCommand = {
     if (command === "gamblemine") {
       if ((await actions.eco.getFor(message.author.id)).balance < gambleCost) {
         await message.reply(
-          `:warning: You do not have ${currency(gambleCost)}!`
+          `:warning: You do not have ${currency(gambleCost)}!`,
         );
         return false;
       } else {
@@ -44,7 +44,7 @@ const command: HypnoCommand = {
     // Resolve user's most expensive pickaxe
     const pickaxe = (
       await actions.items.aquired.resolveFrom(
-        await actions.items.aquired.getAllFor(message.author.id)
+        await actions.items.aquired.getAllFor(message.author.id),
       )
     )
       .filter((item) => item.tag === "pickaxe")
@@ -52,7 +52,7 @@ const command: HypnoCommand = {
 
     if (!pickaxe) {
       await message.reply(
-        `:warning: You do not have a pickaxe! Check the crafting recipes with \`${serverSettings.prefix}recipes\`.`
+        `:warning: You do not have a pickaxe! Check the crafting recipes with \`${serverSettings.prefix}recipes\`.`,
       );
       return false;
     }
@@ -63,7 +63,7 @@ const command: HypnoCommand = {
     // Resolve user's most expensive pickaxe
     const pickaxe = (
       await actions.items.aquired.resolveFrom(
-        await actions.items.aquired.getAllFor(message.author.id)
+        await actions.items.aquired.getAllFor(message.author.id),
       )
     )
       .filter((item) => item.tag === "pickaxe")
@@ -72,17 +72,17 @@ const command: HypnoCommand = {
 
     // Generate minerals and fallback rock
     const minerals = (await actions.items.getByTag("mineral")).filter(
-      (x) => x.name !== "rock"
+      (x) => x.name !== "rock",
     );
     const rock = itemMap[ecoConfig.mining.defaultSpace];
     const generateMineral = () =>
       minerals.find(
-        (mineral) => Math.random() - luckMultiplier < mineral.weight
+        (mineral) => Math.random() - luckMultiplier < mineral.weight,
       ) || rock;
 
     // Create a 5x5 mining map
     const map = Array.from({ length: 5 }, () =>
-      Array.from({ length: 5 }, generateMineral)
+      Array.from({ length: 5 }, generateMineral),
     );
 
     const rowMarker = [":one:", ":two:", ":three:", ":four:", ":five:"];
@@ -92,7 +92,7 @@ const command: HypnoCommand = {
       .setTitle("Select where to mine")
       .setDescription(
         `${ecoConfig.mining.unknownSpace.repeat(5)}\n`.repeat(5) +
-          rowMarker.join("")
+          rowMarker.join(""),
       )
       .setFooter({
         text: `Luck multiplier: ${luckMultiplier * 100}%`,
@@ -103,8 +103,8 @@ const command: HypnoCommand = {
         new ButtonBuilder()
           .setLabel(num.toString())
           .setCustomId(num.toString())
-          .setStyle(ButtonStyle.Primary)
-      )
+          .setStyle(ButtonStyle.Primary),
+      ),
     );
 
     // Send message with buttons
@@ -142,20 +142,20 @@ const command: HypnoCommand = {
           .setDescription(
             `${englishifyList(
               Object.entries(items).map((x) =>
-                itemText(x[1].item, x[1].amount, true)
-              )
+                itemText(x[1].item, x[1].amount, true),
+              ),
             )} worth ${currency(
               Object.entries(items).reduce(
                 (p, c) => p + c[1].item.price * c[1].amount,
-                0
-              )
+                0,
+              ),
             )}\n${
               map
                 .map((row) => row.map((item) => item.emoji).join(""))
                 .join("\n") +
               "\n" +
               rowMarker.join("")
-            }`
+            }`,
           )
           .setFooter({
             text: `Luck multiplier: ${luckMultiplier * 100}%`,

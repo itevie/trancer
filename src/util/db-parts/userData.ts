@@ -8,7 +8,7 @@ const _actions = {
       (await database.get<UserData>(
         "SELECT * FROM user_data WHERE user_id = ? AND guild_id = ?;",
         userId,
-        serverId
+        serverId,
       )) ?? (await _actions.createFor(userId, serverId))
     );
   },
@@ -16,7 +16,7 @@ const _actions = {
   getForServer: async (serverId: string): Promise<UserData[]> => {
     return await database.all<UserData[]>(
       "SELECT * FROM user_data WHERE guild_id = ?;",
-      serverId
+      serverId,
     );
   },
 
@@ -24,7 +24,7 @@ const _actions = {
     return await database.get<UserData>(
       `INSERT INTO user_data (user_id, guild_id) VALUES (?, ?) RETURNING *;`,
       userId,
-      serverId
+      serverId,
     );
   },
 
@@ -34,13 +34,13 @@ const _actions = {
     userId: string,
     serverId: string,
     key: "bumps" | "messages_sent" | "xp",
-    by: number = 1
+    by: number = 1,
   ): Promise<UserData> => {
     return await database.get<UserData>(
       `UPDATE user_data SET ${key} = ${key} + ? WHERE user_id = ? AND guild_id = ?`,
       by,
       userId,
-      serverId
+      serverId,
     );
   },
 
@@ -48,14 +48,14 @@ const _actions = {
     userId: string,
     serverId: string,
     key: T,
-    value: UserDataUpdate[T]
+    value: UserDataUpdate[T],
   ): Promise<UserData> => {
     return await database.get(
       `UPDATE user_data SET ${key} = ?
-        WHERE user_id = ? AND server_id = ?;`,
+        WHERE user_id = ? AND guild_id = ?;`,
       value,
       userId,
-      serverId
+      serverId,
     );
   },
 } as const;

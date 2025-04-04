@@ -53,6 +53,7 @@ const responses = [
 
 const command: HypnoCommand = {
   name: "work",
+  aliases: ["w"],
   description: "Work for money",
   type: "economy",
 
@@ -61,7 +62,7 @@ const command: HypnoCommand = {
   handler: async (message) => {
     const reward = randomFromRange(
       ecoConfig.payouts.work.min,
-      ecoConfig.payouts.work.max
+      ecoConfig.payouts.work.max,
     );
     const members = Array.from(message.guild.members.cache.keys());
     const response = responses[Math.floor(Math.random() * responses.length)]
@@ -69,9 +70,9 @@ const command: HypnoCommand = {
         /\$ru/g,
         `**${
           message.guild.members.cache.get(
-            members[Math.floor(Math.random() * members.length)]
+            members[Math.floor(Math.random() * members.length)],
           ).user.username
-        }**`
+        }**`,
       )
       .replace(/\$r/g, `**${currency(reward)}**`)
       .replace(/\$c/g, ecoConfig.currency);
