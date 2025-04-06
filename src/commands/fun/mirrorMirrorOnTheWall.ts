@@ -3,7 +3,13 @@ import { createEmbed } from "../../util/other";
 
 const command: HypnoCommand<{ prompt: string }> = {
   name: "mirrormirroronthewall",
-  aliases: ["mirror-mirror-on-the-wall", "mirror_mirror_on_the_wall"],
+  aliases: [
+    "mirror-mirror-on-the-wall",
+    "mirror_mirror_on_the_wall",
+    "mmotw",
+    "motw",
+    "mirror",
+  ],
   description: "Mirror mirror on the wall... who's the wisest of them all?",
   type: "fun",
 
@@ -26,8 +32,8 @@ const command: HypnoCommand<{ prompt: string }> = {
           await message.channel.messages.fetch({
             limit: 50,
           })
-        ).map((x) => x.author)
-      )
+        ).map((x) => x.author),
+      ),
     );
     const user = users[Math.floor(Math.random() * users.length)];
 
@@ -37,12 +43,12 @@ const command: HypnoCommand<{ prompt: string }> = {
           .setTitle("Mirror mirror on the wall...")
           .setDescription(`...${args.prompt}\n\n**${user.username}**`)
           .setThumbnail(
-            "https://cdn.discordapp.com/attachments/1257417475621130351/1353036896304893993/189933.png?ex=67e0314e&is=67dedfce&hm=bb5351023340d7414e130312399d3aacff39742aacf08fb5984627dc2ca63038&"
+            "https://cdn.discordapp.com/attachments/1257417475621130351/1353036896304893993/189933.png?ex=67e0314e&is=67dedfce&hm=bb5351023340d7414e130312399d3aacff39742aacf08fb5984627dc2ca63038&",
           )
           .setImage(
             user.displayAvatarURL({
               size: 2048,
-            })
+            }),
           ),
       ],
     });

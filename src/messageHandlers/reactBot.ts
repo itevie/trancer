@@ -8,6 +8,7 @@ import { varients } from "../commands/fun/cowsay";
 import { commands } from "..";
 import { AttachmentBuilder } from "discord.js";
 import { addCaptionToGif } from "../commands/fun/_image_util";
+import { actions } from "../util/database";
 
 const phrases = [
   "skibii sigma",
@@ -327,6 +328,18 @@ const phrases = [
     ",",
   ),
   "holy quackamole!",
+  "This is my favourite bible quote",
+  "Are you finished? No, I think he's Swedish!",
+  "No, I think they're Swedish!",
+  "Flint and Steel",
+  "The Nether",
+  "Chumbuket",
+  "*shoves a pacifier into your mouth*",
+  "this guy could do with a pacifier",
+  "pacifiercore",
+  "that's what she said",
+  "that's what he said",
+  "yeah i'd love too",
 ];
 
 let messagesSince = 0;

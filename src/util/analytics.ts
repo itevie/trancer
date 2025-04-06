@@ -115,7 +115,7 @@ export async function addMessageForCurrentTime(
     );
 
     await analyticDatabase.run(
-      `INSERT INTO messages_in_channels (channel_id, guild_id) VALUES (?, ?)
+      `INSERT INTO messages_in_channels (channel_id, guild_id, amount) VALUES (?, ?, 1)
       ON CONFLICT (channel_id)
       DO UPDATE SET amount = amount + 1`,
       channel.id,

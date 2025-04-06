@@ -165,8 +165,7 @@ CREATE TABLE IF NOT EXISTS user_favourite_spirals (
     user_id TEXT NOT NULL
 );
 
-ALTER TABLE user_data ADD birthday TEXT DEFAULT NULL;
-
+-- ALTER TABLE user_data ADD birthday TEXT DEFAULT NULL;
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,
     guild_id TEXT NOT NULL,

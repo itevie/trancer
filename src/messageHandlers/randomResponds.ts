@@ -88,7 +88,7 @@ const handler: HypnoMessageHandler = {
         });
       }
 
-      if (message.content.match(/i hate y?o?u/i)) {
+      if (message.content.match(/(i hate y?o?u)|(die)|(kys)/i)) {
         return message.reply({
           content:
             hateMessages[Math.floor(Math.random() * hateMessages.length)],
