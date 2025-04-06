@@ -49,6 +49,12 @@ const words = [
   "skibidi sigma",
   "skibidi ohio rizzler",
   ".pay <@395877903998648322> 1",
+  "flint and steel",
+  "i am steve",
+  "this is a crafting table",
+  "the nether",
+  "RELEASE!",
+  "enderpearl",
 ];
 
 const handler: HypnoMessageHandler = {
