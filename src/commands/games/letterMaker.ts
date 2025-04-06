@@ -38,6 +38,13 @@ const modes = {
     max: 10,
     period: 5000,
   },
+
+  reallysoft: {
+    letters: "abcdefghijklmnopqrstuvwxyz",
+    min: 1,
+    max: 30,
+    period: 5000,
+  },
 } as const;
 
 const wordsUsed = new Map<string, string[]>();
@@ -154,14 +161,14 @@ const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
       let word = m.content.toLowerCase();
       let array = wordsUsed.get(m.author.id);
       if (words.has(word)) {
-        if (array.includes(word)) {
+        if (array?.includes(word)) {
           return await m.reply({
             content: "You already used that word - be more original.",
           });
         }
       }
 
-      if (m.content && !check(m.content.toLowerCase(), requiredLetters)) return;
+      if (!check(m.content.toLowerCase(), requiredLetters)) return;
       array.push(word);
       let reward =
         randomFromRange(
