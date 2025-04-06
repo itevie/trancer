@@ -32,6 +32,12 @@ const modes = {
     max: 5,
     period: 15000,
   },
+  soft: {
+    letters: "abcdefghijklmnopqrstuvwxyz",
+    min: 1,
+    max: 10,
+    period: 5000,
+  },
 } as const;
 
 const wordsUsed = new Map<string, string[]>();
