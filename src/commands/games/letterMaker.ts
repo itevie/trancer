@@ -161,7 +161,7 @@ const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
         }
       }
 
-      if (!check(m.content.toLowerCase(), requiredLetters)) return;
+      if (m.content && !check(m.content.toLowerCase(), requiredLetters)) return;
       array.push(word);
       let reward =
         randomFromRange(
