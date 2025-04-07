@@ -22,28 +22,10 @@ const chartJSNodeCanvas = new ChartJSNodeCanvas({
   backgroundColour,
 });
 
-const pastelColors = [
-  "#FFB3BA", // light red
-  "#FFDFBA", // light orange
-  "#FFFFBA", // light yellow
-  "#BAFFC9", // light green
-  "#BAE1FF", // light blue
-  "#D5BAFF", // light purple
-  "#FFCCE5", // pink
-  "#E0BBE4", // lavender
-  "#B5EAD7", // mint
-  "#C7CEEA", // periwinkle
-  "#F9CB9C", // peach
-  "#F6E2B3", // sand
-  "#D0F0C0", // tea green
-  "#F4CCCC", // coral
-  "#D9EAD3", // pastel green
-  "#CFE2F3", // sky blue
-  "#FCE5CD", // light apricot
-  "#D5A6BD", // soft magenta
-  "#D9D2E9", // pastel lavender
-  "#FFF2CC", // lemon chiffon
-];
+const colors =
+  "#FF0000,#00FF00,#0000FF,#FFFF00,#00FFFF,#FF00FF,#FFFFFF,#550000,#005500,#000055,#555500,#005555,#550055,#555555".split(
+    ",",
+  );
 
 const unitTypes = ["day", "hour", "minute"] as const;
 
@@ -169,7 +151,7 @@ const command: HypnoCommand<{
       return {
         label: getUsernameSync(user.id),
         data,
-        borderColor: pastelColors[i % pastelColors.length],
+        borderColor: colors[i % colors.length],
         spanGaps: true,
       };
     });
