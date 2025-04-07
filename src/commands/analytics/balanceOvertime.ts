@@ -21,6 +21,7 @@ const command: HypnoCommand<{
   user?: User;
   unit?: (typeof unitTypes)[number];
   every?: number;
+  past?: number;
 }> = {
   name: "balanceovertime",
   aliases: ["balover"],
@@ -39,11 +40,19 @@ const command: HypnoCommand<{
         name: "unit",
         type: "string",
         oneOf: [...unitTypes],
+        description: "The unit to entries things by",
         wickStyle: true,
       },
       {
         name: "every",
         type: "wholepositivenumber",
+        description: "How many of unit to sort by",
+        wickStyle: true,
+      },
+      {
+        name: "past",
+        type: "wholepositivenumber",
+        description: "Past x days",
         wickStyle: true,
       },
     ],
@@ -51,32 +60,35 @@ const command: HypnoCommand<{
 
   handler: async (message, { args }) => {
     const unit = units[args.unit ?? "day"] * (args.every ?? 1);
+    const past = units.day * (args.past ?? 28);
 
     // Get details
     const user = args.user ? args.user : message.author;
     const transations = Object.entries(
-      (await getMoneyTransations(user.id)).reduce<{
-        [key: string]: {
-          totalBalance: number;
-          count: number;
-          time: Date;
-        };
-      }>((p, c) => {
-        const unitStart = Math.floor(new Date(c.added_at).getTime() / unit);
-
-        if (!p[unitStart]) {
-          p[unitStart] = {
-            totalBalance: 0,
-            count: 0,
-            time: new Date(c.added_at),
+      (await getMoneyTransations(user.id))
+        .filter((x) => Date.now() - x.added_at < past)
+        .reduce<{
+          [key: string]: {
+            totalBalance: number;
+            count: number;
+            time: Date;
           };
-        }
+        }>((p, c) => {
+          const unitStart = Math.floor(new Date(c.added_at).getTime() / unit);
 
-        p[unitStart].totalBalance += c.balance;
-        p[unitStart].count += 1;
+          if (!p[unitStart]) {
+            p[unitStart] = {
+              totalBalance: 0,
+              count: 0,
+              time: new Date(c.added_at),
+            };
+          }
 
-        return p;
-      }, {}),
+          p[unitStart].totalBalance += c.balance;
+          p[unitStart].count += 1;
+
+          return p;
+        }, {}),
     ).map((x) => [x[0], x[1].totalBalance / x[1].count, x[1].time] as const);
 
     // Create graph
