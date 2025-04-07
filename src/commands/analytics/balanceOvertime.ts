@@ -35,6 +35,7 @@ const command: HypnoCommand<{
   every?: number;
   past?: number;
   top?: number;
+  alltime?: boolean;
 }> = {
   name: "balanceovertime",
   aliases: ["balover"],
@@ -65,7 +66,13 @@ const command: HypnoCommand<{
       {
         name: "past",
         type: "wholepositivenumber",
-        description: "Past x days",
+        description: "Past x days, use ?alltime to bypass this",
+        wickStyle: true,
+      },
+      {
+        name: "alltime",
+        type: "boolean",
+        description: "Show all time transactions",
         wickStyle: true,
       },
       {
@@ -111,15 +118,20 @@ const command: HypnoCommand<{
 
     const now = Date.now();
     const buckets: Record<string, Date> = {};
+    const earliest = Math.min(
+      ...users.map((u) =>
+        Math.min(...u.transaction.map((x) => new Date(x.added_at).getTime())),
+      ),
+    );
 
-    for (let i = now - past; i <= now; i += unit) {
+    for (let i = args.alltime ? earliest : now - past; i <= now; i += unit) {
       const bucketKey = Math.floor(i / unit).toString();
       buckets[bucketKey] = new Date(i);
     }
 
     const processed: ChartDataset[] = users.map((user, i) => {
       const grouped = user.transaction
-        .filter((x) => Date.now() - x.added_at < past)
+        .filter((x) => args.alltime || Date.now() - x.added_at < past)
         .reduce<{
           [key: string]: {
             totalBalance: number;
