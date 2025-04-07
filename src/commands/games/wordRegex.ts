@@ -1,4 +1,5 @@
 import { HypnoCommand } from "../../types/util";
+import errorText from "../../util/components/error";
 import { words } from "./letterMaker";
 
 const command: HypnoCommand<{ regex: string }> = {
@@ -18,15 +19,24 @@ const command: HypnoCommand<{ regex: string }> = {
   },
 
   handler: (message, { args }) => {
-    let matchedWords = Array.from(words)
-      .filter((x) => new RegExp(args.regex).test(x))
-      .join(", ")
-      .substring(0, 1999);
+    try {
+      let matchedWords = Array.from(words)
+        .filter((x) => new RegExp(args.regex).test(x))
+        .join(", ")
+        .substring(0, 1999);
 
-    if (matchedWords.length === 0)
-      return message.reply(`There are no words matching that!`);
+      if (matchedWords.length === 0)
+        return message.reply(`There are no words matching that!`);
 
-    return message.reply(matchedWords);
+      return message.reply(matchedWords);
+    } catch (e) {
+      return message.reply(
+        errorText("Failed to parse your regex, did you write it correctly?", {
+          error: e,
+          _url: "<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet>",
+        }),
+      );
+    }
   },
 };
 

@@ -15,7 +15,7 @@ const gambleCost = 60;
 
 const command: HypnoCommand = {
   name: "mine",
-  aliases: ["gamblemine", "m"],
+  aliases: ["gamblemine"],
   eachAliasIsItsOwnCommand: true,
   description: `Mine for minerals, requires a pickaxe. Uses your most expensive pickaxe.\nGamble mining costs ${currency(
     gambleCost,

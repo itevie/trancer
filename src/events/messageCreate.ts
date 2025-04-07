@@ -26,143 +26,51 @@ import {
   ButtonStyle,
   Embed,
   EmbedBuilder,
+  Message,
   MessageCreateOptions,
   TextChannel,
 } from "discord.js";
 import megaAliases from "../megaAliases";
-import { varients } from "../commands/fun/cowsay";
-import { spawnSync } from "child_process";
 
-let excuses = [
-  "Sorry... i'm just not ready at the moment",
-  "I'm sorry Dave, but I'm afraid I can't do that.",
-  "Uhm... not now...",
-  "Nahh lmao not now",
-  "Nah bro go ask some other bot",
-  "Go away - I'm seeing other bots",
-  "Upgrade to premium for an ad-free expierence!",
-  "Uh... that's not how you use that command!",
-  "Stop using me.",
-  "I didn't consent!",
-  "fuck off",
-  "BRO GO AWAY",
-  "nah",
-  "but like i just dont wanna",
-  "ok imagine this, these ppl constantly sending me commands this way and that, gets VERY STRESSFUL SO GO AWYA PLEASE!",
-  "im not runningt he command, but u can have hugs instead *patpat*",
-  "i'm not doing that",
-  "try again later!",
-  "Erm.... nuh uh :3",
-  "Iiii dont think sooooo! :3",
-  "nah vro >:]",
-  "too lazy go away",
-  "nah that command is off limits atm",
-  "sorry im under construction",
-  "*shakes the magic 8ball* should i respond to this loser?\n>8ball: Very doubtful",
-];
-
-client.on("messageCreate", async function handleMessage(message) {
-  // Only listen if in guild
-  if (!message.inGuild()) return;
-  if (config.ignore.channels.includes(message.channel.id)) return;
-
-  /*// ----- for april fools -----
-  if (
-    ["1257416273520758814", "1317161057868972124"].includes(message.guild.id)
-  ) {
-    let old = message.reply.bind(message);
-    message.reply = (data) => {
-      let make = (d: string, no: boolean) => {
-        let fucks: ((c: string) => string)[] = [
-          (c) => c.split("").reverse().join(""),
-          (c) => {
-            if (no) return c.replace(/ /gi, "-");
-            const child = spawnSync("cowsay", [
-              "-f",
-              varients[Math.floor(Math.random() * varients.length)],
-              c,
-            ]);
-            return "```" + child.output.join("") + "```";
-          },
-          (c) => c.toUpperCase(),
-          (c) => c.replace(/ /g, "\\_"),
-          (c) =>
-            c
-              .replace(/e/gi, "3")
-              .replace(/a/gi, "5")
-              .replace(/t/gi, "7")
-              .replace(/o/gi, "0")
-              .replace(/s/gi, "sss"),
-          (c) => "i love you!",
-          (c) =>
-            c
-              .split("")
-              .map((x) =>
-                Math.random() > 0.5 ? x.toUpperCase() : x.toLowerCase(),
-              )
-              .join(""),
-        ];
-
-        return fucks[Math.floor(Math.random() * fucks.length)](d).substring(
-          0,
-          1000,
-        );
-      };
-
-      if (typeof data === "string") {
-        if (Math.random() > 0.8) data = make(data, false);
-      } else if (typeof data === "object") {
-        data = data as MessageCreateOptions;
-        if (data.content && Math.random() > 0.8)
-          (data as any).content = make((data as any).content, false);
-
-        if (data.embeds) {
-          for (const embed of data.embeds) {
-            let e = embed as EmbedBuilder;
-            e.setColor("Random");
-            e.setThumbnail(
-              "https://cdn.discordapp.com/attachments/1274672087491022860/1356417546454044772/IMG_1312.jpg?ex=67ec7dc8&is=67eb2c48&hm=9e854cb0602b046ffc5e0c795e8ea66415e07691a556008a6735281dd158f625&",
-            );
-
-            let r = (o: object) => {
-              for (const i in o) {
-                if (i === "timestamp" || i === "url" || i === "thumbnail")
-                  continue;
-                if (typeof o[i] === "string") o[i] = make(o[i], true);
-                else if (typeof o[i] === "object") r(o[i]);
-              }
-            };
-            r(e.data);
-          }
-        }
-      }
-      return old(data);
-    };
-  }
-  // ----- for april fools -----*/
-
+/**
+ * Replaces the content in the message with safe data
+ */
+function fixMessage(message: Message<true>): void {
+  // Remove @everyone
   if (!message?.member?.permissions?.has("MentionEveryone"))
     message.content = message.content.replace(/@everyone/gi, "<at>everyone");
 
   // Replace special characters
   message.content = message.content.replace(/[’]/g, "'");
   message.content = message.content.replace(/[“”]/g, '"');
+}
+
+function createAutoComplete(dataset: string[], given: string): string[] {
+  return Array.from(
+    new Set(
+      dataset
+        .map((x) => [x, compareTwoStrings(x, given)] as [string, number])
+        .filter((x) => x[1] > 0.6)
+        .map((x) => x[0]),
+    ),
+  );
+}
+
+client.on("messageCreate", async function handleMessage(message) {
+  // Base guards
+  if (!message.inGuild()) return;
+  if (config.ignore.channels.includes(message.channel.id)) return;
+
+  fixMessage(message);
 
   // Run bot-only handlers
   for (const handler of Object.values(handlers).filter((x) => x.botsOnly))
     handler.handler(message);
 
-  // Guards
+  // Other guards
   if (message.author.bot || !message?.author?.id || !message?.guild?.id) return;
 
-  // Preload data
-  const economy = await actions.eco.getFor(message.author.id);
-  const userData = await actions.userData.getFor(
-    message.author.id,
-    message.guild.id,
-  );
-
-  // Fetch server data
+  // Load server settings
   const settings = await actions.serverSettings.getFor(message.guild.id);
 
   // Check if it's just a ping, if so send details
@@ -170,6 +78,13 @@ client.on("messageCreate", async function handleMessage(message) {
     return message.reply(
       `Hey! My prefix is: \`${settings.prefix}\`\nUse \`${settings.prefix}commands\` to view my commands!\nAnd use \`${settings.prefix}about\` to learn about me! :cyclone:`,
     );
+
+  // Preload data
+  const economy = await actions.eco.getFor(message.author.id);
+  const userData = await actions.userData.getFor(
+    message.author.id,
+    message.guild.id,
+  );
 
   if (!config.ignore.handlers.includes(message.channel.id)) {
     // Run handlers
@@ -217,21 +132,14 @@ client.on("messageCreate", async function handleMessage(message) {
   let command = commands[commandName.toLowerCase()];
   if (!command) {
     if (commandName.length > 4) {
-      let suggestions = Array.from(
-        new Map(
-          Object.values(commands).map((x) => [
-            x.name,
-            [x.name, compareTwoStrings(commandName, x.name)] as [
-              string,
-              number,
-            ],
-          ]),
-        ).values(),
-      ).filter((x) => x[1] > 0.6);
+      let suggestions = createAutoComplete(
+        Object.values(commands).map((x) => x.name),
+        commandName,
+      );
       if (suggestions.length > 0) {
         if (suggestions.length === 1) {
           const msg = await message.reply({
-            content: `Did you mean \`${suggestions[0][0]}\`?`,
+            content: `Did you mean \`${suggestions[0]}\`?`,
             components: [
               // @ts-ignore
               new ActionRowBuilder().addComponents(
@@ -249,7 +157,7 @@ client.on("messageCreate", async function handleMessage(message) {
           });
 
           collector.on("collect", (i) => {
-            let newContent = `${settings.prefix}${suggestions[0][0]} ${originalArguments.join(" ")}`;
+            let newContent = `${settings.prefix}${suggestions[0]} ${originalArguments.join(" ")}`;
             message.content = newContent;
             handleMessage(message);
             collector.stop();
@@ -261,7 +169,7 @@ client.on("messageCreate", async function handleMessage(message) {
         } else {
           return message.reply(
             `Did you mean ${englishifyList(
-              suggestions.map((x) => `\`${x[0]}\``),
+              suggestions.map((x) => `\`${x}\``),
               true,
             )}?`,
           );
@@ -270,21 +178,6 @@ client.on("messageCreate", async function handleMessage(message) {
     }
     return;
   }
-
-  /*// ----- for april fools -----
-  if (message.guild.id === "1257416273520758814") {
-    if (Math.random() > 0.7)
-      return message.reply(excuses[Math.floor(Math.random() * excuses.length)]);
-
-    if (Math.random() > 0.7) {
-      let name =
-        Object.keys(commands)[
-          Math.floor(Math.random() * Object.keys(commands).length)
-        ];
-      command = commands[name];
-    }
-  }
-  // ----- for april fools -----*/
 
   // Check blacklisted
   if (
@@ -808,20 +701,22 @@ client.on("messageCreate", async function handleMessage(message) {
                   (err.stack ? err.stack.slice(0, 1000) : "*No Stack*") +
                   "```",
               },
+              {
+                name: "Command Details",
+                value: `**Command**: \`${message.content}\`\n**Parsed**: \`${JSON.stringify({ args, wickStyle })}\``,
+              },
             ]),
         ],
       });
     } else {
-      if (err.message.toLowerCase().includes("timeout")) {
-        await message.reply(
-          `:warning: Oops! I ran into an error, but your command *did* sucessfully run!`,
-        );
-      } else {
-        await message.reply(
-          `:warning: Oops! I ran into an error whilst trying to run that command :(`,
-        );
-      }
+      await message.reply(
+        `:warning: Oops! I ran into an error whilst trying to run that command :(\n> \`${err.message}\``,
+      );
     }
+    err.command = {
+      content: message.content,
+      args: { args, wickStyle },
+    };
     throw err;
   }
 });

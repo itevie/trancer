@@ -166,6 +166,10 @@ process.on("uncaughtException", async (err: any) => {
                 name: `Msg Data`,
                 value: `${err.msg?.content}: ${err.msg?.guild?.name}`,
               },
+              {
+                name: "Command Details",
+                value: `**Command**: \`${err.command?.content}\`\n**Parsed**: \`${JSON.stringify(err.command?.args)}\``,
+              },
             ]),
         ],
       });
