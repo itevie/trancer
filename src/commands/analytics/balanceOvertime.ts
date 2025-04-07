@@ -39,10 +39,12 @@ const command: HypnoCommand<{
         name: "unit",
         type: "string",
         oneOf: [...unitTypes],
+        wickStyle: true,
       },
       {
         name: "every",
         type: "wholepositivenumber",
+        wickStyle: true,
       },
     ],
   },
@@ -57,6 +59,7 @@ const command: HypnoCommand<{
         [key: string]: {
           totalBalance: number;
           count: number;
+          time: Date;
         };
       }>((p, c) => {
         const unitStart = Math.floor(new Date(c.added_at).getTime() / unit);
@@ -65,6 +68,7 @@ const command: HypnoCommand<{
           p[unitStart] = {
             totalBalance: 0,
             count: 0,
+            time: new Date(c.added_at),
           };
         }
 
@@ -73,13 +77,13 @@ const command: HypnoCommand<{
 
         return p;
       }, {}),
-    ).map((x) => [x[0], x[1].totalBalance / x[1].count] as const);
+    ).map((x) => [x[0], x[1].totalBalance / x[1].count, x[1].time] as const);
 
     // Create graph
     const configuration: ChartConfiguration = {
       type: "line",
       data: {
-        labels: transations.map((x) => new Date(x[0]).toLocaleString()),
+        labels: transations.map((x) => x[2].toLocaleString()),
         datasets: [
           {
             label: `${user.username} Balance Overtime (every ${args.every ?? 1} ${args.unit ?? "day"})`,
