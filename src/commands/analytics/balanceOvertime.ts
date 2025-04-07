@@ -1,9 +1,16 @@
-import { ChartConfiguration } from "chart.js";
+import {
+  ChartConfiguration,
+  ChartData,
+  ChartDataset,
+  ChartDatasetProperties,
+} from "chart.js";
 import { HypnoCommand } from "../../types/util";
 import { ChartJSNodeCanvas } from "chartjs-node-canvas";
-import { AttachmentBuilder, User } from "discord.js";
+import { AttachmentBuilder, Base, User } from "discord.js";
 import { getMoneyTransations } from "../../util/analytics";
 import { units } from "../../util/ms";
+import { actions } from "../../util/database";
+import { getUsernameSync } from "../../util/cachedUsernames";
 
 const width = 800;
 const height = 400;
@@ -22,11 +29,12 @@ const command: HypnoCommand<{
   unit?: (typeof unitTypes)[number];
   every?: number;
   past?: number;
+  top?: number;
 }> = {
   name: "balanceovertime",
   aliases: ["balover"],
   type: "analytics",
-  ratelimit: units.minute * 2,
+  ratelimit: units.second * 5,
   description: `Get a graph of the balance of a person overtime`,
 
   args: {
@@ -55,6 +63,14 @@ const command: HypnoCommand<{
         description: "Past x days",
         wickStyle: true,
       },
+      {
+        name: "top",
+        type: "wholepositivenumber",
+        description: "Include the top x amount of people, along with yourself",
+        wickStyle: true,
+        min: 0,
+        max: 10,
+      },
     ],
   },
 
@@ -62,8 +78,79 @@ const command: HypnoCommand<{
     const unit = units[args.unit ?? "day"] * (args.every ?? 1);
     const past = units.day * (args.past ?? 28);
 
+    interface Section {
+      id: string;
+      transaction: MoneyTransaction[];
+    }
+
+    const baseUser = args.user ? args.user : message.author;
+    const users: Section[] = [
+      {
+        id: baseUser.id,
+        transaction: await getMoneyTransations(baseUser.id),
+      },
+    ];
+
+    if (args.top && args.top > 0) {
+      const economy = (await actions.eco.getAll())
+        .sort((a, b) => b.balance - a.balance)
+        .slice(0, args.top);
+
+      for await (const eco of economy) {
+        users.push({
+          id: eco.user_id,
+          transaction: await getMoneyTransations(eco.user_id),
+        });
+      }
+    }
+
+    const now = Date.now();
+    const buckets: Record<string, Date> = {};
+
+    for (let i = now - past; i <= now; i += unit) {
+      const bucketKey = Math.floor(i / unit).toString();
+      buckets[bucketKey] = new Date(i);
+    }
+
+    const processed: ChartDataset[] = users.map((user) => {
+      const grouped = user.transaction
+        .filter((x) => Date.now() - x.added_at < past)
+        .reduce<{
+          [key: string]: {
+            totalBalance: number;
+            count: number;
+            time: Date;
+          };
+        }>((p, c) => {
+          const unitStart = Math.floor(new Date(c.added_at).getTime() / unit);
+
+          if (!p[unitStart]) {
+            p[unitStart] = {
+              totalBalance: 0,
+              count: 0,
+              time: new Date(c.added_at),
+            };
+          }
+
+          p[unitStart].totalBalance += c.balance;
+          p[unitStart].count += 1;
+
+          return p;
+        }, {});
+
+      const data = Object.keys(buckets).map((bucket) => {
+        const group = grouped[bucket];
+        return group ? group.totalBalance / group.count : null;
+      });
+
+      return {
+        label: getUsernameSync(user.id),
+        data,
+      };
+    });
+
     // Get details
-    const user = args.user ? args.user : message.author;
+    const user = args.user;
     const transations = Object.entries(
       (await getMoneyTransations(user.id))
         .filter((x) => Date.now() - x.added_at < past)
@@ -91,18 +178,14 @@ const command: HypnoCommand<{
         }, {}),
     ).map((x) => [x[0], x[1].totalBalance / x[1].count, x[1].time] as const);
 
+    const labels = Object.values(buckets);
+
     // Create graph
     const configuration: ChartConfiguration = {
       type: "line",
       data: {
-        labels: transations.map((x) => x[2].toLocaleString()),
-        datasets: [
-          {
-            label: `${user.username} Balance Overtime (every ${args.every ?? 1} ${args.unit ?? "day"})`,
-            data: transations.map((x) => x[1]),
-            borderColor: "#FFB6C1",
-          },
-        ],
+        labels: labels.map((x) => x.toLocaleString()),
+        datasets: processed,
       },
     };
 

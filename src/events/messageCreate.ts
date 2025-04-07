@@ -277,6 +277,23 @@ client.on("messageCreate", async function handleMessage(message) {
     }
   }
 
+  for (const arg in wickStyle) {
+    if (
+      !command.args.args.some((x) => x.name === arg || x.aliases?.includes(arg))
+    ) {
+      return await message.reply({
+        embeds: [
+          createEmbed()
+            .setTitle("Invalid command usage!")
+            .setDescription(
+              generateCommandCodeBlock(commandName, command, settings) +
+                `\n**Error**: This command does not have the **${arg}** ?arg`,
+            ),
+        ],
+      });
+    }
+  }
+
   // Check if the command requires argument validation
   if (command.args) {
     for (let i in command.args.args) {
