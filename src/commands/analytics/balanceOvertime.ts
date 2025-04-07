@@ -81,7 +81,7 @@ const command: HypnoCommand<{
         description: "Include the top x amount of people, along with yourself",
         wickStyle: true,
         min: 0,
-        max: 10,
+        max: 20,
       },
     ],
   },

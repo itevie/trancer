@@ -123,6 +123,7 @@ const items: Record<string, Partial<Item>> = {
     price: 100,
     weight: 0.2,
     description: "Pacifier. Good for calming down.",
+    emoji: "<:paci:1358918815584620877>",
   },
 
   // ----- Resoureces -----
