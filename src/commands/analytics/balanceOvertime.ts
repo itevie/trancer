@@ -104,6 +104,8 @@ const command: HypnoCommand<{
       }
     }
 
+    console.log(users.map((x) => x.id));
+
     const now = Date.now();
     const buckets: Record<string, Date> = {};
 
@@ -148,35 +150,6 @@ const command: HypnoCommand<{
         data,
       };
     });
-
-    // Get details
-    const user = args.user;
-    const transations = Object.entries(
-      (await getMoneyTransations(user.id))
-        .filter((x) => Date.now() - x.added_at < past)
-        .reduce<{
-          [key: string]: {
-            totalBalance: number;
-            count: number;
-            time: Date;
-          };
-        }>((p, c) => {
-          const unitStart = Math.floor(new Date(c.added_at).getTime() / unit);
-
-          if (!p[unitStart]) {
-            p[unitStart] = {
-              totalBalance: 0,
-              count: 0,
-              time: new Date(c.added_at),
-            };
-          }
-
-          p[unitStart].totalBalance += c.balance;
-          p[unitStart].count += 1;
-
-          return p;
-        }, {}),
-    ).map((x) => [x[0], x[1].totalBalance / x[1].count, x[1].time] as const);
 
     const labels = Object.values(buckets);
 
