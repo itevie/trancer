@@ -22,6 +22,29 @@ const chartJSNodeCanvas = new ChartJSNodeCanvas({
   backgroundColour,
 });
 
+const pastelColors = [
+  "#FFB3BA", // light red
+  "#FFDFBA", // light orange
+  "#FFFFBA", // light yellow
+  "#BAFFC9", // light green
+  "#BAE1FF", // light blue
+  "#D5BAFF", // light purple
+  "#FFCCE5", // pink
+  "#E0BBE4", // lavender
+  "#B5EAD7", // mint
+  "#C7CEEA", // periwinkle
+  "#F9CB9C", // peach
+  "#F6E2B3", // sand
+  "#D0F0C0", // tea green
+  "#F4CCCC", // coral
+  "#D9EAD3", // pastel green
+  "#CFE2F3", // sky blue
+  "#FCE5CD", // light apricot
+  "#D5A6BD", // soft magenta
+  "#D9D2E9", // pastel lavender
+  "#FFF2CC", // lemon chiffon
+];
+
 const unitTypes = ["day", "hour", "minute"] as const;
 
 const command: HypnoCommand<{
@@ -104,8 +127,6 @@ const command: HypnoCommand<{
       }
     }
 
-    console.log(users.map((x) => x.id));
-
     const now = Date.now();
     const buckets: Record<string, Date> = {};
 
@@ -114,7 +135,7 @@ const command: HypnoCommand<{
       buckets[bucketKey] = new Date(i);
     }
 
-    const processed: ChartDataset[] = users.map((user) => {
+    const processed: ChartDataset[] = users.map((user, i) => {
       const grouped = user.transaction
         .filter((x) => Date.now() - x.added_at < past)
         .reduce<{
@@ -148,6 +169,7 @@ const command: HypnoCommand<{
       return {
         label: getUsernameSync(user.id),
         data,
+        borderColor: pastelColors[i % pastelColors.length],
       };
     });
 
