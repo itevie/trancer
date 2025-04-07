@@ -170,6 +170,7 @@ const command: HypnoCommand<{
         label: getUsernameSync(user.id),
         data,
         borderColor: pastelColors[i % pastelColors.length],
+        spanGaps: true,
       };
     });
 
