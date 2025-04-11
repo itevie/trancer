@@ -35,7 +35,7 @@ const types: { [key: string]: UseType } = {
       "Watch out $o, $u is looking evil with their pendulum",
     ],
   },
-  use: {
+  stick: {
     self: ["$u poked themselves with a stick...?"],
     someone: ["$u poked $o with a stick!"],
   },
