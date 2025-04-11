@@ -25,7 +25,7 @@ const command: HypnoCommand = {
     return paginate({
       message: message,
       embed: createEmbed()
-        .setTitle("List of craftable items")
+        .setTitle("This is a crafting table")
         .setFooter({ text: `Get with ${serverSettings.prefix}craft [item]` }),
       type: "description",
       data: data,
