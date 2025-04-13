@@ -36,9 +36,9 @@ const command: HypnoCommand<{ user: User; parts: string[] }> = {
   },
 
   handler: async (message, { args }) => {
-    const parts = args.parts.map(
-      (x) => [x, createRating(args.user.username, x)] as const,
-    );
+    const parts = args.parts
+      .map((x) => [x, createRating(args.user.username, x)] as const)
+      .sort((a, b) => a[1] - b[1]);
 
     const configuration: ChartConfiguration = {
       type: "pie",
