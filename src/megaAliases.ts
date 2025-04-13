@@ -15,6 +15,9 @@ const megaAliases: { [key: string]: string } = {
   sfbo: "sellall fish ?but 1",
   smbo: "sellall mineral ?but 1",
   balovertop10: "balover ?top 10",
+  serverelb: "elb ?server",
+  selb: "elb ?server",
+  servertree: "tree ?g",
 } as const;
 
 export default megaAliases;

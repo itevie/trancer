@@ -1,4 +1,5 @@
 import { client } from "../..";
+import { parseCommand } from "../../events/messageCreate";
 import {
   ArgumentType,
   Argument,
@@ -67,8 +68,25 @@ export let argumentCheckers: Record<
     return { result };
   },
   array: async (a: ArrayArgument, v, d) => {
+    let parts = a.wickStyle
+      ? parseCommand(v).args
+      : d.super.args.slice(d.index);
+    let result: any[] = [];
+
+    for await (const part of parts) {
+      const _result = await argumentCheckers[a.inner as ArgumentType](
+        { ...a, type: a.inner as ArgumentType },
+        part,
+        d,
+      );
+
+      if (typeof _result === "object" && "result" in _result)
+        result.push(_result.result);
+      else return _result;
+    }
+
     // This is treated specially
-    return { result: null };
+    return { result };
   },
   any: async (_a, v, _d) => {
     return { result: v };

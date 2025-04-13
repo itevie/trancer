@@ -268,7 +268,7 @@ interface NumberArgument extends BaseArgument {
 interface ArrayArgument extends BaseArgument {
   type: "array";
 
-  inner?: Omit<ArgumentType, "array">;
+  inner: Omit<ArgumentType, "array">;
 }
 
 interface CurrencyArgument extends BaseArgument {

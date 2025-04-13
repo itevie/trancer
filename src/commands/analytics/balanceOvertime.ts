@@ -22,7 +22,7 @@ const chartJSNodeCanvas = new ChartJSNodeCanvas({
   backgroundColour,
 });
 
-const colors =
+export const colors =
   "#FF0000,#00FF00,#0000FF,#FFFF00,#00FFFF,#FF00FF,#FFFFFF,#550000,#005500,#000055,#555500,#005555,#550055,#555555".split(
     ",",
   );

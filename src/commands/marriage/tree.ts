@@ -29,6 +29,7 @@ const command: HypnoCommand<{
   for?: User;
   outgoing?: boolean;
   incoming?: boolean;
+  allservers?: boolean;
 }> = {
   name: "tree",
   description: "View your marriage tree",
@@ -97,6 +98,13 @@ const command: HypnoCommand<{
         description: "Only show outgoing relationships",
         wickStyle: true,
       },
+      {
+        name: "allservers",
+        type: "boolean",
+        aliases: ["as"],
+        description: "Shows all servers in the tree",
+        wickStyle: true,
+      },
     ],
   },
 
@@ -105,6 +113,15 @@ const command: HypnoCommand<{
     const g = graphviz.digraph("G");
 
     let relationships = await actions.relationships.getAll();
+
+    if (!args.allservers) {
+      relationships = relationships.filter(
+        (x) =>
+          message.guild.members.cache.has(x.user1) &&
+          message.guild.members.cache.has(x.user2),
+      );
+    }
+
     const relavent: string[] = [user.id];
     let _relationships: Relationship[] = [];
 
@@ -131,10 +148,10 @@ const command: HypnoCommand<{
           if (
             !_relationships.includes(r) &&
             _relationships.some(
-              (x) => x.user1 === r.user1 || x.user2 === r.user1
+              (x) => x.user1 === r.user1 || x.user2 === r.user1,
             ) &&
             _relationships.some(
-              (x) => x.user1 === r.user2 || x.user2 === r.user2
+              (x) => x.user1 === r.user2 || x.user2 === r.user2,
             )
           ) {
             _relationships.push(r);
@@ -164,7 +181,7 @@ const command: HypnoCommand<{
       relationships = relationships.filter(
         (x) =>
           (x.user1 === user.id && x.user2 === args.for.id) ||
-          (x.user2 === user.id && x.user1 === args.for.id)
+          (x.user2 === user.id && x.user1 === args.for.id),
       );
     }
 
@@ -187,7 +204,7 @@ const command: HypnoCommand<{
             if (!args.nocolors)
               node.set(
                 "fillcolor",
-                customColors[userId] ?? usernameToBrightHex(username, userId)
+                customColors[userId] ?? usernameToBrightHex(username, userId),
               );
           }
 

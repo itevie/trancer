@@ -31,7 +31,10 @@ export async function checkCommandArguments(
   // Validate arguments
   if (!command.args) return true;
 
-  if (command.args.args[0]?.type === "user" && !args[0].match(/<?@[0-9]+?>?/)) {
+  if (
+    command.args.args[0]?.type === "user" &&
+    !args[0]?.match(/<?@[0-9]+?>?/)
+  ) {
     if (command.args.args[0].infer && ctx.message.reference) {
       args.unshift((await ctx.message.fetchReference()).author.id.toString());
     } else {
