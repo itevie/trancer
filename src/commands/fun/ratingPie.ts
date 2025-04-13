@@ -1,7 +1,7 @@
 import { ChartConfiguration } from "chart.js";
 import { HypnoCommand } from "../../types/util";
 import { createRating } from "./rate";
-import { AttachmentBuilder } from "discord.js";
+import { AttachmentBuilder, User } from "discord.js";
 import { ChartJSNodeCanvas } from "chartjs-node-canvas";
 import { colors } from "../analytics/balanceOvertime";
 
@@ -15,7 +15,7 @@ const chartJSNodeCanvas = new ChartJSNodeCanvas({
   backgroundColour,
 });
 
-const command: HypnoCommand<{ parts: string[] }> = {
+const command: HypnoCommand<{ user: User; parts: string[] }> = {
   name: "pierating",
   type: "fun",
   description: "Get pie chart of many different ratings",
@@ -37,7 +37,7 @@ const command: HypnoCommand<{ parts: string[] }> = {
 
   handler: async (message, { args }) => {
     const parts = args.parts.map(
-      (x) => [x, createRating(message.author.username, x)] as const,
+      (x) => [x, createRating(args.user.username, x)] as const,
     );
 
     const configuration: ChartConfiguration = {
