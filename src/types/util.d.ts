@@ -280,8 +280,8 @@ interface CurrencyArgument extends BaseArgument {
 
 interface UserArgument extends BaseArgument {
   type: "user";
-  mustHaveEco?: boolean;
   denyBots?: boolean;
+  mustHaveEco?: boolean;
 }
 
 type Argument =
