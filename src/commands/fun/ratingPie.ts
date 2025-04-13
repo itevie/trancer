@@ -51,6 +51,16 @@ const command: HypnoCommand<{ user: User; parts: string[] }> = {
           },
         ],
       },
+
+      options: {
+        plugins: {
+          legend: {
+            labels: {
+              color: "white", // Legend text color
+            },
+          },
+        },
+      },
     };
 
     // Create image & attachment
