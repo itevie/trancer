@@ -43,7 +43,7 @@ const command: HypnoCommand<{ user: User; parts: string[] }> = {
     const configuration: ChartConfiguration = {
       type: "pie",
       data: {
-        labels: parts.map((x) => x[0]),
+        labels: parts.map((x) => `${x[0]} (${x[1]}%)`),
         datasets: [
           {
             data: parts.map((x) => x[1]),
