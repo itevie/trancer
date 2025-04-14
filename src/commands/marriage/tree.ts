@@ -227,7 +227,13 @@ const command: HypnoCommand<{
       const attachment = new AttachmentBuilder(buffer).setFile(buffer);
 
       return message.reply({
-        content: `:green_heart: = Friends :heart: = Enemies :purple_heart: = Dating :pink_heart: = Partners :yellow_heart: = Parent for :grey_heart: = Worships :light_blue_heart: = Owner of`,
+        content: `-# 💚 = Friends
+        -# ❤️ = Enemies
+        -# 💜 = Dating
+        -# 🩷 = Partners
+        -# 💛 = Parent for
+        -# 🩶 = Worships
+        -# 🩵 = Owner of`,
         files: [attachment],
       });
     });
