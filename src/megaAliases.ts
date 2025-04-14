@@ -18,6 +18,8 @@ const megaAliases: { [key: string]: string } = {
   serverelb: "elb ?server",
   selb: "elb ?server",
   servertree: "tree ?g",
+  whichgreekletterami:
+    "pierating ς ε ρ τ υ θ ι ο π α σ δ φ γ η ξ κ λ ζ χ ψ ω β ν μ",
 } as const;
 
 export default megaAliases;
