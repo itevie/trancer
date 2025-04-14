@@ -47,6 +47,13 @@ const _actions = {
     );
   },
 
+  getForServer: async (serverId: string): Promise<UsedWord[]> => {
+    return await analyticDatabase.all<UsedWord[]>(
+      "SELECT * FROM words_by WHERE server_id = ?",
+      serverId,
+    );
+  },
+
   toObject: async (words: UsedWord[]): Promise<{ [key: string]: number }> => {
     let result = words.reduce((p, c) => {
       let _word = definedCacheReversed.get(c.word_id);

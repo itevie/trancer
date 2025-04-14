@@ -21,7 +21,6 @@ const command: HypnoCommand<{ user?: User }> = {
   },
 
   handler: async (message, { args }) => {
-    console.log(args);
     let words = Object.entries(
       await actions.wordUsage.toObject(
         await actions.wordUsage.getFor(args.user.id, message.guild.id),

@@ -43,7 +43,7 @@ const command: HypnoCommand = {
         labels: hours.map((h) => `${h}:00`), // Format labels as "0:00", "1:00", etc.
         datasets: [
           {
-            label: "Messages Sent",
+            label: "Messages Sent (GMT)",
             data: dataset,
             backgroundColor: "#FFB6C1",
             borderColor: "#FFB6C1",
