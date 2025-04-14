@@ -15,7 +15,11 @@ const chartJSNodeCanvas = new ChartJSNodeCanvas({
   backgroundColour,
 });
 
-const command: HypnoCommand<{ user: User; parts: string[] }> = {
+const command: HypnoCommand<{
+  user: User;
+  parts: string[];
+  hidethepercentagesbecausetheyrescaryandtheydontaddup?: boolean;
+}> = {
   name: "pierating",
   type: "fun",
   description: "Get pie chart of many different ratings",
@@ -32,6 +36,11 @@ const command: HypnoCommand<{ user: User; parts: string[] }> = {
         type: "array",
         inner: "string",
       },
+      {
+        name: "hidethepercentagesbecausetheyrescaryandtheydontaddup",
+        type: "boolean",
+        wickStyle: true,
+      },
     ],
   },
 
@@ -43,7 +52,10 @@ const command: HypnoCommand<{ user: User; parts: string[] }> = {
     const configuration: ChartConfiguration = {
       type: "pie",
       data: {
-        labels: parts.map((x) => `${x[0]} (${x[1]}%)`),
+        labels: parts.map(
+          (x) =>
+            `${x[0]}${!args.hidethepercentagesbecausetheyrescaryandtheydontaddup ? `(${x[1]}%)` : ""}`,
+        ),
         datasets: [
           {
             data: parts.map((x) => x[1]),
