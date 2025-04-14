@@ -3,25 +3,24 @@ import { HypnoCommand } from "../../types/util";
 import { AttachmentBuilder } from "discord.js";
 import { Jimp } from "jimp";
 
-const command: HypnoCommand<{ code: string; image: string }> = {
-  name: "countryflag",
-  aliases: ["cflag"],
-  description: "Overlay a country's flag over a image",
+const command: HypnoCommand<{ with: string; image: string }> = {
+  name: "overlay",
+  description: "Overlay a image over a image",
   type: "fun",
 
   args: {
     requiredArguments: 2,
     args: [
       {
-        name: "code",
-        type: "string",
-        description: "The country code",
-      },
-      {
         name: "image",
         type: "attachment",
         infer: true,
         defaultPfp: true,
+      },
+      {
+        name: "with",
+        type: "attachment",
+        infer: true,
       },
     ],
   },
@@ -29,9 +28,7 @@ const command: HypnoCommand<{ code: string; image: string }> = {
   handler: async (message, { args }) => {
     try {
       // Load images
-      let _bg = await Jimp.read(
-        `https://flagcdn.com/w2560/${args.code.toLowerCase()}.png`,
-      );
+      let _bg = await Jimp.read(args.with);
       let _img = await Jimp.read(args.image);
 
       // Modify
@@ -54,15 +51,13 @@ const command: HypnoCommand<{ code: string; image: string }> = {
       // Done
       const attachment = new AttachmentBuilder(
         canvas.toBuffer("image/png"),
-      ).setName(`${args.code}.png`);
+      ).setName(`image.png`);
       return message.reply({
         files: [attachment],
       });
     } catch (e) {
       console.log(e);
-      return message.reply(
-        `Failed to make image - did you provide a valid country code? (e.g. GB, FR)`,
-      );
+      return message.reply(`Failed to make image`);
     }
   },
 };

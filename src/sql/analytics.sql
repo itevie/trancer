@@ -21,13 +21,6 @@ CREATE TABLE IF NOT EXISTS messages_in_channels (
     amount INT NOT NULL DEFAULT 0
 );
 
-CREATE TABLE IF NOT EXISTS message_at_time_specific (
-    time TEXT UNIQUE NOT NULL,
-    channel_id TEXT NOT NULL,
-    user_id TEXT NOT NULL,
-    amount INT NOT NULL DEFAULT 0
-);
-
 CREATE TABLE IF NOT EXISTS member_count (
     id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
     time TEXT NOT NULL,
