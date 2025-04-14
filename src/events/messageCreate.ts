@@ -91,6 +91,7 @@ client.on("messageCreate", async function handleMessage(message) {
     message.guild.id === config.botServer.id
   ) {
     await addMessageForCurrentTime(message.channel as TextChannel);
+    actions.wordUsage.addMessage(message);
     return;
   }
 

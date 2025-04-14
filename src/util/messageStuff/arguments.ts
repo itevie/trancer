@@ -33,7 +33,7 @@ export async function checkCommandArguments(
 
   if (
     command.args.args[0]?.type === "user" &&
-    !args[0]?.match(/<?@?[0-9]+>?/)
+    !args[0]?.match(/<?@?[0-9]{5,}>?/)
   ) {
     if (command.args.args[0].infer !== false && ctx.message.reference) {
       args.unshift((await ctx.message.fetchReference()).author.id.toString());

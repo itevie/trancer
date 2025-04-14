@@ -28,6 +28,7 @@ import oneWordStories from "./db-parts/oneWordStories";
 import commandCreations from "./db-parts/commandCreations";
 import triggerIdeas from "./db-parts/triggerIdeas";
 import confessions from "./db-parts/confessions";
+import wordUsage from "./db-parts/wordUsage";
 
 export let database: Database<sqlite3.Database, Statement>;
 export const databaseLogger = new Logger("database");
@@ -56,6 +57,7 @@ export const actions = {
   commandCreations,
   triggerIdeas,
   confessions,
+  wordUsage,
 } as const;
 
 export async function connect(): Promise<void> {

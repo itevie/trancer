@@ -28,11 +28,6 @@ CREATE TABLE IF NOT EXISTS message_at_time_specific (
     amount INT NOT NULL DEFAULT 0
 );
 
-CREATE TABLE IF NOT EXISTS word_usage (
-    word TEXT NOT NULL UNIQUE,
-    amount INT NOT NULL DEFAULT 0
-);
-
 CREATE TABLE IF NOT EXISTS member_count (
     id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
     time TEXT NOT NULL,
@@ -40,8 +35,17 @@ CREATE TABLE IF NOT EXISTS member_count (
     amount INT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS word_usage (
-    word TEXT NOT NULL,
-    amount INT NOT NULL DEFAULT 0,
-    date TEXT NOT NULL
+CREATE TABLE IF NOT EXISTS words (
+    id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
+    word TEXT UNIQUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS words_by (
+    word_id INTEGER REFERENCES words (id),
+    author_id TEXT NOT NULL,
+    server_id TEXT NOT NULL,
+    channel_id TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    amount INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (word_id, author_id, channel_id, created_at)
 );
