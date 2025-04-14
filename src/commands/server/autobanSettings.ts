@@ -5,6 +5,7 @@ import { createEmbed } from "../../util/other";
 import { checkAutoban } from "../../events/guildMemberAdd";
 
 const command: HypnoCommand<{ command?: string; value?: string }> = {
+  ignore: true,
   name: "autoban",
   aliases: ["ab"],
   description: "Configure autoban settings for your server",
@@ -46,7 +47,7 @@ const command: HypnoCommand<{ command?: string; value?: string }> = {
       const commandList = commands
         .map(
           (cmd) =>
-            `\`${serverSettings.prefix}autoban ${cmd.name}\` - ${cmd.description}`
+            `\`${serverSettings.prefix}autoban ${cmd.name}\` - ${cmd.description}`,
         )
         .join("\n");
 
@@ -57,10 +58,10 @@ const command: HypnoCommand<{ command?: string; value?: string }> = {
             .setDescription(
               "This feature autobans members if their **username** or **display name** matches a keyword when they join." +
                 (!message.guild.members.me.permissions.has(
-                  PermissionsBitField.Flags.BanMembers
+                  PermissionsBitField.Flags.BanMembers,
                 )
                   ? "**\n\n:red_circle: Note: I do not have permissions to ban members.**"
-                  : "")
+                  : ""),
             )
             .addFields([
               {
@@ -111,7 +112,7 @@ const command: HypnoCommand<{ command?: string; value?: string }> = {
         await database.run(
           `UPDATE server_settings SET auto_ban_keywords = ? WHERE server_id = ?;`,
           abk.join(";"),
-          message.guild.id
+          message.guild.id,
         );
         return message.reply(`Phrase added!\n\n${createString(abk)}`);
       case "remove":
@@ -126,7 +127,7 @@ const command: HypnoCommand<{ command?: string; value?: string }> = {
         await database.run(
           `UPDATE server_settings SET auto_ban_keywords = ? WHERE server_id = ?;`,
           abk.join(";"),
-          message.guild.id
+          message.guild.id,
         );
         return message.reply(`Phrase removed!\n\n${createString(abk)}`);
       case "enable":
@@ -134,7 +135,7 @@ const command: HypnoCommand<{ command?: string; value?: string }> = {
           return message.reply(`Autoban is already enabled.`);
         await database.run(
           `UPDATE server_settings SET auto_ban_enabled = true WHERE server_id = ?;`,
-          message.guild.id
+          message.guild.id,
         );
         return message.reply(`Autoban has been enabled :green_circle:`);
       case "disable":
@@ -142,7 +143,7 @@ const command: HypnoCommand<{ command?: string; value?: string }> = {
           return message.reply(`Autoban is already disabled.`);
         await database.run(
           `UPDATE server_settings SET auto_ban_enabled = false WHERE server_id = ?;`,
-          message.guild.id
+          message.guild.id,
         );
         return message.reply(`Autoban has been disabled :red_circle:`);
       case "test":
@@ -154,7 +155,7 @@ const command: HypnoCommand<{ command?: string; value?: string }> = {
             result
               ? `:green_circle: **${args.value}** was detected by autoban`
               : `:red_circle: **${args.value}** was not detected by autoban`
-          }`
+          }`,
         );
     }
   },

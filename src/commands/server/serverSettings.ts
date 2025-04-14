@@ -23,6 +23,7 @@ const command: HypnoCommand<{
   setting: keyof typeof settingsToSql;
   value: any;
 }> = {
+  ignore: true,
   name: "serversettings",
   aliases: ["sset"],
   description: "Modify a server setting",
@@ -133,7 +134,7 @@ const command: HypnoCommand<{
         return await database.get<ServerSettings>(
           `UPDATE server_settings SET ${key} = ? WHERE server_id = ? RETURNING *;`,
           value,
-          message.guild.id
+          message.guild.id,
         );
       },
     });

@@ -28,7 +28,7 @@ export async function checkInfer(
     // self pfp
 
     let preferences = [
-      arg.infer && ref !== null && isPfp
+      arg.infer !== false && ref !== null && isPfp
         ? ref.author.displayAvatarURL({
             size: 2048,
             extension: "png",
@@ -38,10 +38,10 @@ export async function checkInfer(
       ref !== null && isURL(ref.content) ? ref.content : null,
       isURL(value) ? value : null,
       value?.match(/<@[0-9]+>/) ? value /* deal with it later  */ : null,
-      arg.infer && ref !== null && ref.attachments.size > 0
+      arg.infer !== false && ref !== null && ref.attachments.size > 0
         ? ref.attachments.at(0).url
         : null,
-      arg.infer && ref !== null
+      arg.infer !== false && ref !== null
         ? ref.author.displayAvatarURL({
             size: 2048,
             extension: "png",
@@ -54,7 +54,7 @@ export async function checkInfer(
     ];
 
     return preferences.find((x) => x !== null) || value;
-  } else if (arg.infer && ctx.super.message.reference) {
+  } else if (arg.infer !== false && ctx.super.message.reference) {
     let reference = await ctx.super.message.fetchReference();
 
     switch (arg.type) {

@@ -4,6 +4,8 @@ import axios from "axios";
 import jwt from "jsonwebtoken";
 import { client } from "../..";
 import config from "../../config";
+import { noDiscords } from "../../commands/server/dashboard";
+import { getUsernameSync } from "../../util/cachedUsernames";
 
 export function Authenticate(req: Request, res: Response, next: NextFunction) {
   if (req.url.startsWith("/login")) return next();
@@ -12,6 +14,31 @@ export function Authenticate(req: Request, res: Response, next: NextFunction) {
   if (client.user.id === config.devBot.id) {
     // @ts-ignore
     req.user = config.owner;
+    return next();
+  }
+
+  if (req.query.nodiscord) {
+    if (!noDiscords.get(req.query.nodiscord as string)) {
+      return res.status(400).send("invalid nodiscord");
+    }
+
+    let id = noDiscords.get(req.query.nodiscord as string);
+
+    const token = jwt.sign(
+      {
+        id: id,
+        username: getUsernameSync(id),
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "28d" },
+    );
+    res.cookie("trancer-token", token, {
+      maxAge: 1000 * 60 * 60 * 24 * 28,
+      path: "/",
+    });
+
+    // @ts-ignore
+    req.user = id;
     return next();
   }
 
@@ -42,8 +69,8 @@ export default function MakeAuthRoutes(): Router {
       `https://discord.com/oauth2/authorize?client_id=${
         process.env.CLIENT_ID
       }&response_type=code&redirect_uri=${encodeURI(
-        `${baseUrl}/login/callback`
-      )}&scope=identify+guilds`
+        `${baseUrl}/login/callback`,
+      )}&scope=identify+guilds`,
     );
   });
 
@@ -62,7 +89,7 @@ export default function MakeAuthRoutes(): Router {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
-        }
+        },
       );
 
       const accessToken = tokenResponse.data.access_token;
@@ -73,7 +100,7 @@ export default function MakeAuthRoutes(): Router {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
-        }
+        },
       );
 
       const token = jwt.sign(
@@ -82,7 +109,7 @@ export default function MakeAuthRoutes(): Router {
           username: userResponse.data.username,
         },
         process.env.JWT_SECRET,
-        { expiresIn: "28d" }
+        { expiresIn: "28d" },
       );
       res.cookie("trancer-token", token, {
         maxAge: 1000 * 60 * 60 * 24 * 28,
