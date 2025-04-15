@@ -11,16 +11,7 @@ import { getMoneyTransations } from "../../util/analytics";
 import { units } from "../../util/ms";
 import { actions } from "../../util/database";
 import { getUsernameSync } from "../../util/cachedUsernames";
-
-const width = 800;
-const height = 400;
-const backgroundColour = "#111111";
-
-const chartJSNodeCanvas = new ChartJSNodeCanvas({
-  width,
-  height,
-  backgroundColour,
-});
+import { chartJSNodeCanvas } from "../../util/db-parts/charts";
 
 export const colors =
   "#FF0000,#00FF00,#0000FF,#FFFF00,#00FFFF,#FF00FF,#FFFFFF,#550000,#005500,#000055,#555500,#005555,#550055,#555555".split(

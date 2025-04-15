@@ -7,16 +7,8 @@ import { definedCache } from "../../util/db-parts/wordUsage";
 import { ChartJSNodeCanvas } from "chartjs-node-canvas";
 import { AttachmentBuilder } from "discord.js";
 import { colors } from "./balanceOvertime";
+import { chartJSNodeCanvas } from "../../util/db-parts/charts";
 
-const width = 800;
-const height = 400;
-const backgroundColour = "#111111";
-
-const chartJSNodeCanvas = new ChartJSNodeCanvas({
-  width,
-  height,
-  backgroundColour,
-});
 const command: HypnoCommand<{ words: string[] }> = {
   name: "wordsovertime",
   description: "Get a word's usage overtime",
