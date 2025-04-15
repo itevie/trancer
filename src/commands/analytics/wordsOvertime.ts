@@ -6,6 +6,7 @@ import { PERM } from "sqlite3";
 import { definedCache } from "../../util/db-parts/wordUsage";
 import { ChartJSNodeCanvas } from "chartjs-node-canvas";
 import { AttachmentBuilder } from "discord.js";
+import { colors } from "./balanceOvertime";
 
 const width = 800;
 const height = 400;
@@ -53,7 +54,7 @@ const command: HypnoCommand<{ words: string[] }> = {
       .map((x) => x[1])
       .sort((a, b) => a.getTime() - b.getTime());
 
-    let datasets: ChartDataset[] = args.words.map((word) => {
+    let datasets: ChartDataset[] = args.words.map((word, i) => {
       return {
         data: buckets.map(
           (x) =>
@@ -62,6 +63,7 @@ const command: HypnoCommand<{ words: string[] }> = {
             )?.[2] || null,
         ),
         label: word,
+        borderColor: colors[i % colors.length],
       };
     });
 
