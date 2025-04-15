@@ -89,6 +89,7 @@ const _actions = {
 
     let words = message.content
       .toLowerCase()
+      .replace(/\n/g, " ")
       .split(" ")
       // Remove empties, and only keep words that have at least one character
       .filter((x) => x.length > 0 && x.match(/[a-z]/))
