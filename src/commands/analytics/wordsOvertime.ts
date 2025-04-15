@@ -57,8 +57,6 @@ const command: HypnoCommand<{ words: string[] }> = {
       ),
     );
 
-    console.log(args, command.args);
-
     // Done
     return message.reply({
       files: [

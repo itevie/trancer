@@ -56,7 +56,8 @@ type ArgumentType =
   | "array"
   | "currency"
   | "channel"
-  | "rank";
+  | "rank"
+  | "date";
 
 interface HypnoCommandDetails<Args extends { [key: string]: any } = {}> {
   serverSettings: ServerSettings;

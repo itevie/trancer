@@ -94,6 +94,16 @@ export let argumentCheckers: Record<
   none: async (_a, _v, _d) => {
     return { result: null };
   },
+  date: async (_a, v, _d) => {
+    try {
+      let date = new Date(v);
+      if (!date) return `Invalid date: ${v} (${date})`;
+      console.log(date);
+      return { result: date };
+    } catch (e) {
+      return `Invalid date: ${e}`;
+    }
+  },
 
   // ----- Special Types -----
   confirm: async (_a, v, _d) => {
