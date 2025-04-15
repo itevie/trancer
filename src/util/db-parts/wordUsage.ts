@@ -81,6 +81,7 @@ const _actions = {
           guild: { id: string };
           channel: { id: string };
         },
+    date?: Date,
   ): Promise<void> => {
     if (!init) {
       _actions.initCache();
@@ -93,7 +94,7 @@ const _actions = {
       .filter((x) => x.length > 0 && x.match(/[a-z]/))
       .filter((word) => !word.startsWith("http"));
 
-    let _time = new Date();
+    let _time = date ? date : new Date();
     _time.setMinutes(0, 0, 0);
     let time = _time.toISOString();
 
