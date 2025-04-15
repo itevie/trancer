@@ -12,5 +12,6 @@ export default function initAllManagers() {
     initQotd();
   }
 
+  actions.wordUsage.initCache();
   actions.commandCreations.init();
 }

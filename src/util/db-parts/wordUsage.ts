@@ -1,8 +1,8 @@
 import { Message } from "discord.js";
 import { analyticDatabase } from "../analytics";
 
-let definedCache: Map<string, number> = new Map();
-let definedCacheReversed: Map<number, string> = new Map();
+export let definedCache: Map<string, number> = new Map();
+export let definedCacheReversed: Map<number, string> = new Map();
 let init: boolean = false;
 
 export interface Word {
@@ -54,6 +54,17 @@ const _actions = {
     );
   },
 
+  getWordInServer: async (
+    word: string,
+    serverId: string,
+  ): Promise<UsedWord[]> => {
+    return await analyticDatabase.all<UsedWord[]>(
+      "SELECT * FROM words_by WHERE server_id = ? AND word_id = ?",
+      serverId,
+      definedCache.get(word),
+    );
+  },
+
   toObject: async (words: UsedWord[]): Promise<{ [key: string]: number }> => {
     let result = words.reduce((p, c) => {
       let _word = definedCacheReversed.get(c.word_id);
@@ -90,6 +101,7 @@ const _actions = {
     let words = message.content
       .toLowerCase()
       .replace(/\n/g, " ")
+      .replace(/[.,!?]/g, "")
       .split(" ")
       // Remove empties, and only keep words that have at least one character
       .filter((x) => x.length > 0 && x.match(/[a-z]/))

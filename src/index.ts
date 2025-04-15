@@ -103,23 +103,23 @@ client.on("ready", async () => {
   initStatusChanger();
   loadSlashCommands();
 
-  let quotes = (
-    await actions.quotes.getForServer("1257416273520758814")
-  ).filter((x) => !!x.channel_id);
-  for (const i of quotes)
-    try {
-      actions.wordUsage.addMessage(
-        {
-          content: i.content,
-          author: { id: i.author_id },
-          guild: {
-            id: i.server_id,
-          },
-          channel: { id: i.channel_id },
-        },
-        new Date(i.created_at),
-      );
-    } catch {}
+  // let quotes = (
+  //   await actions.quotes.getForServer("1257416273520758814")
+  // ).filter((x) => !!x.channel_id);
+  // for (const i of quotes)
+  //   try {
+  //     actions.wordUsage.addMessage(
+  //       {
+  //         content: i.content,
+  //         author: { id: i.author_id },
+  //         guild: {
+  //           id: i.server_id,
+  //         },
+  //         channel: { id: i.channel_id },
+  //       },
+  //       new Date(i.created_at),
+  //     );
+  //   } catch {}
 
   if (
     !args["no-handlers"] &&
