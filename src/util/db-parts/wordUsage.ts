@@ -130,7 +130,6 @@ const _actions = {
         time,
         message.guild.id,
       );
-      console.log(`Added ${word} for ${time}`);
     }
   },
 } as const;

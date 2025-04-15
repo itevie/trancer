@@ -1,3 +1,4 @@
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { generateCommandCodeBlock } from "../args";
 import { createEmbed, compareTwoStrings } from "../other";
 import { argumentCheckers } from "./argumentChecker";
@@ -8,6 +9,13 @@ export async function checkCommandArguments(
   ctx: CommandCheckContext,
 ): CommandCheckPhase {
   const { command, wickStyle, message, details, args, settings } = ctx;
+
+  let errorHelp = new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setStyle(ButtonStyle.Primary)
+      .setLabel("Command Help")
+      .setCustomId(`command-help-${command.name}`),
+  );
 
   // Check if all wick-style are valid
   for (const arg in wickStyle) {
@@ -22,6 +30,10 @@ export async function checkCommandArguments(
               generateCommandCodeBlock(details.command, command, settings) +
                 `\n**Error**: This command does not have the **${arg}** ?arg`,
             ),
+        ],
+        components: [
+          // @ts-ignore
+          errorHelp,
         ],
       });
       return false;
@@ -87,53 +99,101 @@ export async function checkCommandArguments(
             "Parameter is missing, but is required for this command",
           ),
         ],
+        components: [
+          // @ts-ignore
+          errorHelp,
+        ],
       });
       return false;
     }
     if (!givenValue) continue;
 
-    let result = await argumentCheckers[arg.type](arg, givenValue, {
-      super: ctx,
-      index: +i,
-    });
+    let toCheck = [arg];
+    if (arg.or) toCheck.push(...arg.or.map((x) => ({ ...arg, ...x })));
 
-    if (
-      typeof result === "string" ||
-      (typeof result === "object" && "error" in result)
-    ) {
-      let didYouMean =
-        typeof result === "object"
-          ? Array.from(
-              new Map(
-                result.autocomplete.map((x) => [
-                  x,
-                  [
-                    x,
-                    compareTwoStrings(
-                      givenValue.toLowerCase(),
-                      x.toLowerCase(),
-                    ),
-                  ] as [string, number],
-                ]),
-              ).values(),
-            )
-              .filter((x) => x[1] > 0.6)
-              .map((x) => `\`${x[0]}\``)
-              .join(", ")
-          : "";
-      await message.reply({
-        embeds: [
-          generateErrorEmbed(
-            `This part must be a **${arg.type}**\n**Error**: ${
-              typeof result === "object" ? result.error : result
-            }${didYouMean ? `\n**Did you mean**: ${didYouMean}?` : ""}`,
-          ),
-        ],
+    for (const i in toCheck) {
+      let _arg = toCheck[i];
+      let result = await argumentCheckers[_arg.type](_arg, givenValue, {
+        super: ctx,
+        index: +i,
       });
-      return false;
-    }
 
-    ctx.details.args[arg.name] = result.result;
+      // Check if the arg parser gave a error
+      if (
+        typeof result === "string" ||
+        (typeof result === "object" && "error" in result)
+      ) {
+        if (+i !== toCheck.length - 1) {
+          continue;
+        }
+
+        let didYouMean =
+          typeof result === "object"
+            ? Array.from(
+                new Map(
+                  result.autocomplete.map((x) => [
+                    x,
+                    [
+                      x,
+                      compareTwoStrings(
+                        givenValue.toLowerCase(),
+                        x.toLowerCase(),
+                      ),
+                    ] as [string, number],
+                  ]),
+                ).values(),
+              )
+                .filter((x) => x[1] > 0.6)
+                .map((x) => `\`${x[0]}\``)
+                .join(", ")
+            : "";
+
+        await message.reply({
+          embeds: [
+            generateErrorEmbed(
+              `This part must be a **${arg.type}**${arg.or ? ` (or **${arg.or.map((x) => x.type).join(", ")}**)` : ""}\n**Error**: ${
+                typeof result === "object" ? result.error : result
+              }${didYouMean ? `\n**Did you mean**: ${didYouMean}?` : ""}`,
+            ),
+          ],
+          components: [
+            // @ts-ignore
+            errorHelp,
+          ],
+        });
+        return false;
+      }
+
+      // Now check the arg's needs
+      if (_arg.mustBe && result.result !== _arg.mustBe) {
+        await message.reply({
+          embeds: [generateErrorEmbed(`This part must be: \`${arg.mustBe}\``)],
+          components: [
+            // @ts-ignore
+            errorHelp,
+          ],
+        });
+        return false;
+      }
+
+      if (_arg.oneOf && !_arg.oneOf.includes(result.result)) {
+        await message.reply({
+          embeds: [
+            generateErrorEmbed(
+              `This part must be one of: ${_arg.oneOf.map((x) => `\`${x}\``).join(", ")}`,
+            ),
+          ],
+          components: [
+            // @ts-ignore
+            errorHelp,
+          ],
+        });
+        return false;
+      }
+
+      ctx.details.args[arg.name] = result.result;
+      break;
+    }
   }
 
   return true;

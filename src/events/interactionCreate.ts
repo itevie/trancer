@@ -258,6 +258,21 @@ client.on("interactionCreate", async (i) => {
           content: "Failed to delete the confession",
         });
       }
+    } else if (i.customId.startsWith("command-help-")) {
+      const name = i.customId.split("-").slice(2).join("-");
+      // @ts-ignore
+      commands["command"].handler(
+        // @ts-ignore
+        {
+          // @ts-ignore
+          reply: i.reply.bind(i),
+          author: i.user,
+        },
+        {
+          args: { command: name },
+          serverSettings: await actions.serverSettings.getFor(i.guild.id),
+        },
+      );
     }
   }
 });

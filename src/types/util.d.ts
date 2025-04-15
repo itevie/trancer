@@ -232,6 +232,8 @@ interface BaseArgument {
    * type user: gets the message reference's author
    */
   infer?: boolean;
+
+  or?: Omit<Argument, "infer" | "aliases" | "wickStyle" | "name">[];
 }
 
 interface StringArgument extends BaseArgument {

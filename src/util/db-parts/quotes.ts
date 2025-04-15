@@ -43,6 +43,20 @@ const _actions = {
     );
   },
 
+  getFirstQuote: async (serverId: string): Promise<Quote> => {
+    return await database.get<Quote>(
+      "SELECT * FROM quotes WHERE server_id = ? ORDER BY id ASC;",
+      serverId,
+    );
+  },
+
+  getLastQuote: async (serverId: string): Promise<Quote> => {
+    return await database.get<Quote>(
+      "SELECT * FROM quotes WHERE server_id = ? ORDER BY id DESC;",
+      serverId,
+    );
+  },
+
   getRandomQuote: async (from?: string): Promise<Quote> => {
     for (let i = 0; i != 10; i++) {
       try {

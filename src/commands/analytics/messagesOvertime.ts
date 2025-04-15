@@ -3,7 +3,7 @@ import { HypnoCommand } from "../../types/util";
 import { AttachmentBuilder } from "discord.js";
 import { getMessageAtTimes } from "../../util/analytics";
 import { units } from "../../util/ms";
-import { chartJSNodeCanvas } from "../../util/db-parts/charts";
+import { chartJSNodeCanvas } from "../../util/charts";
 
 const command: HypnoCommand<{ type?: "hours" | "minutes" | "days" }> = {
   name: "messageovertime",

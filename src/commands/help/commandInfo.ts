@@ -2,6 +2,8 @@ import { CurrencyArgument, HypnoCommand } from "../../types/util";
 import { commands } from "../..";
 import { createEmbed } from "../../util/other";
 import { generateCommandCodeBlock } from "../../util/args";
+import { EmbedField } from "discord.js";
+import { paginate } from "../../util/components/pagination";
 
 const command: HypnoCommand<{ command: string }> = {
   name: "command",
@@ -44,112 +46,113 @@ const command: HypnoCommand<{ command: string }> = {
     // Check for description
     if (command.description) embed.setDescription(command.description);
 
+    let fields: { name: string; value: string; inline?: boolean }[] = [];
+
     // Check for aliases
     if (command.aliases) {
-      embed.addFields([
-        {
-          name: "Aliases",
-          value: command.aliases.map((x) => `\`${x}\``).join(", "),
-        },
-      ]);
-    }
-
-    // Check for arguments
-    if (command.args) {
-      embed.addFields([
-        {
-          name: "Parameters",
-          value: `${generateCommandCodeBlock(
-            command.name,
-            command,
-            serverSettings
-          )}\n${command.args.args
-            .map((arg) => {
-              let text = `**${arg.wickStyle ? "?" : ""}${arg.name}**`;
-              if (arg.description) text += `\n*${arg.description}*`;
-
-              if (arg.aliases)
-                text += `\n- Aliases: ${arg.aliases
-                  .map((x) => `\`?${x}\``)
-                  .join(", ")}`;
-
-              text += `\n- Type: ${arg.type}`;
-
-              // Infer
-              if (arg.infer)
-                text += `\n- Inferrable: ${arg.infer ? "yes" : "no"}`;
-
-              // Must be
-              if (arg.mustBe) text += `\n- Must be: "${arg.mustBe}"`;
-
-              // One of
-              if (arg.oneOf)
-                text += `\n- Must be one of: ${arg.oneOf
-                  .map((x) => `**${x}**`)
-                  .join(", ")}`;
-
-              // Min & max
-              if ((arg as any).min) text += `\n- Minimum: ${(arg as any).min}`;
-              if ((arg as any).max) text += `\n- Maximum: ${(arg as any).max}`;
-
-              // Allow negative
-              if ((arg as CurrencyArgument).allowNegative)
-                text += `\n- Can be negative: yes`;
-              return text;
-            })
-            .join("\n\n")}`,
-        },
-      ]);
+      fields.push({
+        name: "Aliases",
+        value: command.aliases.map((x) => `\`${x}\``).join(", "),
+      });
     }
 
     // Check for examples
     if (command.examples) {
-      embed.addFields([
-        {
-          name: "Examples",
-          value: command.examples
-            .map(
-              (x) =>
-                `\`${x[0].replace(
-                  /\$cmd/g,
-                  `${serverSettings.prefix}${command.name}`
-                )}\`: ${x[1]}`
-            )
-            .join("\n"),
-        },
-      ]);
+      fields.push({
+        name: "Examples",
+        value: command.examples
+          .map(
+            (x) =>
+              `\`${x[0].replace(
+                /\$cmd/g,
+                `${serverSettings.prefix}${command.name}`,
+              )}\`: ${x[1]}`,
+          )
+          .join("\n"),
+      });
     }
 
     // Check for usage
     if (command.usage) {
-      embed.addFields([
-        {
-          name: "Usage",
-          value: command.usage
-            .map(
-              (x) =>
-                `\`${x[0].replace(
-                  /\$cmd/g,
-                  `${serverSettings.prefix}${command.name}`
-                )}\`: ${x[1]}`
-            )
-            .join("\n"),
-        },
-      ]);
+      fields.push({
+        name: "Usage",
+        value: command.usage
+          .map(
+            (x) =>
+              `\`${x[0].replace(
+                /\$cmd/g,
+                `${serverSettings.prefix}${command.name}`,
+              )}\`: ${x[1]}`,
+          )
+          .join("\n"),
+      });
     }
 
     // Check fore restrictions
     if (restrictions.length > 0) {
-      embed.addFields([
-        {
-          name: `Restrictions`,
-          value: restrictions.join(", "),
-        },
-      ]);
+      fields.push({
+        name: `Restrictions`,
+        value: restrictions.join(", "),
+      });
     }
 
-    return message.reply({
-      embeds: [embed],
+    // Check for arguments
+    if (command.args) {
+      fields.push({
+        name: "Parameters",
+        value: generateCommandCodeBlock(command.name, command, serverSettings),
+      });
+
+      for (const _arg of command.args.args) {
+        let parts = [_arg];
+        if (_arg.or) parts.push(..._arg.or.map((x) => ({ ..._arg, ...x })));
+
+        for (const arg of parts) {
+          let text = "";
+          if (arg.description) text += `\n*${arg.description}*`;
+
+          if (arg.aliases)
+            text += `\n- Aliases: ${arg.aliases
+              .map((x) => `\`?${x}\``)
+              .join(", ")}`;
+
+          text += `\n- Type: ${arg.type}`;
+
+          // Infer
+          if (arg.infer) text += `\n- Inferrable: ${arg.infer ? "yes" : "no"}`;
+
+          // Must be
+          if (arg.mustBe) text += `\n- Must be: "${arg.mustBe}"`;
+
+          // One of
+          if (arg.oneOf)
+            text += `\n- Must be one of: ${arg.oneOf
+              .map((x) => `\`${x}\``)
+              .join(", ")}`;
+
+          // Min & max
+          if ((arg as any).min) text += `\n- Minimum: ${(arg as any).min}`;
+          if ((arg as any).max) text += `\n- Maximum: ${(arg as any).max}`;
+
+          // Allow negative
+          if ((arg as CurrencyArgument).allowNegative)
+            text += `\n- Can be negative: yes`;
+
+          fields.push({
+            name: `${arg.wickStyle ? "?" : ""}${arg.name}${arg.type !== _arg.type ? " (alt)" : ""}`,
+            value: text,
+            inline: true,
+          });
+        }
+      }
+    }
+
+    return paginate({
+      message,
+      embed,
+      type: "field",
+      data: fields,
+      pageLength: 20,
     });
   },
 };
