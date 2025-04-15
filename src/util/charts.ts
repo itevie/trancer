@@ -69,7 +69,9 @@ export async function generateMultilineDataGraph(
     .map((x) => x[1])
     .sort((a, b) => a.getTime() - b.getTime());
 
-  let keys = options.data.map((x) => x[0]);
+  let keys = options.data
+    .map((x) => x[0])
+    .filter((v, i, a) => a.indexOf(v) === i);
 
   let datasets: ChartDataset[] = keys.map((word, i) => {
     return {
