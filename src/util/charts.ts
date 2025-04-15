@@ -118,7 +118,7 @@ export async function generateMultilineDataGraph(
   if (options.last) {
     let cutOff =
       options.last * units[options.unit ?? "day"] * (options.every ?? 1);
-    buckets = buckets.filter((x) => x.getTime() < cutOff);
+    buckets = buckets.filter((x) => Date.now() - x.getTime() < cutOff);
   }
 
   if (options.after) {
