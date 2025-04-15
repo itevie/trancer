@@ -28,6 +28,7 @@ export interface MultilineGraphOptions {
   before?: Date;
   unit?: "hour" | "day" | "month" | "year";
   every?: number;
+  last?: number;
 }
 
 export const graphArgs: Argument[] = [
@@ -78,6 +79,13 @@ export const graphArgs: Argument[] = [
     description: "Only show data before this date",
   },
   {
+    name: "last",
+    aliases: ["l"],
+    type: "wholepositivenumber",
+    wickStyle: true,
+    description: "Use ?unit, it keeps the last x units from the current date",
+  },
+  {
     name: "unit",
     aliases: ["u"],
     type: "string",
@@ -106,6 +114,12 @@ export async function generateMultilineDataGraph(
   let buckets = options.data
     .map((x) => x[1])
     .sort((a, b) => a.getTime() - b.getTime());
+
+  if (options.last) {
+    let cutOff =
+      options.last * units[options.unit ?? "day"] * (options.every ?? 1);
+    buckets = buckets.filter((x) => x.getTime() < cutOff);
+  }
 
   if (options.after) {
     buckets = buckets.filter((x) => x.getTime() > options.after.getTime());
