@@ -54,7 +54,10 @@ export async function checkInfer(
     ];
 
     return preferences.find((x) => x !== null) || value;
-  } else if (arg.infer !== false && ctx.super.message.reference) {
+  } else if (
+    (arg.infer || (arg.type === "user" && arg.infer !== false)) &&
+    ctx.super.message.reference
+  ) {
     let reference = await ctx.super.message.fetchReference();
 
     switch (arg.type) {

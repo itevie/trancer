@@ -44,6 +44,25 @@ const handler: HypnoMessageHandler = {
   ],
 
   handler: async (message) => {
+    // Sheerseeker is gay
+    if (
+      message.author.id === "916688777752240170" &&
+      message.content
+        .toLowerCase()
+        .match(
+          /(i ? don'?t ?think i'?m ?gay)|(i'?m ?not ?gay)|(i ?don'?t ?think i'?m ?gay)/i,
+        )
+    ) {
+      let parts = [
+        "yes you are gay",
+        "haha ur gay",
+        "you literally are gay tho",
+        "yeah sure ok",
+        "yeah sure ok whatever you say",
+      ];
+      return message.reply(parts[Math.floor(Math.random() * parts.length)]);
+    }
+
     // "I'm not a fish"
     if (message.content.match(/(i'?m)? ?(not?) a? ?fishy?/gi)) {
       return message.reply(
