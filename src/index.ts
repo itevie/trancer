@@ -8,7 +8,7 @@ import {
 } from "discord.js";
 import commandLineArgs, { OptionDefinition } from "command-line-args";
 import { HypnoCommand, HypnoMessageHandler } from "./types/util";
-import { connect } from "./util/database";
+import { actions, connect } from "./util/database";
 import getAllFiles, { createBackup, createEmbed } from "./util/other";
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import { checkBadges } from "./util/badges";
@@ -102,6 +102,19 @@ client.on("ready", async () => {
   loadAllSources();
   initStatusChanger();
   loadSlashCommands();
+
+  let quotes = (
+    await actions.quotes.getForServer("1257416273520758814")
+  ).filter((x) => !!x.channel_id);
+  for (const i of quotes)
+    await actions.wordUsage.addMessage({
+      content: i.content,
+      author: { id: i.author_id },
+      guild: {
+        id: i.server_id,
+      },
+      channel: { id: i.channel_id },
+    });
 
   if (
     !args["no-handlers"] &&

@@ -72,7 +72,16 @@ const _actions = {
     init = true;
   },
 
-  addMessage: async (message: Message<true>): Promise<void> => {
+  addMessage: async (
+    message:
+      | Message<true>
+      | {
+          content: string;
+          author: { id: string };
+          guild: { id: string };
+          channel: { id: string };
+        },
+  ): Promise<void> => {
     if (!init) {
       _actions.initCache();
     }
@@ -80,18 +89,9 @@ const _actions = {
     let words = message.content
       .toLowerCase()
       .split(" ")
-      .map((x) => x.replace(/^[^\w']+|[^\w']+$/g, ""))
       // Remove empties, and only keep words that have at least one character
       .filter((x) => x.length > 0 && x.match(/[a-z]/))
-      .filter(
-        (word) =>
-          !word.startsWith("http") &&
-          !word.startsWith("/") &&
-          !word.startsWith("!") &&
-          !word.startsWith("<") &&
-          !word.startsWith("@") &&
-          !word.match(/^:[^ ]+:$/),
-      );
+      .filter((word) => !word.startsWith("http"));
 
     let _time = new Date();
     _time.setMinutes(0, 0, 0);
