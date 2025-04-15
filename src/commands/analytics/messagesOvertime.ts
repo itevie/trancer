@@ -27,7 +27,8 @@ const command: HypnoCommand<{ type?: "hours" | "minutes" | "days" }> = {
     let type = args.type ? args.type : "minutes";
 
     // Get details
-    const messages = await getMessageAtTimes();
+    let messages = await getMessageAtTimes();
+
     const sorted: { [key: string]: number } = {};
 
     for (const msg of messages) {

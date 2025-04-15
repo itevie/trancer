@@ -143,7 +143,7 @@ export async function generateMultilineDataGraph(
       ),
       label: word,
       borderColor: colors[i % colors.length],
-      spanGaps: options.nolink !== null ? options.nolink : true,
+      spanGaps: options.nolink !== null ? !options.nolink : true,
     };
   });
 

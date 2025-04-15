@@ -8,7 +8,7 @@ import {
   definedCacheReversed,
 } from "../../util/db-parts/wordUsage";
 import { ChartJSNodeCanvas } from "chartjs-node-canvas";
-import { AttachmentBuilder } from "discord.js";
+import { AttachmentBuilder, User } from "discord.js";
 import { colors } from "./balanceOvertime";
 import {
   chartJSNodeCanvas,
@@ -16,7 +16,7 @@ import {
   graphArgs,
 } from "../../util/charts";
 
-const command: HypnoCommand<{ words: string[] }> = {
+const command: HypnoCommand<{ words: string[]; user?: User }> = {
   name: "wordsovertime",
   description: "Get a word's usage overtime",
   type: "analytics",
@@ -29,6 +29,13 @@ const command: HypnoCommand<{ words: string[] }> = {
         type: "array",
         inner: "string",
       },
+      {
+        name: "user",
+        type: "user",
+        aliases: ["for"],
+        wickStyle: true,
+        description: "Show the words for a specific user",
+      },
       ...graphArgs,
     ],
   },
@@ -40,6 +47,12 @@ const command: HypnoCommand<{ words: string[] }> = {
         actions.wordUsage.getWordInServer(x, message.guild.id),
       ),
     );
+
+    if (args.user) {
+      loadedWords = loadedWords.map((x) =>
+        x.filter((y) => y.author_id === args.user.id),
+      );
+    }
 
     // By the end we need labels: Dates
     // datesets: [{data: number[], label: word}]
