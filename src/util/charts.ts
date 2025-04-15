@@ -127,6 +127,8 @@ export async function generateMultilineDataGraph(
         result.push(date);
       }
     }
+
+    buckets = result;
   }
 
   let keys = options.data
