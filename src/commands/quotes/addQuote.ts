@@ -74,7 +74,7 @@ const command: HypnoCommand<{ force?: boolean }> = {
         let embed = await actions.quotes.generateEmbed(quote);
 
         let options: MessageEditOptions & MessageCreateOptions =
-          !ref.reference && ref.attachments.size === 0 && ref.content.length > 0
+          ref.attachments.size === 0 && ref.content.length > 0
             ? {
                 files: [await actions.quotes.generateQuoteImage(quote)],
               }
