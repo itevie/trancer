@@ -65,7 +65,7 @@ export let argumentCheckers: Record<
     else if (a.takeRest) result = d.super.args.slice(d.index).join(" ");
     else result = v;
 
-    if (result.length === 0) return "Empty string!";
+    if (!result) return "Empty string!";
 
     return { result };
   },
