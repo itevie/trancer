@@ -340,6 +340,7 @@ const phrases = [
   "that's what she said",
   "that's what he said",
   "yeah i'd love too",
+  "https://cdn.discordapp.com/attachments/1186165471712645180/1362048934893322341/8zp6ph.jpg?ex=6800fa6b&is=67ffa8eb&hm=248ae11c68c6c205fe52759d9df12ce520f219e4fd74487129dbc77a128f3520&",
   "https://tenor.com/view/mf-dog-ate-my-book-on-stoicism-and-he-aint-been-the-same-since-gif-2100496274040615580",
 ];
 
