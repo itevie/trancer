@@ -7,7 +7,7 @@ const command: HypnoCommand<{ what: string; user?: User }> = {
   type: "fun",
 
   args: {
-    requiredArguments: 1,
+    requiredArguments: 2,
     args: [
       {
         name: "user",
