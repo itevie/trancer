@@ -195,8 +195,8 @@ const _actions = {
     );
 
     const pfpSize = height;
-    const mainQuoteFontSize = 64;
-    const usernameFontSize = 32;
+    const mainQuoteFontSize = 96;
+    const usernameFontSize = 48;
 
     const canvas = new Canvas(width, height, "image");
     const ctx = canvas.getContext("2d");
