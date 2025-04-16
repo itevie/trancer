@@ -15,7 +15,7 @@ export const colors =
 const unitTypes = ["day", "hour", "minute"] as const;
 
 const command: HypnoCommand<{
-  user?: User;
+  user?: User[];
   unit?: (typeof unitTypes)[number];
   every?: number;
   past?: number;
@@ -33,7 +33,8 @@ const command: HypnoCommand<{
     args: [
       {
         name: "user",
-        type: "user",
+        type: "array",
+        inner: "user",
       },
       {
         name: "unit",
@@ -80,13 +81,15 @@ const command: HypnoCommand<{
       transaction: MoneyTransaction[];
     }
 
-    const baseUser = args.user ? args.user : message.author;
-    const users: Section[] = [
-      {
-        id: baseUser.id,
-        transaction: await getMoneyTransations(baseUser.id),
-      },
-    ];
+    const baseUsers = args.user ? [...args.user] : [message.author];
+    let users: Section[];
+
+    for (const u of baseUsers) {
+      users.push({
+        id: u.id,
+        transaction: await getMoneyTransations(u.id),
+      });
+    }
 
     if (args.top && args.top > 0) {
       const economy = (await actions.eco.getAll())
