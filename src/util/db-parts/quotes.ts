@@ -232,11 +232,12 @@ const _actions = {
     // Draw main quote
     const lines = splitByLengthWithWhitespace(quote.content, 20);
     let y = height / 2 - (lines.length / 2) * mainQuoteFontSize;
+    const x = width / 1.3 - mainQuoteFontSize;
     ctx.font = `bold ${mainQuoteFontSize}px serif`;
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
     for (const line of lines) {
-      ctx.fillText(line, width / 1.3, y);
+      ctx.fillText(line, x, y);
       y += mainQuoteFontSize;
     }
 
@@ -244,7 +245,7 @@ const _actions = {
     ctx.font = `italic ${displayNameFontSize}px serif`;
     ctx.fillText(
       `- ${user.displayName}${ref ? ` to ${ref.username}}` : ""}`,
-      width / 1.3,
+      x,
       y,
     );
     y += displayNameFontSize;
@@ -252,7 +253,7 @@ const _actions = {
     // Username
     ctx.font = `italic ${usernameFontSize}px serif`;
     ctx.fillStyle = "gray";
-    ctx.fillText(`@${user.username}`, width / 1.3, y);
+    ctx.fillText(`@${user.username}`, x, y);
 
     // ID
     ctx.textAlign = "right";
