@@ -87,7 +87,8 @@ client.on("messageCreate", async function handleMessage(message) {
   // Analytics
   if (
     !message.content.startsWith(settings.prefix) &&
-    !message.content.startsWith(settings.prefix + " ") //&&message.guild.id === config.botServer.id
+    !message.content.startsWith(settings.prefix + " ") &&
+    settings.analytics
   ) {
     await addMessageForCurrentTime(message.channel as TextChannel);
     actions.wordUsage.addMessage(message);
