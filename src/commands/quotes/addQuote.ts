@@ -3,7 +3,7 @@ import { actions, database } from "../../util/database";
 import config from "../../config";
 import ConfirmAction from "../../util/components/Confirm";
 import { createEmbed } from "../../util/other";
-import { MessageCreateOptions } from "discord.js";
+import { MessageCreateOptions, MessageEditOptions } from "discord.js";
 
 const command: HypnoCommand<{ force?: boolean }> = {
   name: "quote",
@@ -73,7 +73,7 @@ const command: HypnoCommand<{ force?: boolean }> = {
 
         let embed = await actions.quotes.generateEmbed(quote);
 
-        let options: MessageCreateOptions =
+        let options: MessageEditOptions & MessageCreateOptions =
           !ref.reference && ref.attachments.size === 0 && ref.content.length > 0
             ? {
                 files: [await actions.quotes.generateQuoteImage(quote)],
