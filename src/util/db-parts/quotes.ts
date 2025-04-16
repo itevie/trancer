@@ -196,7 +196,8 @@ const _actions = {
 
     const pfpSize = height;
     const mainQuoteFontSize = 96;
-    const usernameFontSize = 48;
+    const displayNameFontSize = mainQuoteFontSize - 16;
+    const usernameFontSize = displayNameFontSize - 16;
 
     const canvas = new Canvas(width, height, "image");
     const ctx = canvas.getContext("2d");
@@ -217,7 +218,7 @@ const _actions = {
     ctx.fillRect(0, 0, width, height);
 
     // Draw main quote
-    const lines = splitByLengthWithWhitespace(quote.content, 30);
+    const lines = splitByLengthWithWhitespace(quote.content, 20);
     let y = height / 2 - (lines.length / 2) * mainQuoteFontSize;
     ctx.font = `bold ${mainQuoteFontSize}px serif`;
     ctx.fillStyle = "white";
@@ -228,7 +229,6 @@ const _actions = {
     }
 
     // Display name
-    const displayNameFontSize = 32;
     ctx.font = `italic ${displayNameFontSize}px serif`;
     ctx.fillText(`- ${user.displayName}`, width / 1.3, y);
     y += displayNameFontSize;
