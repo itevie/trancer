@@ -207,7 +207,7 @@ const _actions = {
     );
 
     const pfpSize = height;
-    const mainQuoteFontSize = 84;
+    const mainQuoteFontSize = 72;
     const displayNameFontSize = mainQuoteFontSize - 16;
     const usernameFontSize = displayNameFontSize - 16;
 
