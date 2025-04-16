@@ -69,6 +69,8 @@ const command: HypnoCommand<{ words: string[]; user?: User; top?: number }> = {
       ),
     );
 
+    if (loadedWords.length === 0) return message.reply(`No Data!`);
+
     if (args.user) {
       loadedWords = loadedWords.map((x) =>
         x.filter((y) => y.author_id === args.user.id),
