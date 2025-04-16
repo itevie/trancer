@@ -194,6 +194,10 @@ const _actions = {
       user.displayAvatarURL({ extension: "png", size: 2048 }),
     );
 
+    const pfpSize = height;
+    const mainQuoteFontSize = 64;
+    const usernameFontSize = 32;
+
     const canvas = new Canvas(width, height, "image");
     const ctx = canvas.getContext("2d");
 
@@ -202,7 +206,6 @@ const _actions = {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Draw pfp
-    const pfpSize = height;
     ctx.drawImage(image, 0, 0, pfpSize, pfpSize);
 
     // Overlay
@@ -214,7 +217,6 @@ const _actions = {
     ctx.fillRect(0, 0, width, height);
 
     // Draw main quote
-    const mainQuoteFontSize = 48;
     const lines = splitByLengthWithWhitespace(quote.content, 30);
     let y = height / 2 - (lines.length / 2) * mainQuoteFontSize;
     ctx.font = `bold ${mainQuoteFontSize}px serif`;
@@ -222,17 +224,16 @@ const _actions = {
     ctx.textAlign = "center";
     for (const line of lines) {
       ctx.fillText(line, width / 1.3, y);
-      y += 48;
+      y += mainQuoteFontSize;
     }
 
     // Display name
     const displayNameFontSize = 32;
     ctx.font = `italic ${displayNameFontSize}px serif`;
     ctx.fillText(`- ${user.displayName}`, width / 1.3, y);
-    y += 32;
+    y += displayNameFontSize;
 
     // Username
-    const usernameFontSize = 24;
     ctx.font = `italic ${usernameFontSize}px serif`;
     ctx.fillStyle = "gray";
     ctx.fillText(`@${user.username}`, width / 1.3, y);
