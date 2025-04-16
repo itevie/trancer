@@ -35,7 +35,7 @@ const command: HypnoCommand<{ words: string[] }> = {
     }
 
     await sendProxyMessage(msg.channel as TextChannel, {
-      content: msg.content,
+      content: msg.content + `\n-# <t:${message.createdAt.getTime() / 1000}:R>`,
       username:
         msg.member.displayName || msg.author.displayName || msg.author.username,
       avatarURL: msg.author.displayAvatarURL(),
