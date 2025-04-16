@@ -16,6 +16,7 @@ interface BasePaginationOptions {
   embed: EmbedBuilder;
   type: "description" | "field";
   pageLength?: number;
+  cacheId?: string;
 }
 
 interface DescriptionPaginationOptions extends BasePaginationOptions {

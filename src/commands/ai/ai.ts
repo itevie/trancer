@@ -35,7 +35,7 @@ const command: HypnoCommand = {
 
         components: [
           // @ts-ignore
-          new ActionRowBuilder().addComponents(
+          new ActionRowBuilder<ButtonBuilder>().addComponents(
             Object.keys(characters).map((x) =>
               new ButtonBuilder()
                 .setCustomId(x)
@@ -55,9 +55,11 @@ const command: HypnoCommand = {
           content: characters[type.customId],
         },
       ];
+      await type.deferUpdate();
 
       await msg.edit({
         embeds: [],
+        components: [],
         content: `You selected **${type.customId}** as the character!`,
       });
     }
