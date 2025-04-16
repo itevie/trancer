@@ -165,6 +165,11 @@ interface HypnoCommand<Args extends { [key: string]: any } = {}> {
    * A list of Discord permissions that the user must have to run the command.
    */
   permissions?: PermissionResolvable[];
+
+  /**
+   * Whether or not this command requires a reply
+   */
+  needsReference?: boolean;
 }
 
 interface MessageLike {

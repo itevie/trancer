@@ -1,0 +1,46 @@
+import { TextChannel } from "discord.js";
+import { HypnoCommand } from "../../types/util";
+import { sendProxyMessage } from "../../util/proxy";
+
+const censorLetter = "█";
+
+const command: HypnoCommand<{ words: string[] }> = {
+  name: "censor",
+  type: "fun",
+  description: "Resends a message with censored words",
+  permissions: ["ManageMessages"],
+
+  args: {
+    requiredArguments: 1,
+    args: [
+      {
+        name: "words",
+        type: "array",
+        inner: "string",
+      },
+    ],
+  },
+
+  handler: async (message, { args }) => {
+    if (!message.reference) return message.reply(`Please reply to a message`);
+    let msg = await message.fetchReference();
+
+    await msg.delete();
+    await message.delete();
+
+    for (const a of args.words) {
+      const instance = msg.content.match(new RegExp(a, "gi"));
+      for (const i of instance)
+        msg.content = msg.content.replace(i, censorLetter.repeat(i.length));
+    }
+
+    await sendProxyMessage(msg.channel as TextChannel, {
+      content: msg.content,
+      username:
+        msg.member.displayName || msg.author.displayName || msg.author.username,
+      avatarURL: msg.author.displayAvatarURL(),
+    });
+  },
+};
+
+export default command;
