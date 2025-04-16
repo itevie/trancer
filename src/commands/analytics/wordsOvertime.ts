@@ -59,7 +59,7 @@ const command: HypnoCommand<{ words: string[]; user?: User; top?: number }> = {
           ).sort((a, b) => b[1] - a[1]),
       );
 
-      args.words.push(...words.slice(0, 10).map((x) => x[0]));
+      args.words.push(...words.slice(0, args.top).map((x) => x[0]));
     }
 
     // Initially get data
