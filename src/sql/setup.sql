@@ -1,3 +1,7 @@
+ALTER TABLE server_settings ADD random_replies BOOLEAN DEFAULT true;
+
+ALTER TABLE server_settings ADD react_bot BOOLEAN DEFAULT false;
+
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
@@ -29,7 +33,9 @@ CREATE TABLE IF NOT EXISTS server_settings (
     leave_message TEXT NOT NULL DEFAULT '**{username}** left our server :( We now have {member_count} members',
     allow_nsfw_file_directory_sources BOOLEAN NOT NULL DEFAULT false,
     confessions_channel_id TEXT DEFAULT NULL,
-    analytics BOOLEAN DEFAULT true
+    analytics BOOLEAN DEFAULT true,
+    random_replies BOOLEAN DEFAULT false,
+    react_bot BOOLEAN DEFAULT true
 );
 
 CREATE TABLE IF NOT EXISTS trigger_ideas (

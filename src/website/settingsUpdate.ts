@@ -172,6 +172,16 @@ const settingsUpdate: {
     table: "server_settings",
     row: "analytics",
   },
+  random_replies: {
+    type: "boolean",
+    table: "server_settings",
+    row: "random_replies",
+  },
+  react_bot: {
+    type: "boolean",
+    table: "server_settings",
+    row: "react_bot",
+  },
 };
 
 export async function getWebsiteSettingsFor(

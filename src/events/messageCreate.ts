@@ -49,7 +49,7 @@ client.on("messageCreate", async function handleMessage(message) {
 
   // Run bot-only handlers
   for (const handler of Object.values(handlers).filter((x) => x.botsOnly))
-    handler.handler(message);
+    handler.handler(message, { serverSettings: null as any });
 
   // Other guards
   if (message.author.bot || !message?.author?.id || !message?.guild?.id) return;
@@ -75,7 +75,7 @@ client.on("messageCreate", async function handleMessage(message) {
     for (const handler of Object.values(handlers).filter((x) => !x.botsOnly)) {
       if (handler.noCommands && message.content.startsWith(settings.prefix))
         continue;
-      else handler.handler(message);
+      else handler.handler(message, { serverSettings: settings });
     }
   }
 

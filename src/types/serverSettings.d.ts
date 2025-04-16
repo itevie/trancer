@@ -41,6 +41,8 @@ interface ServerSettings {
   confessions_channel_id: string | null;
 
   analytics: boolean;
+  random_replies: boolean;
+  react_bot: boolean;
 }
 
 interface ChannelImposition {

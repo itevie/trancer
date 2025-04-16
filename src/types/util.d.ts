@@ -310,5 +310,8 @@ interface HypnoMessageHandler {
   botServerOnly?: boolean;
   disabled?: boolean;
 
-  handler: (message: Message) => void;
+  handler: (
+    message: Message,
+    settings: { serverSettings: ServerSettings },
+  ) => void;
 }

@@ -31,7 +31,25 @@ export default function BasicSettings({
         name="Analytics"
         description="Should Trancer track analytics for your server? Like messages overtime, most frequently used words? (This is not viewed by the bot owner, it's simply for your own fun)"
       >
-        <TrancerStringInput k="analytics" server={server} />
+        <TrancerBooleanInput k="analytics" server={server} />
+      </FullWidthInput>
+      <FullWidthInput
+        name="Random Responds"
+        description="Whether or not things like patpat's for fuck you's, and the gif for im immune"
+      >
+        <TrancerBooleanInput k="random_replies" server={server} />
+      </FullWidthInput>
+      <FullWidthInput
+        name="React Bot"
+        description="Randomly respond to messages every so often with random crap"
+      >
+        <TrancerBooleanInput k="react_bot" server={server} />
+      </FullWidthInput>
+      <FullWidthInput
+        name="Enable React Bot"
+        description="Disable things like patpat's for fuck you's, and the gif for im immune"
+      >
+        <TrancerBooleanInput k="analytics" server={server} />
       </FullWidthInput>
       <Words type="heading">Channels</Words>
       <label>Define some simple channels for Trancer to use!</label>

@@ -355,9 +355,9 @@ const handler: HypnoMessageHandler = {
     "Sends a random message every so often (similar to ReactBot but JJJack)",
   botServerOnly: true,
 
-  handler: async (message) => {
-    if (![config.botServer.id, "899811497121828914"].includes(message.guild.id))
-      return;
+  handler: async (message, { serverSettings }) => {
+    if (!serverSettings.react_bot) return;
+
     if (message.author.bot) return;
     if (excludedChannels.includes(message.channel.id)) return;
     messagesSince++;

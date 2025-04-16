@@ -43,7 +43,9 @@ const handler: HypnoMessageHandler = {
     `"I'm immune": responds with random bit of impo + a gif`,
   ],
 
-  handler: async (message) => {
+  handler: async (message, { serverSettings }) => {
+    if (!serverSettings.random_replies) return;
+
     // Sheerseeker is gay
     if (
       message.author.id === "916688777752240170" &&
