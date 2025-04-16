@@ -54,16 +54,25 @@ const command: HypnoCommand<{
           msg.content = msg.content.replace(i, censorLetter.repeat(i.length));
       }
 
-    if (args.numbers)
-      message.content = message.content
+    console.log(
+      args.numbers,
+      msg.content
         .split(" ")
         .map((x, i) =>
-          args.numbers.includes(+i) ? censorLetter.repeat(x.length) : x,
+          args.numbers.includes(+i + 1) ? censorLetter.repeat(x.length) : x,
+        ),
+    );
+
+    if (args.numbers)
+      msg.content = msg.content
+        .split(" ")
+        .map((x, i) =>
+          args.numbers.includes(+i + 1) ? censorLetter.repeat(x.length) : x,
         )
         .join(" ");
 
     if (args.all)
-      message.content = message.content
+      msg.content = msg.content
         .split(" ")
         .map((x, i) => censorLetter.repeat(x.length))
         .join(" ");
