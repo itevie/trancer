@@ -58,8 +58,6 @@ export async function checkCommandArguments(
       continue;
     }
 
-    artifical++;
-
     // Check if it is wickstyle and should be set
     if (arg.wickStyle) {
       let key =
@@ -194,6 +192,7 @@ export async function checkCommandArguments(
       }
 
       ctx.details.args[arg.name] = result.result;
+      artifical++;
       break;
     }
   }
