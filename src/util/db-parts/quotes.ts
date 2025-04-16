@@ -1,10 +1,18 @@
-import { EmbedBuilder, Message, TextBasedChannel, User } from "discord.js";
+import {
+  AttachmentBuilder,
+  EmbedBuilder,
+  Message,
+  TextBasedChannel,
+  User,
+} from "discord.js";
 import { database } from "../database";
 import { createEmbed } from "../other";
 import { client } from "../..";
 import { getUsernameSync } from "../cachedUsernames";
 import { addAbortSignal } from "stream";
 import { addMessageForCurrentTime } from "../analytics";
+import { ChartJSNodeCanvas } from "chartjs-node-canvas";
+import { Canvas, CanvasRenderingContext2D, loadImage } from "canvas";
 
 const _actions = {
   add: async (message: Message, createdBy: string): Promise<Quote> => {
@@ -177,6 +185,113 @@ const _actions = {
 
     return embed;
   },
+
+  generateQuoteImage: async (quote: Quote): Promise<AttachmentBuilder> => {
+    const width = 1920;
+    const height = 1080;
+    const user = await client.users.fetch(quote.author_id);
+    const image = await loadImage(
+      user.displayAvatarURL({ extension: "png", size: 2048 }),
+    );
+
+    const canvas = new Canvas(width, height, "image");
+    const ctx = canvas.getContext("2d");
+
+    // Make it all black
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw pfp
+    const pfpSize = height;
+    ctx.drawImage(image, 0, 0, pfpSize, pfpSize);
+
+    // Overlay
+    const gradient = ctx.createLinearGradient(width / 2, 0, 0, 0);
+    gradient.addColorStop(0, "rgba(0, 0, 0, 1)");
+    gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, width, height);
+
+    // Draw main quote
+    const mainQuoteFontSize = 48;
+    const lines = splitByLengthWithWhitespace(quote.content, 30);
+    let y = height / 2 - (lines.length / 2) * mainQuoteFontSize;
+    ctx.font = `bold ${mainQuoteFontSize}px serif`;
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    for (const line of lines) {
+      ctx.fillText(line, width / 1.3, y);
+      y += 48;
+    }
+
+    // Display name
+    const displayNameFontSize = 32;
+    ctx.font = `italic ${displayNameFontSize}px serif`;
+    ctx.fillText(`- ${user.displayName}`, width / 1.3, y);
+    y += 32;
+
+    // Username
+    const usernameFontSize = 24;
+    ctx.font = `italic ${usernameFontSize}px serif`;
+    ctx.fillStyle = "gray";
+    ctx.fillText(`@${user.username}`, width / 1.3, y);
+
+    // ID
+    ctx.textAlign = "right";
+    ctx.fillText(`ID #20`, width - 24, height - 24);
+
+    // Make it gray
+    applyGrayscale(ctx, 0, 0, width, height);
+
+    // Done
+    const img = canvas.toBuffer("image/png");
+    const attachment = new AttachmentBuilder(img).setFile(img);
+
+    return attachment;
+  },
 } as const;
 
 export default _actions;
+
+function splitByLengthWithWhitespace(str: string, maxLength = 20) {
+  const result = [];
+  let remaining = str;
+
+  while (remaining.length > maxLength) {
+    // Try to find the last whitespace before maxLength
+    let splitAt = remaining.lastIndexOf(" ", maxLength);
+    if (splitAt === -1) splitAt = maxLength; // fallback to hard split
+
+    result.push(remaining.slice(0, splitAt).trim());
+    remaining = remaining.slice(splitAt).trim();
+  }
+
+  if (remaining.length > 0) result.push(remaining);
+
+  return result;
+}
+
+function applyGrayscale(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+) {
+  const imageData = ctx.getImageData(x, y, width, height);
+  const data = imageData.data;
+
+  for (let i = 0; i < data.length; i += 4) {
+    // Calculate luminance using weighted average
+    const r = data[i];
+    const g = data[i + 1];
+    const b = data[i + 2];
+    const avg = 0.299 * r + 0.587 * g + 0.114 * b;
+
+    // Set R, G, B to the grayscale value
+    data[i] = data[i + 1] = data[i + 2] = avg;
+  }
+
+  ctx.putImageData(imageData, x, y);
+}
