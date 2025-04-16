@@ -42,6 +42,7 @@ export async function checkCommandArguments(
 
   // Validate arguments
   if (!command.args) return true;
+  let artifical = 0;
 
   for (let i in command.args.args) {
     const arg = command.args.args[i];
@@ -56,6 +57,8 @@ export async function checkCommandArguments(
 
       continue;
     }
+
+    artifical++;
 
     // Check if it is wickstyle and should be set
     if (arg.wickStyle) {
@@ -114,7 +117,7 @@ export async function checkCommandArguments(
       let _arg = toCheck[i];
       let result = await argumentCheckers[_arg.type](_arg, givenValue, {
         super: ctx,
-        index: +i,
+        index: artifical,
       });
 
       // Check if the arg parser gave a error
