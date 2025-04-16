@@ -1,7 +1,3 @@
-ALTER TABLE server_settings ADD random_replies BOOLEAN DEFAULT true;
-
-ALTER TABLE server_settings ADD react_bot BOOLEAN DEFAULT false;
-
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',

@@ -15,10 +15,12 @@ import XPSettings from "./DashboardPages/XPSettings";
 
 export default function Dashboard() {
   const server = useServerResources(
-    window.location.pathname.match(/\/servers\/([0-9]*)/)?.[1] as string
+    window.location.pathname.match(/\/servers\/([0-9]*)/)?.[1] as string,
   );
 
-  return (
+  return server.resources.channels.length === 0 ? (
+    <></>
+  ) : (
     <>
       <AppNavbar full />
       {Object.keys(server.modified).length > 0 ? (

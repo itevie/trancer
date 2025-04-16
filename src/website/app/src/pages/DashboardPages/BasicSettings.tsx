@@ -45,12 +45,6 @@ export default function BasicSettings({
       >
         <TrancerBooleanInput k="react_bot" server={server} />
       </FullWidthInput>
-      <FullWidthInput
-        name="Enable React Bot"
-        description="Disable things like patpat's for fuck you's, and the gif for im immune"
-      >
-        <TrancerBooleanInput k="analytics" server={server} />
-      </FullWidthInput>
       <Words type="heading">Channels</Words>
       <label>Define some simple channels for Trancer to use!</label>
       <FullWidthInput
