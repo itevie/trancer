@@ -11,7 +11,10 @@ const command: HypnoCommand<{
 }> = {
   name: "censor",
   type: "fun",
-  description: "Resends a message with censored words",
+  description: "Resends a message with censored words".replace(
+    /[^ ]/g,
+    censorLetter,
+  ),
   permissions: ["ManageMessages"],
 
   args: {
