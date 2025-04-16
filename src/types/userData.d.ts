@@ -19,6 +19,7 @@ interface UserData {
   relationships: boolean;
   count_banned: boolean;
   birthday: string | null;
+  analytics: boolean;
 }
 
 interface PinnedRating {

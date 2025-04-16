@@ -1,3 +1,5 @@
+ALTER TABLE server_settings ADD analytics BOOLEAN DEFAULT true;
+
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
@@ -28,7 +30,8 @@ CREATE TABLE IF NOT EXISTS server_settings (
     leave_channel_id TEXT DEFAULT NULL,
     leave_message TEXT NOT NULL DEFAULT '**{username}** left our server :( We now have {member_count} members',
     allow_nsfw_file_directory_sources BOOLEAN NOT NULL DEFAULT false,
-    confessions_channel_id TEXT DEFAULT NULL
+    confessions_channel_id TEXT DEFAULT NULL,
+    analytics BOOLEAN DEFAULT true
 );
 
 CREATE TABLE IF NOT EXISTS trigger_ideas (

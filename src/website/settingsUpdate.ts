@@ -167,6 +167,11 @@ const settingsUpdate: {
     row: "confessions_channel_id",
     botNeeds: ["SendMessages", "EmbedLinks", "ManageMessages"],
   },
+  analytics: {
+    type: "boolean",
+    table: "server_settings",
+    row: "analytics",
+  },
 };
 
 export async function getWebsiteSettingsFor(

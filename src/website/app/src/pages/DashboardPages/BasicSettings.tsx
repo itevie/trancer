@@ -27,6 +27,12 @@ export default function BasicSettings({
       >
         <TrancerStringInput k="prefix" server={server} />
       </FullWidthInput>
+      <FullWidthInput
+        name="Analytics"
+        description="Should Trancer track analytics for your server? Like messages overtime, most frequently used words? (This is not viewed by the bot owner, it's simply for your own fun)"
+      >
+        <TrancerStringInput k="analytics" server={server} />
+      </FullWidthInput>
       <Words type="heading">Channels</Words>
       <label>Define some simple channels for Trancer to use!</label>
       <FullWidthInput
