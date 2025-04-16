@@ -5,7 +5,7 @@ const command: HypnoCommand<{ content: string; channel: Channel }> = {
   name: "send",
   description: "Sends a message in another channel",
   type: "admin",
-  guards: ["admin"],
+  permissions: ["ManageMessages"],
 
   args: {
     requiredArguments: 2,
