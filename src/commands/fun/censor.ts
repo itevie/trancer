@@ -4,19 +4,36 @@ import { createMessageRefEmbed, sendProxyMessage } from "../../util/proxy";
 
 const censorLetter = "█";
 
-const command: HypnoCommand<{ words: string[] }> = {
+const command: HypnoCommand<{
+  words: string[];
+  numbers?: number[];
+  all?: boolean;
+}> = {
   name: "censor",
   type: "fun",
   description: "Resends a message with censored words",
   permissions: ["ManageMessages"],
 
   args: {
-    requiredArguments: 1,
+    requiredArguments: 0,
     args: [
       {
         name: "words",
         type: "array",
         inner: "string",
+      },
+      {
+        name: "numbers",
+        type: "array",
+        inner: "wholepositivenumber",
+        aliases: ["ns", "n"],
+        wickStyle: true,
+      },
+      {
+        name: "all",
+        type: "boolean",
+        wickStyle: true,
+        aliases: ["a"],
       },
     ],
   },
@@ -35,6 +52,20 @@ const command: HypnoCommand<{ words: string[] }> = {
       for (const i of instance || [])
         msg.content = msg.content.replace(i, censorLetter.repeat(i.length));
     }
+
+    if (args.numbers)
+      message.content = message.content
+        .split(" ")
+        .map((x, i) =>
+          args.numbers.includes(+i) ? censorLetter.repeat(x.length) : x,
+        )
+        .join(" ");
+
+    if (args.all)
+      message.content = message.content
+        .split(" ")
+        .map((x, i) => censorLetter.repeat(x.length))
+        .join(" ");
 
     await sendProxyMessage(msg.channel as TextChannel, {
       content:
