@@ -19,7 +19,7 @@ export async function sendProxyMessage(
 
     if (!webook)
       webook = await channel.createWebhook({
-        name: "TrancerWebook",
+        name: "TrancerWebhook",
         reason: "UwU",
       });
 
