@@ -29,8 +29,10 @@ const command: HypnoCommand<{ words: string[] }> = {
     await message.delete();
 
     for (const a of args.words) {
-      const instance = msg.content.match(new RegExp(a, "gi"));
-      for (const i of instance)
+      const instance = msg.content.match(
+        new RegExp(a.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"),
+      );
+      for (const i of instance || [])
         msg.content = msg.content.replace(i, censorLetter.repeat(i.length));
     }
 
