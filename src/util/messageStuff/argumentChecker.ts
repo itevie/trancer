@@ -65,6 +65,8 @@ export let argumentCheckers: Record<
     else if (a.takeRest) result = d.super.args.slice(d.index).join(" ");
     else result = v;
 
+    if (result.length === 0) return "Empty string!";
+
     return { result };
   },
   array: async (a: ArrayArgument, v, d) => {
