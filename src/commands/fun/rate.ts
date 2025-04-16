@@ -10,13 +10,14 @@ const command: HypnoCommand<{ what: string; user?: User }> = {
     requiredArguments: 1,
     args: [
       {
-        name: "what",
-        type: "string",
-      },
-      {
         name: "user",
         type: "user",
         infer: true,
+      },
+      {
+        name: "what",
+        type: "string",
+        takeRest: true,
       },
     ],
   },
@@ -27,7 +28,7 @@ const command: HypnoCommand<{ what: string; user?: User }> = {
     return message.reply(
       `According to my calculation... **${
         user.username
-      }** is... **${createRating(user.username, args.what)}% ${args.what}**`
+      }** is... **${createRating(user.username, args.what)}% ${args.what}**`,
     );
   },
 };
@@ -42,7 +43,7 @@ export function createRating(username: string, what: string): number {
 export function randomNumberFromString(
   input: string,
   rangeMin: number,
-  rangeMax: number
+  rangeMax: number,
 ) {
   // Step 1: Hash the string using a simple hash function
   function simpleHash(str: string) {
