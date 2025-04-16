@@ -43,20 +43,19 @@ export async function checkCommandArguments(
   // Validate arguments
   if (!command.args) return true;
 
-  if (
-    command.args.args[0]?.type === "user" &&
-    !args[0]?.match(/<?@?[0-9]{5,}>?/)
-  ) {
-    if (command.args.args[0].infer !== false && ctx.message.reference) {
-      args.unshift((await ctx.message.fetchReference()).author.id.toString());
-    } else {
-      args.unshift("me");
-    }
-  }
-
   for (let i in command.args.args) {
     const arg = command.args.args[i];
     let givenValue = args[i];
+
+    if (+i === 0 && arg.type === "user" && !args[0]?.match(/<?@?[0-9]{5,}>?/)) {
+      if (arg.infer !== false && ctx.message.reference) {
+        details.args[arg.name] = (await ctx.message.fetchReference()).author;
+      } else {
+        details.args[arg.name] = message.author;
+      }
+
+      continue;
+    }
 
     // Check if it is wickstyle and should be set
     if (arg.wickStyle) {

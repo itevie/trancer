@@ -62,7 +62,7 @@ export let argumentCheckers: Record<
 
     if (a.takeContent && v.split(" ").length === 1)
       result = d.super.args.join(" ");
-    else if (a.takeRest) result = d.super.args.slice(d.index).join(" ");
+    else if (a.takeRest) result = d.super.args.slice(d.index + 1).join(" ");
     else result = v;
 
     return { result };
