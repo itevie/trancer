@@ -244,7 +244,7 @@ const _actions = {
     // Display name
     ctx.font = `italic ${displayNameFontSize}px serif`;
     ctx.fillText(
-      `- ${user.displayName}${ref ? ` to ${ref.username}}` : ""}`,
+      `- ${user.displayName}${ref ? ` to ${ref.username}` : ""}`,
       x,
       y,
     );

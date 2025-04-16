@@ -103,6 +103,12 @@ client.on("ready", async () => {
   initStatusChanger();
   loadSlashCommands();
 
+  /*const quotes = (await actions.quotes.getForServer("1257416273520758814"))
+    .map((x) => x.content)
+    .join("\n");
+  writeFileSync("./test.txt", quotes);
+*/
+
   // let quotes = (
   //   await actions.quotes.getForServer("1257416273520758814")
   // ).filter((x) => !!x.channel_id);

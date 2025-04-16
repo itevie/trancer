@@ -1,6 +1,6 @@
 import { argv0 } from "node:process";
 import { HypnoCommand } from "../../types/util";
-import { actions } from "../../util/database";
+import { actions, keyedCache } from "../../util/database";
 import { ChartConfiguration, ChartDataset } from "chart.js";
 import { PERM } from "sqlite3";
 import {
@@ -16,7 +16,7 @@ import {
   graphArgs,
 } from "../../util/charts";
 
-const command: HypnoCommand<{ words: string[]; user?: User }> = {
+const command: HypnoCommand<{ words: string[]; user?: User; top?: number }> = {
   name: "wordsovertime",
   description: "Get a word's usage overtime",
   type: "analytics",
@@ -36,11 +36,32 @@ const command: HypnoCommand<{ words: string[]; user?: User }> = {
         wickStyle: true,
         description: "Show the words for a specific user",
       },
+      {
+        name: "top",
+        type: "number",
+        aliases: ["top"],
+        wickStyle: true,
+        description: "Also show the top x",
+      },
       ...graphArgs,
     ],
   },
 
   handler: async (message, { args }) => {
+    if (args.top) {
+      let words = await keyedCache(
+        `serverwords-${message.guild.id}`,
+        async () =>
+          Object.entries(
+            await actions.wordUsage.toObject(
+              await actions.wordUsage.getForServer(message.guild.id),
+            ),
+          ).sort((a, b) => b[1] - a[1]),
+      );
+
+      args.words.push(...words.slice(0, 10).map((x) => x[0]));
+    }
+
     // Initially get data
     let loadedWords = await Promise.all(
       args.words.map((x) =>
