@@ -1,5 +1,6 @@
 import { Message } from "discord.js";
 import { analyticDatabase } from "../analytics";
+import { cached } from "../database";
 
 export let definedCache: Map<string, number> = new Map();
 export let definedCacheReversed: Map<number, string> = new Map();

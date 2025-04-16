@@ -1,6 +1,6 @@
 import { User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { actions } from "../../util/database";
+import { actions, keyedCache } from "../../util/database";
 import { paginate } from "../../util/components/pagination";
 import { createEmbed } from "../../util/other";
 import { units } from "../../util/ms";
@@ -24,21 +24,15 @@ const command: HypnoCommand<{ user?: User }> = {
   },
 
   handler: async (message, { args }) => {
-    let words: [string, number][];
-
-    if (
-      !cache.get(args.user.id) ||
-      Date.now() - cache.get(args.user.id).time.getTime() > units.hour
-    ) {
-      words = Object.entries(
-        await actions.wordUsage.toObject(
-          await actions.wordUsage.getFor(args.user.id, message.guild.id),
-        ),
-      ).sort((a, b) => b[1] - a[1]);
-      cache.set(args.user.id, { time: new Date(), data: words });
-    } else {
-      words = cache.get(args.user.id).data;
-    }
+    let words: [string, number][] = await keyedCache(
+      `words-${message.guild.id}-${args.user.id}`,
+      async () =>
+        Object.entries(
+          await actions.wordUsage.toObject(
+            await actions.wordUsage.getFor(args.user.id, message.guild.id),
+          ),
+        ).sort((a, b) => b[1] - a[1]),
+    );
 
     return paginate({
       message,

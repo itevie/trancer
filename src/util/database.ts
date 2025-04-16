@@ -29,6 +29,7 @@ import commandCreations from "./db-parts/commandCreations";
 import triggerIdeas from "./db-parts/triggerIdeas";
 import confessions from "./db-parts/confessions";
 import wordUsage from "./db-parts/wordUsage";
+import { units } from "./ms";
 
 export let database: Database<sqlite3.Database, Statement>;
 export const databaseLogger = new Logger("database");
@@ -59,6 +60,45 @@ export const actions = {
   confessions,
   wordUsage,
 } as const;
+
+export function cached<T extends (...args: unknown[]) => Promise<any>>(
+  f: T,
+  period?: number,
+): (...args: Parameters<T>) => Promise<Awaited<ReturnType<T>>> {
+  const cache: Map<string, { time: number; data: Awaited<ReturnType<T>> }> =
+    new Map();
+
+  return async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>>> => {
+    const key = JSON.stringify(args);
+
+    if (
+      !cache.has(key) ||
+      Date.now() - cache.get(key).time >= (period ?? units.hour)
+    ) {
+      let value = await f(...args);
+      cache.set(key, { time: Date.now(), data: value });
+      return value;
+    }
+
+    return cache.get(key).data;
+  };
+}
+
+let nameCache: Map<string, any> = new Map();
+export async function keyedCache<
+  T extends (...args: unknown[]) => Promise<any>,
+>(key: string, f: T): Promise<Awaited<ReturnType<T>>> {
+  if (
+    !nameCache.has(key) ||
+    Date.now() - nameCache.get(key).time >= units.hour
+  ) {
+    let value = await f();
+    nameCache.set(key, { time: Date.now(), data: value });
+    return value;
+  }
+
+  return nameCache.get(key).data;
+}
 
 export async function connect(): Promise<void> {
   // This is relative to the config file

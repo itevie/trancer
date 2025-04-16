@@ -340,6 +340,7 @@ const phrases = [
   "that's what she said",
   "that's what he said",
   "yeah i'd love too",
+  "https://tenor.com/view/mf-dog-ate-my-book-on-stoicism-and-he-aint-been-the-same-since-gif-2100496274040615580",
 ];
 
 let messagesSince = 0;
@@ -354,7 +355,8 @@ const handler: HypnoMessageHandler = {
   botServerOnly: true,
 
   handler: async (message) => {
-    if (message.guild.id !== config.botServer.id) return;
+    if (![config.botServer.id, "899811497121828914"].includes(message.guild.id))
+      return;
     if (message.author.bot) return;
     if (excludedChannels.includes(message.channel.id)) return;
     messagesSince++;
