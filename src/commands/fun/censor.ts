@@ -1,6 +1,6 @@
 import { TextChannel } from "discord.js";
 import { HypnoCommand } from "../../types/util";
-import { sendProxyMessage } from "../../util/proxy";
+import { createMessageRefEmbed, sendProxyMessage } from "../../util/proxy";
 
 const censorLetter = "█";
 
@@ -41,6 +41,10 @@ const command: HypnoCommand<{ words: string[] }> = {
       username:
         msg.member.displayName || msg.author.displayName || msg.author.username,
       avatarURL: msg.author.displayAvatarURL(),
+      files: msg.attachments.map((x) => x.proxyURL),
+      embeds: msg.reference
+        ? [createMessageRefEmbed(await msg.fetchReference())]
+        : [],
     });
   },
 };
