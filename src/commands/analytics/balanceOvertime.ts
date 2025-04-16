@@ -82,7 +82,7 @@ const command: HypnoCommand<{
     }
 
     const baseUsers = args.user ? [...args.user] : [message.author];
-    let users: Section[];
+    let users: Section[] = [];
 
     for (const u of baseUsers) {
       users.push({
