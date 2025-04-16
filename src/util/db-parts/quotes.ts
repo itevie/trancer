@@ -190,12 +190,24 @@ const _actions = {
     const width = 1920;
     const height = 1080;
     const user = await client.users.fetch(quote.author_id);
+    let ref: User | null = null;
+
+    try {
+      const channel = await client.channels.fetch(quote.channel_id);
+      const message = await (channel as TextBasedChannel).messages.fetch(
+        quote.message_id,
+      );
+      if (message.reference) {
+        ref = (await message.fetchReference()).author;
+      }
+    } catch {}
+
     const image = await loadImage(
       user.displayAvatarURL({ extension: "png", size: 2048 }),
     );
 
     const pfpSize = height;
-    const mainQuoteFontSize = 96;
+    const mainQuoteFontSize = 84;
     const displayNameFontSize = mainQuoteFontSize - 16;
     const usernameFontSize = displayNameFontSize - 16;
 
@@ -230,7 +242,11 @@ const _actions = {
 
     // Display name
     ctx.font = `italic ${displayNameFontSize}px serif`;
-    ctx.fillText(`- ${user.displayName}`, width / 1.3, y);
+    ctx.fillText(
+      `- ${user.displayName}${ref ? ` to ${ref.username}}` : ""}`,
+      width / 1.3,
+      y,
+    );
     y += displayNameFontSize;
 
     // Username
@@ -240,7 +256,7 @@ const _actions = {
 
     // ID
     ctx.textAlign = "right";
-    ctx.fillText(`ID #20`, width - 24, height - 24);
+    ctx.fillText(`ID #${quote.id}`, width - 24, height - 24);
 
     // Make it gray
     applyGrayscale(ctx, 0, 0, width, height);
