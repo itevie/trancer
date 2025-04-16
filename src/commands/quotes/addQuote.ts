@@ -3,6 +3,7 @@ import { actions, database } from "../../util/database";
 import config from "../../config";
 import ConfirmAction from "../../util/components/Confirm";
 import { createEmbed } from "../../util/other";
+import { MessageCreateOptions } from "discord.js";
 
 const command: HypnoCommand<{ force?: boolean }> = {
   name: "quote",
@@ -43,11 +44,11 @@ const command: HypnoCommand<{ force?: boolean }> = {
     // Check if already quoted
     let messageAlreadyExists = await database.get<Quote>(
       `SELECT * FROM quotes WHERE message_id = (?)`,
-      ref.id
+      ref.id,
     );
     if (messageAlreadyExists)
       return message.reply(
-        `Sadly, that quote has already been quoted! :cyclone: (id: #${messageAlreadyExists.id})`
+        `Sadly, that quote has already been quoted! :cyclone: (id: #${messageAlreadyExists.id})`,
       );
 
     // Check similar
@@ -55,14 +56,14 @@ const command: HypnoCommand<{ force?: boolean }> = {
       `SELECT * FROM quotes WHERE LOWER(content) = ? AND server_id = ? AND author_id = ?`,
       ref.content.toLowerCase(),
       message.guild.id,
-      ref.author.id
+      ref.author.id,
     );
 
     ConfirmAction({
       message,
       embed: messageIsSimilar
         ? (await actions.quotes.generateEmbed(messageIsSimilar)).setTitle(
-            "That quote is too similar to this quote! Is it worth it?"
+            "That quote is too similar to this quote! Is it worth it?",
           )
         : createEmbed(),
       autoYes: !messageIsSimilar,
@@ -72,21 +73,26 @@ const command: HypnoCommand<{ force?: boolean }> = {
 
         let embed = await actions.quotes.generateEmbed(quote);
 
+        let options: MessageCreateOptions =
+          !ref.reference && ref.attachments.size === 0 && ref.content.length > 0
+            ? {
+                files: [await actions.quotes.generateQuoteImage(quote)],
+              }
+            : { embeds: [embed] };
+
         // Check if should send in quotes channel
         if (serverSettings.quotes_channel_id) {
           try {
             let channel = await message.guild.channels.fetch(
-              serverSettings.quotes_channel_id
+              serverSettings.quotes_channel_id,
             );
             if (channel.isTextBased()) {
-              await channel.send({
-                embeds: [embed],
-              });
+              await channel.send(options);
             }
           } catch {}
         }
 
-        return { embeds: [embed] };
+        return options;
       },
     });
   },
