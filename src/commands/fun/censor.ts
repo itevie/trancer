@@ -42,9 +42,6 @@ const command: HypnoCommand<{
     if (!message.reference) return message.reply(`Please reply to a message`);
     let msg = await message.fetchReference();
 
-    await msg.delete();
-    await message.delete();
-
     if (args.words)
       for (const a of args.words) {
         const instance = msg.content.match(
@@ -53,15 +50,6 @@ const command: HypnoCommand<{
         for (const i of instance || [])
           msg.content = msg.content.replace(i, censorLetter.repeat(i.length));
       }
-
-    console.log(
-      args.numbers,
-      msg.content
-        .split(" ")
-        .map((x, i) =>
-          args.numbers.includes(+i + 1) ? censorLetter.repeat(x.length) : x,
-        ),
-    );
 
     if (args.numbers)
       msg.content = msg.content
@@ -77,6 +65,8 @@ const command: HypnoCommand<{
         .map((x, i) => censorLetter.repeat(x.length))
         .join(" ");
 
+    await msg.delete();
+    await message.delete();
     await sendProxyMessage(msg.channel as TextChannel, {
       content:
         msg.content +
