@@ -104,7 +104,11 @@ const command: HypnoCommand<{
 
 export default command;
 
-function maskExceptSubstrings(input: string, keeps: string[]): string {
+function maskExceptSubstrings(
+  input: string,
+  keeps: string[],
+  char = censorLetter,
+): string {
   const escapedKeeps = keeps.map((k) =>
     k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
   );
@@ -114,7 +118,7 @@ function maskExceptSubstrings(input: string, keeps: string[]): string {
   return input
     .split(" ")
     .map((word) => {
-      const mask = Array(word.length).fill("?");
+      const mask = Array(word.length).fill(char);
 
       for (const match of word.matchAll(regex)) {
         const start = match.index!;
