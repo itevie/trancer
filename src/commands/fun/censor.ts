@@ -52,15 +52,13 @@ const command: HypnoCommand<{
     if (!message.reference) return message.reply(`Please reply to a message`);
     let msg = await message.fetchReference();
 
-    if (args.words && args.opposite)
-      msg.content = msg.content
-        .split(" ")
-        .map((x) =>
-          args.words.includes(x) ? x : censorLetter.repeat(x.length),
-        )
-        .join(" ");
-    else if (args.words)
+    if (args.words)
       for (const a of args.words) {
+        if (args.opposite) {
+          msg.content = maskExceptSubstring(msg.content, a);
+          continue;
+        }
+
         const instance = msg.content.match(
           new RegExp(a.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"),
         );
@@ -108,3 +106,29 @@ const command: HypnoCommand<{
 };
 
 export default command;
+
+function maskExceptSubstring(
+  input: string,
+  keep: string,
+  char = censorLetter,
+): string {
+  const escapedKeep = keep.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const regex = new RegExp(escapedKeep, "i"); // case-insensitive
+
+  return input
+    .split(" ")
+    .map((word) => {
+      const match = word.match(regex);
+      if (!match) return char.repeat(word.length);
+
+      const start = match.index!;
+      const end = start + match[0].length;
+
+      return (
+        char.repeat(start) +
+        word.slice(start, end) +
+        char.repeat(word.length - end)
+      );
+    })
+    .join(" ");
+}
