@@ -109,22 +109,22 @@ function maskExceptSubstrings(input: string, keeps: string[]): string {
     k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
   );
   const pattern = escapedKeeps.join("|");
-  const regex = new RegExp(pattern, "i"); // case-insensitive
+  const regex = new RegExp(pattern, "gi"); // global & case-insensitive
 
   return input
     .split(" ")
     .map((word) => {
-      const match = word.match(regex);
-      if (!match) return "?".repeat(word.length);
+      const mask = Array(word.length).fill("?");
 
-      const start = match.index!;
-      const end = start + match[0].length;
+      for (const match of word.matchAll(regex)) {
+        const start = match.index!;
+        const end = start + match[0].length;
+        for (let i = start; i < end; i++) {
+          mask[i] = word[i];
+        }
+      }
 
-      return (
-        "?".repeat(start) +
-        word.slice(start, end) +
-        "?".repeat(word.length - end)
-      );
+      return mask.join("");
     })
     .join(" ");
 }
