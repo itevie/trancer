@@ -8,6 +8,7 @@ const command: HypnoCommand<{
   words: string[];
   numbers?: number[];
   all?: boolean;
+  opposite?: boolean;
 }> = {
   name: "censor",
   type: "fun",
@@ -38,6 +39,12 @@ const command: HypnoCommand<{
         wickStyle: true,
         aliases: ["a"],
       },
+      {
+        name: "opposite",
+        type: "boolean",
+        wickStyle: true,
+        aliases: ["o"],
+      },
     ],
   },
 
@@ -45,7 +52,14 @@ const command: HypnoCommand<{
     if (!message.reference) return message.reply(`Please reply to a message`);
     let msg = await message.fetchReference();
 
-    if (args.words)
+    if (args.words && args.opposite)
+      msg.content = msg.content
+        .split(" ")
+        .map((x) =>
+          args.words.includes(x) ? x : censorLetter.repeat(x.length),
+        )
+        .join(" ");
+    else if (args.words)
       for (const a of args.words) {
         const instance = msg.content.match(
           new RegExp(a.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"),
@@ -57,15 +71,23 @@ const command: HypnoCommand<{
     if (args.numbers)
       msg.content = msg.content
         .split(" ")
-        .map((x, i) =>
-          args.numbers.includes(+i + 1) ? censorLetter.repeat(x.length) : x,
+        .map(
+          args.opposite
+            ? (x, i) =>
+                args.numbers.includes(+i + 1)
+                  ? x
+                  : censorLetter.repeat(x.length)
+            : (x, i) =>
+                args.numbers.includes(+i + 1)
+                  ? censorLetter.repeat(x.length)
+                  : x,
         )
         .join(" ");
 
     if (args.all)
       msg.content = msg.content
         .split(" ")
-        .map((x, i) => censorLetter.repeat(x.length))
+        .map((x) => censorLetter.repeat(x.length))
         .join(" ");
 
     await msg.delete();
