@@ -55,7 +55,7 @@ const command: HypnoCommand<{
     if (args.words)
       for (const a of args.words) {
         if (args.opposite) {
-          msg.content = maskExceptSubstring(msg.content, a);
+          msg.content = maskExceptSubstrings(msg.content, a);
           continue;
         }
 
