@@ -52,13 +52,10 @@ const command: HypnoCommand<{
     if (!message.reference) return message.reply(`Please reply to a message`);
     let msg = await message.fetchReference();
 
-    if (args.words)
+    if (args.words && args.opposite)
+      msg.content = maskExceptSubstrings(msg.content, args.words);
+    else if (args.words)
       for (const a of args.words) {
-        if (args.opposite) {
-          msg.content = maskExceptSubstrings(msg.content, a);
-          continue;
-        }
-
         const instance = msg.content.match(
           new RegExp(a.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"),
         );
