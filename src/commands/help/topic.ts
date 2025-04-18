@@ -3,7 +3,6 @@ import { fixMagicVariablesInEmbed } from "../../util/other";
 import { messages } from "./help";
 const command: HypnoCommand = {
   name: "topic",
-  aliases: ["t"],
   description: "Get help on a topic",
   type: "help",
 

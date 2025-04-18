@@ -1,12 +1,13 @@
 import { HypnoCommand } from "../../types/util";
 import { paginate } from "../../util/components/pagination";
-import { database } from "../../util/database";
+import { cached, database, keyedCache } from "../../util/database";
 import { createEmbed, getUser } from "../../util/other";
 
 const command: HypnoCommand<{ search?: string }> = {
   name: "serverquotes",
   description: "Get all the quotes in the server",
   type: "quotes",
+  aliases: ["sq"],
 
   args: {
     requiredArguments: 0,
@@ -21,15 +22,19 @@ const command: HypnoCommand<{ search?: string }> = {
   },
 
   handler: async (message, { args }) => {
-    const quotes = (
-      await database.all<Quote[]>(
-        `SELECT * FROM quotes WHERE server_id = (?);`,
-        message.guild.id,
-      )
-    ).filter(
-      (x) =>
-        !args.search ||
-        x.content.toLowerCase().includes(args.search.toLowerCase()),
+    const quotes = await keyedCache(
+      `server-quotes-${message.guild.id}`,
+      async () =>
+        (
+          await database.all<Quote[]>(
+            `SELECT * FROM quotes WHERE server_id = (?);`,
+            message.guild.id,
+          )
+        ).filter(
+          (x) =>
+            !args.search ||
+            x.content.toLowerCase().includes(args.search.toLowerCase()),
+        ),
     );
 
     let list = [];

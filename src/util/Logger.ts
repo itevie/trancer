@@ -9,6 +9,10 @@ export default class Logger {
     console.log(`[${this.name}]: ${message}`);
   }
 
+  public warn(...message: string[]): void {
+    console.log(`\x1b[33m[${this.name}]`, ...message, "\x1b[0m");
+  }
+
   public logAny(data: any): void {
     console.log(`[${this.name}]: ${data}`);
   }

@@ -54,6 +54,7 @@ import { loadAllSources } from "./commands/file-directory/_util";
 import { initStatusChanger } from "./util/statusChanger";
 import { loadSlashCommands } from "./util/slashCommands";
 import initAllManagers from "./managers/loadAll";
+import { ALL } from "dns";
 
 const logger = new Logger("loader");
 export let errors = 0;
@@ -73,12 +74,28 @@ const commandFiles = (
   .filter((x) => !x.match(/_[a-zA-Z_]+\.[tj]s/))
   .filter((x) => x.match(/(\.[tj]s)$/));
 
+const commandFileCache: Map<string, string> = new Map();
+
 for (const commandFile of commandFiles) {
   const commandImport = require(commandFile).default as HypnoCommand;
   if (commandImport.ignore) continue;
+
+  if (commands[commandImport.name]) {
+    logger.warn(
+      `Command ${commandImport.name} already exists and will be overwritten (${commandFileCache.get(commandImport.name)} => ${commandFile})`,
+    );
+  }
+
   commands[commandImport.name] = commandImport;
+  commandFileCache.set(commandImport.name, commandFile);
   uniqueCommands[commandImport.name] = commandImport;
   for (const alias of commandImport.aliases || []) {
+    if (commands[alias]) {
+      logger.warn(
+        `Command ${alias} already exists and will be overwritten (${commandFileCache.get(alias)} => ${commandFile})`,
+      );
+    }
+
     if (commandImport.eachAliasIsItsOwnCommand) {
       commands[alias] = {
         ...commandImport,
@@ -87,6 +104,7 @@ for (const commandFile of commandFiles) {
     } else {
       commands[alias] = commandImport;
     }
+    commandFileCache.set(alias, commandFile);
   }
   logger.log(`Loaded command: ${commandImport.name}`);
 }

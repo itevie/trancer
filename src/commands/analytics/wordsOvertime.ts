@@ -1,20 +1,8 @@
-import { argv0 } from "node:process";
 import { HypnoCommand } from "../../types/util";
 import { actions, keyedCache } from "../../util/database";
-import { ChartConfiguration, ChartDataset } from "chart.js";
-import { PERM } from "sqlite3";
-import {
-  definedCache,
-  definedCacheReversed,
-} from "../../util/db-parts/wordUsage";
-import { ChartJSNodeCanvas } from "chartjs-node-canvas";
-import { AttachmentBuilder, User } from "discord.js";
-import { colors } from "./balanceOvertime";
-import {
-  chartJSNodeCanvas,
-  generateMultilineDataGraph,
-  graphArgs,
-} from "../../util/charts";
+import { definedCacheReversed } from "../../util/db-parts/wordUsage";
+import { generateMultilineDataGraph, graphArgs } from "../../util/charts";
+import { User } from "discord.js";
 
 const command: HypnoCommand<{ words: string[]; user?: User; top?: number }> = {
   name: "wordsovertime",
