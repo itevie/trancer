@@ -230,7 +230,7 @@ const _actions = {
     ctx.fillRect(0, 0, width, height);
 
     // Draw main quote
-    const lines = splitByLengthWithWhitespace(quote.content, 20);
+    const lines = splitByLengthWithWhitespace(quote.content, 25);
     let y = height / 2 - (lines.length / 2) * mainQuoteFontSize;
     const x = width / 1.3 - mainQuoteFontSize;
     ctx.font = `bold ${mainQuoteFontSize}px serif`;

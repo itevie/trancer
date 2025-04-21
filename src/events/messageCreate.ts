@@ -109,7 +109,8 @@ client.on("messageCreate", async function handleMessage(message) {
 
   const originalArguments = content.split(" ").slice(1);
 
-  const { wickStyle, args } = parseCommand(content);
+  const { wickStyle: _ws, args } = parseCommand(content);
+  const { _debug, _delete, ...wickStyle } = _ws;
 
   // Check if the command exists
   if (args.length === 0) return;
@@ -245,6 +246,11 @@ client.on("messageCreate", async function handleMessage(message) {
         economy,
       }))
     ) {
+      if (_debug === "true") {
+        await message.reply(
+          JSON.stringify({ args, wickStyle, detailsArgs: details.args }),
+        );
+      }
       return;
     }
   }
@@ -256,10 +262,13 @@ client.on("messageCreate", async function handleMessage(message) {
   try {
     await command.handler(message, details);
 
-    if (wickStyle["delete"] === "true") {
+    if (_delete === "true") {
       try {
         await message.delete();
       } catch {}
+    }
+    if (_debug === "true") {
+      await message.reply(JSON.stringify(details.args));
     }
   } catch (err) {
     console.log(err);

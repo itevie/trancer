@@ -46,9 +46,13 @@ export async function checkCommandArguments(
 
   for (let i in command.args.args) {
     const arg = command.args.args[i];
-    let givenValue = args[i];
+    let givenValue = args[artifical];
 
-    if (+i === 0 && arg.type === "user" && !args[0]?.match(/<?@?[0-9]{5,}>?/)) {
+    if (
+      +i === 0 &&
+      arg.type === "user" &&
+      !args[0]?.match(/<?@?[0-9]{16,}>?/)
+    ) {
       if (arg.infer !== false && ctx.message.reference) {
         details.args[arg.name] = (await ctx.message.fetchReference()).author;
       } else {
@@ -71,7 +75,7 @@ export async function checkCommandArguments(
 
     givenValue = await checkInfer(arg, givenValue, {
       super: ctx,
-      index: +i,
+      index: artifical,
     });
 
     // Generate codeblock for the errors
