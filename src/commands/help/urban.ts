@@ -30,6 +30,7 @@ const command: HypnoCommand<{ word: string }> = {
       message,
       embed: createEmbed().setTitle(`Definitions for ${args.word}`),
       type: "field",
+      pageLength: 5,
       data: result.data.list
         .sort(
           (a, b) => b.thumbs_up - b.thumbs_down - (a.thumbs_up - a.thumbs_down),
@@ -37,7 +38,7 @@ const command: HypnoCommand<{ word: string }> = {
         .map((x) => {
           return {
             name: `${x.word} 👍${x.thumbs_up} 👎${x.thumbs_down}`,
-            value: `${x.definition} ([permalink](${x.permalink}))\n> ${x.example}\n-# ${new Date(x.written_on).toDateString()}`,
+            value: `${x.definition} ([permalink](${x.permalink}))\n> ${x.example.replace(/\n/g, "\n> ")}\n-# ${new Date(x.written_on).toDateString()}`,
           };
         }),
     });
