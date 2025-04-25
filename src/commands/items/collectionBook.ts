@@ -22,13 +22,12 @@ const command: HypnoCommand<{ user?: User }> = {
   handler: async (message, { args }) => {
     const user = args.user ? args.user : message.author;
     const aquired = await actions.items.aquired.resolveFrom(
-      await actions.items.aquired.getAllFor(user.id, true)
+      await actions.items.aquired.getAllFor(user.id, true),
     );
     const items = (await actions.items.getAll()).filter(
-      (x) => !aquired.some((y) => y.id === x.id)
+      (x) => !aquired.some((y) => y.id === x.id),
     );
 
-    const fields: { name: string; value: string }[] = [];
     const tags: { [key: string]: string } = aquired.reduce((p, c) => {
       return {
         ...p,
@@ -45,7 +44,7 @@ const command: HypnoCommand<{ user?: User }> = {
           .addFields(
             Object.entries(tags).map((x) => {
               return { name: x[0], value: x[1] };
-            })
+            }),
           )
           .addFields([
             {

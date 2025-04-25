@@ -35,5 +35,5 @@ async function generateContext(args: string[]): Promise<CommandCheckContext> {
 }
 
 test("implicit user", async () => {
-  const result =
+  const result = 2;
 });
