@@ -5,19 +5,20 @@ import { HypnoMessageHandler } from "../types/util";
 import { actions, database } from "../util/database";
 import { randomFromRange } from "../util/other";
 
-let pastVC1m: string[] = [];
-let pastVCactual: string[] = [];
+let pastVC1m: [string, string][] = [];
+let pastVCactual: [string, string][] = [];
 
 // Gets the current people in a VC
 // excluding people on their own
 async function getCurrentVC() {
   // Compute current
-  let inVCrightNow: string[] = [];
+  let inVCrightNow: [string, string][] = [];
   for await (const vcChannel of config.botServer.vcChannels) {
     let channel = await client.channels.fetch(vcChannel);
     if (channel.isVoiceBased()) {
       if (channel.members.size === 1) continue;
-      for (const member of channel.members) inVCrightNow.push(member[1].id);
+      for (const member of channel.members)
+        inVCrightNow.push([member[1].id, channel.guild.id]);
     }
   }
 
@@ -33,11 +34,11 @@ setInterval(async () => {
 
   // Award people who are still in it
   for await (const id of inVCrightNow)
-    if (pastVCactual.includes(id))
+    if (pastVCactual.some((x) => x[0] === id[0]))
       await actions.eco.addMoneyFor(
-        id,
+        id[0],
         randomFromRange(ecoConfig.payouts.vc.min, ecoConfig.payouts.vc.max),
-        "vc"
+        "vc",
       );
 
   // Reset
@@ -50,10 +51,11 @@ setInterval(async () => {
 
   // Award people who are still in it
   for await (const id of inVCrightNow)
-    if (pastVC1m.includes(id))
+    if (pastVC1m.some((x) => x[0] === id[0]))
       await database.run(
-        `UPDATE user_data SET vc_time = vc_time + 1 WHERE user_id = ?`,
-        id
+        `UPDATE user_data SET vc_time = vc_time + 1 WHERE user_id = ? AND server_id = ?`,
+        id[0],
+        id[1],
       );
 
   pastVC1m = inVCrightNow;

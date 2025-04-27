@@ -103,8 +103,8 @@ const handler: HypnoMessageHandler = {
 
       let collector = msg.channel.createMessageCollector({
         filter: (x) =>
-          x.content.toLowerCase() === word ||
-          x.content.toLowerCase() === piglatin(word),
+          x.content.toLowerCase() === word.toLowerCase() ||
+          x.content.toLowerCase() === piglatin(word).toLowerCase(),
         time: 30000,
       });
 
