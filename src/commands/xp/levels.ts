@@ -1,9 +1,4 @@
-import {
-  after,
-  calculateLevel,
-  levels,
-  rewards,
-} from "../../messageHandlers/xp";
+import { after, calculateLevel, levels } from "../../messageHandlers/xp";
 import { HypnoCommand } from "../../types/util";
 
 const command: HypnoCommand = {
@@ -16,8 +11,6 @@ const command: HypnoCommand = {
 
     for (const level in levels) {
       text += `**Level ${parseInt(level) + 2}**: ${levels[level]} XP\n`;
-      if (rewards[calculateLevel(levels[level])])
-        text += `- ${rewards[calculateLevel(levels[level])].label}\n`;
     }
 
     text += `*And so on... **${after} XP** required for each level*`;

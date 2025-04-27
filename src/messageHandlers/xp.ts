@@ -17,17 +17,6 @@ export const levels = [
 ];
 export const after = levels[levels.length - 1] - levels[levels.length - 2];
 
-export const rewards: {
-  [key: number]: { handle: (messge: Message<boolean>) => void; label: string };
-} = {
-  5: {
-    handle: async (message) => {
-      await message.member.roles.add(config.botServer.roles.canRequest);
-    },
-    label: `You can now request sub/tist/DMs!`,
-  },
-};
-
 export const minXP = 0;
 export const maxXP = 5;
 export const timeBetween = 120000;
