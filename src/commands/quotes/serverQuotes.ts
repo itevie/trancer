@@ -7,7 +7,7 @@ const command: HypnoCommand<{ search?: string }> = {
   name: "serverquotes",
   description: "Get all the quotes in the server",
   type: "quotes",
-  aliases: ["sq"],
+  aliases: ["sq", "serverqs", "serverq", "squotes", "serqs"],
 
   args: {
     requiredArguments: 0,

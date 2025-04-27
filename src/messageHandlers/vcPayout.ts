@@ -53,7 +53,7 @@ setInterval(async () => {
   for await (const id of inVCrightNow)
     if (pastVC1m.some((x) => x[0] === id[0]))
       await database.run(
-        `UPDATE user_data SET vc_time = vc_time + 1 WHERE user_id = ? AND server_id = ?`,
+        `UPDATE user_data SET vc_time = vc_time + 1 WHERE user_id = ? AND guild_id = ?`,
         id[0],
         id[1],
       );
