@@ -250,6 +250,14 @@ const items: Record<string, Partial<Item>> = {
     buyable: false,
     emoji: "<:chirtmas_cookie:1321761548372279337>",
   },
+  "easter-2025-egg": {
+    price: 1000,
+    weight: 0,
+    description: "An ugly egg given on Easter 2025!",
+    tag: "collectable",
+    buyable: false,
+    emoji: "<:egg:1366070379302359050>",
+  },
 
   // ----- Misc -----
   "lottery-ticket": {

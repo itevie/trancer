@@ -46,7 +46,14 @@ const handler: HypnoMessageHandler = {
   handler: async (message, { serverSettings }) => {
     if (!serverSettings.random_replies) return;
 
-    // Sheerseeker is gay
+    // Don't hang me, Fin
+    if (
+      message.author.id === "772511780680499252" &&
+      message.content.toLowerCase().includes("hang") &&
+      ["him", "trancer"].some((x) => message.content.toLowerCase().includes(x))
+    )
+      return message.reply(`No... Fin... pls don't hang me :(`);
+
     if (
       message.author.id === "916688777752240170" &&
       message.content
@@ -55,6 +62,7 @@ const handler: HypnoMessageHandler = {
           /(i ? don'?t ?think i'?m ?gay)|(i'?m ?not ?gay)|(i ?don'?t ?think i'?m ?gay)/i,
         )
     ) {
+      // Sheerseeker is gay
       let parts = [
         "yes you are gay",
         "haha ur gay",

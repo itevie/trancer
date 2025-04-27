@@ -3,6 +3,7 @@ import config from "../config";
 import { HypnoMessageHandler } from "../types/util";
 import { randomFromRange } from "../util/other";
 import { actions } from "../util/database";
+import { currency } from "../util/language";
 
 const exclude = [
   "1257420480953057321",
@@ -20,6 +21,7 @@ export const after = levels[levels.length - 1] - levels[levels.length - 2];
 export const minXP = 0;
 export const maxXP = 5;
 export const timeBetween = 120000;
+export const xpEcoReward = 100;
 
 const lastAwards: { [key: string]: number } = {};
 
@@ -68,8 +70,13 @@ const handler: HypnoMessageHandler = {
 
     if (pre !== post && settings.level_notifications) {
       let reward = null; //  rewards[post];
-      if (reward && message.guild.id === config.botServer.id)
-        await reward.handle(message);
+
+      if (message.guild.id === config.botServer.id) {
+        const amount = xpEcoReward * (post / 2);
+        reward = currency(amount);
+        await actions.eco.addMoneyFor(message.author.id, amount, "messaging");
+      }
+
       try {
         await message.reply(
           `Welldone! You levelled up from level **${pre}** to **${post}**! :cyclone:${
