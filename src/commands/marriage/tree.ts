@@ -144,6 +144,14 @@ const command: HypnoCommand<{
         }
       }
 
+      if (args.for) {
+        relationships = relationships.filter(
+          (x) =>
+            (x.user1 === user.id && args.for.some((y) => y.id === x.user2)) ||
+            (x.user2 === user.id && args.for.some((y) => y.id === x.user1)),
+        );
+      }
+
       if (args.depth) {
         for (const r of relationships) {
           if (
@@ -176,14 +184,6 @@ const command: HypnoCommand<{
 
     if (args.incoming) {
       relationships = relationships.filter((x) => x.user2 === user.id);
-    }
-
-    if (args.for) {
-      relationships = relationships.filter(
-        (x) =>
-          (x.user1 === user.id && args.for.some((y) => y.id === x.user2)) ||
-          (x.user2 === user.id && args.for.some((y) => y.id === x.user1)),
-      );
     }
 
     const nodesAdded: string[] = [];
