@@ -179,22 +179,19 @@ const command: HypnoCommand<{
     }
 
     if (args.for) {
-      relationships = relationships.filter((x) =>
-        [...(args.for.map((x) => x.id) || []), user.id].some(
-          (y) =>
-            (x.user1 === y || x.user2 === y) &&
-            (relationships.some(
-              (z) =>
-                (z.user1 === x.user1 && z.user2 === user.id) ||
-                (z.user2 === x.user1 && z.user1 === user.id),
-            ) ||
-              relationships.some(
-                (z) =>
-                  (z.user1 === x.user1 && z.user2 === user.id) ||
-                  (z.user2 === x.user1 && z.user1 === user.id),
-              )),
-        ),
-      );
+      const allowed = new Set([...args.for, user.id]);
+      relationships = relationships.filter(({ user1, user2 }) => {
+        const u1InAllowed = allowed.has(user1);
+        const u2InAllowed = allowed.has(user2);
+
+        // Keep if one of them is user.id
+        if (user1 === user.id || user2 === user.id) {
+          return true;
+        }
+
+        // Otherwise, keep if both are in args.for
+        return u1InAllowed && u2InAllowed;
+      });
     }
 
     const nodesAdded: string[] = [];
