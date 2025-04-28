@@ -57,6 +57,14 @@ const handler: HypnoMessageHandler = {
       return message.reply(`No... Fin... pls don't hang me :(`);
 
     if (
+      message.guild.id === "1257416273520758814" &&
+      message.content.toLowerCase() === "huh"
+    ) {
+      await message.reply("❌");
+      return message.reply(`HUH HUH HUH HUH?????`);
+    }
+
+    if (
       message.author.id === "916688777752240170" &&
       message.content
         .toLowerCase()

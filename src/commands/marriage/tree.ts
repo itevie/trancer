@@ -180,20 +180,11 @@ const command: HypnoCommand<{
 
     if (args.for) {
       const allowed = new Set([...(args.for || []).map((x) => x.id), user.id]);
-      console.log(allowed);
       relationships = relationships.filter(({ user1, user2 }) => {
         const u1InAllowed = allowed.has(user1);
         const u2InAllowed = allowed.has(user2);
 
-        if (!u1InAllowed || !u2InAllowed) return false;
-
-        // Keep if one of them is user.id
-        if (user1 === user.id || user2 === user.id) {
-          return true;
-        }
-
-        // Otherwise, keep if both are in args.for
-        return u1InAllowed && u2InAllowed;
+        return !(!u1InAllowed || !u2InAllowed);
       });
     }
 
