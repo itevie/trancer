@@ -185,6 +185,8 @@ const command: HypnoCommand<{
         const u1InAllowed = allowed.has(user1);
         const u2InAllowed = allowed.has(user2);
 
+        if (!u1InAllowed || !u2InAllowed) return false;
+
         // Keep if one of them is user.id
         if (user1 === user.id || user2 === user.id) {
           return true;
