@@ -180,6 +180,7 @@ const command: HypnoCommand<{
 
     if (args.for) {
       const allowed = new Set([...args.for, user.id]);
+      console.log(allowed);
       relationships = relationships.filter(({ user1, user2 }) => {
         const u1InAllowed = allowed.has(user1);
         const u2InAllowed = allowed.has(user2);
