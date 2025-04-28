@@ -179,7 +179,7 @@ const command: HypnoCommand<{
     }
 
     if (args.for) {
-      const allowed = new Set([...args.for, user.id]);
+      const allowed = new Set([...(args.for || []).map((x) => x.id), user.id]);
       console.log(allowed);
       relationships = relationships.filter(({ user1, user2 }) => {
         const u1InAllowed = allowed.has(user1);
