@@ -26,7 +26,7 @@ const command: HypnoCommand<{
   depth?: number;
   connection?: RelationshipType;
   nocolors?: boolean;
-  for?: User;
+  for?: User[];
   outgoing?: boolean;
   incoming?: boolean;
   allservers?: boolean;
@@ -79,10 +79,11 @@ const command: HypnoCommand<{
       },
       {
         name: "for",
-        type: "user",
+        type: "array",
         aliases: ["f", "foruser", "with"],
         description: "Get the relationship with just you and them",
         wickStyle: true,
+        inner: "user",
       },
       {
         name: "incoming",
@@ -180,8 +181,8 @@ const command: HypnoCommand<{
     if (args.for) {
       relationships = relationships.filter(
         (x) =>
-          (x.user1 === user.id && x.user2 === args.for.id) ||
-          (x.user2 === user.id && x.user1 === args.for.id),
+          (x.user1 === user.id && args.for.some((y) => y.id === x.user2)) ||
+          (x.user2 === user.id && args.for.some((y) => y.id === x.user1)),
       );
     }
 
