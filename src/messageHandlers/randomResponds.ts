@@ -49,7 +49,9 @@ const handler: HypnoMessageHandler = {
     // Don't hang me, Fin
     if (
       message.author.id === "772511780680499252" &&
-      message.content.toLowerCase().includes("hang") &&
+      ["hang", "execute", "kill", "crucify"].some((x) =>
+        message.content.toLowerCase().includes(x),
+      ) &&
       ["him", "trancer"].some((x) => message.content.toLowerCase().includes(x))
     )
       return message.reply(`No... Fin... pls don't hang me :(`);
