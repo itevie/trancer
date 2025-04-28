@@ -48,10 +48,10 @@ const command: HypnoCommand<{ user?: User }> = {
         user.username
       }** has **${xp} XP** (level ${level})\n\n${level} ${makePercentageASCII(
         progress,
-        20
+        20,
       )} ${
         level + 1
-      }\n\nIt will take:\n> Least: **${least} minutes**\n> Average: **${average} minutes**\n> Most: **${most} minutes**`
+      }\n\nIf you sent a message every single minute, it would take:\n> Least: **${least} minutes**\n> Average: **${average} minutes**\n> Most: **${most} minutes**`,
     );
   },
 };
