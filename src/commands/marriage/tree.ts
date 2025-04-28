@@ -180,8 +180,19 @@ const command: HypnoCommand<{
 
     if (args.for) {
       relationships = relationships.filter((x) =>
-        [...(args.for.map((x) => x.id) || []), message.author].some(
-          (y) => x.user1 === y || x.user2 === y,
+        [...(args.for.map((x) => x.id) || []), user.id].some(
+          (y) =>
+            (x.user1 === y || x.user2 === y) &&
+            (relationships.some(
+              (z) =>
+                (z.user1 === x.user1 && z.user2 === user.id) ||
+                (z.user2 === x.user1 && z.user1 === user.id),
+            ) ||
+              relationships.some(
+                (z) =>
+                  (z.user1 === x.user1 && z.user2 === user.id) ||
+                  (z.user2 === x.user1 && z.user1 === user.id),
+              )),
         ),
       );
     }
