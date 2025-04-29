@@ -80,7 +80,7 @@ const handler: HypnoMessageHandler = {
       try {
         await message.reply(
           `Welldone! You levelled up from level **${pre}** to **${post}**! :cyclone:${
-            reward ? `\n\n${reward}` : ""
+            reward ? `\n\nYou got ${reward}` : ""
           }`,
         );
       } catch {}
