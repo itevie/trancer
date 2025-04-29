@@ -105,9 +105,13 @@ export function getFontFile() {
   throw new Error("No impact font found...");
 }
 
-export function addCaptionToGif(inputPath: string, caption: string) {
+export function addCaptionToGif(
+  inputPath: string,
+  caption: string,
+  ext: string = "gif",
+) {
   const safeCaption = caption.replace(/'/g, "\\'");
-  const output = __dirname + "/output.gif";
+  const output = __dirname + `/output.${ext}`;
 
   if (existsSync(output)) rmSync(output);
 

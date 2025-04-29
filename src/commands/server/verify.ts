@@ -9,6 +9,10 @@ const command: HypnoCommand = {
   aliases: ["v"],
   type: "admin",
   permissions: [PermissionsBitField.Flags.ManageMessages],
+  except: (m) => {
+    // Allow mini helper which has no perms
+    return m.member.roles.cache.has("1366865032151040121");
+  },
 
   handler: async (message, o) => {
     let verifiedRole = o.serverSettings.verification_role_id;
@@ -45,14 +49,14 @@ const command: HypnoCommand = {
         o.serverSettings.verified_string
       ) {
         let channel = await (message.client.channels.fetch(
-          o.serverSettings.verified_channel_id
+          o.serverSettings.verified_channel_id,
         ) as Promise<TextChannel>);
         await channel.send(
           replaceVarString(
             o.serverSettings.verified_string,
             member.user,
-            member.guild
-          )
+            member.guild,
+          ),
         );
       }
     } catch (e) {

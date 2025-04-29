@@ -183,7 +183,7 @@ client.on("messageCreate", async function handleMessage(message) {
   )
     return await message.reply("AI is disabled!");
 
-  if (command.guards) {
+  if (command.guards && !(command.except && command.except(message))) {
     // Check bot owner
     if (
       command.guards.includes("bot-owner") &&

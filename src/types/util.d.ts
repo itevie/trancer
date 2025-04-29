@@ -124,7 +124,7 @@ interface HypnoCommand<Args extends { [key: string]: any } = {}> {
   /**
    * A command to handle guard / permission exceptions
    */
-  except?: (message: Message, args: string[]) => boolean;
+  except?: (message: Message, args?: string[]) => boolean;
 
   /**
    * Runs before the main handler. Used to check if it should be ran or not.
