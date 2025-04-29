@@ -183,40 +183,42 @@ client.on("messageCreate", async function handleMessage(message) {
   )
     return await message.reply("AI is disabled!");
 
-  if (command.guards && !(command.except && command.except(message))) {
-    // Check bot owner
-    if (
-      command.guards.includes("bot-owner") &&
-      message.author.id !== config.owner
-    )
-      return await message.reply(`Only the bot owner can run this command!`);
+  if (!(command.except && command.except(message))) {
+    if (command.guards) {
+      // Check bot owner
+      if (
+        command.guards.includes("bot-owner") &&
+        message.author.id !== config.owner
+      )
+        return await message.reply(`Only the bot owner can run this command!`);
 
-    // Check bot server
-    if (
-      command.guards.includes("bot-server") &&
-      message.guild.id !== config.botServer.id
-    )
-      return await message.reply(
-        "This command can only be ran in the bot's server!",
-      );
-
-    // Check admin only
-    if (
-      command.guards.includes("admin") &&
-      !message.member.permissions.has("Administrator")
-    )
-      return await message.reply(
-        "You must have the administrator permission to run this command!",
-      );
-  }
-
-  // Check for specific permissions
-  if (command.permissions)
-    for (const permission of command.permissions)
-      if (!message.member.permissions.has(permission))
+      // Check bot server
+      if (
+        command.guards.includes("bot-server") &&
+        message.guild.id !== config.botServer.id
+      )
         return await message.reply(
-          `You do not have the ${permission} permission!`,
+          "This command can only be ran in the bot's server!",
         );
+
+      // Check admin only
+      if (
+        command.guards.includes("admin") &&
+        !message.member.permissions.has("Administrator")
+      )
+        return await message.reply(
+          "You must have the administrator permission to run this command!",
+        );
+    }
+
+    // Check for specific permissions
+    if (command.permissions)
+      for (const permission of command.permissions)
+        if (!message.member.permissions.has(permission))
+          return await message.reply(
+            `You do not have the ${permission} permission!`,
+          );
+  }
 
   const details: HypnoCommandDetails<any> = {
     serverSettings: settings,
