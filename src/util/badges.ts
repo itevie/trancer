@@ -7,6 +7,8 @@ import { Message } from "discord.js";
 import { createEmbed } from "./other";
 import { client } from "..";
 import { units } from "./ms";
+import { analyticDatabase } from "./analytics";
+import { UsedWord } from "./db-parts/wordUsage";
 
 export interface Badge {
   name: string;
@@ -198,6 +200,23 @@ export const badges: { [key: string]: Badge } = {
       const dawn = await actions.dawnagotchi.getFor(user.user_id);
       if (!dawn) return false;
       return Date.now() - dawn.created_at.getTime() >= units.day * 30;
+    },
+  },
+  french: {
+    name: "French",
+    description: "⚠️ This user is French - be weary ⚠️",
+    emoji: "🇨🇵",
+    scan: async (user) => {
+      const _words = await analyticDatabase.all<UsedWord[]>(
+        `SELECT wb.*
+        FROM words_by wb
+        JOIN words w ON wb.word_id = w.id
+        WHERE LOWER(w.word) IN ('french', 'france')
+          AND wb.author_id = ? AND server_id = ?`,
+        user.user_id,
+        "1257416273520758814",
+      );
+      return false;
     },
   },
 } as const;

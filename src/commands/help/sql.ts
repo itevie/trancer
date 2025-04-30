@@ -1,7 +1,8 @@
 import { HypnoCommand } from "../../types/util";
+import { analyticDatabase } from "../../util/analytics";
 import { database } from "../../util/database";
 
-const command: HypnoCommand<{ sql: string }> = {
+const command: HypnoCommand<{ sql: string; analytics?: boolean }> = {
   name: "sql",
   description: "Run an SQL statement",
   type: "admin",
@@ -15,11 +16,18 @@ const command: HypnoCommand<{ sql: string }> = {
         type: "string",
         takeContent: true,
       },
+      {
+        name: "analytics",
+        type: "boolean",
+        wickStyle: true,
+      },
     ],
   },
 
   handler: async (message, { args }) => {
-    const result = await database.all(args.sql);
+    const result = await (args.analytics ? analyticDatabase : database).all(
+      args.sql,
+    );
     return message.reply(JSON.stringify(result));
   },
 };
