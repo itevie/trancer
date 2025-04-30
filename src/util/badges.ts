@@ -207,17 +207,23 @@ export const badges: { [key: string]: Badge } = {
     description: "⚠️ This user is French - be weary ⚠️",
     emoji: "🇨🇵",
     scan: async (user) => {
-      const amount = (
-        await analyticDatabase.all<UsedWord[]>(
-          `SELECT wb.*
+      console.log("check french", user.user_id);
+      const words = await analyticDatabase.all<UsedWord[]>(
+        `SELECT wb.*
         FROM words_by wb
         JOIN words w ON wb.word_id = w.id
         WHERE LOWER(w.word) IN ('french', 'france', 'français', 'francais')
           AND wb.author_id = ? AND server_id = ?`,
-          user.user_id,
-          "1257416273520758814",
-        )
-      ).reduce((p, c) => p + c.amount, 0);
+        user.user_id,
+        "1257416273520758814",
+      );
+
+      const filtered = words.filter(
+        (x) => new Date(x.created_at) > new Date("2025-04-30T00:00:00Z"),
+      );
+      console.log(filtered);
+
+      const amount = filtered.reduce((p, c) => p + c.amount, 0);
       if (amount < 15) return false;
 
       try {
