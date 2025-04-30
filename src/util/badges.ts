@@ -207,16 +207,28 @@ export const badges: { [key: string]: Badge } = {
     description: "⚠️ This user is French - be weary ⚠️",
     emoji: "🇨🇵",
     scan: async (user) => {
-      const _words = await analyticDatabase.all<UsedWord[]>(
-        `SELECT wb.*
+      const amount = (
+        await analyticDatabase.all<UsedWord[]>(
+          `SELECT wb.*
         FROM words_by wb
         JOIN words w ON wb.word_id = w.id
-        WHERE LOWER(w.word) IN ('french', 'france')
+        WHERE LOWER(w.word) IN ('french', 'france', 'français', 'francais')
           AND wb.author_id = ? AND server_id = ?`,
-        user.user_id,
-        "1257416273520758814",
-      );
-      return false;
+          user.user_id,
+          "1257416273520758814",
+        )
+      ).reduce((p, c) => p + c.amount, 0);
+      if (amount < 15) return false;
+
+      try {
+        const member = (
+          await client.guilds.fetch(config.botServer.id)
+        ).members.fetch(user.user_id);
+        (await member).roles.add(config.botServer.roles.french);
+        return true;
+      } catch {
+        return false;
+      }
     },
   },
 } as const;
