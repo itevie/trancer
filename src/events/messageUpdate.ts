@@ -3,6 +3,7 @@ import { client } from "..";
 import config from "../config";
 import { createEmbed } from "../util/other";
 import { actions } from "../util/database";
+import { getUsernameSync } from "../util/cachedUsernames";
 
 client.on("messageUpdate", async (old, newMsg) => {
   // Check if channel has a count
@@ -60,7 +61,10 @@ client.on("messageUpdate", async (old, newMsg) => {
             iconURL:
               newMsg.author?.displayAvatarURL() ??
               "https://dawn.rest/cdn/no_pfp.png",
-            name: newMsg.author?.username ?? "No Username",
+            name:
+              newMsg.author?.username ??
+              getUsernameSync(newMsg.author.id) ??
+              "No Username",
           }),
       ],
     });

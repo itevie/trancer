@@ -3,13 +3,14 @@ import { client } from "..";
 import config from "../config";
 import { createEmbed } from "../util/other";
 import { actions } from "../util/database";
+import { getUsernameSync } from "../util/cachedUsernames";
 
 client.on("messageDelete", async (message) => {
   // Check if channel has a count
   let count = await actions.serverCount.getFor(message.guild.id);
   if (count && message.channel.id === count.channel_id) {
     const channel = (await client.channels.fetch(
-      count.channel_id
+      count.channel_id,
     )) as TextChannel;
     await channel.send({
       embeds: [
@@ -21,7 +22,7 @@ client.on("messageDelete", async (message) => {
               message.author.username
             }** deleted their number! The next number is **${
               count.current_count + 1
-            }**`
+            }**`,
           ),
       ],
     });
@@ -41,7 +42,10 @@ client.on("messageDelete", async (message) => {
             iconURL:
               message.author?.displayAvatarURL() ??
               "https://dawn.rest/cdn/no_pfp.png",
-            name: message.author?.username ?? "No Username",
+            name:
+              message.author?.username ??
+              getUsernameSync(message.author.id) ??
+              "No Username",
           }),
       ],
     });
