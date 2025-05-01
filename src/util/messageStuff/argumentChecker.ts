@@ -174,12 +174,12 @@ export let argumentCheckers: Record<
     }
   },
   role: async (_a, v, d) => {
-    if (!v.match(/<?&?[0-9]+>?/))
+    if (!v.match(/<?@?&?[0-9]+>?/))
       return "Invalid role format provided! Please provide a mention or ID";
 
     try {
       let result = await d.super.message.guild.roles.fetch(
-        v.replace(/[<>&]/g, ""),
+        v.replace(/[<>&@]/g, ""),
       );
 
       if (result.guild.id !== d.super.message.guild.id)
