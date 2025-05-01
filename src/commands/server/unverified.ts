@@ -22,7 +22,7 @@ const command: HypnoCommand = {
           );
         })
         .map((x) => x.user.username)
-        .join(" "),
+        .join(", "),
     );
 
     paginate({
