@@ -173,8 +173,22 @@ export let argumentCheckers: Record<
       return `Failed to fetch the channel: ${v}`;
     }
   },
-  role: async (_a, _v, _d) => {
-    return "no!";
+  role: async (_a, v, d) => {
+    if (!v.match(/<?&?[0-9]+>?/))
+      return "Invalid role format provided! Please provide a mention or ID";
+
+    try {
+      let result = await d.super.message.guild.roles.fetch(
+        v.replace(/[<>&]/g, ""),
+      );
+
+      if (result.guild.id !== d.super.message.guild.id)
+        return `That role is not in this server`;
+
+      return { result };
+    } catch {
+      return `Failed to fetch the role: ${v}`;
+    }
   },
 
   // ----- Database Types -----
