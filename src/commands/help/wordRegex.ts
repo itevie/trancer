@@ -1,11 +1,11 @@
 import { HypnoCommand } from "../../types/util";
 import errorText from "../../util/components/error";
-import { words } from "./letterMaker";
+import { words } from "../games/letterMaker";
 
 const command: HypnoCommand<{ regex: string }> = {
   name: "wordregex",
   aliases: ["wordsearch", "searchword"],
-  type: "fun",
+  type: "help",
   description: "Search words from a dictionary by a regex",
 
   args: {
