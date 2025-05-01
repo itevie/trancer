@@ -8,7 +8,7 @@ export function currency(amount: number): string {
 export function itemText(
   item: Item,
   amount?: number,
-  forceAmount: boolean = false
+  forceAmount: boolean = false,
 ): string {
   return `**${(amount && amount > 1) || forceAmount ? `${amount} ` : ""}${
     item.emoji ? item.emoji : ""
@@ -19,7 +19,7 @@ export function itemText(
 export function replaceVarString(
   str: string,
   user: User,
-  server?: Guild
+  server?: Guild,
 ): MessageCreateOptions {
   const parts = {
     mention: `<@${user.id}>`,
@@ -62,4 +62,8 @@ export function ordinalSuffixOf(i: number) {
     return i + "rd";
   }
   return i + "th";
+}
+
+export function escapeDisc(str: string): string {
+  return str.replace(/[*]/g, "\\*").replace(/_/g, "\\_").replace(/`/g, "\\`");
 }

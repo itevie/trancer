@@ -207,7 +207,6 @@ export const badges: { [key: string]: Badge } = {
     description: "⚠️ This user is French - be weary ⚠️",
     emoji: "🇨🇵",
     scan: async (user) => {
-      console.log("check french", user.user_id);
       const words = await analyticDatabase.all<UsedWord[]>(
         `SELECT wb.*
         FROM words_by wb
@@ -221,7 +220,6 @@ export const badges: { [key: string]: Badge } = {
       const filtered = words.filter(
         (x) => new Date(x.created_at) > new Date("2025-04-30T00:00:00Z"),
       );
-      console.log(filtered);
 
       const amount = filtered.reduce((p, c) => p + c.amount, 0);
       if (amount < 15) return false;

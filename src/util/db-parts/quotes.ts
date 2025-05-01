@@ -272,7 +272,7 @@ const _actions = {
 
 export default _actions;
 
-function splitByLengthWithWhitespace(str: string, maxLength = 20) {
+export function splitByLengthWithWhitespace(str: string, maxLength = 20) {
   const result = [];
   let remaining = str;
 
