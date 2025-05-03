@@ -15,9 +15,9 @@ const command: HypnoCommand = {
       message,
       embed: createEmbed()
         .setTitle("The list of jobs")
-        .setFooter({
-          text: `Use ${serverSettings.prefix}job to pick one!`,
-        }),
+        .setDescription(
+          `-# Use \`${serverSettings.prefix}job <job_name>\` to pick one!`,
+        ),
       type: "field",
       data: Object.entries(jobs).map((x) => ({
         name: x[0],

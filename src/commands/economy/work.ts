@@ -11,6 +11,7 @@ import { currency } from "../../util/language";
 import { awardRandomThings } from "../items/_util";
 import { jobs } from "./_jobs";
 import { calculateLevel } from "../../messageHandlers/xp";
+import Buttoned from "../../util/components/Buttoned";
 
 // $r = Reward
 // $c = Currency Symbol
@@ -69,9 +70,19 @@ const command: HypnoCommand = {
 
   preHandler: async (message, { serverSettings, economy }) => {
     if (!economy.job) {
-      await message.reply(
-        `You do not have a job! Please pick one in \`${serverSettings.prefix}jobs\``,
-      );
+      await Buttoned({
+        message,
+        options: `You do not have a job! Please pick one in \`${serverSettings.prefix}jobs\``,
+        buttons: {
+          trash: {
+            callback: async (i) => {
+              await actions.eco.setJob(message.author.id, "Trash Picker");
+              await i.reply(`Set your job to **Trash Picker**!`);
+            },
+            label: "Select Trash Picker",
+          },
+        },
+      });
       return false;
     }
 
