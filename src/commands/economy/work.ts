@@ -67,12 +67,18 @@ const command: HypnoCommand = {
 
   ratelimit: ecoConfig.payouts.work.limit,
 
-  handler: async (message, { serverSettings, economy }) => {
-    if (!economy.job)
-      return message.reply(
+  preHandler: async (message, { serverSettings, economy }) => {
+    if (!economy.job) {
+      await message.reply(
         `You do not have a job! Please pick one in \`${serverSettings.prefix}jobs\``,
       );
+      return false;
+    }
 
+    return true;
+  },
+
+  handler: async (message, { serverSettings, economy }) => {
     const jobName = economy.job as keyof typeof jobs;
     const job = jobs[jobName];
 
