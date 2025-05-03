@@ -10,6 +10,7 @@ import { actions } from "../../util/database";
 import { itemMap } from "../../util/db-parts/items";
 import { createEmbed, englishifyList } from "../../util/other";
 import { currency, itemText } from "../../util/language";
+import { getUsersBestPickaxe } from "./_util";
 
 const gambleCost = 60;
 
@@ -42,14 +43,7 @@ const command: HypnoCommand = {
     }
 
     // Resolve user's most expensive pickaxe
-    const pickaxe = (
-      await actions.items.aquired.resolveFrom(
-        await actions.items.aquired.getAllFor(message.author.id),
-      )
-    )
-      .filter((item) => item.tag === "pickaxe")
-      .sort((a, b) => b.price - a.price)[0];
-
+    const pickaxe = await getUsersBestPickaxe(message.author);
     if (!pickaxe) {
       await message.reply(
         `:warning: You do not have a pickaxe! Check the crafting recipes with \`${serverSettings.prefix}recipes\`.`,
@@ -61,13 +55,7 @@ const command: HypnoCommand = {
 
   handler: async (message) => {
     // Resolve user's most expensive pickaxe
-    const pickaxe = (
-      await actions.items.aquired.resolveFrom(
-        await actions.items.aquired.getAllFor(message.author.id),
-      )
-    )
-      .filter((item) => item.tag === "pickaxe")
-      .sort((a, b) => b.price - a.price)[0];
+    const pickaxe = await getUsersBestPickaxe(message.author);
     const luckMultiplier = pickaxe.name === "emerald-pickaxe" ? 0.1 : 0;
 
     // Generate minerals and fallback rock
@@ -132,6 +120,7 @@ const command: HypnoCommand = {
       items[row[selected].id].amount++;
       await actions.items.aquired.addFor(message.author.id, row[selected].id);
     }
+    await actions.eco.addXp(message.author.id, 5, "mine");
 
     // Update message with mined results
     await msg.edit({

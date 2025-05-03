@@ -1,10 +1,17 @@
 import { Guild, MessageCreateOptions, User } from "discord.js";
 import ecoConfig from "../ecoConfig";
 
-export function currency(amount: number): string {
-  return `**${amount}${ecoConfig.currency}**`;
+/**
+ * Returns a currency string, in the format money:currency:
+ */
+export function currency(amount: number, notBold: boolean = false): string {
+  return `${notBold ? "" : "**"}${amount}${ecoConfig.currency}${notBold ? "" : "**"}`;
 }
 
+/**
+ * Returns a item string, respecting how many the user has
+ * @param forceAmount Whether or not to show the amount if there is none
+ */
 export function itemText(
   item: Item,
   amount?: number,
@@ -13,6 +20,52 @@ export function itemText(
   return `**${(amount && amount > 1) || forceAmount ? `${amount} ` : ""}${
     item.emoji ? item.emoji : ""
   }${item.name}${(amount || forceAmount) && amount !== 1 ? "s" : ""}**`;
+}
+
+/**
+ * Returns the ordinal suffic of a number
+ */
+export function ordinalSuffixOf(num: number): string {
+  let j = num % 10,
+    k = num % 100;
+  if (j === 1 && k !== 11) {
+    return num + "st";
+  }
+  if (j === 2 && k !== 12) {
+    return num + "nd";
+  }
+  if (j === 3 && k !== 13) {
+    return num + "rd";
+  }
+  return num + "th";
+}
+
+/**
+ * Escapes special Discord characters
+ */
+export function escapeDisc(str: string): string {
+  return str.replace(/[*]/g, "\\*").replace(/_/g, "\\_").replace(/`/g, "\\`");
+}
+
+/**
+ * Turns an array into a list
+ */
+export function list(str: [string, any][]): string {
+  return str.map((x) => `**${x[0]}**: ${x[1]}`).join("\n");
+}
+
+/**
+ * Adds backticks to a string
+ */
+export function tick(str: string): string {
+  return `\`${str}\``;
+}
+
+/**
+ * Makes a string bold
+ */
+export function b(str: string): string {
+  return `**${str}**`;
 }
 
 // Embed format: %%%embed%%%{"title": ""}
@@ -47,23 +100,4 @@ export function replaceVarString(
   return {
     content: str,
   };
-}
-
-export function ordinalSuffixOf(i: number) {
-  let j = i % 10,
-    k = i % 100;
-  if (j === 1 && k !== 11) {
-    return i + "st";
-  }
-  if (j === 2 && k !== 12) {
-    return i + "nd";
-  }
-  if (j === 3 && k !== 13) {
-    return i + "rd";
-  }
-  return i + "th";
-}
-
-export function escapeDisc(str: string): string {
-  return str.replace(/[*]/g, "\\*").replace(/_/g, "\\_").replace(/`/g, "\\`");
 }

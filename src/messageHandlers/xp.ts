@@ -97,6 +97,7 @@ export function xpForNextLevel(xp: number): number {
 }
 
 export function getXPForLevel(level: number): number {
+  if (level < 0) return levels[0];
   if (levels.length - 1 > level) return levels[level];
   let last = levels.length - 1;
   let lvl = levels[last];

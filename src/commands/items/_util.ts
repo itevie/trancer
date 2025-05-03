@@ -2,25 +2,24 @@ import { actions, database } from "../../util/database";
 import {
   biasedRandomFromRange,
   englishifyList,
-  randomFromRange,
+  randomMinMax,
+  RandomMinMax,
   shuffle,
 } from "../../util/other";
 import { currency, itemText } from "../../util/language";
+import { itemMap } from "../../util/db-parts/items";
 
 interface RewardDetails {
   currency: number;
   items: { [key: number]: number };
 }
 
-interface RandomRewardOptions {
-  currency?: {
-    min: number;
-    max: number;
-  };
+export interface RandomRewardOptions {
+  currency?: RandomMinMax;
 
   items?: {
     // Key: item ID, value: weight
-    pool: "get-db" | { [key: number]: number };
+    pool: "get-db" | { [key: number | string]: number };
     count: {
       min: number;
       max: number;
@@ -28,9 +27,15 @@ interface RandomRewardOptions {
   };
 }
 
+/**
+ * Award random items to a user, and return the stringified result
+ * @param userId The user
+ * @param details The options
+ * @returns The stringified result
+ */
 export async function awardRandomThings(
   userId: string,
-  details: RandomRewardOptions
+  details: RandomRewardOptions,
 ): Promise<string> {
   let rewards = await generateRandomReward(details);
   await giveRewardDeteils(userId, rewards);
@@ -38,9 +43,14 @@ export async function awardRandomThings(
   return english;
 }
 
+/**
+ * Give a user rewards
+ * @param userId The user
+ * @param details The options
+ */
 export async function giveRewardDeteils(
   userId: string,
-  details: RewardDetails
+  details: RewardDetails,
 ): Promise<void> {
   if (details.currency) await actions.eco.addMoneyFor(userId, details.currency);
   for await (const [item, amount] of Object.entries(details.items)) {
@@ -48,8 +58,13 @@ export async function giveRewardDeteils(
   }
 }
 
+/**
+ * Turns random reward details into a english list
+ * @param details The rewards given
+ * @returns The Englishified list
+ */
 export async function englishifyRewardDetails(
-  details: RewardDetails
+  details: RewardDetails,
 ): Promise<string> {
   let winnings: string[] = [];
   if (details.currency !== 0) winnings.push(`${currency(details.currency)}`);
@@ -63,12 +78,12 @@ export async function englishifyRewardDetails(
 }
 
 /**
- * Awards a random amount of things based on the options
+ * Generates a random amount of things based on the options
  * @param options What to award
  * @returns The string representation of what was awarded
  */
 export async function generateRandomReward(
-  options: RandomRewardOptions
+  options: RandomRewardOptions,
 ): Promise<RewardDetails> {
   let winnings: RewardDetails = {
     currency: 0,
@@ -76,10 +91,7 @@ export async function generateRandomReward(
   };
 
   if (options.currency) {
-    winnings.currency = randomFromRange(
-      options.currency.min,
-      options.currency.max
-    );
+    winnings.currency = randomMinMax(options.currency);
   }
 
   if (options.items) {
@@ -89,8 +101,16 @@ export async function generateRandomReward(
         (await database.all<Item[]>("SELECT * FROM items;")).map((x) => [
           x.id.toString(),
           x.weight,
-        ])
+        ]),
       );
+    } else {
+      for (const key of Object.keys(pool)) {
+        if (!key.match(/[0-9]+/)) {
+          let old = pool[key];
+          pool[itemMap[key].id] = old;
+          delete pool[key];
+        }
+      }
     }
 
     let poolEntries = Object.entries(pool);
@@ -122,6 +142,10 @@ export async function generateRandomReward(
   return winnings;
 }
 
+/**
+ * Calculates the price of an item
+ * @returns The price
+ */
 export function calculateItemPrice(item: Item): number {
   return Math.max(1, Math.round(Math.min(0.7, 1 - item.weight) * item.price));
 }

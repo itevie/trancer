@@ -1,17 +1,10 @@
 import "dotenv/config";
-import {
-  BurstHandlerMajorIdKey,
-  Client,
-  IntentsBitField,
-  Partials,
-  TextChannel,
-} from "discord.js";
+import { Client, IntentsBitField, Partials, TextChannel } from "discord.js";
 import commandLineArgs, { OptionDefinition } from "command-line-args";
 import { HypnoCommand, HypnoMessageHandler } from "./types/util";
-import { actions, connect } from "./util/database";
+import { connect } from "./util/database";
 import getAllFiles, { createBackup, createEmbed } from "./util/other";
 import { existsSync, readFileSync, writeFileSync } from "fs";
-import { checkBadges } from "./util/badges";
 import Logger from "./util/Logger";
 import config from "./config";
 import { connectAnalytic } from "./util/analytics";
@@ -29,7 +22,7 @@ const cliArgsDefinitio: OptionDefinition[] = [
   { name: "no-handlers", defaultValue: false, type: Boolean },
 ] as const;
 
-let args = commandLineArgs(cliArgsDefinitio) as any;
+let args = commandLineArgs(cliArgsDefinitio);
 
 export const commands: { [key: string]: HypnoCommand } = {};
 export const uniqueCommands: { [key: string]: HypnoCommand } = {};
@@ -66,13 +59,13 @@ export let errors = 0;
 })();
 
 // Load commands
-const commandFiles = (
+const commandFiles: string[] = (
   args["load-cmd"] && args["load-cmd"].length > 0
-    ? args["load-cmd"].map((x) => `${__dirname}/commands/${x}`)
+    ? args["load-cmd"].map((x: string) => `${__dirname}/commands/${x}`)
     : getAllFiles(__dirname + "/commands")
 )
-  .filter((x) => !x.match(/_[a-zA-Z_]+\.[tj]s/))
-  .filter((x) => x.match(/(\.[tj]s)$/));
+  .filter((x: string) => !x.match(/_[a-zA-Z_]+\.[tj]s/))
+  .filter((x: string) => x.match(/(\.[tj]s)$/));
 
 const commandFileCache: Map<string, string> = new Map();
 

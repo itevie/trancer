@@ -296,6 +296,9 @@ const defaults: Omit<Item, "id" | "name"> = {
   max: null,
 };
 
+// export const itemMap: Map<string, Item> = new Map();
+// export const itemIdMap: Map<number, Item> = new Map();
+
 export async function setupItems(): Promise<void> {
   const dbItems = await database.all<Item[]>("SELECT * FROM items;");
 
@@ -326,6 +329,12 @@ export async function setupItems(): Promise<void> {
       }
     }
   }
+
+  /*const _items = await database.all<Item[]>("SELECT * FROM items");
+  for (const item of _items) {
+    itemMap.set(item.name, item);
+    itemIdMap.set(item.id, item);
+    }*/
 
   databaseLogger.log("Updated items");
 }

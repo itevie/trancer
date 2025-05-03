@@ -25,7 +25,7 @@ const progressBarFilled = "█";
  */
 export default function getAllFiles(
   dirPath: string,
-  arrayOfFiles: string[] = []
+  arrayOfFiles: string[] = [],
 ): string[] {
   const files = fs.readdirSync(dirPath);
   arrayOfFiles = arrayOfFiles || [];
@@ -41,6 +41,16 @@ export default function getAllFiles(
   return arrayOfFiles;
 }
 
+export type RandomMinMax = number | { min: number; max: number };
+
+/**
+ * Picks a random number from different formats
+ */
+export function randomMinMax(value: RandomMinMax): number {
+  if (typeof value === "number") return value;
+  else return randomFromRange(value.min, value.max);
+}
+
 /**
  * Creates the base embed for all embeds
  * @returns The created embed
@@ -50,7 +60,7 @@ export function createEmbed(): EmbedBuilder {
     .setColor(
       (client.user?.id === config.devBot.id
         ? config.embed.devColor
-        : config.embed.color) as HexColorString
+        : config.embed.color) as HexColorString,
     )
     .setTimestamp();
 }
@@ -74,7 +84,7 @@ export function getRandomImpositionFromFile(): string {
  */
 export async function getRandomImposition(
   forWho?: string,
-  allowBombard: boolean = false
+  allowBombard: boolean = false,
 ): Promise<string> {
   if (!forWho) return getRandomImpositionFromFile();
 
@@ -136,7 +146,7 @@ export function biasedRandomFromRange(min: number, max: number): number {
  */
 export function fixMagicVariablesInEmbed(
   embed: EmbedBuilder,
-  serverSettings: ServerSettings
+  serverSettings: ServerSettings,
 ): EmbedBuilder {
   // Base stuff
   for (const i in embed) {
@@ -148,7 +158,7 @@ export function fixMagicVariablesInEmbed(
   for (const i in embed.data.fields)
     embed.data.fields[i].value = embed.data.fields[i].value.replace(
       /\$prefix/g,
-      serverSettings.prefix
+      serverSettings.prefix,
     );
 
   return embed;
@@ -181,7 +191,7 @@ export function createBackup() {
 
   fs.copyFileSync(
     __dirname + "/../../data.db",
-    folder + `/${new Date().toDateString().replace(/\//g, "-")}.db`
+    folder + `/${new Date().toDateString().replace(/\//g, "-")}.db`,
   );
 }
 
@@ -259,13 +269,13 @@ export function downloadFile(link: string, path: string): Promise<void> {
  */
 export function makePercentageASCII(
   percentage: number,
-  length: number
+  length: number,
 ): string {
   const percentagePer = 100 / length;
   const amount = Math.round(percentage / percentagePer);
 
   return `${progressBarFilled.repeat(amount)}${progressBarEmpty.repeat(
-    length - amount
+    length - amount,
   )}`;
 }
 

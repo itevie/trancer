@@ -25,6 +25,10 @@ const command: HypnoCommand = {
       user_id: "0",
       last_daily: 0,
       last_fish: 0,
+      mine_xp: 0,
+      fish_xp: 0,
+      work_xp: 0,
+      job: null,
     };
 
     let ecos = await actions.eco.getAll();
@@ -54,7 +58,7 @@ const command: HypnoCommand = {
               ["Helping", currentEco.from_helping],
             ]
               .map((x) => `**${x[0]}**: ${x[1]}${ecoConfig.currency}`)
-              .join("\n")
+              .join("\n"),
           ),
       ],
     });

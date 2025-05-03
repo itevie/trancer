@@ -272,18 +272,30 @@ CREATE TABLE IF NOT EXISTS ranks (
     description TEXT DEFAULT NULL
 );
 
+-- ALTER TABLE economy ADD fish_xp INT NOT NULL DEFAULT 0;
+-- ALTER TABLE economy ADD mine_xp INT NOT NULL DEFAULT 0;
+-- ALTER TABLE economy ADD work_xp INT NOT NULL DEFAULT 0;
+-- ALTER TABLE economy ADD job STRING DEFAULT NULL;
 CREATE TABLE IF NOT EXISTS economy (
+    -- Basic
     user_id TEXT NOT NULL UNIQUE,
     balance INT NOT NULL DEFAULT 0,
+    -- Dawn
     last_fish INT NOT NULL DEFAULT 0,
     last_daily INT NOT NULL DEFAULT 0,
     last_dawn_care INT NOT NULL DEFAULT 0,
     last_dawn_care_all_100 INT NOT NULL DEFAULT 0,
+    -- How they earned money
     from_messaging INT NOT NULL DEFAULT 0,
     from_vc INT NOT NULL DEFAULT 0,
     from_commands INT NOT NULL DEFAULT 0,
     from_helping INT NOT NULL DEFAULT 0,
-    from_gambling INT NOT NULL DEFAULT 0
+    from_gambling INT NOT NULL DEFAULT 0,
+    -- Levelling
+    work_xp INT NOT NULL DEFAULT 0,
+    fish_xp INT NOT NULL DEFAULT 0,
+    mine_xp INT NOT NULL DEFAULT 0,
+    job STRING DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS leaderboards (

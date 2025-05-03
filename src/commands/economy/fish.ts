@@ -3,6 +3,7 @@ import { createEmbed } from "../../util/other";
 import { awardRandomThings } from "../items/_util";
 import { actions } from "../../util/database";
 import ecoConfig from "../../ecoConfig";
+import { calculateFishingRatelimit } from "./_util";
 
 const command: HypnoCommand = {
   name: "fish",
@@ -10,16 +11,7 @@ const command: HypnoCommand = {
   description: `Fish for fishes in the open sea and earn ${ecoConfig.currency}!`,
   type: "economy",
 
-  ratelimit: async (message) => {
-    let item = await actions.items.aquired.getFor(
-      message.author.id,
-      await actions.items.getId(ecoConfig.items.fishingRod),
-    );
-
-    return item && item.amount > 0
-      ? ecoConfig.payouts.fish.limit / 2
-      : ecoConfig.payouts.fish.limit;
-  },
+  ratelimit: async (message) => await calculateFishingRatelimit(message.author),
 
   handler: async (message) => {
     if (
@@ -58,6 +50,8 @@ const command: HypnoCommand = {
       ).user.username;
       if (!fish.includes(name)) fish.push(`**${name}**`);
     }
+
+    await actions.eco.addXp(message.author.id, 5, "fish");
 
     // Reply
     return message.reply({

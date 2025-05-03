@@ -1,8 +1,16 @@
 import ecoConfig from "../../ecoConfig";
 import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
-import { createEmbed, randomFromRange } from "../../util/other";
+import {
+  createEmbed,
+  randomFromRange,
+  RandomMinMax,
+  randomMinMax,
+} from "../../util/other";
 import { currency } from "../../util/language";
+import { awardRandomThings } from "../items/_util";
+import { jobs } from "./_jobs";
+import { calculateLevel } from "../../messageHandlers/xp";
 
 // $r = Reward
 // $c = Currency Symbol
@@ -59,13 +67,24 @@ const command: HypnoCommand = {
 
   ratelimit: ecoConfig.payouts.work.limit,
 
-  handler: async (message) => {
-    const reward = randomFromRange(
-      ecoConfig.payouts.work.min,
-      ecoConfig.payouts.work.max,
+  handler: async (message, { serverSettings, economy }) => {
+    if (!economy.job)
+      return message.reply(
+        `You do not have a job! Please pick one in \`${serverSettings.prefix}jobs\``,
+      );
+
+    const jobName = economy.job as keyof typeof jobs;
+    const job = jobs[jobName];
+
+    const reward = await awardRandomThings(message.author.id, job.rewards);
+    await actions.eco.addXp(
+      message.author.id,
+      randomMinMax(((job as any)?.xp as RandomMinMax) || 5),
+      "work",
     );
+
     const members = Array.from(message.guild.members.cache.keys());
-    const response = responses[Math.floor(Math.random() * responses.length)]
+    const response = job.phrases[Math.floor(Math.random() * job.phrases.length)]
       .replace(
         /\$ru/g,
         `**${
@@ -74,12 +93,18 @@ const command: HypnoCommand = {
           ).user.username
         }**`,
       )
-      .replace(/\$r/g, `**${currency(reward)}**`)
+      .replace(/\$r/g, reward)
       .replace(/\$c/g, ecoConfig.currency);
-    await actions.eco.addMoneyFor(message.author.id, reward, "commands");
 
     return message.reply({
-      embeds: [createEmbed().setTitle("You Worked!").setDescription(response)],
+      embeds: [
+        createEmbed()
+          .setTitle(`You worked as a ${jobName}`)
+          .setDescription(response)
+          .setFooter({
+            text: `You are level ${calculateLevel(economy.work_xp)} in work`,
+          }),
+      ],
     });
   },
 };

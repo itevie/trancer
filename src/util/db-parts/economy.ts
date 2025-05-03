@@ -19,7 +19,7 @@ const _actions = {
   createFor: async (userId: string): Promise<Economy> => {
     return await database.get(
       `INSERT INTO economy (user_id) VALUES ((?)) RETURNING *`,
-      userId
+      userId,
     );
   },
 
@@ -27,7 +27,7 @@ const _actions = {
     return (
       (await database.get<Economy | undefined>(
         `SELECT * FROM economy WHERE user_id = (?);`,
-        userId
+        userId,
       )) || (await _actions.createFor(userId))
     );
   },
@@ -39,18 +39,18 @@ const _actions = {
   addMoneyFor: async (
     userId: string,
     amount: number,
-    reason?: moneyAddReasons
+    reason?: moneyAddReasons,
   ): Promise<void> => {
     let eco = (await database.get(
       `UPDATE economy SET balance = balance + ? WHERE user_id = ? RETURNING *`,
       amount,
-      userId
+      userId,
     )) as Economy;
     if (reason) {
       await database.run(
         `UPDATE economy SET from_${reason} = from_${reason} + ? WHERE user_id = ?`,
         amount,
-        userId
+        userId,
       );
     }
 
@@ -60,18 +60,18 @@ const _actions = {
   removeMoneyFor: async (
     userId: string,
     amount: number,
-    gamblingRelated?: boolean
+    gamblingRelated?: boolean,
   ): Promise<void> => {
     let eco = (await database.get(
       `UPDATE economy SET balance = balance - (?) WHERE user_id = (?) RETURNING *`,
       amount,
-      userId
+      userId,
     )) as Economy;
     if (gamblingRelated) {
       await database.run(
         `UPDATE economy SET from_gambling_lost = from_gambling_lost + ? WHERE user_id = ?`,
         amount,
-        userId
+        userId,
       );
     }
 
@@ -82,7 +82,7 @@ const _actions = {
     let eco = (await database.get(
       `UPDATE economy SET balance = (?) WHERE user_id = (?) RETURNING *`,
       amount,
-      userId
+      userId,
     )) as Economy;
     await addMoneyTransaction(userId, eco.balance);
   },
@@ -91,7 +91,7 @@ const _actions = {
     await database.run(
       `UPDATE economy SET last_fish = (?) WHERE user_id = (?)`,
       Date.now(),
-      userId
+      userId,
     );
   },
 
@@ -99,7 +99,27 @@ const _actions = {
     await database.run(
       `UPDATE economy SET last_daily = (?) WHERE user_id = (?)`,
       Date.now(),
-      userId
+      userId,
+    );
+  },
+
+  setJob: async (userId: string, job: string): Promise<void> => {
+    await database.run(
+      "UPDATE economy SET job = ? WHERE user_id = ?",
+      job,
+      userId,
+    );
+  },
+
+  addXp: async (
+    userId: string,
+    xp: number,
+    type: "mine" | "work" | "fish",
+  ): Promise<void> => {
+    await database.run(
+      `UPDATE economy SET ${type}_xp = ${type}_xp + ? WHERE user_id = ?`,
+      xp,
+      userId,
     );
   },
 } as const;

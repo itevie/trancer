@@ -40,7 +40,7 @@ function createAutoComplete(dataset: string[], given: string): string[] {
   );
 }
 
-client.on("messageCreate", async function handleMessage(message) {
+async function handleMessage(message) {
   // Base guards
   if (!message.inGuild()) return;
   if (config.ignore.channels.includes(message.channel.id)) return;
@@ -306,7 +306,17 @@ client.on("messageCreate", async function handleMessage(message) {
     };
     throw err;
   }
-});
+}
+
+export async function fakeRun(message: Message, newContent: string) {
+  const originalContent = message.content;
+  message.content = newContent;
+  const result = await handleMessage(message);
+  message.content = originalContent;
+  return result;
+}
+
+client.on("messageCreate", handleMessage);
 
 export function parseCommand(content: string): {
   wickStyle: { [key: string]: string };

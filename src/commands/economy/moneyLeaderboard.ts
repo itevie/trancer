@@ -40,12 +40,9 @@ const command: HypnoCommand<{ server?: boolean }> = {
     checkBadges();
 
     await createPaginatedLeaderboardFromData({
-      embed: createEmbed()
-        .setTitle(`Economy Leaderboard`)
-
-        .setFooter({
-          text: `Check ${serverSettings.prefix}howtogeteco on how to get more!`,
-        }),
+      embed: createEmbed().setFooter({
+        text: `Check ${serverSettings.prefix}howtogeteco on how to get more!`,
+      }),
       replyTo: message,
       data: organised,
       entryName: ecoConfig.currency,
