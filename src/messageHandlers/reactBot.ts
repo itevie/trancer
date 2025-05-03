@@ -344,8 +344,12 @@ const phrases = [
   "https://tenor.com/view/mf-dog-ate-my-book-on-stoicism-and-he-aint-been-the-same-since-gif-2100496274040615580",
 ];
 
-let messagesSince = 0;
-let messagesRequired = 20;
+interface ReactBotSettings {
+  since: number;
+  required: number;
+}
+
+const reactBotSettings: Map<string, ReactBotSettings> = new Map();
 
 const excludedChannels = ["1315484267517575168"];
 
@@ -360,9 +364,12 @@ const handler: HypnoMessageHandler = {
 
     if (message.author.bot) return;
     if (excludedChannels.includes(message.channel.id)) return;
-    messagesSince++;
+    if (!reactBotSettings.has(message.guild.id))
+      reactBotSettings.set(message.guild.id, { since: 0, required: 20 });
+    const o = reactBotSettings.get(message.guild.id);
+    o.since++;
 
-    if (messagesSince >= messagesRequired) {
+    if (o.since >= o.required) {
       try {
         let phrase = phrases[Math.floor(Math.random() * phrases.length)]
           .replace(/\$username/g, message.author.username)
@@ -433,8 +440,8 @@ const handler: HypnoMessageHandler = {
           },
         ];
 
-        messagesSince = 0;
-        messagesRequired = randomFromRange(20, 70);
+        o.since = 0;
+        o.required = randomFromRange(20, 70);
 
         if (Math.random() > 0.5) {
           let temp = fuckups[Math.floor(Math.random() * fuckups.length)]();
