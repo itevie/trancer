@@ -194,6 +194,9 @@ CREATE TABLE IF NOT EXISTS user_data (
 
 CREATE TABLE IF NOT EXISTS pinned_ratings (user_id TEXT NOT NULL, rating TEXT NOT NULL);
 
+-- ALTER TABLE dawnagotchi ADD acc_face INT DEFAULT NULL;
+ALTER TABLE dawnagotchi ADD acc_hair INT DEFAULT NULL;
+
 CREATE TABLE IF NOT EXISTS dawnagotchi (
     id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
     owner_id TEXT NOT NULL,
@@ -202,7 +205,9 @@ CREATE TABLE IF NOT EXISTS dawnagotchi (
     alive BOOLEAN NOT NULL DEFAULT true,
     next_feed INT NOT NULL DEFAULT 0,
     next_drink INT NOT NULL DEFAULT 0,
-    next_play INT NOT NULL DEFAULT 0
+    next_play INT NOT NULL DEFAULT 0,
+    acc_face INT DEFAULT NULL,
+    acc_hair INT DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS aquired_badges (

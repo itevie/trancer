@@ -119,11 +119,21 @@ const items: Record<string, Partial<Item>> = {
       "You can fish more frequently. This has a 10% chance of breaking.",
     emoji: "<:fishing_rod:1321761522699210802>",
   },
+
+  // ----- Accessories -----
   pacifier: {
     price: 100,
     weight: 0.2,
+    tag: "accessory",
     description: "Pacifier. Good for calming down.",
     emoji: "<:paci:1358918815584620877>",
+  },
+  "hair-bow": {
+    price: 2500,
+    weight: 0.005,
+    tag: "accessory",
+    description: "Make your Dawn all cutesy with a hair bow!",
+    emoji: "<:bow:1368265911139565578>",
   },
 
   // ----- Resoureces -----

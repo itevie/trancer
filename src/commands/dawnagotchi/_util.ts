@@ -8,6 +8,7 @@ import { actions, database } from "../../util/database";
 import ecoConfig from "../../ecoConfig";
 import { BlendMode, Jimp } from "jimp";
 import config from "../../config";
+import { itemIDMap, itemMap } from "../../util/db-parts/items";
 
 const hexToRgb = (hex: string) => {
   const bigint = parseInt(hex.slice(1), 16);
@@ -22,6 +23,22 @@ interface DawnagotchiRequirements {
   feed: number;
   drink: number;
   play: number;
+}
+
+export const accessoryPlaces = ["face", "hair"] as const;
+export type AccessoryPlace = (typeof accessoryPlaces)[number];
+
+export function getDawnagotchiAccessory(
+  item: Item,
+): [string, AccessoryPlace[]] | null {
+  switch (item.id) {
+    case itemMap["pacifier"].id:
+      return ["acc_paci.png", ["face"]];
+    case itemMap["hair-bow"].id:
+      return ["acc_bow.png", ["hair"]];
+    default:
+      return null;
+  }
 }
 
 export async function generateDawnagotchiImage(dawn: Dawnagotchi) {
@@ -62,6 +79,13 @@ export async function generateDawnagotchiImage(dawn: Dawnagotchi) {
   if (requirements.feed < 25) await overlay("acc_food.png");
   if (requirements.drink < 25) await overlay("acc_water.png");
   if (requirements.play < 25) await overlay("acc_play.png");
+
+  for (const key of accessoryPlaces) {
+    if (dawn[`acc_${key}`] !== null) {
+      const acc = getDawnagotchiAccessory(itemIDMap[dawn[`acc_${key}`]]);
+      await overlay(acc[0]);
+    }
+  }
 
   return await image.getBuffer("image/png");
 }

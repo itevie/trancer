@@ -1,3 +1,4 @@
+import { AccessoryPlace } from "../../commands/dawnagotchi/_util";
 import { database } from "../database";
 
 const _actions = {
@@ -43,6 +44,18 @@ const _actions = {
   removeFor: async (userId: string): Promise<void> => {
     await database.run(
       `UPDATE dawnagotchi SET alive = false WHERE owner_id = ?`,
+      userId,
+    );
+  },
+
+  setAccessory: async (
+    userId: string,
+    key: AccessoryPlace,
+    item: number | null,
+  ): Promise<void> => {
+    await database.run(
+      `UPDATE dawnagotchi SET acc_${key} = ? WHERE owner_id = ? AND alive = true;`,
+      item,
       userId,
     );
   },

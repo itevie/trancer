@@ -14,6 +14,7 @@ mkdir ./build/website/app
 # Copy new files
 cp -rf ./src/sql/* ./build/sql/
 cp -rf ./src/website/app/build ./build/website/app
+cp -rf ./src/data/dawn ./build/data/dawn
 
 # Done
 echo "Done!"
