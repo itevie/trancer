@@ -10,10 +10,14 @@ const command: HypnoCommand = {
   description: "Get a list of jobs and their rewards",
   type: "economy",
 
-  handler: async (message, { args }) => {
+  handler: async (message, { args, serverSettings }) => {
     return paginate({
       message,
-      embed: createEmbed().setTitle("The list of jobs"),
+      embed: createEmbed()
+        .setTitle("The list of jobs")
+        .setFooter({
+          text: `Use ${serverSettings.prefix}job to pick one!`,
+        }),
       type: "field",
       data: Object.entries(jobs).map((x) => ({
         name: x[0],
