@@ -28,14 +28,14 @@ const command: HypnoCommand = {
     // Check if they have the power drink
     let powerDrink = await actions.items.aquired.getFor(
       message.author.id,
-      await actions.items.getId(ecoConfig.items.powerDrink)
+      await actions.items.getId(ecoConfig.items.powerDrink),
     );
     let timeAdd = config.dawnagotchi.actions.water.timeAdd;
     if (powerDrink && powerDrink.amount > 0) {
       timeAdd = timeAdd * 3;
       await actions.items.aquired.removeFor(
         message.author.id,
-        await actions.items.getId(ecoConfig.items.powerDrink)
+        await actions.items.getId(ecoConfig.items.powerDrink),
       );
     }
 
@@ -43,19 +43,20 @@ const command: HypnoCommand = {
     await database.run(
       `UPDATE dawnagotchi SET next_drink = next_drink + ? WHERE owner_id = ?`,
       timeAdd,
-      message.author.id
+      message.author.id,
     );
 
     let money = await awardMoneyForCaringForDawn(dawn);
 
     // Done
+    const { embed, attachment } = await generateDawnagotchiEmbed(
+      await actions.dawnagotchi.getFor(message.author.id),
+    );
+
     return message.reply({
       content: money ? `You got ${currency(money)}` : "",
-      embeds: [
-        generateDawnagotchiEmbed(
-          await actions.dawnagotchi.getFor(message.author.id)
-        ),
-      ],
+      embeds: [embed],
+      files: [attachment],
     });
   },
 };

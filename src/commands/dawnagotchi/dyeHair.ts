@@ -24,7 +24,7 @@ const command: HypnoCommand<{ hex: string }> = {
     // Check if they have any hair dye
     let item = await actions.items.aquired.getFor(
       message.author.id,
-      await actions.items.getId(ecoConfig.items.hairDye)
+      await actions.items.getId(ecoConfig.items.hairDye),
     );
     let shopItem = await actions.items.getByName(ecoConfig.items.hairDye);
     if (item.amount === 0)
@@ -36,25 +36,25 @@ const command: HypnoCommand<{ hex: string }> = {
 
     if (!args.args.hex.match(/^((random)|(#[0-9a-fA-F]{6}))$/))
       return message.reply(
-        `You need to provide a hex (#xxxxxx) color, or "random".`
+        `You need to provide a hex (#xxxxxx) color, or "random".`,
       );
 
     // Change hair color & remove item
     await database.run(
       `UPDATE dawnagotchi SET hair_color_hex = ? WHERE owner_id = ?`,
       args.args.hex,
-      message.author.id
+      message.author.id,
     );
     await actions.items.aquired.removeFor(message.author.id, item.item_id);
 
-    // Done
+    const { embed, attachment } = await generateDawnagotchiEmbed(
+      await actions.dawnagotchi.getFor(message.author.id),
+    );
+
     return message.reply({
       content: `Your Dawn's hair has been dyed **${args.args.hex}**!`,
-      embeds: [
-        generateDawnagotchiEmbed(
-          await actions.dawnagotchi.getFor(message.author.id)
-        ),
-      ],
+      embeds: [embed],
+      files: [attachment],
     });
   },
 };

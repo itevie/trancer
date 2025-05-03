@@ -31,11 +31,17 @@ const command: HypnoCommand<{ user?: User; extraDetails?: boolean }> = {
     let dawn = await actions.dawnagotchi.getFor(user.id);
     if (!dawn)
       return message.reply(
-        `${user.id === message.author.id ? "You" : "They"} do not have a Dawn!`
+        `${user.id === message.author.id ? "You" : "They"} do not have a Dawn!`,
       );
 
+    const { embed, attachment } = await generateDawnagotchiEmbed(
+      dawn,
+      args.extraDetails,
+    );
+
     return message.reply({
-      embeds: [generateDawnagotchiEmbed(dawn, args.extraDetails)],
+      embeds: [embed],
+      files: [attachment],
     });
   },
 };

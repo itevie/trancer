@@ -24,13 +24,13 @@ const command: HypnoCommand = {
 
     if (requirement >= 100)
       return message.reply(
-        `Your Dawn does not require your attention right now >:(`
+        `Your Dawn does not require your attention right now >:(`,
       );
 
     // Check if they have the power play
     let powerPlay = await actions.items.aquired.getFor(
       message.author.id,
-      await actions.items.getId(ecoConfig.items.powerPlay)
+      await actions.items.getId(ecoConfig.items.powerPlay),
     );
     let timeAdd = config.dawnagotchi.actions.play.timeAdd;
     if (powerPlay && powerPlay.amount > 0) {
@@ -38,10 +38,10 @@ const command: HypnoCommand = {
       if (Math.random() > 0.5) {
         await actions.items.aquired.removeFor(
           message.author.id,
-          await actions.items.getId(ecoConfig.items.powerPlay)
+          await actions.items.getId(ecoConfig.items.powerPlay),
         );
         await message.reply(
-          `Oops... your Dawn ate the pendulum... you lost one...`
+          `Oops... your Dawn ate the pendulum... you lost one...`,
         );
       }
     }
@@ -50,19 +50,20 @@ const command: HypnoCommand = {
     await database.run(
       `UPDATE dawnagotchi SET next_play = next_play + ? WHERE owner_id = ?`,
       timeAdd,
-      message.author.id
+      message.author.id,
     );
 
     let money = await awardMoneyForCaringForDawn(dawn);
 
     // Done
+    const { embed, attachment } = await generateDawnagotchiEmbed(
+      await actions.dawnagotchi.getFor(message.author.id),
+    );
+
     return message.reply({
       content: money ? `You got ${currency(money)}` : "",
-      embeds: [
-        generateDawnagotchiEmbed(
-          await actions.dawnagotchi.getFor(message.author.id)
-        ),
-      ],
+      embeds: [embed],
+      files: [attachment],
     });
   },
 };
