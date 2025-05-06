@@ -41,6 +41,7 @@ export function createMessageRefEmbed(message: Message): EmbedBuilder {
       `**[Reply to:](${messageLink(message)})** ${message.content}`,
     );
 }
+
 export function messageLink(message: Message) {
   return `https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`;
 }
