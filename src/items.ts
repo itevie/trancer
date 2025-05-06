@@ -259,6 +259,7 @@ const items: Record<string, Partial<Item>> = {
     tag: "collectable",
     buyable: false,
     emoji: "<:chirtmas_cookie:1321761548372279337>",
+    droppable: false,
   },
   "easter-2025-egg": {
     price: 1000,
@@ -267,6 +268,7 @@ const items: Record<string, Partial<Item>> = {
     tag: "collectable",
     buyable: false,
     emoji: "<:egg:1366070379302359050>",
+    droppable: false,
   },
 
   // ----- Misc -----
