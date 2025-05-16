@@ -56,12 +56,31 @@ const handler: HypnoMessageHandler = {
     )
       return message.reply(`No... Fin... pls don't hang me :(`);
 
+    if (message.content.match(/i use arch btw/i)) {
+      return message.reply(
+        "https://tenor.com/view/sudo-rm-rf-linux-bruh-chungus-poggers-gif-19024993",
+      );
+    }
+
     if (
       message.guild.id === "1257416273520758814" &&
       message.content.toLowerCase() === "huh"
     ) {
       await message.reply("❌");
       return message.reply(`HUH HUH HUH HUH?????`);
+    }
+
+    if (
+      ["1203793262335238187", "342483035188363287"].includes(
+        message.author.id,
+      ) &&
+      ["add", "setting", "frequency"].every((x) =>
+        message.content.toLowerCase().includes(x),
+      )
+    ) {
+      return message.reply(
+        "https://github.com/itevie/hypno-discord-bot/edit/main/src/messageHandlers/reactBot.ts",
+      );
     }
 
     if (

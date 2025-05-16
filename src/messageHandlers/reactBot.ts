@@ -447,6 +447,9 @@ const handler: HypnoMessageHandler = {
           let temp = fuckups[Math.floor(Math.random() * fuckups.length)]();
           if (temp instanceof AttachmentBuilder) {
             await message.reply({
+              options: {
+                reply: false,
+                }
               files: [temp],
             });
           } else {
