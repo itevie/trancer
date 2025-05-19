@@ -134,25 +134,27 @@ const handler: HypnoMessageHandler = {
     }
 
     // Check if Trancer is a subject
-    if (
-      (message.reference &&
-        (await message.fetchReference()).author.id === client.user.id) ||
-      message.content.includes(client.user.id)
-    ) {
-      if (message.content.match(/i? ?love y?oa??u/i)) {
-        return message.reply({
-          content:
-            loveMessages[Math.floor(Math.random() * loveMessages.length)],
-        });
-      }
+    try {
+      if (
+        (message.reference &&
+          (await message.fetchReference()).author.id === client.user.id) ||
+        message.content.includes(client.user.id)
+      ) {
+        if (message.content.match(/i? ?love y?oa??u/i)) {
+          return message.reply({
+            content:
+              loveMessages[Math.floor(Math.random() * loveMessages.length)],
+          });
+        }
 
-      if (message.content.match(/(i hate y?o?u)|(die)|(kys)/i)) {
-        return message.reply({
-          content:
-            hateMessages[Math.floor(Math.random() * hateMessages.length)],
-        });
+        if (message.content.match(/(i hate y?o?u)|(die)|(kys)/i)) {
+          return message.reply({
+            content:
+              hateMessages[Math.floor(Math.random() * hateMessages.length)],
+          });
+        }
       }
-    }
+    } catch {}
   },
 };
 
