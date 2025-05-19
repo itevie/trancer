@@ -166,7 +166,7 @@ const command: HypnoCommand<{ user: User }> = {
               value: list([
                 ["Owned Cards", cardAmount],
                 ["Unique Cards", aquiredCards.length],
-                ["Card Wroth", currency(cardPrice, true)],
+                ["Card Worth", currency(cardPrice, true)],
               ]),
               inline: true,
             },

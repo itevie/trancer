@@ -91,7 +91,7 @@ async function handleMessage(message) {
     settings.analytics
   ) {
     await addMessageForCurrentTime(message.channel as TextChannel);
-    actions.wordUsage.addMessage(message);
+    // actions.wordUsage.addMessage(message);
     return;
   }
 
