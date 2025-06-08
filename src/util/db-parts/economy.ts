@@ -87,6 +87,13 @@ const _actions = {
     await addMoneyTransaction(userId, eco.balance);
   },
 
+  addMissionTokenFor: async (userId: string): Promise<void> => {
+    await database.run(
+      "UPDATE economy SET mission_tokens = mission_tokens + 1 WHERE user_id = ?",
+      userId,
+    );
+  },
+
   setLastFish: async (userId: string): Promise<void> => {
     await database.run(
       `UPDATE economy SET last_fish = (?) WHERE user_id = (?)`,

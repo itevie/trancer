@@ -22,12 +22,12 @@ const command: HypnoCommand = {
   ],
   guards: ["admin"],
 
-  except: (_, args) => args[0] === "details",
+  except: (_, args) => args?.[0] === "details",
   handler: async (message, { oldArgs: args, serverSettings }) => {
     // Check if arg
     if (!args[0])
       return message.reply(
-        `Please provide a subcommand, see \`${serverSettings.prefix}cmd is\``
+        `Please provide a subcommand, see \`${serverSettings.prefix}cmd is\``,
       );
 
     // Fetch imposition settings
@@ -39,7 +39,7 @@ const command: HypnoCommand = {
       case "enable":
         await actions.triggers.auto.setEnabled(message.channel.id, true);
         return await message.reply(
-          `Enabled imposition for this channel! Have fun :cyclone:`
+          `Enabled imposition for this channel! Have fun :cyclone:`,
         );
       case "disable":
         await actions.triggers.auto.setEnabled(message.channel.id, false);
@@ -47,7 +47,7 @@ const command: HypnoCommand = {
       case "chance":
         if (!args[1])
           return message.reply(
-            `Expected a second argument with the chance. Examples: 60, 46\nCurrent is: ${imposition.chance}%`
+            `Expected a second argument with the chance. Examples: 60, 46\nCurrent is: ${imposition.chance}%`,
           );
 
         const chanceValue = parseInt(args[1]);
@@ -56,12 +56,12 @@ const command: HypnoCommand = {
 
         await actions.triggers.auto.setChance(message.channel.id, chanceValue);
         return await message.reply(
-          `There will now be a **${chanceValue}%** chance a random imposition will be sent every **${imposition.every}** minutes`
+          `There will now be a **${chanceValue}%** chance a random imposition will be sent every **${imposition.every}** minutes`,
         );
       case "every":
         if (!args[1])
           return message.reply(
-            `Expected a second argument with the minutes. Examples: 10, 5\nCurrent is: ${imposition.every}`
+            `Expected a second argument with the minutes. Examples: 10, 5\nCurrent is: ${imposition.every}`,
           );
 
         const everyValue = parseInt(args[1]);
@@ -70,29 +70,29 @@ const command: HypnoCommand = {
 
         await actions.triggers.auto.setEvery(message.channel.id, everyValue);
         return await message.reply(
-          `There will now be a **${imposition.chance}%** chance a random imposition will be sent every **${everyValue}** minutes`
+          `There will now be a **${imposition.chance}%** chance a random imposition will be sent every **${everyValue}** minutes`,
         );
       case "details":
         if (!imposition.is_enabled)
           return await message.reply(`Imposition is disabled in this channel!`);
         return await message.reply(
-          `Every **${imposition.every} minutes**, I will attempt to send an action, only **${imposition.chance}%** of the time will it succeed`
+          `Every **${imposition.every} minutes**, I will attempt to send an action, only **${imposition.chance}%** of the time will it succeed`,
         );
       case "where":
         const channels = (await message.guild.channels.fetch()).map(
-          (x) => x.id
+          (x) => x.id,
         );
         const whereResult = (
           await database.all(
             `SELECT * FROM channel_imposition WHERE channel_id IN (${channels
               .map((x) => `'${x}'`)
-              .join(", ")}) AND is_enabled = true;`
+              .join(", ")}) AND is_enabled = true;`,
           )
         ).map((x) => x.channel_id);
         return message.reply(
           `In this server, imposition is in the following channels: ${whereResult
             .map((x) => `<#${x}>`)
-            .join(", ")}`
+            .join(", ")}`,
         );
     }
   },

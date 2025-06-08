@@ -1,7 +1,5 @@
-import { Jimp } from "jimp";
 import { HypnoMessageHandler } from "../types/util";
 import { getRandomImposition } from "../util/other";
-import { readFileSync } from "fs";
 import { AttachmentBuilder } from "discord.js";
 import { generateNotImmuneImage } from "../commands/fun/_image_util";
 import { client } from "..";

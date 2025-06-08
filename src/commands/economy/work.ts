@@ -66,7 +66,7 @@ const command: HypnoCommand = {
   description: "Work for money",
   type: "economy",
 
-  ratelimit: ecoConfig.payouts.work.limit,
+  // ratelimit: ecoConfig.payouts.work.limit,
 
   preHandler: async (message, { serverSettings, economy }) => {
     if (!economy.job) {
@@ -89,7 +89,7 @@ const command: HypnoCommand = {
     return true;
   },
 
-  handler: async (message, { serverSettings, economy }) => {
+  handler: async (message, { economy }) => {
     const jobName = economy.job as keyof typeof jobs;
     const job = jobs[jobName];
 
@@ -113,7 +113,7 @@ const command: HypnoCommand = {
       .replace(/\$r/g, reward)
       .replace(/\$c/g, ecoConfig.currency);
 
-    return message.reply({
+    return {
       embeds: [
         createEmbed()
           .setTitle(`You worked as a ${jobName}`)
@@ -122,7 +122,7 @@ const command: HypnoCommand = {
             text: `You are level ${calculateLevel(economy.work_xp)} in work`,
           }),
       ],
-    });
+    };
   },
 };
 

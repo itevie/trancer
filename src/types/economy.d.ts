@@ -15,4 +15,5 @@ interface Economy {
   mine_xp: number;
   fish_xp: number;
   job: null;
+  mission_tokens: number;
 }

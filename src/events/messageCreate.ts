@@ -10,11 +10,17 @@ import {
   ButtonBuilder,
   ButtonStyle,
   Message,
+  MessageCreateOptions,
   TextChannel,
 } from "discord.js";
 import megaAliases from "../megaAliases";
 import { checkCommandRatelimit } from "../util/messageStuff/ratelimit";
 import { checkCommandArguments } from "../util/messageStuff/arguments";
+import {
+  manipulatePostEconomicCommand,
+  runPreEconomicCommand,
+} from "../util/economy";
+import { isMainThread } from "node:worker_threads";
 
 /**
  * Replaces the content in the message with safe data
@@ -262,7 +268,18 @@ async function handleMessage(message) {
 
   // Done!
   try {
-    await command.handler(message, details);
+    if (command.type === "economy") {
+      await runPreEconomicCommand(message);
+    }
+
+    const result = await command.handler(message, details);
+    if (isMessageCreateOptions(result)) {
+      if (command.type === "economy") {
+        await manipulatePostEconomicCommand(result, message);
+      }
+
+      await message.reply(result);
+    }
 
     if (_delete === "true") {
       try {
@@ -395,4 +412,17 @@ export function parseCommand(content: string): {
     wickStyle,
     args,
   };
+}
+
+function isMessageCreateOptions(value: any): value is MessageCreateOptions {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    ("content" in value ||
+      "embeds" in value ||
+      "files" in value ||
+      "components" in value ||
+      "reply" in value) &&
+    !("id" in value)
+  );
 }

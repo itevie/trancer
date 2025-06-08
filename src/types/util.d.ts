@@ -4,11 +4,14 @@ import {
   Guild,
   InteractionResponse,
   Message,
+  MessageCreateOptions,
   PermissionResolvable,
   SlashCommandBooleanOption,
   SlashCommandBuilder,
   User,
 } from "discord.js";
+
+export type MaybePromise<T> = Promise<T> | T;
 
 export type HypnoCommandType =
   | "analytics"
@@ -138,7 +141,10 @@ interface HypnoCommand<Args extends { [key: string]: any } = {}> {
   /**
    * The main handler for the command
    */
-  handler: (message: Message<true>, options: HypnoCommandDetails<Args>) => void;
+  handler: (
+    message: Message<true>,
+    options: HypnoCommandDetails<Args>,
+  ) => MaybePromise<MessageCreateOptions | Message | void>;
 
   /**
    * How often this command can be ran

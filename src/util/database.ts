@@ -28,6 +28,7 @@ import oneWordStories from "./db-parts/oneWordStories";
 import commandCreations from "./db-parts/commandCreations";
 import triggerIdeas from "./db-parts/triggerIdeas";
 import confessions from "./db-parts/confessions";
+import missions from "./db-parts/missions";
 import wordUsage from "./db-parts/wordUsage";
 import { units } from "./ms";
 
@@ -59,6 +60,7 @@ export const actions = {
   triggerIdeas,
   confessions,
   wordUsage,
+  missions,
 } as const;
 
 export function cached<T extends (...args: unknown[]) => Promise<any>>(

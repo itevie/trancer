@@ -248,6 +248,17 @@ CREATE TABLE IF NOT EXISTS relationships (
     type TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS missions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    for TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    name TEXT NOT NULL,
+    completed BOOLEAN DEFAULT false NOT NULL,
+    completed_at TEXT DEFAULT NULL,
+    rewards TEXT NOT NULL,
+    old TEXT DEFAULT NULL
+);
+
 -- Global stuff
 CREATE TABLE IF NOT EXISTS spirals (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -276,6 +287,7 @@ CREATE TABLE IF NOT EXISTS ranks (
     description TEXT DEFAULT NULL
 );
 
+-- ALTER TABLE economy ADD mission_tokens INT NOT NULL DEFAULT 0;
 CREATE TABLE IF NOT EXISTS economy (
     -- Basic
     user_id TEXT NOT NULL UNIQUE,
@@ -295,7 +307,9 @@ CREATE TABLE IF NOT EXISTS economy (
     work_xp INT NOT NULL DEFAULT 0,
     fish_xp INT NOT NULL DEFAULT 0,
     mine_xp INT NOT NULL DEFAULT 0,
-    job STRING DEFAULT NULL
+    job STRING DEFAULT NULL,
+    -- Other
+    mission_tokens INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS leaderboards (

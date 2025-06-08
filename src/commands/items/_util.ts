@@ -7,7 +7,7 @@ import {
   shuffle,
 } from "../../util/other";
 import { currency, itemText } from "../../util/language";
-import { itemMap } from "../../util/db-parts/items";
+import { itemIDMap, itemMap } from "../../util/db-parts/items";
 
 interface RewardDetails {
   currency: number;
@@ -63,14 +63,12 @@ export async function giveRewardDeteils(
  * @param details The rewards given
  * @returns The Englishified list
  */
-export async function englishifyRewardDetails(
-  details: RewardDetails,
-): Promise<string> {
+export function englishifyRewardDetails(details: RewardDetails): string {
   let winnings: string[] = [];
   if (details.currency !== 0) winnings.push(`${currency(details.currency)}`);
 
-  for await (const [id, quantity] of Object.entries(details.items)) {
-    const item = await actions.items.get(parseInt(id));
+  for (const [id, quantity] of Object.entries(details.items)) {
+    const item = itemIDMap[id] as Item;
     winnings.push(`${itemText(item, quantity, true)}`);
   }
 

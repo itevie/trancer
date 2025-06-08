@@ -1,6 +1,5 @@
 import { HypnoCommand } from "../../types/util";
 import { createEmbed } from "../../util/other";
-import config from "../../config";
 import ecoConfig from "../../ecoConfig";
 import { actions } from "../../util/database";
 
@@ -29,6 +28,7 @@ const command: HypnoCommand = {
       fish_xp: 0,
       work_xp: 0,
       job: null,
+      mission_tokens: 0,
     };
 
     let ecos = await actions.eco.getAll();

@@ -3,13 +3,14 @@ import { HypnoCommand } from "../../types/util";
 import { actions, keyedCache } from "../../util/database";
 import { createEmbed, makePercentageASCII } from "../../util/other";
 import { msToHowLong } from "../../util/ms";
-import { currency, list, tick } from "../../util/language";
+import { b, currency, list, tick } from "../../util/language";
 import ecoConfig from "../../ecoConfig";
 import { calculateFishingRatelimit, getUsersBestPickaxe } from "./_util";
 import { itemIDMap, itemMap } from "../../util/db-parts/items";
 import { computeCardPrice } from "../cards/_util";
 import { calculateLevel, getXPForLevel } from "../../messageHandlers/xp";
 import { fakeRun } from "../../events/messageCreate";
+import { Mission, missions } from "./_missions";
 
 const command: HypnoCommand<{ user: User }> = {
   name: "economy",
@@ -69,6 +70,15 @@ const command: HypnoCommand<{ user: User }> = {
     const mineLevel = calculateLevel(economy.mine_xp);
     const fishLevel = calculateLevel(economy.fish_xp);
     const workLevel = calculateLevel(economy.work_xp);
+
+    let missionText = [];
+    let userMissions = await actions.missions.fetchTodayFor(economy.user_id);
+
+    for await (const m of userMissions) {
+      missionText.push(
+        `> ${b(missions[m.name].description)}: ${await (missions[m.name] as Mission).check(m)}%`,
+      );
+    }
 
     const msg = await message.reply({
       embeds: [
@@ -135,6 +145,15 @@ const command: HypnoCommand<{ user: User }> = {
                   ],
                 ]),
               inline: true,
+            },
+            {
+              name: "♠️ Missions",
+              inline: true,
+              value:
+                list([["Mission Tokens", economy.mission_tokens.toString()]]) +
+                "\n" +
+                missionText.join("\n") +
+                `${serverSettings.prefix}mission`,
             },
             {
               name: "⏳ Timers",
