@@ -180,6 +180,16 @@ export async function checkCommandArguments(
         return false;
       }
 
+      if (
+        _arg.oneOf &&
+        _arg.type === "string" &&
+        _arg.oneOf.some((x) => x.toLowerCase() === result.result.toLowerCase())
+      ) {
+        result.result = _arg.oneOf.find(
+          (x) => x.toLowerCase() === result.result.toLowerCase(),
+        );
+      }
+
       if (_arg.oneOf && !_arg.oneOf.includes(result.result)) {
         await message.reply({
           embeds: [
