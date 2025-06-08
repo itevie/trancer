@@ -79,6 +79,15 @@ export const missions = {
     difficulty: "normal",
     check: async (m) => await checkItemTagged(m, "mineral", 20),
   },
+  "2 missions": {
+    description: "Complete 2 other missions",
+    difficulty: "normal",
+    check: async (m) => {
+      let n = await actions.eco.getFor(m.for);
+      let old = convertMissionOld(m);
+      return percent(n.mission_tokens - old.eco.mission_tokens, 2);
+    },
+  },
 } satisfies Record<string, Mission>;
 export type MissionName = keyof typeof missions;
 export const missionCount = Object.keys(missions).length;

@@ -153,7 +153,7 @@ const command: HypnoCommand<{ user: User }> = {
                 list([["Mission Tokens", economy.mission_tokens.toString()]]) +
                 "\n" +
                 missionText.join("\n") +
-                `${serverSettings.prefix}mission`,
+                `\n${serverSettings.prefix}missions`,
             },
             {
               name: "⏳ Timers",
