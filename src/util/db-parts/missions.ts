@@ -16,8 +16,13 @@ import { itemMap } from "./items";
 
 const _actions = {
   async generate(user: User): Promise<DatabaseMission> {
-    const missionName =
-      Object.keys(missions)[Math.floor(Math.random() * missionCount)];
+    let current = await _actions.fetchTodayFor(user.id);
+    let missionName: string;
+    do {
+      missionName = missionName =
+        Object.keys(missions)[Math.floor(Math.random() * missionCount)];
+    } while (current.some((x) => x.name === missionName));
+
     const missionData: Partial<DatabaseMission> = {
       for: user.id,
       created_at: new Date().toISOString().split("T")[0],
