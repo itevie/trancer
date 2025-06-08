@@ -1,6 +1,7 @@
 import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
 import { list } from "../../util/language";
+import { msToHowLong, units } from "../../util/ms";
 import { createEmbed } from "../../util/other";
 import { englishifyRewardDetails } from "../items/_util";
 import { missions } from "./_missions";
@@ -26,7 +27,20 @@ const command: HypnoCommand = {
     }
 
     return {
-      embeds: [createEmbed().setTitle(`Your missions`).addFields(ms)],
+      embeds: [
+        createEmbed()
+          .setTitle(`Your missions`)
+          .addFields(ms)
+          .setFooter({
+            text:
+              "New missions in " +
+              msToHowLong(
+                new Date(new Date().toISOString().split("T")[0]).getTime() +
+                  units.day -
+                  Date.now(),
+              ),
+          }),
+      ],
     };
   },
 };
