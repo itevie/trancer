@@ -287,8 +287,6 @@ CREATE TABLE IF NOT EXISTS ranks (
     description TEXT DEFAULT NULL
 );
 
-ALTER TABLE economy ADD mission_tokens INT NOT NULL DEFAULT 0;
-
 CREATE TABLE IF NOT EXISTS economy (
     -- Basic
     user_id TEXT NOT NULL UNIQUE,
