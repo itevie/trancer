@@ -89,6 +89,15 @@ export const missions = {
       return percent(n.mission_tokens - old.eco.mission_tokens, 2);
     },
   },
+  "win tictactoe": {
+    description: "Win a game of tic-tac-toe",
+    difficulty: "hard",
+    check: async (m) => {
+      let n = await actions.userData.getCollective(m.for);
+      let old = convertMissionOld(m);
+      return n.ttt_win > old.userData.ttt_win ? 100 : 0;
+    },
+  },
 } satisfies Record<string, Mission>;
 export type MissionName = keyof typeof missions;
 export const missionCount = Object.keys(missions).length;
@@ -125,6 +134,7 @@ async function checkItemTagged(
 function convertMissionOld(data: DatabaseMission): {
   items: AquiredItem[];
   eco: Economy;
+  userData: Partial<UserData>;
 } {
   return JSON.parse(data.old);
 }

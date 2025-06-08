@@ -14,6 +14,23 @@ const _actions = {
     );
   },
 
+  async getCollective(userId: string): Promise<Partial<UserData>> {
+    const all = await database.all<UserData[]>(
+      "SELECT * FROM user_data WHERE user_id = ?",
+      userId,
+    );
+    const data: Partial<UserData> = {
+      ttt_win: 0,
+    };
+
+    for (const a of all) {
+      for (const key of Object.keys(data))
+        if (typeof data[key] === "number") data[key] += a[key];
+    }
+
+    return data;
+  },
+
   getForServer: async (serverId: string): Promise<UserData[]> => {
     return await database.all<UserData[]>(
       "SELECT * FROM user_data WHERE guild_id = ?;",

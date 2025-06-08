@@ -38,6 +38,7 @@ const _actions = {
       old: JSON.stringify({
         items: await actions.items.aquired.getAllFor(user.id),
         eco: await actions.eco.getFor(user.id),
+        userData: await actions.userData.getCollective(user.id),
       }),
     };
     return await database.get<DatabaseMission>(
