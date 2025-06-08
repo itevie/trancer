@@ -129,6 +129,30 @@ export const missions = {
       );
     },
   },
+  "get a card": {
+    description: "Obtain 1 card",
+    difficulty: "easy",
+    check: async (m) => {
+      let n = (await actions.cards.aquired.getAllFor(m.for)).reduce(
+        (p, c) => p + c.amount,
+        0,
+      );
+      let o = convertMissionOld(m).cards.reduce((p, c) => p + c.amount, 0);
+      return n > o ? 100 : 0;
+    },
+  },
+  "get 3 card": {
+    description: "Obtain 3 cards",
+    difficulty: "hard",
+    check: async (m) => {
+      let n = (await actions.cards.aquired.getAllFor(m.for)).reduce(
+        (p, c) => p + c.amount,
+        0,
+      );
+      let o = convertMissionOld(m).cards.reduce((p, c) => p + c.amount, 0);
+      return percent(n - o, 3);
+    },
+  },
 } satisfies Record<string, Mission>;
 export type MissionName = keyof typeof missions;
 export const missionCount = Object.keys(missions).length;
@@ -167,6 +191,7 @@ function convertMissionOld(data: DatabaseMission): {
   eco: Economy;
   userData: Partial<UserData>;
   botServerUserData: UserData;
+  cards: AquiredCard[];
 } {
   return JSON.parse(data.old);
 }

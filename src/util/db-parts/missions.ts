@@ -4,7 +4,6 @@ import {
   missions,
   missionCount,
   baseRandomRewards,
-  MissionDifficulty,
   Mission,
 } from "../../commands/economy/_missions";
 import {
@@ -12,7 +11,6 @@ import {
   giveRewardDeteils,
 } from "../../commands/items/_util";
 import { actions, database } from "../database";
-import { itemMap } from "./items";
 import config from "../../config";
 
 const _actions = {
@@ -44,6 +42,7 @@ const _actions = {
           user.id,
           config.botServer.id,
         ),
+        cards: await actions.cards.aquired.getAllFor(user.id),
       }),
     };
     return await database.get<DatabaseMission>(
