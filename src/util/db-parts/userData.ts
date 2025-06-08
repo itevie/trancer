@@ -1,5 +1,4 @@
 import { database } from "../database";
-import { units } from "../ms";
 
 type UserDataUpdate = Omit<UserData, "guild_id" | "user_id">;
 

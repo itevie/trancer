@@ -387,5 +387,5 @@ export function randomNumberFromString(
 
 export function percent(current: number, goal: number): number {
   if (goal === 0) return 100;
-  return Math.min((current / goal) * 100, 100);
+  return Math.round(Math.min((current / goal) * 100, 100));
 }

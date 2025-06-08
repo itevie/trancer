@@ -66,7 +66,7 @@ const command: HypnoCommand = {
   description: "Work for money",
   type: "economy",
 
-  // ratelimit: ecoConfig.payouts.work.limit,
+  ratelimit: ecoConfig.payouts.work.limit,
 
   preHandler: async (message, { serverSettings, economy }) => {
     if (!economy.job) {

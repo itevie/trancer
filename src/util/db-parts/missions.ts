@@ -13,6 +13,7 @@ import {
 } from "../../commands/items/_util";
 import { actions, database } from "../database";
 import { itemMap } from "./items";
+import config from "../../config";
 
 const _actions = {
   async generate(user: User): Promise<DatabaseMission> {
@@ -39,6 +40,10 @@ const _actions = {
         items: await actions.items.aquired.getAllFor(user.id),
         eco: await actions.eco.getFor(user.id),
         userData: await actions.userData.getCollective(user.id),
+        botServerUserData: await actions.userData.getFor(
+          user.id,
+          config.botServer.id,
+        ),
       }),
     };
     return await database.get<DatabaseMission>(

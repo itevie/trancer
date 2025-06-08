@@ -4,6 +4,7 @@ import { generateRandomReward, RandomRewardOptions } from "../items/_util";
 import { actions, database } from "../../util/database";
 import { itemIDMap, itemMap } from "../../util/db-parts/items";
 import { percent } from "../../util/other";
+import config from "../../config";
 
 export const missionDifficulties = ["easy", "normal", "hard"] as const;
 export type MissionDifficulty = (typeof missionDifficulties)[number];
@@ -98,6 +99,36 @@ export const missions = {
       return n.ttt_win > old.userData.ttt_win ? 100 : 0;
     },
   },
+  "twilight 30 messages": {
+    description: "Get 30 messages in Trancy Twilight",
+    difficulty: "hard",
+    check: async (m) => {
+      let n = await actions.userData.getFor(m.for, config.botServer.id);
+      return percent(
+        n.messages_sent - convertMissionOld(m).botServerUserData.messages_sent,
+        50,
+      );
+    },
+  },
+  "twilight 50 xp": {
+    description: "Get 50 XP in Trancy Twilight",
+    difficulty: "hard",
+    check: async (m) => {
+      let n = await actions.userData.getFor(m.for, config.botServer.id);
+      return percent(n.xp - convertMissionOld(m).botServerUserData.xp, 50);
+    },
+  },
+  "twilight bump": {
+    description: "Bump Trancy Twilight",
+    difficulty: "hard",
+    check: async (m) => {
+      let n = await actions.userData.getFor(m.for, config.botServer.id);
+      return percent(
+        n.bumps - convertMissionOld(m).botServerUserData.bumps,
+        50,
+      );
+    },
+  },
 } satisfies Record<string, Mission>;
 export type MissionName = keyof typeof missions;
 export const missionCount = Object.keys(missions).length;
@@ -135,6 +166,7 @@ function convertMissionOld(data: DatabaseMission): {
   items: AquiredItem[];
   eco: Economy;
   userData: Partial<UserData>;
+  botServerUserData: UserData;
 } {
   return JSON.parse(data.old);
 }
