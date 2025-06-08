@@ -41,24 +41,25 @@ export interface Mission {
   reward?: RandomRewardOptions;
 }
 
+const baseCurrency = 30;
 export const baseRandomRewards: Record<MissionDifficulty, RandomRewardOptions> =
   {
     easy: {
       currency: {
-        min: 10,
-        max: 10,
+        min: baseCurrency,
+        max: baseCurrency,
       },
     },
     normal: {
       currency: {
-        min: 20,
-        max: 30,
+        min: baseCurrency * 2,
+        max: baseCurrency * 2.5,
       },
     },
     hard: {
       currency: {
-        min: 40,
-        max: 60,
+        min: baseCurrency * 3,
+        max: baseCurrency * 4,
       },
     },
   };
