@@ -3,7 +3,12 @@ import { client } from "..";
 import { getUser } from "./other";
 let path = __dirname + "/../data/cached_usernames.json";
 if (!fs.existsSync(path)) fs.writeFileSync(path, "{}");
-let usernames = JSON.parse(fs.readFileSync(path, "utf-8"));
+let usernames: any;
+try {
+usernames = JSON.parse(fs.readFileSync(path, "utf-8"));
+} catch {
+usernames = {}
+}
 
 export function getUsernameSync(id: string): string {
   if (!usernames[id]) {
