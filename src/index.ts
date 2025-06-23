@@ -45,7 +45,7 @@ import { loadSlashCommands } from "./util/slashCommands";
 import initAllManagers from "./managers/loadAll";
 import loadTs from "./util/tsLoader";
 import { Init } from "./init/init";
-import { createEmbed } from "./util/other";
+import { createBackup, createEmbed } from "./util/other";
 
 const logger = new Logger("loader");
 export let errors = 0;
