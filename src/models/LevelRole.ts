@@ -6,6 +6,7 @@ export interface DbLevelRole {
   level: number;
 }
 
+// TODO: add check() function
 export default class LevelRole {
   public constructor(public data: DbLevelRole) {}
 

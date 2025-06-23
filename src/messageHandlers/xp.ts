@@ -77,6 +77,8 @@ const handler: HypnoMessageHandler = {
         await actions.eco.addMoneyFor(message.author.id, amount, "messaging");
       }
 
+      // TODO: Check if they should be given them
+
       try {
         await message.reply(
           `Welldone! You levelled up from level **${pre}** to **${post}**! :cyclone:${
