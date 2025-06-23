@@ -188,7 +188,7 @@ export const badges: { [key: string]: Badge } = {
     emoji: ":fish:",
     scan: async (user) => {
       if (user.guild_id !== config.botServer.id) return false;
-      if (calculateLevel(user.xp) < 10) return false;
+      if (calculateLevel(user.xp) < 5) return false;
       try {
         const member = (
           await client.guilds.fetch(config.botServer.id)
