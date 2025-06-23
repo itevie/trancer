@@ -7,6 +7,7 @@ import { createEmbed } from "../../util/other";
 const command: HypnoCommand<{ badge: string; global?: boolean }> = {
   name: "givebadgetoall",
   type: "badges",
+  description: "Give a badge to all users",
 
   guards: ["bot-owner"],
 
