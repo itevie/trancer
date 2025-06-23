@@ -24,6 +24,15 @@ const handler: HypnoMessageHandler = {
     const diffMs = today.getTime() - lastDay.getTime();
     const diffDays = diffMs / units.day;
 
+    let setTime = async () => {
+      await actions.userData.updateFor(
+        message.author.id,
+        message.guild.id,
+        "last_talking_streak",
+        now.toISOString(),
+      );
+    };
+
     if (diffDays > 1) {
       await actions.userData.updateFor(
         message.author.id,
@@ -31,15 +40,11 @@ const handler: HypnoMessageHandler = {
         "talking_streak",
         0,
       );
-      await actions.userData.updateFor(
-        message.author.id,
-        message.guild.id,
-        "last_talking_streak",
-        now.toISOString(),
-      );
+      setTime();
 
       return;
     } else if (diffDays === 0) {
+      if (userData.last_talking_streak === null) setTime();
       return;
     } else {
       await actions.userData.updateFor(
@@ -48,12 +53,7 @@ const handler: HypnoMessageHandler = {
         "talking_streak",
         userData.talking_streak + 1,
       );
-      await actions.userData.updateFor(
-        message.author.id,
-        message.guild.id,
-        "last_talking_streak",
-        now.toISOString(),
-      );
+      setTime();
     }
   },
 };
