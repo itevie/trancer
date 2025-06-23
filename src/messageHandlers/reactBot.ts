@@ -449,7 +449,7 @@ const handler: HypnoMessageHandler = {
           if (temp instanceof AttachmentBuilder) {
             await message.reply({
               options: {
-                reply: false,
+                reply: false as any,
               },
               files: [temp],
             });
