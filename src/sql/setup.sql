@@ -189,7 +189,9 @@ CREATE TABLE IF NOT EXISTS user_data (
     hypno_status TEXT NOT NULL DEFAULT 'green',
     relationships BOOL NOT NULL DEFAULT true,
     count_banned BOOLEAN NOT NULL DEFAULT false,
-    birthday TEXT DEFAULT NULL
+    birthday TEXT DEFAULT NULL,
+    talking_streak INT NOT NULL DEFAULT 0,
+    last_talking_streak TEXT DEFAULT NUL
 );
 
 CREATE TABLE IF NOT EXISTS pinned_ratings (user_id TEXT NOT NULL, rating TEXT NOT NULL);

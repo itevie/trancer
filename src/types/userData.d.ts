@@ -19,6 +19,8 @@ interface UserData {
   relationships: boolean;
   count_banned: boolean;
   birthday: string | null;
+  talking_streak: number;
+  last_talking_streak: string;
 }
 
 interface PinnedRating {
