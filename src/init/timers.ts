@@ -24,7 +24,7 @@ export default async function initTimers() {
   for (const freq of Object.keys(timerFrequencyMap)) {
     setInterval(() => {
       timerLogger.log(
-        `Running timers of requency ${freq}: ${timerFrequencyMap[freq].map((x) => x.name).join(", ")}`,
+        `Running timers of frequency ${freq}: ${timerFrequencyMap[freq].map((x) => x.name).join(", ")}`,
       );
       for (const timer of timerFrequencyMap[freq]) {
         timer.execute();
