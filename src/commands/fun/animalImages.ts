@@ -4,7 +4,6 @@ import { AttachmentBuilder } from "discord.js";
 
 const fetchers: { [key: string]: (tags: string) => Promise<string> } = {
   cat: async (tags) => {
-    console.log(`https://cataas.com/cat/${tags}`);
     return (await axios.get(`https://cataas.com/cat${tags ? `/${tags}` : ""}`))
       .data.url;
   },
@@ -50,8 +49,8 @@ const command: HypnoCommand<{ tags?: string }> = {
                 .split(",")
                 .map((x) => x.trim())
                 .join(",")
-            : ""
-        )
+            : "",
+        ),
       );
     } catch (e) {
       console.log(e.message);

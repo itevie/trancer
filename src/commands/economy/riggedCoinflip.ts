@@ -29,20 +29,14 @@ const command: HypnoCommand<{ amount: number; confirm?: string }> = {
   handler: async (message, args) => {
     let eco = await actions.eco.getFor(message.author.id);
 
-    console.log(
-      args,
-      args.args.amount > 1000 ||
-        (eco.balance > 100 && args.args.amount > eco.balance / 2)
-    );
-
     ConfirmAction({
       message,
       embed: createEmbed()
         .setTitle(`Confirm coinflip`)
         .setDescription(
           `You are coinflipping a lot of money (${currency(
-            args.args.amount
-          )}), are you sure?`
+            args.args.amount,
+          )}), are you sure?`,
         ),
       autoYes: !(
         args.args.amount > 1000 ||
@@ -55,19 +49,19 @@ const command: HypnoCommand<{ amount: number; confirm?: string }> = {
           await actions.eco.addMoneyFor(
             message.author.id,
             args.args.amount,
-            "gambling"
+            "gambling",
           );
         } else {
           await actions.eco.removeMoneyFor(
             message.author.id,
             args.args.amount,
-            true
+            true,
           );
         }
 
         if (!win && args.args.amount > 1000) {
           await message.reply(
-            "https://tenor.com/view/not-stonks-profit-down-sad-frown-arms-crossed-gif-15684535"
+            "https://tenor.com/view/not-stonks-profit-down-sad-frown-arms-crossed-gif-15684535",
           );
         }
 
@@ -78,11 +72,11 @@ const command: HypnoCommand<{ amount: number; confirm?: string }> = {
               .setDescription(
                 win
                   ? `:green_circle: The coin landed in your favour! Your earnt ${currency(
-                      args.args.amount
+                      args.args.amount,
                     )}!`
                   : `:red_circle: The coin did not land in your favour, you lost ${currency(
-                      args.args.amount
-                    )} :(`
+                      args.args.amount,
+                    )} :(`,
               ),
           ],
         };

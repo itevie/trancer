@@ -205,7 +205,8 @@ process.on("uncaughtException", async (err: any) => {
                 name: "Command Details",
                 value: `**Command**: \`${err.command?.content}\`\n**Parsed**: \`${JSON.stringify(err.command?.args)}\``,
               },
-            ]),
+            ])
+            .toJSON(),
         ],
       });
     }
