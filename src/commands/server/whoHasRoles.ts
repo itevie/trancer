@@ -2,7 +2,7 @@ import { Role } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { paginate } from "../../util/components/pagination";
 import { createEmbed } from "../../util/other";
-import { getUsernameSync } from "../../util/cachedUsernames";
+import cachedUsernames from "../../util/cachedUsernames";
 import { escapeDisc } from "../../util/language";
 
 const command: HypnoCommand<{ roles: Role[] }> = {
@@ -30,7 +30,7 @@ const command: HypnoCommand<{ roles: Role[] }> = {
       data: args.roles.map((x) => ({
         name: `${x.name}`,
         value: escapeDisc(
-          x.members.map((x) => getUsernameSync(x.id)).join(", "),
+          x.members.map((x) => cachedUsernames.getSync(x.id)).join(", "),
         ),
         inline: true,
       })),

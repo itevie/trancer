@@ -1,7 +1,7 @@
 import { HypnoCommand } from "../../types/util";
 import { actions } from "../../util/database";
 import { createEmbed } from "../../util/other";
-import { getUsernameSync } from "../../util/cachedUsernames";
+import cachedUsernames from "../../util/cachedUsernames";
 import { paginate } from "../../util/components/pagination";
 
 const command: HypnoCommand = {
@@ -18,7 +18,7 @@ const command: HypnoCommand = {
     return paginate({
       embed: createEmbed().setTitle("Your trusted tists"),
       type: "description",
-      data: list.map((x) => getUsernameSync(x.trusted_user_id)),
+      data: list.map((x) => cachedUsernames.getSync(x.trusted_user_id)),
       message: message,
     });
   },

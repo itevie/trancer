@@ -9,7 +9,7 @@ import { currency } from "../util/language";
 import Manager from "./Manager";
 import config from "../config";
 
-const lotteryFileLocation = config.dataDirectory + "/lottery.txt";
+export const lotteryFileLocation = config.dataDirectory + "/lottery.txt";
 
 /*class LotteryManager extends Manager {
   public name: "lottery";
@@ -29,16 +29,9 @@ export default lotteryManager;*/
 
 export async function initLottery() {
   if (!ecoConfig.lottery.enabled) return;
-
-  if (!existsSync(lotteryFileLocation))
-    writeFileSync(lotteryFileLocation, new Date().toISOString());
-
-  setInterval(() => {
-    checkLottery();
-  }, 60000);
 }
 
-async function checkLottery() {
+export async function checkLottery() {
   const lastStartTime = new Date(readFileSync(lotteryFileLocation, "utf-8"));
   if (ecoConfig.lottery.length - (Date.now() - lastStartTime.getTime()) > 0)
     return;

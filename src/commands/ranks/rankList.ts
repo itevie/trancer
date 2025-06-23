@@ -1,5 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import { getUsernameSync } from "../../util/cachedUsernames";
+import cachedUsernames from "../../util/cachedUsernames";
 import { paginate } from "../../util/components/pagination";
 import { actions, database } from "../../util/database";
 import { createEmbed } from "../../util/other";
@@ -27,7 +27,7 @@ const command: HypnoCommand = {
         (x) =>
           `**${x.rank_name}**: ${
             votes.some((y) => y.rank_name === x.rank_name)
-              ? getUsernameSync(
+              ? cachedUsernames.getSync(
                   votes.find((y) => y.rank_name === x.rank_name).votee,
                 )
               : "*Not voted*"

@@ -1,5 +1,5 @@
 import { HypnoCommand, HypnoInteractionCommand } from "../../types/util";
-import { getUsernameSync } from "../../util/cachedUsernames";
+import cachedUsernames from "../../util/cachedUsernames";
 import { paginate } from "../../util/components/pagination";
 import { actions } from "../../util/database";
 import { createEmbed } from "../../util/other";
@@ -53,7 +53,7 @@ const command: HypnoCommand = {
         const msDiff = x.birthday_date.getTime() - today.getTime();
         const daysUntil = Math.ceil(msDiff / (1000 * 60 * 60 * 24));
 
-        return `**${getUsernameSync(x.user_id)}**: ${x.birthday_date.toDateString()} (${daysUntil} day${daysUntil !== 1 ? "s" : ""} left)`;
+        return `**${cachedUsernames.getSync(x.user_id)}**: ${x.birthday_date.toDateString()} (${daysUntil} day${daysUntil !== 1 ? "s" : ""} left)`;
       }),
     });
   },

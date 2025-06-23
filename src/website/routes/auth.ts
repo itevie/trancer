@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { client } from "../..";
 import config from "../../config";
 import { noDiscords } from "../../commands/server/dashboard";
-import { getUsernameSync } from "../../util/cachedUsernames";
+import cachedUsernames from "../../util/cachedUsernames";
 
 export function Authenticate(req: Request, res: Response, next: NextFunction) {
   if (req.url.startsWith("/login")) return next();
@@ -27,7 +27,7 @@ export function Authenticate(req: Request, res: Response, next: NextFunction) {
     const token = jwt.sign(
       {
         id: id,
-        username: getUsernameSync(id),
+        username: cachedUsernames.getSync(id),
       },
       process.env.JWT_SECRET,
       { expiresIn: "28d" },

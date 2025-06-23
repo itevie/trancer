@@ -8,7 +8,7 @@ import {
 import { database } from "../database";
 import { createEmbed } from "../other";
 import { client } from "../..";
-import { getUsernameSync } from "../cachedUsernames";
+import cachedUsernames from "../cachedUsernames";
 import { addAbortSignal } from "stream";
 import { addMessageForCurrentTime } from "../analytics";
 import { ChartJSNodeCanvas } from "chartjs-node-canvas";
@@ -103,7 +103,7 @@ const _actions = {
       small: boolean = false,
     ) => {
       return `${
-        typeof user === "string" ? getUsernameSync(user) : user.username
+        typeof user === "string" ? cachedUsernames.getSync(user) : user.username
       }${!small ? ` - ${new Date(message?.createdAt || quote.created_at).toDateString()}` : ""}${
         message
           ? ` - [[Message Link]](https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id})`

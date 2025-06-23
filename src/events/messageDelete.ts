@@ -3,7 +3,7 @@ import { client } from "..";
 import config from "../config";
 import { createEmbed } from "../util/other";
 import { actions } from "../util/database";
-import { getUsernameSync } from "../util/cachedUsernames";
+import cachedUsernames from "../util/cachedUsernames";
 
 export const messageDeletes: Map<string, Message<boolean> | PartialMessage> =
   new Map();
@@ -50,7 +50,7 @@ client.on("messageDelete", async (message) => {
               "https://dawn.rest/cdn/no_pfp.png",
             name:
               message.author?.username ??
-              getUsernameSync(message.author.id) ??
+              cachedUsernames.getSync(message.author.id) ??
               "No Username",
           }),
       ],

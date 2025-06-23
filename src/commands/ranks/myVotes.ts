@@ -3,7 +3,7 @@ import { HypnoCommand } from "../../types/util";
 import { actions, database } from "../../util/database";
 import { createEmbed } from "../../util/other";
 import { paginate } from "../../util/components/pagination";
-import { getUsernameSync } from "../../util/cachedUsernames";
+import cachedUsernames from "../../util/cachedUsernames";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "votes",
@@ -29,7 +29,9 @@ const command: HypnoCommand<{ user?: User }> = {
       message: message,
       embed: createEmbed().setTitle(`All your votes!`),
       type: "description",
-      data: votes.map((x) => `**${x.rank_name}**: ${getUsernameSync(x.votee)}`),
+      data: votes.map(
+        (x) => `**${x.rank_name}**: ${cachedUsernames.getSync(x.votee)}`,
+      ),
     });
   },
 };
