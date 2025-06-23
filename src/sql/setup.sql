@@ -170,6 +170,7 @@ CREATE TABLE IF NOT EXISTS user_favourite_spirals (
 
 -- alter table user_data add column last_talking_streak TEXT DEFAULT NULL;
 -- alter table user_data add column talking_streak INT NOT NULL DEFAULT 0;
+alter table user_data add column highest_talking_streak INT NOT NULL DEFAULT 0;
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,
     guild_id TEXT NOT NULL,
@@ -193,7 +194,8 @@ CREATE TABLE IF NOT EXISTS user_data (
     count_banned BOOLEAN NOT NULL DEFAULT false,
     birthday TEXT DEFAULT NULL,
     talking_streak INT NOT NULL DEFAULT 0,
-    last_talking_streak TEXT DEFAULT NULL
+    last_talking_streak TEXT DEFAULT NULL,
+    highest_talking_streak INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS pinned_ratings (user_id TEXT NOT NULL, rating TEXT NOT NULL);

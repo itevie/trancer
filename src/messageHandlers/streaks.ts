@@ -33,6 +33,14 @@ const handler: HypnoMessageHandler = {
       );
     };
 
+    if (userData.talking_streak > userData.highest_talking_streak)
+      await actions.userData.updateFor(
+        message.author.id,
+        message.guild.id,
+        "highest_talking_streak",
+        userData.talking_streak,
+      );
+
     if (diffDays > 1) {
       await actions.userData.updateFor(
         message.author.id,
