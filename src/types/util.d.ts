@@ -40,7 +40,7 @@ export type HypnoCommandType =
   | "confessions"
   | "file-directory";
 
-type Guard = "admin" | "bot-server" | "bot-owner";
+type Guard = "admin" | "bot-server" | "bot-owner" | "twilight-booster";
 
 type ArgumentType =
   | "attachment"

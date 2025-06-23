@@ -47,7 +47,6 @@ import { loadAllSources } from "./commands/file-directory/_util";
 import { initStatusChanger } from "./util/statusChanger";
 import { loadSlashCommands } from "./util/slashCommands";
 import initAllManagers from "./managers/loadAll";
-import { ALL } from "dns";
 
 const logger = new Logger("loader");
 export let errors = 0;

@@ -21,6 +21,7 @@ import {
   runPreEconomicCommand,
 } from "../util/economy";
 import { isMainThread } from "node:worker_threads";
+import HugeAlias from "../models/HugeAlias";
 
 /**
  * Replaces the content in the message with safe data
@@ -107,10 +108,29 @@ async function handleMessage(message) {
 
   // Extract command
   let content = message.content.substring(settings.prefix.length).trim();
-
-  if (megaAliases[content.split(" ")[0].toLowerCase()]) {
+  let psudoCommand = content.split(" ")[0].toLowerCase();
+  if (megaAliases[psudoCommand]) {
     const key = content.split(" ")[0];
     content = content.replace(key, megaAliases[key.toLowerCase()]);
+  } else if (
+    !commands[psudoCommand] &&
+    (await HugeAlias.fetch(message.author.id, psudoCommand))
+  ) {
+    if (!(await isTwilightBooster(message.author.id))) {
+      return message.reply(
+        `Sorry, but you need to be a booster in Trancy Twilight to run your huge alias!`,
+      );
+    }
+    let temp = (await HugeAlias.fetch(message.author.id, psudoCommand)).data
+      .result;
+
+    const { args } = parseCommand(content);
+    args.shift();
+    for (const arg in args) {
+      temp = temp.replace(new RegExp(`\\$${parseInt(arg) + 1}\\$`), args[arg]);
+    }
+
+    content = temp;
   }
 
   const originalArguments = content.split(" ").slice(1);
@@ -189,6 +209,7 @@ async function handleMessage(message) {
   )
     return await message.reply("AI is disabled!");
 
+  console.log(command.guards, await isTwilightBooster(message.author.id));
   if (!(command.except && command.except(message))) {
     if (command.guards) {
       // Check bot owner
@@ -215,6 +236,16 @@ async function handleMessage(message) {
         return await message.reply(
           "You must have the administrator permission to run this command!",
         );
+
+      // Check twilight booster
+      if (
+        command.guards.includes("twilight-booster") &&
+        !(await isTwilightBooster(message.author.id))
+      ) {
+        return await message.reply(
+          `You must be a booster in Trancy Twilight to run this command!`,
+        );
+      }
     }
 
     // Check for specific permissions
@@ -425,4 +456,10 @@ function isMessageCreateOptions(value: any): value is MessageCreateOptions {
       "reply" in value) &&
     !("id" in value)
   );
+}
+
+async function isTwilightBooster(userId: string) {
+  const guild = await client.guilds.fetch(config.botServer.id);
+  const member = await guild.members.fetch(userId);
+  return !!member.premiumSince;
 }
