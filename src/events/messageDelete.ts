@@ -9,6 +9,7 @@ export const messageDeletes: Map<string, Message<boolean> | PartialMessage> =
   new Map();
 
 client.on("messageDelete", async (message) => {
+  if (!message || !message.channel || !message.author) return;
   messageDeletes.set(`${message.author.id}-${message.channel.id}`, message);
 
   // Check if channel has a count
