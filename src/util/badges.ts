@@ -125,6 +125,14 @@ export const badges: { [key: string]: Badge } = {
       return false;
     },
   },
+  birthday: {
+    name: "Twilight's Birthday",
+    description: "Be in Trancy Twilight when it hit 1 year old",
+    emoji: ":birthday:",
+    scan: async () => {
+      return false;
+    },
+  },
   mythiccard: {
     name: "Mythic Card",
     description: "Got a mythic card at some point",
