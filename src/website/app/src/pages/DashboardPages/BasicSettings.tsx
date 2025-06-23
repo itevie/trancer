@@ -78,6 +78,31 @@ export default function BasicSettings({
           v={server.resources.channels.map((x) => [x.id, x.name])}
         />
       </FullWidthInput>
+      <Words type="heading">Birthdays</Words>
+      <label>
+        Your members can set up their own birthday on Trancer with the{" "}
+        <code>setbirthday</code> command!
+        <br />
+        You can then see all of your server's birthdays in one place with{" "}
+        <code>birthdays</code>
+      </label>
+      <FullWidthInput
+        name="Birthday Announcement Channel"
+        description="Where should birthdays be announced? (they'll be announced on the birthday day)"
+      >
+        <TrancerMultiInput
+          k="birthday_channel"
+          server={server}
+          nullable={true}
+          v={server.resources.channels.map((x) => [x.id, x.name])}
+        />
+      </FullWidthInput>
+      <FullWidthInput
+        name="Birthday Announcement Text"
+        description="What should be sent when it is their birthday? You can use {username} and {mention}"
+      >
+        <TrancerStringInput k="birthday_text" server={server} />
+      </FullWidthInput>
       <Words type="heading">Bumping</Words>
       <label>
         You don't need another bot to remind for bumps! Use Trancer!

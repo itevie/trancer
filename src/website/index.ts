@@ -12,13 +12,12 @@ import {
   getMessageAtTimes,
 } from "../util/analytics";
 import { generateCode } from "../util/other";
-import path from "path";
 import { MakeServerRoutes } from "./routes/api/serverRoutes";
 import MakeAuthRoutes, { Authenticate } from "./routes/auth";
 import MakeSettingsRoutes from "./routes/api/settingsRoutes";
 import MakeBasicRoutes from "./routes/api/basicRoutes";
 
-const logger = new Logger("website");
+export const websiteLogger = new Logger("website");
 const codes: { [key: string]: string } = {};
 export const baseUrl = "https://trancer.dawn.rest";
 
@@ -28,6 +27,11 @@ export default function initServer() {
   app.use(express.json());
   app.use(Authenticate);
   app.use("/", express.static(__dirname + "/app/build"));
+
+  app.use((req, _, next) => {
+    websiteLogger.log(`${req.method} ${req.originalUrl}`);
+    next();
+  });
 
   app.use(MakeAuthRoutes());
   app.use(MakeServerRoutes());
@@ -53,11 +57,11 @@ export default function initServer() {
           return res
             .status(400)
             .send(
-              `No user ID provided. Pass it using /data/money_transactions-ID`
+              `No user ID provided. Pass it using /data/money_transactions-ID`,
             );
         let transactions = await analyticDatabase.all<MoneyTransaction[]>(
           "SELECT * FROM money_transactions WHERE user_id = ? ORDER BY id DESC LIMIT 1000;",
-          userId
+          userId,
         );
         return res.status(200).send(transactions);
       case "user_data":
@@ -80,11 +84,11 @@ export default function initServer() {
       case "quotes":
         const quotes = await database.all<Quote[]>(
           `SELECT * FROM quotes WHERE server_id = (?);`,
-          config.botServer.id
+          config.botServer.id,
         );
         const optIn = (
           await database.all<UserData[]>(
-            "SELECT * FROM user_data WHERE site_quote_opt_in = true;"
+            "SELECT * FROM user_data WHERE site_quote_opt_in = true;",
           )
         ).map((x) => x.user_id);
         return res
@@ -99,11 +103,11 @@ export default function initServer() {
     ["/", "/servers", "/servers/:id/:type?", "/user_settings", "/economy"],
     (_, res) => {
       return res.sendFile(__dirname + "/app/build/index.html");
-    }
+    },
   );
 
   app.listen(config.website.port, () => {
-    logger.log(`Website listening on port ${config.website.port}`);
+    websiteLogger.log(`Website listening on port ${config.website.port}`);
   });
 }
 

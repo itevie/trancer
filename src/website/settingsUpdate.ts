@@ -182,6 +182,17 @@ const settingsUpdate: {
     table: "server_settings",
     row: "react_bot",
   },
+  birthday_channel: {
+    type: "channel",
+    table: "server_settings",
+    row: "birthday_channel_id",
+    botNeeds: ["SendMessages"],
+  },
+  birthday_text: {
+    type: "string",
+    table: "server_settings",
+    row: "birthday_announcement_text",
+  },
 };
 
 export async function getWebsiteSettingsFor(

@@ -209,7 +209,6 @@ async function handleMessage(message) {
   )
     return await message.reply("AI is disabled!");
 
-  console.log(command.guards, await isTwilightBooster(message.author.id));
   if (!(command.except && command.except(message))) {
     if (command.guards) {
       // Check bot owner

@@ -1,3 +1,5 @@
+-- alter table server_settings add birthday_announcement_text TEXT DEFAULT 'It is **{mention}''s** birthday today!';
+-- alter table server_settings add birthday_channel_id TEXT DEFAULT NULL;
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
@@ -31,7 +33,9 @@ CREATE TABLE IF NOT EXISTS server_settings (
     confessions_channel_id TEXT DEFAULT NULL,
     analytics BOOLEAN DEFAULT true,
     random_replies BOOLEAN DEFAULT false,
-    react_bot BOOLEAN DEFAULT true
+    react_bot BOOLEAN DEFAULT true,
+    birthday_channel_id TEXT DEFAULT NULL,
+    birthday_announcement_text TEXT DEFAULT 'It is **{username}''s** birthday today!'
 );
 
 CREATE TABLE IF NOT EXISTS trigger_ideas (
@@ -177,6 +181,7 @@ CREATE TABLE IF NOT EXISTS huge_aliases (
 -- alter table user_data add column last_talking_streak TEXT DEFAULT NULL;
 -- alter table user_data add column talking_streak INT NOT NULL DEFAULT 0;
 -- alter table user_data add column highest_talking_streak INT NOT NULL DEFAULT 0;
+-- alter table user_data add column birthday_last_announced TEXT DEFAULT NULL;
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,
     guild_id TEXT NOT NULL,
@@ -199,6 +204,7 @@ CREATE TABLE IF NOT EXISTS user_data (
     relationships BOOL NOT NULL DEFAULT true,
     count_banned BOOLEAN NOT NULL DEFAULT false,
     birthday TEXT DEFAULT NULL,
+    birthday_last_announced TEXT DEFAULT NULL,
     talking_streak INT NOT NULL DEFAULT 0,
     last_talking_streak TEXT DEFAULT NULL,
     highest_talking_streak INT NOT NULL DEFAULT 0
