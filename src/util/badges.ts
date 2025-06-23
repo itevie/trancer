@@ -69,6 +69,30 @@ export const badges: { [key: string]: Badge } = {
       return user.messages_sent > 10_000;
     },
   },
+  "7talkstreak": {
+    name: "7 Day Talking Streak",
+    description: "Talk in Trancy Twilight 7 days in a row",
+    emoji: ":fire:",
+    scan: async (user) => {
+      return user.talking_streak > 7;
+    },
+  },
+  "14talkstreak": {
+    name: "14 Day Talking Streak",
+    description: "Talk in Trancy Twilight 14 days in a row",
+    emoji: ":firecracker:",
+    scan: async (user) => {
+      return user.talking_streak > 14;
+    },
+  },
+  "21talkstreak": {
+    name: "21 Day Talking Streak",
+    description: "Talk in Trancy Twilight 21 days in a row",
+    emoji: ":heart_on_fire:",
+    scan: async (user) => {
+      return user.talking_streak > 21;
+    },
+  },
   level15: {
     name: "Level 15",
     description: "Get to level 15",

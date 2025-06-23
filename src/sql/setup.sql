@@ -170,7 +170,7 @@ CREATE TABLE IF NOT EXISTS user_favourite_spirals (
 
 -- alter table user_data add column last_talking_streak TEXT DEFAULT NULL;
 -- alter table user_data add column talking_streak INT NOT NULL DEFAULT 0;
-alter table user_data add column highest_talking_streak INT NOT NULL DEFAULT 0;
+-- alter table user_data add column highest_talking_streak INT NOT NULL DEFAULT 0;
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,
     guild_id TEXT NOT NULL,
