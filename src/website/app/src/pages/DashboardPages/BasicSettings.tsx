@@ -3,7 +3,7 @@ import TrancerMultiInput from "../../Components/TrancerMultiInput";
 import TrancerStringInput from "../../Components/TrancerStringInput";
 import Column from "../../dawn-ui/components/Column";
 import FullWidthInput from "../../dawn-ui/components/FullWidthInput";
-import Words from "../../dawn-ui/components/Words";
+import Words, { TextType } from "../../dawn-ui/components/Words";
 import { useBotDetails } from "../../hooks/useBotDetails";
 import useServerResources from "../../hooks/useServerResources";
 
@@ -16,11 +16,11 @@ export default function BasicSettings({
 
   return (
     <Column>
-      <Words type="heading">Basic Settings</Words>
+      <Words type={TextType.Heading}>Basic Settings</Words>
       <label>
         Here you can configure some of the most basic settings for Trancer!
       </label>
-      <Words type="heading">Prefix</Words>
+      <Words type={TextType.Heading}>Prefix</Words>
       <FullWidthInput
         name="Prefix"
         description="What should Trancer's command prefix be?"
@@ -45,7 +45,7 @@ export default function BasicSettings({
       >
         <TrancerBooleanInput k="react_bot" server={server} />
       </FullWidthInput>
-      <Words type="heading">Channels</Words>
+      <Words type={TextType.Heading}>Channels</Words>
       <label>Define some simple channels for Trancer to use!</label>
       <FullWidthInput
         name="Invite Logger Channel"
@@ -78,7 +78,7 @@ export default function BasicSettings({
           v={server.resources.channels.map((x) => [x.id, x.name])}
         />
       </FullWidthInput>
-      <Words type="heading">Birthdays</Words>
+      <Words type={TextType.Heading}>Birthdays</Words>
       <label>
         Your members can set up their own birthday on Trancer with the{" "}
         <code>setbirthday</code> command!
@@ -103,7 +103,7 @@ export default function BasicSettings({
       >
         <TrancerStringInput k="birthday_text" server={server} />
       </FullWidthInput>
-      <Words type="heading">Bumping</Words>
+      <Words type={TextType.Heading}>Bumping</Words>
       <label>
         You don't need another bot to remind for bumps! Use Trancer!
       </label>
@@ -123,7 +123,7 @@ export default function BasicSettings({
           v={server.resources.channels.map((x) => [x.id, x.name])}
         />
       </FullWidthInput>
-      <Words type="heading">Customisation</Words>
+      <Words type={TextType.Heading}>Customisation</Words>
       <label>Change some little things about Trancer</label>
       <FullWidthInput
         name="Traffic Light Theme"
@@ -136,7 +136,7 @@ export default function BasicSettings({
           nullable={false}
         />
       </FullWidthInput>
-      <Words type="heading">Hypnosis Roles</Words>
+      <Words type={TextType.Heading}>Hypnosis Roles</Words>
       <label>These are used for the .roles command</label>
       <FullWidthInput name="Tist Role">
         <TrancerMultiInput

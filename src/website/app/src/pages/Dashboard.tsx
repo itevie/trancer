@@ -8,7 +8,8 @@ import AppNavbar from "../Navbar";
 import AutobanSettings from "./DashboardPages/AutobanSettings";
 import BasicSettings from "./DashboardPages/BasicSettings";
 import FileDirectorySettings from "./DashboardPages/FileDirectorySettings";
-import MessageSettings from "./DashboardPages/MessagesSettings";
+import LevelRoleSettings from "./DashboardPages/LevelRoleSettings";
+import MessageSettings from "./DashboardPages/MessageSettings";
 import ReportSettings from "./DashboardPages/ReportSettings";
 import VerificationSettings from "./DashboardPages/VerificationSettings";
 import XPSettings from "./DashboardPages/XPSettings";
@@ -43,6 +44,7 @@ export default function Dashboard() {
               Reporting: <ReportSettings server={server} />,
               Autoban: <AutobanSettings server={server} />,
               XP: <XPSettings server={server} />,
+              "Level Roles": <LevelRoleSettings server={server} />,
               "File Directory": <FileDirectorySettings server={server} />,
             }}
           </Tabbed>

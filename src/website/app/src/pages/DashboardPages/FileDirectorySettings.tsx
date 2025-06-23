@@ -1,7 +1,7 @@
 import TrancerBooleanInput from "../../Components/TrancerBooleanInput";
 import Column from "../../dawn-ui/components/Column";
 import FullWidthInput from "../../dawn-ui/components/FullWidthInput";
-import Words from "../../dawn-ui/components/Words";
+import Words, { TextType } from "../../dawn-ui/components/Words";
 import useServerResources from "../../hooks/useServerResources";
 
 export default function FileDirectorySettings({
@@ -11,7 +11,7 @@ export default function FileDirectorySettings({
 }) {
   return (
     <Column>
-      <Words type="heading">File Directory Settings</Words>
+      <Words type={TextType.Heading}>File Directory Settings</Words>
       <label>
         Trancer has it's own hypnosis file directory! Configure what shows up
         here! Want to add your own files into the directory? DM me on Discord!

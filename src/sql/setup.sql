@@ -154,6 +154,14 @@ CREATE TABLE IF NOT EXISTS confessions (
     created_at TEXT NOT NULL
 );
 
+DROP TABLE level_roles;
+CREATE TABLE IF NOT EXISTS level_roles (
+    server_id TEXT NOT NULL,
+    role_id TEXT DEFAULT NULL,
+    level INT NOT NULL,
+    UNIQUE(server_id, level)
+);
+
 -- User specific stuff
 CREATE TABLE IF NOT EXISTS user_imposition (
     user_id TEXT NOT NULL,

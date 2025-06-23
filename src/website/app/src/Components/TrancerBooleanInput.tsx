@@ -8,11 +8,6 @@ export default function TrancerBooleanInput({
   server: ReturnType<typeof useServerResources>;
   k: string;
 }) {
-  console.log(
-    k,
-    server.resources.settings[k],
-    Boolean(server.modified[k] ?? server.resources.settings[k] ?? "false"),
-  );
   return (
     <input
       defaultChecked={Boolean(
