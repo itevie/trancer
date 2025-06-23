@@ -64,7 +64,7 @@ export function tick(str: string): string {
 /**
  * Makes a string bold
  */
-export function b(str: string): string {
+export function b(str: any): string {
   return `**${str}**`;
 }
 
