@@ -8,6 +8,7 @@ import ecoConfig from "../ecoConfig";
 import { currency } from "../util/language";
 import Manager from "./Manager";
 import config from "../config";
+import StateConfig from "../models/StateConfig";
 
 export const lotteryFileLocation = config.dataDirectory + "/lottery.txt";
 
@@ -32,7 +33,7 @@ export async function initLottery() {
 }
 
 export async function checkLottery() {
-  const lastStartTime = new Date(readFileSync(lotteryFileLocation, "utf-8"));
+  const lastStartTime = (await StateConfig.fetch()).lastLottery;
   if (ecoConfig.lottery.length - (Date.now() - lastStartTime.getTime()) > 0)
     return;
 

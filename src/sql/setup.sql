@@ -1,3 +1,9 @@
+CREATE TABLE IF NOT EXISTS config (
+    last_backup TEXT DEFAULT NULL,
+    last_lottery TEXT DEFAULT NULL,
+    last_qotd TEXT DEFAULT NULL
+);
+
 -- alter table server_settings add birthday_announcement_text TEXT DEFAULT 'It is **{mention}''s** birthday today!';
 -- alter table server_settings add birthday_channel_id TEXT DEFAULT NULL;
 CREATE TABLE IF NOT EXISTS server_settings (
