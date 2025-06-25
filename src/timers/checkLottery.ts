@@ -12,6 +12,7 @@ import { Timer } from "./timer";
 const timer: Timer = {
   name: "check-lottery",
   every: units.hour,
+  noDev: true,
   execute: async () => {
     const lastStartTime = (await StateConfig.fetch()).lastLottery;
     if (ecoConfig.lottery.length - (Date.now() - lastStartTime.getTime()) > 0)

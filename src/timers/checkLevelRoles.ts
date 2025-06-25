@@ -11,6 +11,7 @@ const logger = new Logger("level-role-checker");
 const timer: Timer = {
   name: "check-level-roles",
   every: units.hour * 3,
+  noDev: true,
   async execute() {
     logger.log(`Checking level roles`);
     const servers = client.guilds.cache;
