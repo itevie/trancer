@@ -7,11 +7,13 @@ const init: Init = {
   whenReady: true,
   execute: async () => {
     const guilds = await client.guilds.fetch();
+    const progress = logger.logProgress("Loading servers", guilds.size);
     for await (const [_, guild] of guilds) {
       const g = await guild.fetch();
       await g.members.fetch();
-      logger.log(`Loaded server: ${g.name} (${g.id}) owned by ${g.ownerId}`);
+      progress();
     }
+    progress(true);
   },
 };
 
