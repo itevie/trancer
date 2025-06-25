@@ -4,7 +4,7 @@ import { Timer } from "./timer";
 
 const timer: Timer = {
   name: "check-lottery",
-  every: units.minute,
+  every: units.hour,
   execute: () => {
     checkLottery();
   },
