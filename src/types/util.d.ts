@@ -185,15 +185,6 @@ interface MessageLike {
   guild: Guild;
 }
 
-interface HypnoInteractionCommand<Args extends { [key: string]: any } = {}>
-  extends HypnoCommand<Args> {
-  slash: SlashCommandBuilder;
-  handler: (
-    message: MessageLike,
-    options: HypnoCommandDetails<Args>,
-  ) => Promise<any>;
-}
-
 interface BaseArgument {
   /**
    * The type of this argument

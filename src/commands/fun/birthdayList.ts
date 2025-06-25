@@ -1,4 +1,4 @@
-import { HypnoCommand, HypnoInteractionCommand } from "../../types/util";
+import { HypnoCommand } from "../../types/util";
 import cachedUsernames from "../../util/cachedUsernames";
 import { paginate } from "../../util/components/pagination";
 import { actions } from "../../util/database";
