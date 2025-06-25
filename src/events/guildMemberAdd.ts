@@ -65,7 +65,7 @@ client.on("guildMemberAdd", async (member) => {
 
       await database.run(
         `UPDATE server_settings SET auto_ban_count = auto_ban_count + 1 WHERE server_id = ?`,
-        member.guild.id
+        member.guild.id,
       );
 
       return;
@@ -76,13 +76,13 @@ client.on("guildMemberAdd", async (member) => {
   if (serverSettings.unverified_role_id) {
     try {
       const roles = await member.guild.roles.fetch(
-        serverSettings.unverified_role_id
+        serverSettings.unverified_role_id,
       );
       await addRole(member, roles);
     } catch (e) {
       console.log(
         `Failed to give unverified role in server ${member.guild.id}`,
-        e
+        e,
       );
     }
   }
@@ -102,7 +102,7 @@ client.on("guildMemberAdd", async (member) => {
       if (usedCode) {
         // Send it
         let channel = (await member.guild.channels.fetch(
-          serverSettings.invite_logger_channel_id
+          serverSettings.invite_logger_channel_id,
         )) as TextChannel;
         await channel.send({
           embeds: [
@@ -110,7 +110,7 @@ client.on("guildMemberAdd", async (member) => {
               .setTitle(`${member.user.username} invite details`)
               .setDescription(
                 `**Invited By**: ${usedCode.inviter.username} (<@${usedCode.inviter.id}>)` +
-                  `\n**Invite Code**: ${usedCode.code} (${usedCode.uses} uses)`
+                  `\n**Invite Code**: ${usedCode.code} (${usedCode.uses} uses)`,
               ),
           ],
         });
@@ -125,15 +125,15 @@ client.on("guildMemberAdd", async (member) => {
     if (serverSettings.welcome_channel_id) {
       try {
         const channel = await client.channels.fetch(
-          serverSettings.welcome_channel_id
+          serverSettings.welcome_channel_id,
         );
         if (channel.isTextBased()) {
           await channel.send(
             replaceVarString(
               serverSettings.welcome_message,
               member.user,
-              member.guild
-            )
+              member.guild,
+            ),
           );
         }
       } catch (e) {
@@ -146,7 +146,7 @@ client.on("guildMemberAdd", async (member) => {
   // Send welcome message
   (
     (await client.channels.fetch(
-      config.botServer.channels.welcomes
+      config.botServer.channels.welcomes,
     )) as TextChannel
   ).send({
     content: `<@${member.user.id}>`,
@@ -156,24 +156,28 @@ client.on("guildMemberAdd", async (member) => {
         .setDescription(
           `Welcome **${member.user.username}** to our server!` +
             `\n\nRead here: <#1283861103964717126> to get access to our server!` +
-            `\n\nWe hope you enjoy your stay! :cyclone:`
+            `\n\nWe hope you enjoy your stay! :cyclone:`,
         )
         .setFooter({
           text: `We now have ${member.guild.memberCount} members`,
-        }),
+        })
+        .setThumbnail(member.displayAvatarURL()),
     ],
   });
 
   // Send ping in how to verify
   let tempMessage = await (
     (await client.channels.fetch(
-      config.botServer.channels.howToVerify
+      config.botServer.channels.howToVerify,
     )) as TextChannel
   ).send(`<@${member.user.id}> read here on how to join our server!`);
 
-  setTimeout(async () => {
-    await tempMessage.delete();
-  }, 1000 * 60 * 5);
+  setTimeout(
+    async () => {
+      await tempMessage.delete();
+    },
+    1000 * 60 * 5,
+  );
 
   // Check if the invter can be fetched
   let attempts = 0;
@@ -184,7 +188,7 @@ client.on("guildMemberAdd", async (member) => {
         let inviteDetails = await getInviteDetails(
           member.client,
           member.guild.id,
-          member.id
+          member.id,
         );
 
         // Check if suceeded
@@ -197,14 +201,14 @@ client.on("guildMemberAdd", async (member) => {
           await actions.eco.addMoneyFor(
             user.id,
             ecoConfig.payouts.inviting.min,
-            "helping"
+            "helping",
           );
           await user.send(
             `Thanks for inviting ** ${
               member.user.username
             } ** to our server!\nYou earnt ${currency(
-              ecoConfig.payouts.inviting.min
-            )}`
+              ecoConfig.payouts.inviting.min,
+            )}`,
           );
         } else {
           // Allow only 3 attempts
