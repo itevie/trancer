@@ -20,9 +20,10 @@ const handler: HypnoMessageHandler = {
       lastStreak.getDate(),
     );
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
     const diffMs = today.getTime() - lastDay.getTime();
     const diffDays = diffMs / units.day;
+
+    console.log(lastDay, today, diffDays, diffMs);
 
     let setTime = async () => {
       await actions.userData.updateFor(

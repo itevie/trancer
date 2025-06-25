@@ -5,6 +5,7 @@ import { Init } from "./init";
 const logger = new Logger("server-cache");
 const init: Init = {
   whenReady: true,
+  priority: -1,
   execute: async () => {
     const guilds = await client.guilds.fetch();
     const progress = logger.logProgress("Loading servers", guilds.size);

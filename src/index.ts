@@ -8,6 +8,7 @@ import cliArgumentsDefinition from "./cliArgs";
 import loadTs from "./util/tsLoader";
 import { Init } from "./init/init";
 import { createEmbed } from "./util/other";
+import path from "path";
 
 export const args = commandLineArgs(cliArgumentsDefinition);
 
@@ -34,16 +35,19 @@ const logger = new Logger("loader");
 export let errors = 0;
 
 const initiators = loadTs(__dirname + "/init");
-export const whenReadyInitiators: (() => MaybePromise<any>)[] = [];
+export const whenReadyInitiators: Init[] = [];
+export const deinits: (() => MaybePromise<any>)[] = [];
 (async () => {
   logger.log(`Running ${initiators.length} initiators`);
   for await (const init of initiators) {
     try {
       const thing = require(init).default as Init;
-      if (typeof thing === "object" && thing.whenReady)
-        whenReadyInitiators.push(thing.execute);
-      else if (typeof thing === "function") await thing();
-      else await thing.execute();
+      if (thing.whenReady) whenReadyInitiators.push(thing);
+      else {
+        await thing.execute();
+      }
+
+      if (thing.deinit) deinits.push(thing.deinit);
     } catch (e) {
       logger.error(`\n\nFailed to run initialiser: ${init}!`, e);
       process.exit(1);
@@ -88,7 +92,7 @@ process.on("uncaughtException", async (err: any) => {
         ],
       });
     }
-  } catch (err) {
+  } catch (newErr) {
     console.log(err);
     process.exit(0);
   }

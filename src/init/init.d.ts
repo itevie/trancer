@@ -1,8 +1,8 @@
 import { MaybePromise } from "../types/util";
 
-declare type Init =
-  | (() => MaybePromise<any>)
-  | {
-      whenReady?: boolean;
-      execute: () => MaybePromise<any>;
-    };
+declare interface Init {
+  whenReady?: boolean;
+  priority?: number;
+  execute: () => MaybePromise<any>;
+  deinit?: () => MaybePromise<any>;
+}

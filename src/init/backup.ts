@@ -2,6 +2,7 @@ import { existsSync, writeFileSync, readFileSync } from "fs";
 import path from "path";
 import { createBackup } from "../util/other";
 import Logger from "../util/Logger";
+import { Init } from "./init";
 
 const logger = new Logger("backup");
 
@@ -19,4 +20,8 @@ const logger = new Logger("backup");
   }
 };
 
-export default () => {};
+const init: Init = {
+  execute() {},
+};
+
+export default init;

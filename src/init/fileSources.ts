@@ -1,5 +1,10 @@
 import { loadAllSources } from "../commands/file-directory/_util";
+import { Init } from "./init";
 
-export default function () {
-  loadAllSources();
-}
+const init: Init = {
+  execute() {
+    loadAllSources();
+  },
+};
+
+export default init;

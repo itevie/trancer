@@ -1,7 +1,17 @@
-import { connectAnalytic } from "../util/analytics";
-import { connect } from "../util/database";
+import { analyticDatabase, connectAnalytic } from "../util/analytics";
+import { connect, database } from "../util/database";
+import { Init } from "./init";
 
-export default async function () {
-  await connect();
-  await connectAnalytic();
-}
+const init: Init = {
+  async execute() {
+    await connect();
+    await connectAnalytic();
+  },
+
+  async deinit() {
+    await database.close();
+    await analyticDatabase.close();
+  },
+};
+
+export default init;
