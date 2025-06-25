@@ -33,6 +33,7 @@ const timer: Timer = {
           if (memberLevel >= levelRole.data.level) {
             try {
               const role = await server.roles.fetch(levelRole.data.role_id);
+              if (member.roles.cache.has(role.id)) continue;
               await addRole(member, role);
               logger.log(`Gave ${member.user.id} the role ${role.name}`);
             } catch (e) {
