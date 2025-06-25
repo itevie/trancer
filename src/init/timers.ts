@@ -3,6 +3,8 @@ import loadTs from "../util/tsLoader";
 import { Timer } from "../timers/timer";
 import Logger from "../util/Logger";
 import { Init } from "./init";
+import { client } from "..";
+import config from "../config";
 
 const timerLogger = new Logger("timers");
 const init: Init = {
@@ -11,9 +13,12 @@ const init: Init = {
     const timers = loadTs(__dirname + "/../timers");
     const timerFrequencyMap: Record<string, Timer[]> = {};
 
+    let isDev = client.user.id === config.devBot.id;
+
     // Load them all
     for await (const timer of timers) {
       const i = require(timer).default as Timer;
+      if (i.noDev && isDev) continue;
       if (!timerFrequencyMap[i.every]) timerFrequencyMap[i.every] = [];
       timerFrequencyMap[i.every].push(i);
     }
