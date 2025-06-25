@@ -45,7 +45,7 @@ export const whenReadyInitiators: (() => MaybePromise<any>)[] = [];
       else if (typeof thing === "function") await thing();
       else await thing.execute();
     } catch (e) {
-      logger.error(`Failed to run initialiser: ${init}!`, e);
+      logger.error(`\n\nFailed to run initialiser: ${init}!`, e);
       process.exit(1);
     }
   }

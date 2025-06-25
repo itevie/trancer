@@ -1,5 +1,4 @@
 import { client, whenReadyInitiators } from "..";
-import initAllManagers from "../managers/loadAll";
 import initServer from "../website";
 import Logger from "../util/Logger";
 import config from "../config";
@@ -7,8 +6,6 @@ import config from "../config";
 const logger = new Logger("ready");
 
 client.on("ready", async () => {
-  initAllManagers();
-
   logger.log(`${client.user?.username} successfully logged in!`);
 
   await (await client.guilds.fetch(config.botServer.id)).members.fetch();
