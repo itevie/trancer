@@ -42,6 +42,7 @@ const timer: Timer = {
 
       const channel = await client.channels.fetch(config.qotd.channel);
       if (channel.isTextBased()) {
+        await StateConfig.set("last_qotd", new Date().toISOString());
         await channel.send({
           content: config.qotd.content,
           embeds: [embed],
