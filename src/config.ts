@@ -30,6 +30,7 @@ let config = {
       verified: "1257423790212907038",
       canRequest: "1282301213278474241",
       french: "1366862341437653042",
+      birthday: "1387439309669269675",
     },
 
     channels: {
