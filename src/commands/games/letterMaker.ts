@@ -6,12 +6,21 @@ import ecoConfig from "../../ecoConfig";
 import { currency } from "../../util/language";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { actions } from "../../util/database";
-export const words = new Set(
-  readFileSync(__dirname + "/../../data/words.txt", "utf8")
-    .split("\n")
-    .map((word) => word.trim()),
-);
-const sortedWords = Array.from(words).sort((a, b) => a.length - b.length);
+let _words: null | Set<string> = null;
+
+export function getWords() {
+  if (_words) return _words;
+  _words = new Set(
+    readFileSync(__dirname + "/../../data/words.txt", "utf8")
+      .split("\n")
+      .map((word) => word.trim()),
+  );
+  return _words;
+}
+
+export function getSortedWords() {
+  return Array.from(_words).sort((a, b) => a.length - b.length);
+}
 
 const modes = {
   easy: {
@@ -133,7 +142,7 @@ const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
 
     function check(word: string, letters: string[]): boolean {
       const neededLetters = [...letters];
-      if (!words.has(word)) return false;
+      if (!getWords().has(word)) return false;
       for (const [k, v] of neededLetters.entries()) {
         if (word.includes(v)) {
           word = word.replace(v, "");
@@ -146,7 +155,7 @@ const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
 
     function makeExamples(): string[] {
       let examples: string[] = [];
-      for (const word of sortedWords) {
+      for (const word of getSortedWords()) {
         if (check(word, requiredLetters)) {
           examples.push(word);
           if (examples.length >= 15) break;
@@ -160,7 +169,7 @@ const command: HypnoCommand<{ mode?: keyof typeof modes }> = {
       if (!wordsUsed.has(message.author.id)) wordsUsed.set(m.author.id, []);
       let word = m.content.toLowerCase();
       let array = wordsUsed.get(m.author.id);
-      if (words.has(word)) {
+      if (getWords().has(word)) {
         if (array?.includes(word)) {
           return await m.reply({
             content: "You already used that word - be more original.",

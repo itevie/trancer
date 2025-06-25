@@ -1,6 +1,6 @@
 import { HypnoCommand } from "../../types/util";
 import errorText from "../../util/components/error";
-import { words } from "../games/letterMaker";
+import { getWords } from "../games/letterMaker";
 
 const command: HypnoCommand<{ regex: string }> = {
   name: "wordregex",
@@ -20,7 +20,7 @@ const command: HypnoCommand<{ regex: string }> = {
 
   handler: (message, { args }) => {
     try {
-      let matchedWords = Array.from(words)
+      let matchedWords = Array.from(getWords())
         .filter((x) => new RegExp(args.regex).test(x))
         .join(", ")
         .substring(0, 1999);
