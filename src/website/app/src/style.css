@@ -1,7 +1,33 @@
 .login-with-discord {
-  background-color: #5865f2;
+    background-color: #5865f2;
 }
 
 .login-with-discord:hover {
-  background-color: #4752c4;
+    background-color: #4752c4;
+}
+
+.economy-podium {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-sizing: bor;
+    margin-bottom: 30px;
+}
+
+.economy-podium > * {
+    width: 20vw;
+    height: 20vw;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.economy-podium > *:nth-child(2) {
+    width: 25vw;
+    height: 25vw;
+}
+
+.economy-podium-img {
+    aspect-ratio: 1 / 1;
+    border-radius: 1000px;
+    object-fit: cover;
 }
