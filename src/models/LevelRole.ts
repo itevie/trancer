@@ -47,6 +47,19 @@ export default class LevelRole {
     return new LevelRole(data);
   }
 
+  public static async fetchByLevel(
+    serverId: string,
+    level: number,
+  ): Promise<LevelRole | null> {
+    let data = await database.get<DbLevelRole>(
+      "SELECT * FROM level_roles WHERE server_id = ? AND level = ?",
+      serverId,
+      level,
+    );
+    if (!data) return null;
+    return new LevelRole(data);
+  }
+
   public static async create(
     serverId: string,
     roleId: string,
