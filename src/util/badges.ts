@@ -153,8 +153,16 @@ export const badges: { [key: string]: Badge } = {
     name: "Twilight's Birthday",
     description: "Be in Trancy Twilight when it hit 1 year old",
     emoji: ":birthday:",
-    scan: async () => {
-      return false;
+    scan: async (user) => {
+      try {
+        const member = (
+          await client.guilds.fetch(config.botServer.id)
+        ).members.fetch(user.user_id);
+        (await member).roles.add(config.botServer.roles.birthday);
+        return true;
+      } catch {
+        return false;
+      }
     },
   },
   mythiccard: {
@@ -208,7 +216,7 @@ export const badges: { [key: string]: Badge } = {
   },
   "can-request": {
     name: "Can Request",
-    description: "Reached level 10 on Trancer",
+    description: "Reached level 5 on Trancer",
     emoji: ":fish:",
     scan: async (user) => {
       if (user.guild_id !== config.botServer.id) return false;
@@ -275,6 +283,9 @@ export async function checkBadges(
   message?: Message<true>,
   data?: UserData & Economy,
 ) {
+  // TODO: Make this better, or make badges have a "twilightOnly" property.
+  if (message.guild.id !== config.botServer.id) return;
+
   const users = data
     ? [data]
     : await database.all<(UserData & Economy)[]>(
