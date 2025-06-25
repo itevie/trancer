@@ -11,6 +11,7 @@ export default function () {
       : loadTs(__dirname + "/../commands");
 
   const commandFileCache: Map<string, string> = new Map();
+  const progress = logger.logProgress("Loaded commands", commandFiles.length);
 
   for (const commandFile of commandFiles) {
     const commandImport = require(commandFile).default as HypnoCommand;
@@ -42,6 +43,7 @@ export default function () {
       }
       commandFileCache.set(alias, commandFile);
     }
-    logger.log(`Loaded command: ${commandImport.name}`);
+    progress(commandImport.name);
   }
+  progress(true);
 }
