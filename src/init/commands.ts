@@ -14,6 +14,7 @@ export default function () {
   const progress = logger.logProgress("Loaded commands", commandFiles.length);
 
   for (const commandFile of commandFiles) {
+    let start = Date.now();
     const commandImport = require(commandFile).default as HypnoCommand;
     if (commandImport.ignore) continue;
 
@@ -44,6 +45,9 @@ export default function () {
       commandFileCache.set(alias, commandFile);
     }
     progress(commandImport.name);
+    let period = Date.now() - start;
+
+    // if (period > 50) console.log(commandImport.name);
   }
   progress(true);
 }
