@@ -22,7 +22,10 @@ const init: Init = {
       if (!timerFrequencyMap[i.every]) timerFrequencyMap[i.every] = [];
       timerFrequencyMap[i.every].push(i);
     }
-    timerLogger.log(`Loaded ${timers.length} timers`);
+    for (const f of Object.keys(timerFrequencyMap))
+      timerLogger.log(
+        `Frequency ${f} loaded ${timerFrequencyMap[f].length} timers`,
+      );
 
     let run = async (timer: Timer) => {
       try {
