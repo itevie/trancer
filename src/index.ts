@@ -2,24 +2,14 @@ import "dotenv/config";
 import { Client, IntentsBitField, Partials, TextChannel } from "discord.js";
 import commandLineArgs, { OptionDefinition } from "command-line-args";
 import { HypnoCommand, HypnoMessageHandler, MaybePromise } from "./types/util";
-import { existsSync, readFileSync, writeFileSync } from "fs";
 import Logger from "./util/Logger";
 import config from "./config";
-import path from "path";
-import initServer from "./website";
+import cliArgumentsDefinition from "./cliArgs";
+import loadTs from "./util/tsLoader";
+import { Init } from "./init/init";
+import { createEmbed } from "./util/other";
 
-const cliArgsDefinitio: OptionDefinition[] = [
-  {
-    name: "load-cmd",
-    defaultValue: [],
-    alias: "c",
-    multiple: true,
-    type: String,
-  },
-  { name: "no-handlers", defaultValue: false, type: Boolean },
-] as const;
-
-export const args = commandLineArgs(cliArgsDefinitio);
+export const args = commandLineArgs(cliArgumentsDefinition);
 
 export const commands: { [key: string]: HypnoCommand } = {};
 export const uniqueCommands: { [key: string]: HypnoCommand } = {};
@@ -40,40 +30,26 @@ export const client = new Client({
   partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
 
-import { loadAllSources } from "./commands/file-directory/_util";
-import { loadSlashCommands } from "./util/slashCommands";
-import initAllManagers from "./managers/loadAll";
-import loadTs from "./util/tsLoader";
-import { Init } from "./init/init";
-import { createBackup, createEmbed } from "./util/other";
-
 const logger = new Logger("loader");
 export let errors = 0;
 
 const initiators = loadTs(__dirname + "/init");
-const whenReady: (() => MaybePromise<any>)[] = [];
-for (const init of initiators) {
-  const thing = require(init).default as Init;
-  if (typeof thing === "object" && thing.whenReady)
-    whenReady.push(thing.execute);
-  else if (typeof thing === "function") thing();
-  else thing.execute();
-}
-
-client.on("ready", async () => {
-  initAllManagers();
-
-  logger.log(`${client.user?.username} successfully logged in!`);
-
-  await (await client.guilds.fetch(config.botServer.id)).members.fetch();
-
-  if (true || config.website.enabled) {
-    initServer();
+export const whenReadyInitiators: (() => MaybePromise<any>)[] = [];
+(async () => {
+  logger.log(`Running ${initiators.length} initiators`);
+  for await (const init of initiators) {
+    try {
+      const thing = require(init).default as Init;
+      if (typeof thing === "object" && thing.whenReady)
+        whenReadyInitiators.push(thing.execute);
+      else if (typeof thing === "function") await thing();
+      else await thing.execute();
+    } catch (e) {
+      logger.error(`Failed to run initialiser: ${init}!`, e);
+      process.exit(1);
+    }
   }
-
-  logger.log(`Executing when readies...`);
-  for await (const part of whenReady) await part();
-});
+})();
 
 client.login(process.env.BOT_TOKEN);
 
@@ -117,15 +93,3 @@ process.on("uncaughtException", async (err: any) => {
     process.exit(0);
   }
 });
-
-// Backup
-let lastBackup = 0;
-let loc = path.normalize(path.resolve(__dirname, "../last_backup.txt"));
-if (!existsSync(loc)) writeFileSync(loc, "0");
-lastBackup = new Date(readFileSync(loc, "utf-8")).getTime();
-
-if (8.64e7 - (Date.now() - lastBackup) < 0) {
-  createBackup();
-  logger.log(`Created backup!`);
-  writeFileSync(loc, Date.now().toString());
-}
