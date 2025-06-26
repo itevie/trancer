@@ -87,6 +87,13 @@ CREATE TABLE IF NOT EXISTS server_count (
     highest_count INT NOT NULL DEFAULT 0
 );
 
+CREATE TABLE IF NOT EXISTS server_count_ruins (
+    server_id TEXT NOT NULL,
+    channel_id TEXT NOT NULL,
+    count INT NOT NULL DEFAULT 0,
+    ruined_at TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS role_menus (
     id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT NOT NULL,
     server_id TEXT NOT NULL,

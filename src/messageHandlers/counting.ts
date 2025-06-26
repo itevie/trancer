@@ -1,6 +1,6 @@
-import { client } from "..";
+import ServerCount from "../models/ServerCount";
 import { HypnoMessageHandler } from "../types/util";
-import { actions, database } from "../util/database";
+import { actions } from "../util/database";
 import { createEmbed } from "../util/other";
 import Mexp from "math-expression-evaluator";
 import wordsToNumbers from "words-to-numbers";
@@ -26,9 +26,9 @@ const handler: HypnoMessageHandler = {
 
   handler: async (message) => {
     // Get count & do guards
-    let count = await actions.serverCount.getFor(message.guild.id);
+    let count = await ServerCount.get(message.guild.id);
     if (!count) return;
-    if (message.channel.id !== count.channel_id) return;
+    if (message.channel.id !== count.data.channel_id) return;
 
     let userData = await actions.userData.getFor(
       message.author.id,
@@ -50,32 +50,14 @@ const handler: HypnoMessageHandler = {
       return;
     }
 
-    if (count.last_counter === message.author.id)
+    if (count.data.last_counter === message.author.id)
       return message.reply(
         `You cannot count twice in a row - wait for someone else!`,
       );
 
     // Check if it is expected
-    if (number !== count.current_count + 1) {
-      await database.run(
-        `UPDATE server_count SET current_count = 0 WHERE server_id = ?`,
-        message.guild.id,
-      );
-      await database.run(
-        `UPDATE user_data SET count_ruined = count_ruined + 1 WHERE user_id = ? AND guild_id = ?;`,
-        message.author.id,
-        message.guild.id,
-      );
-      if (userData.count_ruined >= 5) {
-        await database.run(
-          "UPDATE user_data SET count_banned = true WHERE user_id = ? AND guild_id = ?",
-          message.author.id,
-          message.guild.id,
-        );
-        await message.reply(
-          `:warning: You have been banned from counting since you have ruined the count more than 5 times! You must buy a count unban with \`.unbancount\``,
-        );
-      }
+    if (number !== count.data.current_count + 1) {
+      await count.ruined(message.author.id, message);
 
       await message.react(`❌`);
       return message.reply({
@@ -86,7 +68,7 @@ const handler: HypnoMessageHandler = {
               `<@${
                 message.author.id
               }> ruined the count! The next number was **${
-                count.current_count + 1
+                count.data.current_count + 1
               }**\n\nThe count has been reset, next number is **1**`,
             )
             .setColor(`#FF0000`),
@@ -94,25 +76,9 @@ const handler: HypnoMessageHandler = {
       });
     }
 
-    // Check if it is the highest
-    if (number > count.highest_count)
-      await database.run(
-        `UPDATE server_count SET highest_count = ? WHERE server_id = ?`,
-        number,
-        message.guild.id,
-      );
-
     // Update & add reaction
-    await database.run(
-      `UPDATE server_count SET current_count = current_count + 1 WHERE server_id = ?`,
-      message.guild.id,
-    );
-    await database.run(
-      `UPDATE server_count SET last_counter = ? WHERE server_id = ?`,
-      message.author.id,
-      message.guild.id,
-    );
-    await message.react(number < count.highest_count ? `✅` : "☑️");
+    await count.increase(message.author.id);
+    await message.react(number < count.data.highest_count ? `✅` : "☑️");
   },
 };
 
