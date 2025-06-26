@@ -1,3 +1,4 @@
+import ServerCount from "../../models/ServerCount";
 import { HypnoCommand } from "../../types/util";
 import { actions, database } from "../../util/database";
 
@@ -8,20 +9,20 @@ const command: HypnoCommand = {
   guards: ["admin"],
 
   handler: async (message) => {
-    if (await actions.serverCount.getFor(message.guild.id)) {
+    if (await ServerCount.get(message.guild.id)) {
       await database.run(
         `UPDATE server_count SET channel_id = ? WHERE server_id = ?`,
         message.channel.id,
-        message.guild.id
+        message.guild.id,
       );
       return message.reply(
-        `The server's count has been updated to this channel!`
+        `The server's count has been updated to this channel!`,
       );
     } else {
       await database.run(
         `INSERT INTO server_count (server_id, channel_id) VALUES (?, ?)`,
         message.guild.id,
-        message.channel.id
+        message.channel.id,
       );
       return message.reply(`Sucessfully set up counting for this channel!`);
     }

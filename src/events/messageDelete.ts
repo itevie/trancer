@@ -4,6 +4,7 @@ import config from "../config";
 import { createEmbed } from "../util/other";
 import { actions } from "../util/database";
 import cachedUsernames from "../util/cachedUsernames";
+import ServerCount from "../models/ServerCount";
 
 export const messageDeletes: Map<string, Message<boolean> | PartialMessage> =
   new Map();
@@ -13,10 +14,10 @@ client.on("messageDelete", async (message) => {
   messageDeletes.set(`${message.author.id}-${message.channel.id}`, message);
 
   // Check if channel has a count
-  let count = await actions.serverCount.getFor(message.guild.id);
-  if (count && message.channel.id === count.channel_id) {
+  let count = await ServerCount.get(message.guild.id);
+  if (count && message.channel.id === count.data.channel_id) {
     const channel = (await client.channels.fetch(
-      count.channel_id,
+      count.data.channel_id,
     )) as TextChannel;
     await channel.send({
       embeds: [
@@ -27,7 +28,7 @@ client.on("messageDelete", async (message) => {
             `**${
               message.author.username
             }** deleted their number! The next number is **${
-              count.current_count + 1
+              count.data.current_count + 1
             }**`,
           ),
       ],

@@ -19,40 +19,45 @@ const init: Init = {
     const progress = logger.logProgress("Loaded commands", commandFiles.length);
 
     for (const commandFile of commandFiles) {
-      let start = Date.now();
-      const commandImport = require(commandFile).default as HypnoCommand;
-      if (commandImport.ignore) continue;
+      try {
+        let start = Date.now();
+        const commandImport = require(commandFile).default as HypnoCommand;
+        if (commandImport.ignore) continue;
 
-      if (commands[commandImport.name]) {
-        logger.warn(
-          `Command ${commandImport.name} already exists and will be overwritten (${commandFileCache.get(commandImport.name)} => ${commandFile})`,
-        );
-      }
-
-      commands[commandImport.name] = commandImport;
-      commandFileCache.set(commandImport.name, commandFile);
-      uniqueCommands[commandImport.name] = commandImport;
-      for (const alias of commandImport.aliases || []) {
-        if (commands[alias]) {
+        if (commands[commandImport.name]) {
           logger.warn(
-            `Command ${alias} already exists and will be overwritten (${commandFileCache.get(alias)} => ${commandFile})`,
+            `Command ${commandImport.name} already exists and will be overwritten (${commandFileCache.get(commandImport.name)} => ${commandFile})`,
           );
         }
 
-        if (commandImport.eachAliasIsItsOwnCommand) {
-          commands[alias] = {
-            ...commandImport,
-            name: alias,
-          };
-        } else {
-          commands[alias] = commandImport;
-        }
-        commandFileCache.set(alias, commandFile);
-      }
-      progress(commandImport.name);
-      let period = Date.now() - start;
+        commands[commandImport.name] = commandImport;
+        commandFileCache.set(commandImport.name, commandFile);
+        uniqueCommands[commandImport.name] = commandImport;
+        for (const alias of commandImport.aliases || []) {
+          if (commands[alias]) {
+            logger.warn(
+              `Command ${alias} already exists and will be overwritten (${commandFileCache.get(alias)} => ${commandFile})`,
+            );
+          }
 
-      // if (period > 50) console.log(commandImport.name);
+          if (commandImport.eachAliasIsItsOwnCommand) {
+            commands[alias] = {
+              ...commandImport,
+              name: alias,
+            };
+          } else {
+            commands[alias] = commandImport;
+          }
+          commandFileCache.set(alias, commandFile);
+        }
+        progress(commandImport.name);
+        let period = Date.now() - start;
+
+        // if (period > 50) console.log(commandImport.name);
+      } catch (e) {
+        logger.error("Failed to load command: " + commandFile, e);
+        process.exit(1);
+      }
     }
     progress(true);
   },
