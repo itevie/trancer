@@ -20,6 +20,7 @@ export type HypnoCommandType =
   | "economy"
   | "cards"
   | "badges"
+  | "booster"
   | "counting"
   | "spirals"
   | "quotes"

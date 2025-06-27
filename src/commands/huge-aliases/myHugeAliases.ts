@@ -8,7 +8,7 @@ const command: HypnoCommand = {
   name: "myaliases",
   aliases: ["myhugealiases"],
   description: "Get a list of your huge aliases",
-  type: "help",
+  type: "booster",
 
   handler: async (message) => {
     let aliases = await HugeAlias.fetchAll(message.author.id);

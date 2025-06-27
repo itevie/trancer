@@ -13,10 +13,16 @@ client.on("guildMemberUpdate", async (oldMember, newMember) => {
     await actions.eco.addMoneyFor(
       newMember.user.id,
       ecoConfig.payouts.boosts.max,
-      "helping"
+      "helping",
     );
+    if (
+      !(await actions.badges.aquired.getAllFor(newMember.user.id)).some(
+        (x) => x.badge_name === "booster",
+      )
+    )
+      await actions.badges.addFor(newMember.user.id, "booster");
     const channel = (await client.channels.fetch(
-      config.botServer.channels.boosts
+      config.botServer.channels.boosts,
     )) as TextChannel;
     await channel.send({
       embeds: [
@@ -28,8 +34,8 @@ client.on("guildMemberUpdate", async (oldMember, newMember) => {
             }> for boosting our server! We now have **${
               newMember.guild.premiumSubscriptionCount
             }** bosts!\nYou have received ${currency(
-              ecoConfig.payouts.boosts.max
-            )}`
+              ecoConfig.payouts.boosts.max,
+            )}`,
           ),
       ],
     });

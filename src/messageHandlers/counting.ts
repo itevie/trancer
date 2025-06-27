@@ -34,7 +34,6 @@ const handler: HypnoMessageHandler = {
       message.author.id,
       message.guild.id,
     );
-    if (userData.count_banned) return;
 
     // Check if it contains a number
     let number: number | null = null;
@@ -49,6 +48,11 @@ const handler: HypnoMessageHandler = {
     } catch {
       return;
     }
+
+    if (userData.count_banned)
+      return message.reply(
+        `:x: This is not counted as you're too bad at counting. (Ruined count 5 times - count banned)`,
+      );
 
     if (count.data.last_counter === message.author.id)
       return message.reply(

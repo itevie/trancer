@@ -5,7 +5,7 @@ const command: HypnoCommand<{ command: string }> = {
   name: "deletealias",
   aliases: ["deletehugealias", "delalias"],
   description: "Remove one of your huge aliases",
-  type: "help",
+  type: "booster",
 
   guards: ["twilight-booster"],
 

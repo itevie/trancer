@@ -12,7 +12,7 @@ const command: HypnoCommand<{ command: string; result: string }> = {
     "Set a huge alias. You can make one simple command run a huge command with all the arguments!" +
     "\n\nYou can also use the arguments when running it. For example you could make `.x @user` run `.ttt @user`, this is done by defining `x` as `ttt $1$`" +
     "\n\nEach $x$ (where x is where in the running command it appears) will be replaced!",
-  type: "help",
+  type: "booster",
 
   guards: ["twilight-booster"],
 

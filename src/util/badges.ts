@@ -93,6 +93,14 @@ export const badges: { [key: string]: Badge } = {
       return user.talking_streak > 21;
     },
   },
+  booster: {
+    name: "Boost Twilight",
+    description: "Boost Trancy Twilight at least once",
+    emoji: ":pink_heart:",
+    scan: async () => {
+      return false;
+    },
+  },
   level15: {
     name: "Level 15",
     description: "Get to level 15",
