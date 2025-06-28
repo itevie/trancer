@@ -79,12 +79,17 @@ CREATE TABLE IF NOT EXISTS channel_imposition (
     every INT NOT NULL DEFAULT 10
 );
 
+-- ALTER TABLE server_count ADD COLUMN ignore_failure_weekend BOOLEAN NOT NULL DEFAULT false;
+-- ALTER TABLE server_count ADD COLUMN ignore_failure BOOLEAN NOT NULL DEFAULT false;
+
 CREATE TABLE IF NOT EXISTS server_count (
     server_id TEXT NOT NULL,
     channel_id TEXT NOT NULL,
     current_count INT NOT NULL DEFAULT 0,
     last_counter TEXT DEFAULT NULL,
-    highest_count INT NOT NULL DEFAULT 0
+    highest_count INT NOT NULL DEFAULT 0,
+    ignore_failure BOOLEAN NOT NULL DEFAULT false,
+    ignore_failure_weekends BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE TABLE IF NOT EXISTS server_count_ruins (

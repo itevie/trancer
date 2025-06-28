@@ -7,6 +7,7 @@ import useServerResources from "../hooks/useServerResources";
 import AppNavbar from "../Navbar";
 import AutobanSettings from "./DashboardPages/AutobanSettings";
 import BasicSettings from "./DashboardPages/BasicSettings";
+import CountingSettings from "./DashboardPages/CountingSettings";
 import FileDirectorySettings from "./DashboardPages/FileDirectorySettings";
 import LevelRoleSettings from "./DashboardPages/LevelRoleSettings";
 import MessageSettings from "./DashboardPages/MessageSettings";
@@ -43,6 +44,7 @@ export default function Dashboard() {
               Verification: <VerificationSettings server={server} />,
               Reporting: <ReportSettings server={server} />,
               Autoban: <AutobanSettings server={server} />,
+              Counting: <CountingSettings server={server} />,
               XP: <XPSettings server={server} />,
               "Level Roles": <LevelRoleSettings server={server} />,
               "File Directory": <FileDirectorySettings server={server} />,

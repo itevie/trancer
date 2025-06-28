@@ -17,7 +17,7 @@ const init: Init = {
       )
     ) {
       // Load handlers
-      const handleFiles = loadTs(__dirname + "/messageHandlers");
+      const handleFiles = loadTs(__dirname + "/../messageHandlers");
 
       for (const handleFile of handleFiles) {
         const handleImport = require(handleFile).default as HypnoMessageHandler;

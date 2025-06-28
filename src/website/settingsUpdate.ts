@@ -201,6 +201,16 @@ const settingsUpdate: {
     table: "level_roles",
     row: "?",
   },
+  ignore_failure: {
+    type: "boolean",
+    table: "server_count",
+    row: "ignore_failure",
+  },
+  ignore_failure_weekend: {
+    type: "boolean",
+    table: "server_count",
+    row: "ignore_failure_weekend",
+  },
 };
 
 export async function getWebsiteSettingsFor(

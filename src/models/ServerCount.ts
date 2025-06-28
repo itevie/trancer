@@ -7,6 +7,8 @@ export interface DbServerCount {
   current_count: number;
   last_counter: string | null;
   highest_count: number;
+  ignore_failure: boolean;
+  ignore_failure_weekends: boolean;
 }
 
 export interface DbServerCountRuin {
@@ -21,7 +23,7 @@ export default class ServerCount {
 
   public async increase(by: string): Promise<void> {
     let count = await database.get<DbServerCount>(
-      "UPDATE server_count SET count = count + 1, last_counter = ? WHERE server_id = ?",
+      "UPDATE server_count SET current_count = current_count + 1, last_counter = ? WHERE server_id = ? RETURNING *",
       by,
       this.data.server_id,
     );

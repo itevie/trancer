@@ -26,4 +26,5 @@ export const categoryEmojis: Record<HypnoCommandType, string> = {
   voice: "📞",
   confessions: "🤫",
   "file-directory": "📁",
+  booster: ":pink_heart:",
 };

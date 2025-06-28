@@ -54,13 +54,21 @@ const handler: HypnoMessageHandler = {
         `:x: This is not counted as you're too bad at counting. (Ruined count 5 times - count banned)`,
       );
 
-    if (count.data.last_counter === message.author.id)
-      return message.reply(
-        `You cannot count twice in a row - wait for someone else!`,
-      );
+    // if (count.data.last_counter === message.author.id)
+    //   return message.reply(
+    //     `You cannot count twice in a row - wait for someone else!`,
+    //   );
 
     // Check if it is expected
     if (number !== count.data.current_count + 1) {
+      if (
+        count.data.ignore_failure ||
+        (count.data.ignore_failure_weekends &&
+          [0, 6].includes(new Date().getDay()))
+      ) {
+        await message.react(`❌`);
+        return;
+      }
       await count.ruined(message.author.id, message);
 
       await message.react(`❌`);
