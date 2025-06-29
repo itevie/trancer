@@ -1,34 +1,30 @@
-import { AttachmentBuilder } from "discord.js";
-
 import { HypnoCommand } from "../../types/util";
-
 import { getMemberCounts } from "../../util/analytics";
-import { generateSimpleLineChart } from "../../util/graphs";
 import { units } from "../../util/ms";
+import { generateMultilineDataGraph, graphArgs } from "../../util/charts";
 
 const command: HypnoCommand = {
   name: "membercountovertime",
-
   aliases: ["mover", "mcover", "memberover"],
-
   description: "Get the server's member count overtime",
-  ratelimit: units.minute * 10,
+  ratelimit: units.second * 30,
+
+  args: {
+    requiredArguments: 0,
+    args: [...graphArgs],
+  },
 
   type: "analytics",
 
-  handler: async (message) => {
-    // Generate
-
-    let image = await generateSimpleLineChart(
-      await getMemberCounts(message.guild.id),
-      "time",
-      "amount",
-      "Member Count Overtime",
-    );
-
-    const attachment = new AttachmentBuilder(image).setFile(image);
-
-    // Done
+  handler: async (message, { args }) => {
+    const attachment = await generateMultilineDataGraph({
+      data: (await getMemberCounts(message.guild.id)).map((x) => [
+        "Member Count",
+        new Date(x.time),
+        x.amount,
+      ]),
+      ...args,
+    });
 
     return message.reply({
       files: [attachment],
