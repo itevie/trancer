@@ -235,6 +235,12 @@ CREATE TABLE IF NOT EXISTS user_data (
     highest_talking_streak INT NOT NULL DEFAULT 0
 );
 
+CREATE TABLE IF NOT EXISTS minecraft_user_data (
+    user_id TEXT UNIQUE REFERENCES users(id),
+    uuid TEXT UNIQUE NOT NULL,
+    username TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS pinned_ratings (user_id TEXT NOT NULL, rating TEXT NOT NULL);
 
 CREATE TABLE IF NOT EXISTS dawnagotchi (

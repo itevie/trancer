@@ -10,6 +10,15 @@ import cachedUsernames from "../../util/cachedUsernames";
 export function Authenticate(req: Request, res: Response, next: NextFunction) {
   if (req.url.startsWith("/login")) return next();
 
+  if (req.originalUrl.startsWith("/api/minecraft")) {
+    const authHeader = req.headers["authorization"];
+    if (!authHeader || authHeader !== process.env.MC_SHARED_TOKEN) {
+      return res.status(401).send("Invalid shared token");
+    }
+
+    return next();
+  }
+
   // Check if development
   if (client.user.id === config.devBot.id) {
     // @ts-ignore

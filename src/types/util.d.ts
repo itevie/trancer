@@ -25,6 +25,7 @@ export type HypnoCommandType =
   | "spirals"
   | "quotes"
   | "help"
+  | "minecraft"
   | "hypnosis"
   | "uncategorised"
   | "fun"

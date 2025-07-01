@@ -16,6 +16,7 @@ import { MakeServerRoutes } from "./routes/api/serverRoutes";
 import MakeAuthRoutes, { Authenticate } from "./routes/auth";
 import MakeSettingsRoutes from "./routes/api/settingsRoutes";
 import MakeBasicRoutes from "./routes/api/basicRoutes";
+import MakeMinecraftRoutes from "./routes/api/minecraftRoutes";
 
 export const websiteLogger = new Logger("website");
 const codes: { [key: string]: string } = {};
@@ -37,6 +38,7 @@ export default function initServer() {
   app.use(MakeServerRoutes());
   app.use(MakeSettingsRoutes());
   app.use(MakeBasicRoutes());
+  app.use(MakeMinecraftRoutes());
 
   app.get("/api/data/:type", async (req, res) => {
     /*if (!req.headers.authorization)

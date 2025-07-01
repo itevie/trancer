@@ -9,6 +9,7 @@ import { actions, database } from "../util/database";
 import { client } from "..";
 import statusThemes from "../commands/hypnosis/_util";
 import LevelRole, { DbLevelRole } from "../models/LevelRole";
+import ServerCount from "../models/ServerCount";
 
 const settingsUpdate: {
   [key: string]: {
@@ -218,6 +219,7 @@ export async function getWebsiteSettingsFor(
 ): Promise<{ [key: string]: string }> {
   const tables = {
     server_settings: await actions.serverSettings.getFor(serverId),
+    server_count: (await ServerCount.get(serverId)).data,
   };
 
   const sorted: { [key: string]: string } = {};
