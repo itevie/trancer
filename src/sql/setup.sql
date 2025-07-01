@@ -4,8 +4,8 @@ CREATE TABLE IF NOT EXISTS config (
     last_qotd TEXT DEFAULT NULL
 );
 
-alter table server_settings add birthday_announcement_text TEXT DEFAULT 'It is **{mention}''s** birthday today!';
-alter table server_settings add birthday_channel_id TEXT DEFAULT NULL;
+-- alter table server_settings add birthday_announcement_text TEXT DEFAULT 'It is **{mention}''s** birthday today!';
+-- alter table server_settings add birthday_channel_id TEXT DEFAULT NULL;
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
@@ -79,8 +79,8 @@ CREATE TABLE IF NOT EXISTS channel_imposition (
     every INT NOT NULL DEFAULT 10
 );
 
-ALTER TABLE server_count ADD COLUMN ignore_failure_weekend BOOLEAN NOT NULL DEFAULT false;
-ALTER TABLE server_count ADD COLUMN ignore_failure BOOLEAN NOT NULL DEFAULT false;
+-- ALTER TABLE server_count ADD COLUMN ignore_failure_weekend BOOLEAN NOT NULL DEFAULT false;
+-- ALTER TABLE server_count ADD COLUMN ignore_failure BOOLEAN NOT NULL DEFAULT false;
 
 CREATE TABLE IF NOT EXISTS server_count (
     server_id TEXT NOT NULL,
@@ -203,10 +203,10 @@ CREATE TABLE IF NOT EXISTS huge_aliases (
     result TEXT NOT NULL
 );
 
-alter table user_data add column last_talking_streak TEXT DEFAULT NULL;
-alter table user_data add column talking_streak INT NOT NULL DEFAULT 0;
-alter table user_data add column highest_talking_streak INT NOT NULL DEFAULT 0;
-alter table user_data add column birthday_last_announced TEXT DEFAULT NULL;
+-- alter table user_data add column last_talking_streak TEXT DEFAULT NULL;
+-- alter table user_data add column talking_streak INT NOT NULL DEFAULT 0;
+-- alter table user_data add column highest_talking_streak INT NOT NULL DEFAULT 0;
+-- alter table user_data add column birthday_last_announced TEXT DEFAULT NULL;
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,
     guild_id TEXT NOT NULL,
