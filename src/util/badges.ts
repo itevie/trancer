@@ -332,7 +332,7 @@ export async function checkBadges(
           .setTitle("You got the following badges!")
           .setDescription(
             given
-              .map((x) => `${x.emoji} **${x.name}**: ${x.description}`)
+              .map((x) => `${x?.emoji} **${x.name}**: ${x.description}`)
               .join("\n"),
           ),
       ],
