@@ -349,7 +349,7 @@ export function formatBadges(
 
   for (let i in badges) {
     result.push(
-      `${badges[i].emoji} \`${badges[i].name}\`: ${badges[i].description}`,
+      `${badges[i]?.emoji} \`${badges[i]?.name}\`: ${badges[i]?.description}`,
     );
   }
 
