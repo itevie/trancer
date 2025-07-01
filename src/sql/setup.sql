@@ -1,3 +1,11 @@
+CREATE TABLE IF NOT EXISTS config (
+    last_backup TEXT DEFAULT NULL,
+    last_lottery TEXT DEFAULT NULL,
+    last_qotd TEXT DEFAULT NULL
+);
+
+alter table server_settings add birthday_announcement_text TEXT DEFAULT 'It is **{mention}''s** birthday today!';
+alter table server_settings add birthday_channel_id TEXT DEFAULT NULL;
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
@@ -31,7 +39,9 @@ CREATE TABLE IF NOT EXISTS server_settings (
     confessions_channel_id TEXT DEFAULT NULL,
     analytics BOOLEAN DEFAULT true,
     random_replies BOOLEAN DEFAULT false,
-    react_bot BOOLEAN DEFAULT true
+    react_bot BOOLEAN DEFAULT true,
+    birthday_channel_id TEXT DEFAULT NULL,
+    birthday_announcement_text TEXT DEFAULT 'It is **{username}''s** birthday today!'
 );
 
 CREATE TABLE IF NOT EXISTS trigger_ideas (
@@ -69,12 +79,24 @@ CREATE TABLE IF NOT EXISTS channel_imposition (
     every INT NOT NULL DEFAULT 10
 );
 
+ALTER TABLE server_count ADD COLUMN ignore_failure_weekend BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE server_count ADD COLUMN ignore_failure BOOLEAN NOT NULL DEFAULT false;
+
 CREATE TABLE IF NOT EXISTS server_count (
     server_id TEXT NOT NULL,
     channel_id TEXT NOT NULL,
     current_count INT NOT NULL DEFAULT 0,
     last_counter TEXT DEFAULT NULL,
-    highest_count INT NOT NULL DEFAULT 0
+    highest_count INT NOT NULL DEFAULT 0,
+    ignore_failure BOOLEAN NOT NULL DEFAULT false,
+    ignore_failure_weekends BOOLEAN NOT NULL DEFAULT false
+);
+
+CREATE TABLE IF NOT EXISTS server_count_ruins (
+    server_id TEXT NOT NULL,
+    channel_id TEXT NOT NULL,
+    count INT NOT NULL DEFAULT 0,
+    ruined_at TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS role_menus (
@@ -150,6 +172,13 @@ CREATE TABLE IF NOT EXISTS confessions (
     created_at TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS level_roles (
+    server_id TEXT NOT NULL,
+    role_id TEXT DEFAULT NULL,
+    level INT NOT NULL,
+    UNIQUE(server_id, level)
+);
+
 -- User specific stuff
 CREATE TABLE IF NOT EXISTS user_imposition (
     user_id TEXT NOT NULL,
@@ -168,6 +197,16 @@ CREATE TABLE IF NOT EXISTS user_favourite_spirals (
     user_id TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS huge_aliases (
+    user_id TEXT NOT NULL,
+    command TEXT NOT NULL,
+    result TEXT NOT NULL
+);
+
+alter table user_data add column last_talking_streak TEXT DEFAULT NULL;
+alter table user_data add column talking_streak INT NOT NULL DEFAULT 0;
+alter table user_data add column highest_talking_streak INT NOT NULL DEFAULT 0;
+alter table user_data add column birthday_last_announced TEXT DEFAULT NULL;
 CREATE TABLE IF NOT EXISTS user_data (
     user_id TEXT NOT NULL,
     guild_id TEXT NOT NULL,
@@ -189,7 +228,17 @@ CREATE TABLE IF NOT EXISTS user_data (
     hypno_status TEXT NOT NULL DEFAULT 'green',
     relationships BOOL NOT NULL DEFAULT true,
     count_banned BOOLEAN NOT NULL DEFAULT false,
-    birthday TEXT DEFAULT NULL
+    birthday TEXT DEFAULT NULL,
+    birthday_last_announced TEXT DEFAULT NULL,
+    talking_streak INT NOT NULL DEFAULT 0,
+    last_talking_streak TEXT DEFAULT NULL,
+    highest_talking_streak INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS minecraft_user_data (
+    user_id TEXT UNIQUE REFERENCES users(id),
+    uuid TEXT UNIQUE NOT NULL,
+    username TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS pinned_ratings (user_id TEXT NOT NULL, rating TEXT NOT NULL);
