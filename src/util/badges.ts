@@ -292,6 +292,7 @@ export async function checkBadges(
   data?: UserData & Economy,
 ) {
   // TODO: Make this better, or make badges have a "twilightOnly" property.
+  if (!message) return;
   if (message.guild.id !== config.botServer.id) return;
   if (client.user.id === config.devBot.id) return;
 

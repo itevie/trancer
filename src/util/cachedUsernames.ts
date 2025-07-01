@@ -4,12 +4,14 @@ import { getUser } from "./other";
 import Logger from "./Logger";
 
 const logger = new Logger("cached-usernames");
-export class CachedUsernames {
-  public readonly path: string = __dirname + "/../data/cached_usernames.json";
-  public map: Record<string, string> = JSON.parse(
-    fs.readFileSync(this.path, "utf-8"),
-  );
+export const cachedUsernamesPath = __dirname + "/../data/cached_usernames.json";
+if (!fs.existsSync(cachedUsernamesPath))
+  fs.writeFileSync(cachedUsernamesPath, "{}");
+export const cachedUsernamesMap: Record<string, string> = JSON.parse(
+  fs.readFileSync(cachedUsernamesPath, "utf-8"),
+);
 
+export class CachedUsernames {
   public getID(username: string): string | null {
     return Object.entries(username).find((x) => x[1] === username)?.[0];
   }
@@ -19,23 +21,26 @@ export class CachedUsernames {
 
     if (client.users.cache.has(id)) {
       username = client.users.cache.get(id).username;
-      if (this.map[id] !== username) {
-        this.map[id] = username;
-        fs.writeFileSync(this.path, JSON.stringify(this.map));
+      if (cachedUsernamesMap[id] !== username) {
+        cachedUsernamesMap[id] = username;
+        fs.writeFileSync(
+          cachedUsernamesPath,
+          JSON.stringify(cachedUsernamesMap),
+        );
       }
-    } else if (this.map[id]) {
-      username = this.map[id];
+    } else if (cachedUsernamesMap[id]) {
+      username = cachedUsernamesMap[id];
     } else {
       username = (await client.users.fetch(id)).username;
-      this.map[id] = username;
-      fs.writeFileSync(this.path, JSON.stringify(this.map));
+      cachedUsernamesMap[id] = username;
+      fs.writeFileSync(cachedUsernamesPath, JSON.stringify(cachedUsernamesMap));
     }
 
     return username;
   }
 
   public getSync(id: string): string {
-    if (!this.map[id]) {
+    if (!cachedUsernamesMap[id]) {
       logger.log(`Fetching user id ${id}`);
       setTimeout(async () => {
         try {
@@ -46,13 +51,9 @@ export class CachedUsernames {
       }, 1);
     }
 
-    return this.map[id] || `<${id}>`;
+    return cachedUsernamesMap[id] || `<${id}>`;
   }
 }
 
 const cachedUsernames = new CachedUsernames();
-console.log(cachedUsernames.map);
-
-if (!fs.existsSync(cachedUsernames.path))
-  fs.writeFileSync(cachedUsernames.path, "{}");
 export default cachedUsernames;

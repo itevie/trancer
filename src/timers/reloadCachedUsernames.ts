@@ -1,6 +1,9 @@
 import { writeFileSync } from "fs";
 import { client } from "..";
-import cachedUsernames from "../util/cachedUsernames";
+import cachedUsernames, {
+  cachedUsernamesMap,
+  cachedUsernamesPath,
+} from "../util/cachedUsernames";
 import { units } from "../util/ms";
 import { Timer } from "./timer";
 
@@ -9,10 +12,10 @@ const timer: Timer = {
   every: units.minute * 30,
   execute: () => {
     for (const [_, user] of client.users.cache) {
-      cachedUsernames.map[user.id] = user.username;
+      cachedUsernamesMap[user.id] = user.username;
     }
 
-    writeFileSync(cachedUsernames.path, JSON.stringify(cachedUsernames));
+    writeFileSync(cachedUsernamesPath, JSON.stringify(cachedUsernamesMap));
   },
 };
 
