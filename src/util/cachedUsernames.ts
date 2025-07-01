@@ -1,7 +1,9 @@
 import fs from "fs";
 import { client } from "..";
 import { getUser } from "./other";
+import Logger from "./Logger";
 
+const logger = new Logger("cached-usernames");
 export class CachedUsernames {
   public readonly path: string = __dirname + "/../data/cached_usernames.json";
   public map: Record<string, string> = JSON.parse(
@@ -34,6 +36,7 @@ export class CachedUsernames {
 
   public getSync(id: string): string {
     if (!this.map[id]) {
+      logger.log(`Fetching user id ${id}`);
       setTimeout(async () => {
         try {
           await getUser(id);
@@ -48,6 +51,7 @@ export class CachedUsernames {
 }
 
 const cachedUsernames = new CachedUsernames();
+console.log(cachedUsernames.map);
 
 if (!fs.existsSync(cachedUsernames.path))
   fs.writeFileSync(cachedUsernames.path, "{}");
