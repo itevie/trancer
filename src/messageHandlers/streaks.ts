@@ -23,8 +23,6 @@ const handler: HypnoMessageHandler = {
     const diffMs = today.getTime() - lastDay.getTime();
     const diffDays = diffMs / units.day;
 
-    console.log(lastDay, today, diffDays, diffMs);
-
     let setTime = async () => {
       await actions.userData.updateFor(
         message.author.id,

@@ -24,7 +24,6 @@ export default function LeaderboardPage() {
   useEffect(() => {
     const id = window.location.href.match(/servers\/([0-9]+)/)?.[1];
     axiosClient.get<UserData[]>(`/api/servers/${id}/user_data`).then((x) => {
-      console.log(x.data[0]);
       setUserData(x.data);
     });
   }, []);
@@ -93,7 +92,7 @@ export default function LeaderboardPage() {
                           .filter((x) => x[part[0]] !== 0)
                           .sort(
                             (a, b) =>
-                              (b[part[0]] as number) - (a[part[0]] as number)
+                              (b[part[0]] as number) - (a[part[0]] as number),
                           )
                           .slice(0, 50)
                           .map((x, i) => (

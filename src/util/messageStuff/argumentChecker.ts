@@ -100,7 +100,6 @@ export let argumentCheckers: Record<
     try {
       let date = new Date(v);
       if (!date) return `Invalid date: ${v} (${date})`;
-      console.log(date);
       return { result: date };
     } catch (e) {
       return `Invalid date: ${e}`;
