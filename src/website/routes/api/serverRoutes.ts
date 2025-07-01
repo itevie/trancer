@@ -8,6 +8,7 @@ import {
   getWebsiteSettingsFor,
   saveWebsiteSettingsFor,
 } from "../../settingsUpdate";
+import LevelRole from "../../../models/LevelRole";
 
 export function MakeServerRoutes(): Router {
   const router = Router();
@@ -75,6 +76,7 @@ export function MakeServerRoutes(): Router {
       }),
       settings: await getWebsiteSettingsFor(server.id),
       raw_settings: await actions.serverSettings.getFor(server.id),
+      level_roles: await LevelRole.fetchAll(server.id),
     });
   });
 

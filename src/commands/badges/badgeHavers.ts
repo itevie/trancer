@@ -1,7 +1,7 @@
 import { AquiredBadge } from "../../types/aquiredBadge";
 import { HypnoCommand } from "../../types/util";
 import badges, { Badge } from "../../util/badges";
-import { getUsernameSync } from "../../util/cachedUsernames";
+import cachedUsernames from "../../util/cachedUsernames";
 import { paginate } from "../../util/components/pagination";
 import { database } from "../../util/database";
 import { createEmbed } from "../../util/other";
@@ -57,7 +57,7 @@ const command: HypnoCommand<{ badge: string }> = {
       message: message,
       embed: createEmbed().setTitle(`Who has ${badge.emoji} ${badge.name}`),
       type: "description",
-      data: aquired.map((x) => getUsernameSync(x.user)),
+      data: aquired.map((x) => cachedUsernames.getSync(x.user)),
     });
   },
 };

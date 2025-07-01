@@ -8,9 +8,18 @@
     "moduleResolution": "NodeNext",
     "outDir": "./build",
     "typeRoots": ["./src/types"],
-    //"noUnusedLocals": true,
     "skipLibCheck": true,
-    "incremental": true
+    "incremental": false
+
+    // "noUnusedLocals": true,
+    // "strict": true,
+    // "noImplicitAny": true
+    // "strictNullChecks": true
+    // "strictFunctionTypes": true,
+    // "strictBindCallApply": true,
+    // "strictPropertyInitialization": true,
+    // "noImplicitThis": true
+    // "alwaysStrict": true
   },
   "exclude": ["./data_backups", "./src/website/app"],
   "ts-node": {

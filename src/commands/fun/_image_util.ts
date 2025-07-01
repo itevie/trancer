@@ -62,7 +62,6 @@ export async function createRotatingGifBuffer(
   frameCount = 30,
   duration = 3,
 ) {
-  console.log(inputPath);
   const image = await loadImage(inputPath);
   const size = Math.max(image.width, image.height);
 
@@ -156,7 +155,6 @@ export function runFfmpegCommandWithInput(
   ext: string,
 ) {
   let temp = __dirname + "/temp." + inputExt;
-  console.log(temp);
   writeFileSync(temp, input);
   let result = runFfmpegCommand(command.replace(/%i/g, temp), ext);
   //rmSync(temp);

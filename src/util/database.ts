@@ -19,7 +19,6 @@ import relationships from "./db-parts/relationships";
 import reports from "./db-parts/reports";
 import blacklist from "./db-parts/blacklist";
 import badges from "./db-parts/badges";
-import serverCount from "./db-parts/serverCount";
 import dawnagotchi from "./db-parts/dawnagotchi";
 import ranks from "./db-parts/ranks";
 import ratelimits from "./db-parts/ratelimits";
@@ -50,7 +49,6 @@ export const actions = {
   reports,
   blacklist,
   badges,
-  serverCount,
   dawnagotchi,
   ranks,
   ratelimits,

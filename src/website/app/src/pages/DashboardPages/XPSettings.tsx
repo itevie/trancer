@@ -1,7 +1,7 @@
 import TrancerBooleanInput from "../../Components/TrancerBooleanInput";
 import Column from "../../dawn-ui/components/Column";
 import FullWidthInput from "../../dawn-ui/components/FullWidthInput";
-import Words from "../../dawn-ui/components/Words";
+import Words, { TextType } from "../../dawn-ui/components/Words";
 import { useBotDetails } from "../../hooks/useBotDetails";
 import useServerResources from "../../hooks/useServerResources";
 
@@ -14,7 +14,7 @@ export default function XPSettings({
 
   return (
     <Column>
-      <Words type="heading">XP Settings</Words>
+      <Words type={TextType.Heading}>XP Settings</Words>
       <label>
         Trancer has it's very own XP system, per-server! Track who speaks the
         most with the <code>.xpl</code> command!

@@ -6,7 +6,6 @@ import { replaceVarString } from "../util/language";
 import { autoBanned } from "./guildMemberAdd";
 
 client.on("guildMemberRemove", async (member) => {
-  if (member.guild.id !== config.botServer.id) return;
   let serverSettings = await actions.serverSettings.getFor(member.guild.id);
 
   // Add to analytics
@@ -19,15 +18,15 @@ client.on("guildMemberRemove", async (member) => {
     if (serverSettings.leave_channel_id) {
       try {
         const channel = await client.channels.fetch(
-          serverSettings.leave_channel_id
+          serverSettings.leave_channel_id,
         );
         if (channel.isTextBased()) {
           await channel.send(
             replaceVarString(
               serverSettings.leave_message,
               member.user,
-              member.guild
-            )
+              member.guild,
+            ),
           );
         }
       } catch (e) {
@@ -35,15 +34,15 @@ client.on("guildMemberRemove", async (member) => {
       }
     }
     return;
-  }
-
-  const channel = await client.channels.fetch(
-    config.botServer.channels.welcomes
-  );
-  if (channel.isTextBased()) {
-    await channel.send(
-      `**${member.user.username}** left our server :( We now have ${member.guild.memberCount} members`
+  } else {
+    const channel = await client.channels.fetch(
+      config.botServer.channels.welcomes,
     );
+    if (channel.isTextBased()) {
+      await channel.send(
+        `**${member.user.username}** left our server :( We now have ${member.guild.memberCount} members`,
+      );
+    }
   }
 });
 
@@ -57,7 +56,7 @@ client.on("guildBanAdd", async (member) => {
   if (member.guild.id !== config.botServer.id) return;
 
   const channel = await client.channels.fetch(
-    config.botServer.channels.welcomes
+    config.botServer.channels.welcomes,
   );
   if (channel.isTextBased()) {
     await channel.send(
@@ -67,7 +66,7 @@ client.on("guildBanAdd", async (member) => {
         autoBanned.includes(member.user.id)
           ? "\nCourtesy of Trancer autoban :3c"
           : ""
-      }`
+      }`,
     );
   }
 });

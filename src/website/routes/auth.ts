@@ -5,10 +5,19 @@ import jwt from "jsonwebtoken";
 import { client } from "../..";
 import config from "../../config";
 import { noDiscords } from "../../commands/server/dashboard";
-import { getUsernameSync } from "../../util/cachedUsernames";
+import cachedUsernames from "../../util/cachedUsernames";
 
 export function Authenticate(req: Request, res: Response, next: NextFunction) {
   if (req.url.startsWith("/login")) return next();
+
+  if (req.originalUrl.startsWith("/api/minecraft")) {
+    const authHeader = req.headers["authorization"];
+    if (!authHeader || authHeader !== process.env.MC_SHARED_TOKEN) {
+      return res.status(401).send("Invalid shared token");
+    }
+
+    return next();
+  }
 
   // Check if development
   if (client.user.id === config.devBot.id) {
@@ -27,7 +36,7 @@ export function Authenticate(req: Request, res: Response, next: NextFunction) {
     const token = jwt.sign(
       {
         id: id,
-        username: getUsernameSync(id),
+        username: cachedUsernames.getSync(id),
       },
       process.env.JWT_SECRET,
       { expiresIn: "28d" },

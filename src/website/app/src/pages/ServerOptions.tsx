@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Page from "../dawn-ui/components/Page";
-import Words from "../dawn-ui/components/Words";
+import Words, { TextType } from "../dawn-ui/components/Words";
 import AppNavbar from "../Navbar";
 import { Server, useServers } from "../hooks/useServers";
 import Row from "../dawn-ui/components/Row";
@@ -9,7 +9,7 @@ import Container from "../dawn-ui/components/Container";
 export default function ServerOptions() {
   const servers = useServers();
   const [selectedServer, setSelectedServer] = useState<Server | undefined>(
-    undefined
+    undefined,
   );
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export default function ServerOptions() {
     <>
       <AppNavbar full />
       <Page full>
-        <Words style={{ textAlign: "center" }} type="page-title">
+        <Words style={{ textAlign: "center" }} type={TextType.PageTitle}>
           {selectedServer?.name}
         </Words>
         <Row util={["justify-center"]}>

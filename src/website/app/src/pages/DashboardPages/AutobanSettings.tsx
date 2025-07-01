@@ -2,7 +2,7 @@ import TrancerBooleanInput from "../../Components/TrancerBooleanInput";
 import TrancerStringInput from "../../Components/TrancerStringInput";
 import Column from "../../dawn-ui/components/Column";
 import FullWidthInput from "../../dawn-ui/components/FullWidthInput";
-import Words from "../../dawn-ui/components/Words";
+import Words, { TextType } from "../../dawn-ui/components/Words";
 import { useBotDetails } from "../../hooks/useBotDetails";
 import useServerResources from "../../hooks/useServerResources";
 
@@ -15,7 +15,7 @@ export default function AutobanSettings({
 
   return (
     <Column>
-      <Words type="heading">Autoban Settings</Words>
+      <Words type={TextType.Heading}>Autoban Settings</Words>
       <label>
         Trancer can automagically ban new joiners who have bad usernames/display
         names! When a "mommy" joins your server Trancer will instantly

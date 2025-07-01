@@ -2,7 +2,7 @@ import { AttachmentBuilder, User } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import graphviz from "graphviz";
 import { actions } from "../../util/database";
-import { getUsernameSync } from "../../util/cachedUsernames";
+import cachedUsernames from "../../util/cachedUsernames";
 import { colorMap, marriageEmojis } from "./_util";
 
 const customColors = {
@@ -190,8 +190,8 @@ const command: HypnoCommand<{
 
     const nodesAdded: string[] = [];
     for (const { user1, user2, type } of relationships) {
-      const username1 = getUsernameSync(user1);
-      const username2 = getUsernameSync(user2);
+      const username1 = cachedUsernames.getSync(user1);
+      const username2 = cachedUsernames.getSync(user2);
 
       const addNode = (userId: string, username: string) => {
         if (!nodesAdded.includes(userId)) {

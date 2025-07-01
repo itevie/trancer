@@ -20,6 +20,7 @@ export const lbUserDataMap = {
   c4_loses: "c4_lose",
   c4_ties: "c4_tie",
   count_ruined: "count_ruined",
+  talking_streak: "talking_streak",
 };
 
 export const lbTypes = [
@@ -36,6 +37,7 @@ export const lbTypes = [
   "c4_loses",
   "c4_ties",
   "count_ruined",
+  "talking_streak",
 ] as const;
 
 const lbMap: Record<string, (typeof lbTypes)[number]> = {
@@ -52,6 +54,9 @@ const lbMap: Record<string, (typeof lbTypes)[number]> = {
   c4_ties: "c4_ties",
   vctime: "vc",
   count_ruined: "count_ruined",
+  talking_streak: "talking_streak",
+  streaks: "talking_streak",
+  streak: "talking_streak",
 } as const;
 
 const lbDetails: Record<
@@ -101,6 +106,10 @@ const lbDetails: Record<
     title: "Most times ruining the count",
     entryName: "times",
   },
+  talking_streak: {
+    title: "See who has talked the most",
+    entryName: "days",
+  },
 };
 
 const command: HypnoCommand = {
@@ -115,7 +124,7 @@ const command: HypnoCommand = {
       return message.reply(
         `Please use one of the following commands instead: ${Object.keys(lbMap)
           .map((x) => `\`${o.serverSettings.prefix}${x}\``)
-          .join(", ")}`
+          .join(", ")}`,
       );
     let data = await actions.userData.getForServer(message.guild.id);
 

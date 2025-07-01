@@ -1,5 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import { getUsernameSync } from "../../util/cachedUsernames";
+import cachedUsernames from "../../util/cachedUsernames";
 import { paginate } from "../../util/components/pagination";
 import { actions } from "../../util/database";
 import { createEmbed } from "../../util/other";
@@ -34,7 +34,9 @@ const command: HypnoCommand<{ word: string }> = {
       message,
       embed: createEmbed().setTitle(`Who has said ${args.word} the most?`),
       type: "description",
-      data: words.map((x) => `**${getUsernameSync(x[0])}**: ${x[1]} time`),
+      data: words.map(
+        (x) => `**${cachedUsernames.getSync(x[0])}**: ${x[1]} time`,
+      ),
     });
   },
 };

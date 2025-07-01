@@ -270,6 +270,15 @@ const items: Record<string, Partial<Item>> = {
     emoji: "<:egg:1366070379302359050>",
     droppable: false,
   },
+  "1st-birthday-cake": {
+    price: 5000,
+    weight: 0,
+    description: "Twilight's first birthday cake :heart:",
+    tag: "collectable",
+    buyable: false,
+    emoji: ":birthday:",
+    droppable: false,
+  },
 
   // ----- Misc -----
   "lottery-ticket": {

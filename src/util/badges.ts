@@ -69,6 +69,38 @@ export const badges: { [key: string]: Badge } = {
       return user.messages_sent > 10_000;
     },
   },
+  "7talkstreak": {
+    name: "7 Day Talking Streak",
+    description: "Talk in Trancy Twilight 7 days in a row",
+    emoji: ":fire:",
+    scan: async (user) => {
+      return user.talking_streak > 7;
+    },
+  },
+  "14talkstreak": {
+    name: "14 Day Talking Streak",
+    description: "Talk in Trancy Twilight 14 days in a row",
+    emoji: ":firecracker:",
+    scan: async (user) => {
+      return user.talking_streak > 14;
+    },
+  },
+  "21talkstreak": {
+    name: "21 Day Talking Streak",
+    description: "Talk in Trancy Twilight 21 days in a row",
+    emoji: ":heart_on_fire:",
+    scan: async (user) => {
+      return user.talking_streak > 21;
+    },
+  },
+  booster: {
+    name: "Boost Twilight",
+    description: "Boost Trancy Twilight at least once",
+    emoji: ":pink_heart:",
+    scan: async () => {
+      return false;
+    },
+  },
   level15: {
     name: "Level 15",
     description: "Get to level 15",
@@ -125,6 +157,22 @@ export const badges: { [key: string]: Badge } = {
       return false;
     },
   },
+  birthday: {
+    name: "Twilight's Birthday",
+    description: "Be in Trancy Twilight when it hit 1 year old",
+    emoji: ":birthday:",
+    scan: async (user) => {
+      try {
+        const member = (
+          await client.guilds.fetch(config.botServer.id)
+        ).members.fetch(user.user_id);
+        (await member).roles.add(config.botServer.roles.birthday);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+  },
   mythiccard: {
     name: "Mythic Card",
     description: "Got a mythic card at some point",
@@ -176,11 +224,11 @@ export const badges: { [key: string]: Badge } = {
   },
   "can-request": {
     name: "Can Request",
-    description: "Reached level 10 on Trancer",
+    description: "Reached level 5 on Trancer",
     emoji: ":fish:",
     scan: async (user) => {
       if (user.guild_id !== config.botServer.id) return false;
-      if (calculateLevel(user.xp) < 10) return false;
+      if (calculateLevel(user.xp) < 5) return false;
       try {
         const member = (
           await client.guilds.fetch(config.botServer.id)
@@ -243,6 +291,10 @@ export async function checkBadges(
   message?: Message<true>,
   data?: UserData & Economy,
 ) {
+  // TODO: Make this better, or make badges have a "twilightOnly" property.
+  if (message.guild.id !== config.botServer.id) return;
+  if (client.user.id === config.devBot.id) return;
+
   const users = data
     ? [data]
     : await database.all<(UserData & Economy)[]>(

@@ -4,7 +4,7 @@ import { describe } from "node:test";
 import { actions } from "../../util/database";
 import { paginate } from "../../util/components/pagination";
 import { createEmbed } from "../../util/other";
-import { getUsernameSync } from "../../util/cachedUsernames";
+import cachedUsernames from "../../util/cachedUsernames";
 
 const command: HypnoCommand<{ rank: Rank; user?: User }> = {
   name: "whovotedfor",
@@ -39,7 +39,7 @@ const command: HypnoCommand<{ rank: Rank; user?: User }> = {
         `Who voted ${args.rank.rank_name} for ${user.username}?`,
       ),
       type: "description",
-      data: votes.map((x) => getUsernameSync(x)),
+      data: votes.map((x) => cachedUsernames.getSync(x)),
     });
   },
 };
