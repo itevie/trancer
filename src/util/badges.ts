@@ -348,6 +348,7 @@ export function formatBadges(
   let result = [];
 
   for (let i in badges) {
+    if (!badges[i]?.name) continue;
     result.push(
       `${badges[i]?.emoji} \`${badges[i]?.name}\`: ${badges[i]?.description}`,
     );

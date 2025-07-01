@@ -20,6 +20,7 @@ const megaAliases: { [key: string]: string } = {
   servertree: "tree ?g",
   whichgreekletterami:
     "pierating ς ε ρ τ υ θ ι ο π α σ δ φ γ η ξ κ λ ζ χ ψ ω β ν μ",
+  ivotefor: "vote president2025",
 } as const;
 
 export default megaAliases;
