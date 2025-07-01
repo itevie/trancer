@@ -1,5 +1,4 @@
-import { spawn, spawnSync } from "child_process";
-import { messUpSentence } from "../commands/fun/messUpSentence";
+import { spawnSync } from "child_process";
 import { piglatin } from "../commands/fun/pigLatin";
 import config from "../config";
 import { HypnoMessageHandler } from "../types/util";
@@ -8,7 +7,6 @@ import { varients } from "../commands/fun/cowsay";
 import { commands } from "..";
 import { AttachmentBuilder } from "discord.js";
 import { addCaptionToGif } from "../commands/fun/_image_util";
-import { actions } from "../util/database";
 
 const phrases = [
   "skibii sigma",
@@ -442,14 +440,14 @@ const handler: HypnoMessageHandler = {
         ];
 
         o.since = 0;
-        o.required = randomFromRange(20, 70);
+        o.required = randomFromRange(70, 140);
 
         if (Math.random() > 0.5) {
           let temp = fuckups[Math.floor(Math.random() * fuckups.length)]();
           if (temp instanceof AttachmentBuilder) {
             await message.reply({
               options: {
-                reply: false,
+                reply: false as any,
               },
               files: [temp],
             });

@@ -1,4 +1,4 @@
-import { after, calculateLevel, levels } from "../../messageHandlers/xp";
+import { after, levels } from "../../messageHandlers/xp";
 import { HypnoCommand } from "../../types/util";
 
 const command: HypnoCommand = {

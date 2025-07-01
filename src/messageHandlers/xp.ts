@@ -1,9 +1,10 @@
 import { Message } from "discord.js";
 import config from "../config";
 import { HypnoMessageHandler } from "../types/util";
-import { randomFromRange } from "../util/other";
+import { addRole, englishifyList, randomFromRange } from "../util/other";
 import { actions } from "../util/database";
-import { currency } from "../util/language";
+import { b, currency } from "../util/language";
+import LevelRole from "../models/LevelRole";
 
 const exclude = [
   "1257420480953057321",
@@ -30,14 +31,6 @@ const handler: HypnoMessageHandler = {
   description: "Gives XP to the message author",
 
   handler: async (message) => {
-    // Don't give Charlie Phillips XP
-    if (
-      message.guild.id === "1257416273520758814" &&
-      message.author.id === "818024289587822603" &&
-      message.content.match(/(hi)|(hru)|(wyd)|(hello)/i)
-    )
-      return;
-
     let settings = await actions.serverSettings.getFor(message.guild.id);
 
     if (exclude.includes(message.channel.id)) return;
@@ -69,19 +62,32 @@ const handler: HypnoMessageHandler = {
     let post = calculateLevel(data.xp + award);
 
     if (pre !== post && settings.level_notifications) {
-      let reward = null; //  rewards[post];
+      let reward: string[] = [];
 
+      // Check if they should get economy in Twilight
       if (message.guild.id === config.botServer.id) {
         const amount = xpEcoReward * (post / 2);
-        reward = currency(amount);
+        reward.push(currency(amount));
         await actions.eco.addMoneyFor(message.author.id, amount, "messaging");
+      }
+
+      // Check if there is a level role
+      let levelRole = await LevelRole.fetchByLevel(message.guild.id, post);
+      if (!!levelRole) {
+        try {
+          let role = await message.guild.roles.fetch(levelRole.data.role_id);
+          await addRole(message.member, role);
+          reward.push(`role ${role.name}`);
+        } catch (e) {
+          // TODO: Handle error here, show it to the author somehow
+          console.log(e);
+        }
       }
 
       try {
         await message.reply(
-          `Welldone! You levelled up from level **${pre}** to **${post}**! :cyclone:${
-            reward ? `\n\nYou got ${reward}` : ""
-          }`,
+          `Welldone! You levelled up from level ${b(pre)} to ${b(post)}! :cyclone` +
+            (reward ? `\n\n${englishifyList(reward)}` : ""),
         );
       } catch {}
     }

@@ -23,14 +23,8 @@ const command: HypnoCommand<{ user?: User }> = {
   },
 
   handler: async (message, { args }) => {
-    // Collect user to fetch & pronouns
-    let user = args.user || message.author;
-    let pronoun = args.user ? "Their" : "Your";
-
-    // Get the economy
-    let economy = await actions.eco.getFor(user.id);
-
-    // Done
+    let pronoun = args.user.id !== message.author.id ? "Their" : "Your";
+    let economy = await actions.eco.getFor(args.user.id);
     return message.reply(`${pronoun} balance is ${currency(economy.balance)}`);
   },
 };

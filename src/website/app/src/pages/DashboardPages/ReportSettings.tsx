@@ -1,7 +1,7 @@
 import TrancerMultiInput from "../../Components/TrancerMultiInput";
 import Column from "../../dawn-ui/components/Column";
 import FullWidthInput from "../../dawn-ui/components/FullWidthInput";
-import Words from "../../dawn-ui/components/Words";
+import Words, { TextType } from "../../dawn-ui/components/Words";
 import { useBotDetails } from "../../hooks/useBotDetails";
 import useServerResources from "../../hooks/useServerResources";
 
@@ -14,7 +14,7 @@ export default function ReportSettings({
 
   return (
     <Column>
-      <Words type="heading">Report Settings</Words>
+      <Words type={TextType.Heading}>Report Settings</Words>
       <label>
         This feature allows different server to send reports to all servers.
         When someone in a <b>trusted</b> server makes a report, it will be sent

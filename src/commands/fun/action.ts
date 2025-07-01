@@ -1,4 +1,4 @@
-import { HypnoCommand, HypnoInteractionCommand } from "../../types/util";
+import { HypnoCommand } from "../../types/util";
 import axios from "axios";
 import { embedLength, SlashCommandBuilder, User } from "discord.js";
 import { createEmbed } from "../../util/other";
@@ -174,34 +174,12 @@ const english: Record<(typeof types)[number], string> = {
   yes: "1 said yes to 2!",
 };
 
-const command: HypnoInteractionCommand<{ user?: User }> = {
+const command: HypnoCommand<{ user?: User }> = {
   name: "action",
   type: "actions",
   eachAliasIsItsOwnCommand: true,
   aliases: [...types],
   description: "Actions on others!",
-
-  slash: (() => {
-    const builder = new SlashCommandBuilder()
-      .setName("action")
-      .setDescription("Perform an action on someone.");
-
-    for (const type of commonTypes) {
-      builder.addSubcommand((sub) =>
-        sub
-          .setName(type)
-          .setDescription(`Perform the ${type} action.`)
-          .addUserOption((option) =>
-            option
-              .setName("user")
-              .setDescription("The user to perform the action on.")
-              .setRequired(false),
-          ),
-      );
-    }
-
-    return builder;
-  })(),
 
   args: {
     requiredArguments: 0,

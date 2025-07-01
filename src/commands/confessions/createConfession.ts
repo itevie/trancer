@@ -8,7 +8,7 @@ import {
   TextInputBuilder,
   TextInputStyle,
 } from "discord.js";
-import { HypnoCommand, HypnoInteractionCommand } from "../../types/util";
+import { HypnoCommand } from "../../types/util";
 import { units } from "../../util/ms";
 import { actions } from "../../util/database";
 

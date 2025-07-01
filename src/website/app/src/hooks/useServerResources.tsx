@@ -14,11 +14,18 @@ export interface ServerRole {
   permissions: number;
 }
 
+export interface LevelRole {
+  server_id: string;
+  role_id: string | null;
+  level: number;
+}
+
 type ServerResources = {
   channels: ServerChannel[];
   roles: ServerRole[];
   settings: { [key: string]: string };
   raw_settings: ServerSettings;
+  level_roles: LevelRole[];
 };
 
 export default function useServerResources(id: string) {
@@ -27,6 +34,7 @@ export default function useServerResources(id: string) {
     roles: [],
     settings: {},
     raw_settings: {} as ServerSettings,
+    level_roles: [],
   });
 
   const [modified, setModified] = useState<{ [key: string]: string }>({});

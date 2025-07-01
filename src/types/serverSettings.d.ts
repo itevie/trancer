@@ -43,6 +43,9 @@ interface ServerSettings {
   analytics: boolean;
   random_replies: boolean;
   react_bot: boolean;
+
+  birthday_channel_id: string | null;
+  birthday_announcement_text: string;
 }
 
 interface ChannelImposition {

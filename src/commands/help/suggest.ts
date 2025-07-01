@@ -1,6 +1,6 @@
 import { TextBasedChannel } from "discord.js";
 import config from "../../config";
-import { HypnoCommand, HypnoInteractionCommand } from "../../types/util";
+import { HypnoCommand } from "../../types/util";
 import { createEmbed } from "../../util/other";
 import { units } from "../../util/ms";
 

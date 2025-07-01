@@ -20,10 +20,12 @@ export type HypnoCommandType =
   | "economy"
   | "cards"
   | "badges"
+  | "booster"
   | "counting"
   | "spirals"
   | "quotes"
   | "help"
+  | "minecraft"
   | "hypnosis"
   | "uncategorised"
   | "fun"
@@ -40,7 +42,7 @@ export type HypnoCommandType =
   | "confessions"
   | "file-directory";
 
-type Guard = "admin" | "bot-server" | "bot-owner";
+type Guard = "admin" | "bot-server" | "bot-owner" | "twilight-booster";
 
 type ArgumentType =
   | "attachment"
@@ -183,15 +185,6 @@ interface MessageLike {
   reply: Message["reply"];
   channel: Channel;
   guild: Guild;
-}
-
-interface HypnoInteractionCommand<Args extends { [key: string]: any } = {}>
-  extends HypnoCommand<Args> {
-  slash: SlashCommandBuilder;
-  handler: (
-    message: MessageLike,
-    options: HypnoCommandDetails<Args>,
-  ) => Promise<any>;
 }
 
 interface BaseArgument {

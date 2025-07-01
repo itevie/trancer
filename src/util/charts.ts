@@ -129,8 +129,8 @@ export async function generateMultilineDataGraph(
     buckets = buckets.filter((x) => x.getTime() < options.before.getTime());
   }
 
+  let period = units[options.unit || "hour"] * (options.every || 1);
   if (options.unit || options.every) {
-    let period = units[options.unit || "hour"] * (options.every || 1);
     let result: Date[] = [];
 
     for (const date of buckets) {
@@ -151,9 +151,16 @@ export async function generateMultilineDataGraph(
 
   let datasets: ChartDataset[] = keys.map((word, i) => {
     return {
-      data: buckets.map(
-        (x) =>
-          options.data.find((y) => y[0] === word && y[1] === x)?.[2] || null,
+      data: buckets.map((bucketDate) =>
+        options.data.reduce(
+          (p, c) =>
+            p +
+            (c[1].getTime() < bucketDate.getTime() + period &&
+            c[1].getTime() >= bucketDate.getTime()
+              ? c[2]
+              : 0),
+          0,
+        ),
       ),
       label: word,
       borderColor: colors[i % colors.length],

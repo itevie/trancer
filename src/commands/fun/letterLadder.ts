@@ -1,5 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import { words } from "../games/letterMaker";
+import { getWords } from "../games/letterMaker";
 
 function oneLetterDifferent(a: string, b: string): boolean {
   if (a.length !== b.length) return false;
@@ -55,6 +55,7 @@ const command: HypnoCommand<{ start: string; end: string }> = {
   handler: async (message, { args }) => {
     const start = args.start.toLowerCase();
     const end = args.end.toLowerCase();
+    const words = getWords();
 
     if (start.length !== end.length) {
       await message.reply("Both words must be the same length!");

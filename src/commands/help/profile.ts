@@ -58,6 +58,8 @@ const command: HypnoCommand<{ user?: User }> = {
           ["Joined Server", member?.joinedAt.toDateString() || "?"],
           ["Birthday", userData.birthday ?? "Not Set"],
           ["Status", userData.hypno_status],
+          ["Talking Streak", userData.talking_streak + " days"],
+          ["Highest Talking Streak", userData.highest_talking_streak + " days"],
           [
             "Level",
             `${calculateLevel(userData?.xp || 0)} (${userData?.xp} XP)`,

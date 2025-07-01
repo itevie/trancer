@@ -3,6 +3,7 @@ import { HypnoCommand } from "../../types/util";
 import { createEmbed } from "../../util/other";
 import { actions } from "../../util/database";
 import { itemText } from "../../util/language";
+import { paginate } from "../../util/components/pagination";
 
 const command: HypnoCommand<{ user?: User }> = {
   name: "inventory",
@@ -26,24 +27,21 @@ const command: HypnoCommand<{ user?: User }> = {
 
     let items = await actions.items.aquired.getAllFor(user.id);
 
-    let embed = createEmbed().setTitle(`${user.username}'s inventory`);
-
-    if (items.length === 0) embed.setDescription(`*No items :(*`);
-    else {
-      let text: string[] = [];
-      for await (const i of items) {
-        let item = await actions.items.get(i.item_id);
-        text.push(
-          `**${itemText(item)}**: ${i.amount}${
-            i.protected ? ` *[protected]*` : ""
-          }`
-        );
-      }
-      embed.setDescription(text.join("\n"));
+    let text: string[] = [];
+    for await (const i of items) {
+      let item = await actions.items.get(i.item_id);
+      text.push(
+        `**${itemText(item)}**: ${i.amount}${
+          i.protected ? ` *[protected]*` : ""
+        }`,
+      );
     }
 
-    return message.reply({
-      embeds: [embed],
+    return paginate({
+      message,
+      embed: createEmbed().setTitle(`${user.username}'s Inventory`),
+      type: "description",
+      data: text,
     });
   },
 };

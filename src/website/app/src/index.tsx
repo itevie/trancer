@@ -11,6 +11,7 @@ import ServerList from "./pages/Servers";
 import ServerOptions from "./pages/ServerOptions";
 import UserSettings from "./pages/UserSettings";
 import Dashboard from "./pages/Dashboard";
+import Economy from "./pages/Economy";
 
 window.document.body.style.setProperty("--dawn-neutral-base-color", "300");
 
@@ -28,7 +29,7 @@ axiosClient.config.headers = {
 loadTheme();
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById("root") as HTMLElement,
 );
 
 const router = createBrowserRouter([
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
     path: "/user_settings",
     element: <UserSettings />,
   },
+  {
+    path: "/economy",
+    element: <Economy />,
+  },
 ]);
 
 root.render(
@@ -67,5 +72,5 @@ root.render(
     <ContextMenuManager />
     <AlertManager />
     <RouterProvider router={router} />
-  </>
+  </>,
 );

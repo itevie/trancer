@@ -4,7 +4,7 @@ import { AttachmentBuilder, Base, User } from "discord.js";
 import { getMoneyTransations } from "../../util/analytics";
 import { units } from "../../util/ms";
 import { actions } from "../../util/database";
-import { getUsernameSync } from "../../util/cachedUsernames";
+import cachedUsernames from "../../util/cachedUsernames";
 import { chartJSNodeCanvas } from "../../util/charts";
 
 export const colors =
@@ -149,7 +149,7 @@ const command: HypnoCommand<{
       });
 
       return {
-        label: getUsernameSync(user.id),
+        label: cachedUsernames.getSync(user.id),
         data,
         borderColor: colors[i % colors.length],
         spanGaps: true,

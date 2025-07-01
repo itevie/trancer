@@ -46,7 +46,7 @@ const handler: HypnoMessageHandler = {
         content: `Uh oh... Your Dawn has left you...\n\n${messages.join(
           "\n",
         )}\n\nYou lost ${currency(ecoConfig.payouts.dawn.punishment)}`,
-        embeds: [generateDawnagotchiEmbed(dawn)],
+        embeds: [(await generateDawnagotchiEmbed(dawn)).embed],
       });
     }
   },

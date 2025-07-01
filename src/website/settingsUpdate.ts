@@ -3,10 +3,13 @@ import {
   GuildTextBasedChannel,
   PermissionFlagsBits,
   PermissionResolvable,
+  Role,
 } from "discord.js";
 import { actions, database } from "../util/database";
 import { client } from "..";
 import statusThemes from "../commands/hypnosis/_util";
+import LevelRole, { DbLevelRole } from "../models/LevelRole";
+import ServerCount from "../models/ServerCount";
 
 const settingsUpdate: {
   [key: string]: {
@@ -182,6 +185,33 @@ const settingsUpdate: {
     table: "server_settings",
     row: "react_bot",
   },
+  birthday_channel: {
+    type: "channel",
+    table: "server_settings",
+    row: "birthday_channel_id",
+    botNeeds: ["SendMessages"],
+  },
+  birthday_text: {
+    type: "string",
+    table: "server_settings",
+    row: "birthday_announcement_text",
+  },
+  level_roles: {
+    // This is treated specially,
+    type: "string",
+    table: "level_roles",
+    row: "?",
+  },
+  ignore_failure: {
+    type: "boolean",
+    table: "server_count",
+    row: "ignore_failure",
+  },
+  ignore_failure_weekend: {
+    type: "boolean",
+    table: "server_count",
+    row: "ignore_failure_weekend",
+  },
 };
 
 export async function getWebsiteSettingsFor(
@@ -189,11 +219,13 @@ export async function getWebsiteSettingsFor(
 ): Promise<{ [key: string]: string }> {
   const tables = {
     server_settings: await actions.serverSettings.getFor(serverId),
+    server_count: (await ServerCount.get(serverId)).data,
   };
 
   const sorted: { [key: string]: string } = {};
 
   for (const setting in settingsUpdate) {
+    if (settingsUpdate[setting].row === "?") continue;
     let v = tables[settingsUpdate[setting].table][settingsUpdate[setting].row];
     if (settingsUpdate[setting].type === "boolean") v = v ? true : false;
     sorted[setting] = v === undefined ? null : v;
@@ -219,6 +251,60 @@ export async function saveWebsiteSettingsFor(
     )
       return `${key} cannot be null`;
     if (value === null) v = null;
+
+    if (key === "level_roles") {
+      let json: any;
+      try {
+        json = JSON.parse(value);
+      } catch {
+        return `${key} has invalid JSON`;
+      }
+
+      if (!Array.isArray(json)) return `${key} must be a JSON array`;
+
+      if (!server.members.me.permissions.has("ManageRoles"))
+        return `Trancer does not have permission to manage roles`;
+
+      let levelRoles: DbLevelRole[] = [];
+      for await (const userLevelRole of json) {
+        if (!("role_id" in userLevelRole))
+          return `"role_id" missing on one of the ${key}`;
+        if (!("level" in userLevelRole))
+          return `"level" missing on one of the ${key}`;
+
+        if (typeof userLevelRole["level"] !== "number")
+          return `"level" must be an integer`;
+        let level = parseInt(userLevelRole["level"].toString());
+        if (Number.isNaN(level) || level < 0) return `Invalid "level"`;
+
+        if (levelRoles.some((x) => x.level === level))
+          return `You already have a level role with the level ${level}`;
+
+        let role: Role | null = null;
+        if (userLevelRole !== null)
+          try {
+            role = await server.roles.fetch(userLevelRole.role_id);
+          } catch {
+            return `${key} gave an invalid role_id: ${userLevelRole.role_id}`;
+          }
+
+        if (role.position > server.members.me.roles.highest.position)
+          return `Trancer's role is below ${role.name}, please move Trancer higher to save`;
+
+        levelRoles.push({
+          server_id: server.id,
+          role_id: role.id,
+          level: userLevelRole.level,
+        });
+      }
+
+      await LevelRole.deleteAll(server.id);
+      for await (const levelRole of levelRoles) {
+        await LevelRole.create(server.id, levelRole.role_id, levelRole.level);
+      }
+
+      continue;
+    }
 
     if (v !== null) {
       switch (setting.type) {

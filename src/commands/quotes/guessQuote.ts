@@ -11,8 +11,11 @@ const command: HypnoCommand = {
   description: `A random quote will be sent, and you must guess who sent it!`,
 
   handler: async (message) => {
-    if (games.includes(message.author.id))
-      return message.reply(`You're already in a game!`);
+    if (games.includes(message.author.id)) {
+      return {
+        content: "You are already in a game!",
+      };
+    }
 
     const quote = await actions.quotes.getRandomQuote(message.guild.id);
     if (!quote) return message.reply(`Looks like this server has no quotes!`);
@@ -24,38 +27,37 @@ const command: HypnoCommand = {
       time: 120000,
     });
 
-    await message.reply({
+    const botMessage = await message.reply({
       embeds: [await actions.quotes.generateEmbed(quote, true)],
     });
 
     games.push(message.author.id);
 
-    collector.on("end", () => {
+    collector.on("end", async () => {
       games = games.filter((x) => x !== message.author.id);
+      await botMessage.edit({
+        content: `Sorry, you took too long!`,
+        embeds: [await actions.quotes.generateEmbed(quote)],
+      });
     });
 
     collector.on("collect", async (m) => {
       collector.stop();
       games = games.filter((x) => x !== message.author.id);
       const response = m.content
-        .replace("guess ", "")
-        .replace(/[<@>]/g, "")
+        .substring("guess ".length)
+        .replace(/[\\<@>]/g, "")
         .toLowerCase();
 
-      const username = user.username.replace(/#[1-9]+/, "").toLowerCase();
+      const username = user.username.toLowerCase();
+      const displayName = user.displayName.toLowerCase();
 
-      // Check correctness
-      let correct = false;
-      if (
+      const correct =
         compareTwoStrings(response, username) > 0.8 ||
-        (user.displayName &&
-          compareTwoStrings(response, user.displayName.replace(/[ ]/g, "")) >
-            0.6) ||
+        compareTwoStrings(response, displayName) > 0.8 ||
         username.startsWith(response) ||
-        user.displayName.toLowerCase().startsWith(response) ||
-        response == user.id
-      )
-        correct = true;
+        displayName.startsWith(response) ||
+        response === user.id;
 
       // Check what happened
       if (!correct)

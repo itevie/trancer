@@ -1,5 +1,5 @@
 import { HypnoCommand } from "../../types/util";
-import { getUsernameSync } from "../../util/cachedUsernames";
+import cachedUsernames from "../../util/cachedUsernames";
 import { paginate } from "../../util/components/pagination";
 import { actions } from "../../util/database";
 import { createEmbed } from "../../util/other";
@@ -19,7 +19,7 @@ const command: HypnoCommand = {
       type: "description",
       data: dawns.map(
         (x) =>
-          `**${getUsernameSync(x.owner_id)}**: ${x.created_at.toLocaleDateString()}`,
+          `**${cachedUsernames.getSync(x.owner_id)}**: ${x.created_at.toLocaleDateString()}`,
       ),
     });
   },

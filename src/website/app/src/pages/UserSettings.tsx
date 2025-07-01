@@ -1,8 +1,8 @@
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Column from "../dawn-ui/components/Column";
 import Container from "../dawn-ui/components/Container";
 import Page from "../dawn-ui/components/Page";
-import Words from "../dawn-ui/components/Words";
+import Words, { TextType } from "../dawn-ui/components/Words";
 import AppNavbar from "../Navbar";
 import Row from "../dawn-ui/components/Row";
 import Button from "../dawn-ui/components/Button";
@@ -25,7 +25,7 @@ export default function UserSettings() {
       setTriggers(
         result.data.map((x: any) => {
           return { ...x, tags: x.tags.split(";") };
-        })
+        }),
       );
     })();
   }, []);
@@ -66,7 +66,7 @@ export default function UserSettings() {
       <Page full>
         <Column>
           <Container title="Your Settings">
-            <Words type="heading">Your Triggers</Words>
+            <Words type={TextType.Heading}>Your Triggers</Words>
             <table>
               <tbody>
                 <tr>
@@ -97,7 +97,7 @@ export default function UserSettings() {
                               updateTag(
                                 x.what,
                                 t.toLowerCase(),
-                                e.currentTarget.checked
+                                e.currentTarget.checked,
                               )
                             }
                           />
