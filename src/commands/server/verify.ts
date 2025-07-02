@@ -34,20 +34,35 @@ const command: HypnoCommand = {
     // Add role
     try {
       const msg = await message.fetchReference();
+
       let member: GuildMember;
       try {
-        await message.guild.members.fetch(msg.member);
+        member = await message.guild.members.fetch(msg.member);
       } catch (e) {
         return message.reply(
           `I don't think that member is in the server anymore.`,
         );
       }
-      if (verifiedRole)
-        await addRole(member, await message.guild.roles.fetch(verifiedRole));
-      if (unverifiedRole) await member.roles.remove(unverifiedRole);
-      await message.delete();
 
       try {
+        if (verifiedRole)
+          await addRole(member, await message.guild.roles.fetch(verifiedRole));
+      } catch (e) {
+        return {
+          content: "Failed to give the verified role!\n> " + e.toString(),
+        };
+      }
+
+      try {
+        if (unverifiedRole) await member.roles.remove(unverifiedRole);
+      } catch (e) {
+        return {
+          content: `Failed to remove unverified role!\n> ${e.toString()}`,
+        };
+      }
+
+      try {
+        await message.delete();
         await msg.react("✅");
       } catch {}
 
@@ -55,16 +70,31 @@ const command: HypnoCommand = {
         o.serverSettings.verified_channel_id &&
         o.serverSettings.verified_string
       ) {
-        let channel = await (message.client.channels.fetch(
-          o.serverSettings.verified_channel_id,
-        ) as Promise<TextChannel>);
-        await channel.send(
-          replaceVarString(
-            o.serverSettings.verified_string,
-            member.user,
-            member.guild,
-          ),
-        );
+        let channel: TextChannel;
+        try {
+          let channel = await (message.client.channels.fetch(
+            o.serverSettings.verified_channel_id,
+          ) as Promise<TextChannel>);
+        } catch (e) {
+          return {
+            content: `Failed to fetch the channel to send the message in!\n> ${e.toString()}`,
+          };
+        }
+
+        try {
+          await channel.send(
+            replaceVarString(
+              o.serverSettings.verified_string,
+              member.user,
+              member.guild,
+            ),
+          );
+        } catch (e) {
+          return {
+            content:
+              "Failed to send the message in the channel!\n> " + e.toString(),
+          };
+        }
       }
     } catch (e) {
       return message.reply(`Error: ${e.toString()}`);
