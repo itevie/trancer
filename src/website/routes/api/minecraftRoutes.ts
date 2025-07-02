@@ -2,6 +2,7 @@ import { Router } from "express";
 import { generateCode } from "../../../util/other";
 import MinecraftUserData from "../../../models/MinecraftUserData";
 import { client } from "../../..";
+import config from "../../../config";
 
 export interface McAuthBody {
   uuid: string;
@@ -29,11 +30,18 @@ export default function MakeMinecraftRoutes() {
     const user = await MinecraftUserData.getByUuid(req.params.id);
     if (!user) return res.status(404).send({ message: "Player not found" });
     const discordUser = await client.users.fetch(user.data.user_id);
+    const role = (
+      await client.guilds.cache.get(config.botServer.id).roles.fetch()
+    )
+      .filter((x) => x.color !== 0)
+      .sort((a, b) => b.position - a.position)
+      .first();
 
     res.status(200).send({
       ...user.data,
       discord_username: discordUser.username,
       discord_avatar: discordUser.displayAvatarURL(),
+      discord_color: role.hexColor,
     });
   });
 

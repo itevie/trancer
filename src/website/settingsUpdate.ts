@@ -219,7 +219,7 @@ export async function getWebsiteSettingsFor(
 ): Promise<{ [key: string]: string }> {
   const tables = {
     server_settings: await actions.serverSettings.getFor(serverId),
-    server_count: (await ServerCount.get(serverId)).data,
+    server_count: (await ServerCount.get(serverId))?.data,
   };
 
   const sorted: { [key: string]: string } = {};

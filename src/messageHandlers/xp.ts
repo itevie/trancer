@@ -67,7 +67,7 @@ const handler: HypnoMessageHandler = {
       // Check if they should get economy in Twilight
       if (message.guild.id === config.botServer.id) {
         const amount = xpEcoReward * (post / 2);
-        reward.push(currency(amount));
+        reward.push("You got " + currency(amount));
         await actions.eco.addMoneyFor(message.author.id, amount, "messaging");
       }
 
@@ -86,7 +86,7 @@ const handler: HypnoMessageHandler = {
 
       try {
         await message.reply(
-          `Welldone! You levelled up from level ${b(pre)} to ${b(post)}! :cyclone` +
+          `Welldone! You levelled up from level ${b(pre)} to ${b(post)}! :cyclone:` +
             (reward ? `\n\n${englishifyList(reward)}` : ""),
         );
       } catch {}
