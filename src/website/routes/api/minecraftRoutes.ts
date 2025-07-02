@@ -3,6 +3,7 @@ import { generateCode } from "../../../util/other";
 import MinecraftUserData from "../../../models/MinecraftUserData";
 import { client } from "../../..";
 import config from "../../../config";
+import { actions } from "../../../util/database";
 
 export interface McAuthBody {
   uuid: string;
@@ -24,6 +25,15 @@ export default function MakeMinecraftRoutes() {
     }
 
     res.status(200).send({ code: entry.code });
+  });
+
+  router.get("/api/minecraft/users/:id/balance", async (req, res) => {
+    const user = await MinecraftUserData.getByUserId(req.params.id);
+    if (!user) return res.status(404).send({ message: "Player not found" });
+    const eco = await actions.eco.getFor(user.data.user_id);
+    return res.status(200).send({
+      balance: eco.balance,
+    });
   });
 
   router.get("/api/minecraft/users/:id", async (req, res) => {
