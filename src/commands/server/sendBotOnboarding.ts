@@ -28,7 +28,7 @@ export default command;
 
 export async function sendToAllOwners(
   message: Message<true>,
-  content: MessageCreateOptions
+  content: MessageCreateOptions,
 ) {
   await message.react("⌛");
   const fakeServers = await message.client.guilds.fetch();
@@ -43,11 +43,13 @@ export async function sendToAllOwners(
 
   ConfirmAction({
     message,
-    embed: createEmbed().setTitle(
-      `Are you sure you want to send this message to the following owners: ${owners.map(
-        (x) => x.user.username
-      )}`
-    ),
+    embed: createEmbed()
+      .setTitle("Are you sure?")
+      .setDescription(
+        `Are you sure you want to send this message to the following owners: ${owners.map(
+          (x) => x.user.username,
+        )}`,
+      ),
     async callback() {
       for await (const owner of owners) {
         try {
@@ -61,7 +63,7 @@ export async function sendToAllOwners(
           createEmbed()
             .setTitle("Sent")
             .setDescription(
-              `Successfully sent the message to ${owners.length} owners!`
+              `Successfully sent the message to ${owners.length} owners!`,
             ),
         ],
       };
