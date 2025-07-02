@@ -72,7 +72,7 @@ const command: HypnoCommand = {
       ) {
         let channel: TextChannel;
         try {
-          let channel = await (message.client.channels.fetch(
+          channel = await (message.client.channels.fetch(
             o.serverSettings.verified_channel_id,
           ) as Promise<TextChannel>);
         } catch (e) {
