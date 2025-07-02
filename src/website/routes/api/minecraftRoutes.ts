@@ -30,9 +30,11 @@ export default function MakeMinecraftRoutes() {
     const user = await MinecraftUserData.getByUuid(req.params.id);
     if (!user) return res.status(404).send({ message: "Player not found" });
     const discordUser = await client.users.fetch(user.data.user_id);
-    const role = (
-      await client.guilds.cache.get(config.botServer.id).roles.fetch()
-    )
+    const member = await client.guilds.cache
+      .get(config.botServer.id)
+      .members.fetch(user.data.user_id);
+
+    const role = member.roles.cache
       .filter((x) => x.color !== 0)
       .sort((a, b) => b.position - a.position)
       .first();
