@@ -37,6 +37,8 @@ export default function MakeMinecraftRoutes() {
       .sort((a, b) => b.position - a.position)
       .first();
 
+    console.log(role.hexColor, role.color);
+
     res.status(200).send({
       ...user.data,
       discord_username: discordUser.username,
