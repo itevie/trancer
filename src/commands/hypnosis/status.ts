@@ -54,7 +54,7 @@ const command: HypnoCommand<{
     await database.run(
       `UPDATE user_data SET hypno_status = ? WHERE user_id = ?;`,
       dbMap[args.type],
-      message.author.id
+      message.author.id,
     );
 
     if (!args.noNickname) {
@@ -69,28 +69,42 @@ const command: HypnoCommand<{
       // Check length
       if (currentNickname.length > 32)
         return await message.reply(
-          `Oops! Your nickname is too long, and adding a status would exceed 32 characters long.`
+          `Oops! Your nickname is too long, and adding a status would exceed 32 characters long.`,
         );
 
       // Check if user has permission to change it
       if (!message.guild.members.me.permissions.has("ChangeNickname"))
         return await message.reply(
-          `Oops! I don't have permission to change your nickname in this server.`
+          `Oops! I don't have permission to change your nickname in this server.`,
         );
+
+      if (
+        message.member.roles.highest.position >
+        message.guild.members.me.roles.highest.position
+      )
+        return {
+          content:
+            "I couldn't change your nickname as your role is higher than mine!",
+        };
+
+      if (message.member.user.id === message.guild.ownerId)
+        return {
+          content: `Due to Discord limitations, I can't change your nickname as you are the owner of the server.`,
+        };
 
       try {
         await message.member.setNickname(
-          currentNickname.trim() + ` (${emojis[typeMap[args.type]]})`
+          currentNickname.trim() + ` (${emojis[typeMap[args.type]]})`,
         );
       } catch (e) {
         return await message.reply(
-          `Oops! I couldn't change your nickname: ${e.message}`
+          `Oops! I couldn't change your nickname: ${e.message}`,
         );
       }
     }
 
     return await message.reply(
-      `Updated your status to **${typeMap[args.type]}**`
+      `Updated your status to **${typeMap[args.type]}**`,
     );
   },
 };
