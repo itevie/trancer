@@ -226,6 +226,7 @@ export async function getWebsiteSettingsFor(
 
   for (const setting in settingsUpdate) {
     if (settingsUpdate[setting].row === "?") continue;
+    if (!tables[settingsUpdate[setting].table]) continue;
     let v = tables[settingsUpdate[setting].table][settingsUpdate[setting].row];
     if (settingsUpdate[setting].type === "boolean") v = v ? true : false;
     sorted[setting] = v === undefined ? null : v;
