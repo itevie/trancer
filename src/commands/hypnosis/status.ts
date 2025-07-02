@@ -66,8 +66,10 @@ const command: HypnoCommand<{
         currentNickname = currentNickname.replace(/\(\p{Emoji}\)/u, "");
       }
 
+      let nickname =
+        currentNickname.trim() + ` (${emojis[typeMap[args.type]]})`;
       // Check length
-      if (currentNickname.length > 32)
+      if (nickname.length >= 32)
         return await message.reply(
           `Oops! Your nickname is too long, and adding a status would exceed 32 characters long.`,
         );
@@ -93,9 +95,7 @@ const command: HypnoCommand<{
         };
 
       try {
-        await message.member.setNickname(
-          currentNickname.trim() + ` (${emojis[typeMap[args.type]]})`,
-        );
+        await message.member.setNickname(nickname);
       } catch (e) {
         return await message.reply(
           `Oops! I couldn't change your nickname: ${e.message}`,
