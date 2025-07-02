@@ -1,4 +1,4 @@
-import { PermissionsBitField, TextChannel } from "discord.js";
+import { GuildMember, PermissionsBitField, TextChannel } from "discord.js";
 import { HypnoCommand } from "../../types/util";
 import { addRole } from "../../util/other";
 import { replaceVarString } from "../../util/language";
@@ -34,7 +34,14 @@ const command: HypnoCommand = {
     // Add role
     try {
       const msg = await message.fetchReference();
-      const member = await message.guild.members.fetch(msg.member);
+      let member: GuildMember;
+      try {
+        await message.guild.members.fetch(msg.member);
+      } catch (e) {
+        return message.reply(
+          `I don't think that member is in the server anymore.`,
+        );
+      }
       if (verifiedRole)
         await addRole(member, await message.guild.roles.fetch(verifiedRole));
       if (unverifiedRole) await member.roles.remove(unverifiedRole);
