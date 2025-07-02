@@ -9,6 +9,7 @@ const command: HypnoCommand<{ code: string }> = {
   name: "mcauth",
   description: "Authenticate with the Minecraft server",
   type: "minecraft",
+  guards: ["bot-server"],
 
   args: {
     requiredArguments: 1,

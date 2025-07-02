@@ -28,7 +28,7 @@ export default function MakeMinecraftRoutes() {
   });
 
   router.get("/api/minecraft/users/:id/balance", async (req, res) => {
-    const user = await MinecraftUserData.getByUserId(req.params.id);
+    const user = await MinecraftUserData.getByUuid(req.params.id);
     if (!user) return res.status(404).send({ message: "Player not found" });
     const eco = await actions.eco.getFor(user.data.user_id);
     return res.status(200).send({
@@ -49,13 +49,11 @@ export default function MakeMinecraftRoutes() {
       .sort((a, b) => b.position - a.position)
       .first();
 
-    console.log(role.hexColor, role.color);
-
     res.status(200).send({
       ...user.data,
       discord_username: discordUser.username,
       discord_avatar: discordUser.displayAvatarURL(),
-      discord_color: role.hexColor,
+      discord_color: role?.hexColor,
     });
   });
 
