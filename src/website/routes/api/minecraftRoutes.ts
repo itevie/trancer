@@ -36,6 +36,29 @@ export default function MakeMinecraftRoutes() {
     });
   });
 
+  router.post("/api/minecraft/users/:id/balance/:amount", async (req, res) => {
+    const user = await MinecraftUserData.getByUuid(req.params.id);
+    if (!user) return res.status(404).send({ message: "Player not found " });
+    await actions.eco.addMoneyFor(
+      user.data.user_id,
+      parseInt(req.params.amount),
+    );
+    return res.status(200).send({});
+  });
+
+  router.delete(
+    "/api/minecraft/users/:id/balance/:amount",
+    async (req, res) => {
+      const user = await MinecraftUserData.getByUuid(req.params.id);
+      if (!user) return res.status(404).send({ message: "Player not found " });
+      await actions.eco.removeMoneyFor(
+        user.data.user_id,
+        parseInt(req.params.amount),
+      );
+      return res.status(200).send({});
+    },
+  );
+
   router.get("/api/minecraft/users/:id", async (req, res) => {
     const user = await MinecraftUserData.getByUuid(req.params.id);
     if (!user) return res.status(404).send({ message: "Player not found" });
