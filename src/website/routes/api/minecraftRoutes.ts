@@ -32,7 +32,7 @@ export default function MakeMinecraftRoutes() {
     if (!user) return res.status(404).send({ message: "Player not found" });
     const eco = await actions.eco.getFor(user.data.user_id);
     return res.status(200).send({
-      balance: eco.balance,
+      balance: parseInt(eco.balance.toFixed(0)),
     });
   });
 
