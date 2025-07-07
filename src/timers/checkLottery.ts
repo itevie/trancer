@@ -11,12 +11,11 @@ import { Timer } from "./timer";
 
 const timer: Timer = {
   name: "check-lottery",
-  every: units.hour,
+  every: units.minute * 5,
   noDev: true,
   execute: async () => {
     const lastStartTime = (await StateConfig.fetch()).lastLottery;
-    if (ecoConfig.lottery.length - (Date.now() - lastStartTime.getTime()) > 0)
-      return;
+    if (Date.now() - lastStartTime.getTime() < ecoConfig.lottery.length) return;
 
     // Get people who bought it
     const items = await actions.items.aquired.get(
