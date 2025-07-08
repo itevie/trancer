@@ -62,23 +62,23 @@ const init: Init = {
     }
     progress(true);
 
-    writeFileSync(
-      "/home/isabella/Documents/commands.txt",
-      Object.entries(
-        Object.entries(uniqueCommands).reduce(
-          (acc, [, cmd]) => {
-            acc[cmd.type] = [...(acc[cmd.type] ?? []), cmd.name];
-            return acc;
-          },
-          {} as Record<string, string[]>,
-        ),
-      )
-        .map(
-          ([type, names]) =>
-            `${type}\n${names.map((name) => `  ${name}`).join("\n")}`,
-        )
-        .join("\n"),
-    );
+    // writeFileSync(
+    //   "/home/isabella/Documents/commands.txt",
+    //   Object.entries(
+    //     Object.entries(uniqueCommands).reduce(
+    //       (acc, [, cmd]) => {
+    //         acc[cmd.type] = [...(acc[cmd.type] ?? []), cmd.name];
+    //         return acc;
+    //       },
+    //       {} as Record<string, string[]>,
+    //     ),
+    //   )
+    //     .map(
+    //       ([type, names]) =>
+    //         `${type}\n${names.map((name) => `  ${name}`).join("\n")}`,
+    //     )
+    //     .join("\n"),
+    // );
   },
 };
 
