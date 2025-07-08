@@ -31,8 +31,7 @@ const command: HypnoCommand = {
         prize,
       )}\nIt ends in **${msToHowLong(
         ecoConfig.lottery.length -
-          (Date.now() -
-            new Date((await StateConfig.fetch()).lastQotd).getTime()),
+          (Date.now() - (await StateConfig.fetch()).lastQotd.getTime()),
       )}**`,
     );
   },

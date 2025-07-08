@@ -4,7 +4,7 @@ import config from "../config";
 import { calculateLevel } from "../messageHandlers/xp";
 import { currency } from "./language";
 import { Message } from "discord.js";
-import { createEmbed } from "./other";
+import { addRole, createEmbed } from "./other";
 import { client } from "..";
 import { units } from "./ms";
 import { analyticDatabase } from "./analytics";
@@ -162,15 +162,17 @@ export const badges: { [key: string]: Badge } = {
     description: "Be in Trancy Twilight when it hit 1 year old",
     emoji: ":birthday:",
     scan: async (user) => {
-      try {
-        const member = (
+      if (
+        (await actions.badges.aquired.getAllFor(user.user_id)).find(
+          (x) => x.badge_name === "birthday",
+        )
+      ) {
+        const member = await (
           await client.guilds.fetch(config.botServer.id)
         ).members.fetch(user.user_id);
-        (await member).roles.add(config.botServer.roles.birthday);
-        return true;
-      } catch {
-        return false;
+        member.roles.add(config.botServer.roles.birthday);
       }
+      return false;
     },
   },
   mythiccard: {

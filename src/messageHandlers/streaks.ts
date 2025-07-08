@@ -51,6 +51,7 @@ const handler: HypnoMessageHandler = {
 
       return;
     } else if (diffDays === 0) {
+      message.react("🔥");
       if (userData.last_talking_streak === null) {
         now = new Date(now.getTime() - units.day);
         setTime();
