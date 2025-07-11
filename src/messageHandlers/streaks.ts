@@ -52,12 +52,12 @@ const handler: HypnoMessageHandler = {
       return;
     } else if (diffDays === 0) {
       if (userData.last_talking_streak === null) {
-        message.react("🔥");
         now = new Date(now.getTime() - units.day);
         setTime();
       }
       return;
     } else {
+      message.react("🔥");
       await actions.userData.updateFor(
         message.author.id,
         message.guild.id,
