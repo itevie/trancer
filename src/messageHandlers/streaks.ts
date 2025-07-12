@@ -7,6 +7,7 @@ const handler: HypnoMessageHandler = {
   description: "Handles talking streaks",
 
   handler: async (message) => {
+    let serverSettings = await actions.serverSettings.getFor(message.guild.id);
     let userData = await actions.userData.getFor(
       message.author.id,
       message.guild.id,
@@ -48,7 +49,9 @@ const handler: HypnoMessageHandler = {
         0,
       );
       setTime();
-
+      if (serverSettings.streak_end_reactions) {
+        await message.reply(":fire: :x: Your talking streak has been reset!");
+      }
       return;
     } else if (diffDays === 0) {
       if (userData.last_talking_streak === null) {
@@ -57,7 +60,9 @@ const handler: HypnoMessageHandler = {
       }
       return;
     } else {
-      message.react("🔥");
+      if (serverSettings.streak_reactions) {
+        message.react("🔥");
+      }
       await actions.userData.updateFor(
         message.author.id,
         message.guild.id,

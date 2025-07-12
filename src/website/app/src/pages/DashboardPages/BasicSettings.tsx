@@ -85,6 +85,12 @@ export default function BasicSettings({
       >
         <TrancerBooleanInput k="streak_reactions" server={server} />
       </FullWidthInput>
+      <FullWidthInput
+        name="Streak End Reactions"
+        description="Should Trancer tell people when their talking streaks have ended?"
+      >
+        <TrancerBooleanInput k="streak_end_reactions" server={server} />
+      </FullWidthInput>
       <Words type={TextType.Heading}>Birthdays</Words>
       <label>
         Your members can set up their own birthday on Trancer with the{" "}

@@ -48,6 +48,7 @@ interface ServerSettings {
   birthday_announcement_text: string;
 
   streak_reactions: boolean;
+  streak_end_reactions: boolean;
 }
 
 interface ChannelImposition {

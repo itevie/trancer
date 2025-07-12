@@ -6,11 +6,11 @@ CREATE TABLE IF NOT EXISTS config (
 
 -- alter table server_settings add birthday_announcement_text TEXT DEFAULT 'It is **{mention}''s** birthday today!';
 -- alter table server_settings add birthday_channel_id TEXT DEFAULT NULL;
-ALTER TABLE
-    server_settings
-ADD
-    streak_reactions BOOLEAN DEFAULT false;
-
+-- ALTER TABLE
+--     server_settings
+-- ADD
+--     streak_reactions BOOLEAN DEFAULT false;
+ALTER TABLE server_settings ADD streak_end_reactions BOOLEAN DEFAULT false;
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
