@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS config (
 --     server_settings
 -- ADD
 --     streak_reactions BOOLEAN DEFAULT false;
-ALTER TABLE server_settings ADD streak_end_reactions BOOLEAN DEFAULT false;
+-- ALTER TABLE server_settings ADD streak_end_reactions BOOLEAN DEFAULT false;
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
