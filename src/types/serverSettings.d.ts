@@ -46,6 +46,8 @@ interface ServerSettings {
 
   birthday_channel_id: string | null;
   birthday_announcement_text: string;
+
+  streak_reactions: boolean;
 }
 
 interface ChannelImposition {

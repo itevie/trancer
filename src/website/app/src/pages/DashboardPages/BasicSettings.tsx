@@ -78,6 +78,13 @@ export default function BasicSettings({
           v={server.resources.channels.map((x) => [x.id, x.name])}
         />
       </FullWidthInput>
+      <Words type={TextType.Heading}>Streaks</Words>
+      <FullWidthInput
+        name="Streak Reactions"
+        description="Should Trancer react with a fire emoji when someone increases their talking streak?"
+      >
+        <TrancerBooleanInput k="streak_reactions" server={server} />
+      </FullWidthInput>
       <Words type={TextType.Heading}>Birthdays</Words>
       <label>
         Your members can set up their own birthday on Trancer with the{" "}

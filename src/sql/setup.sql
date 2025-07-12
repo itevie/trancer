@@ -6,6 +6,11 @@ CREATE TABLE IF NOT EXISTS config (
 
 -- alter table server_settings add birthday_announcement_text TEXT DEFAULT 'It is **{mention}''s** birthday today!';
 -- alter table server_settings add birthday_channel_id TEXT DEFAULT NULL;
+ALTER TABLE
+    server_settings
+ADD
+    streak_reactions BOOLEAN DEFAULT false;
+
 CREATE TABLE IF NOT EXISTS server_settings (
     server_id TEXT NOT NULL,
     prefix TEXT NOT NULL DEFAULT '.',
@@ -41,7 +46,8 @@ CREATE TABLE IF NOT EXISTS server_settings (
     random_replies BOOLEAN DEFAULT false,
     react_bot BOOLEAN DEFAULT true,
     birthday_channel_id TEXT DEFAULT NULL,
-    birthday_announcement_text TEXT DEFAULT 'It is **{username}''s** birthday today!'
+    birthday_announcement_text TEXT DEFAULT 'It is **{username}''s** birthday today!',
+    streak_reactions BOOLEAN DEFAULT false
 );
 
 CREATE TABLE IF NOT EXISTS trigger_ideas (
@@ -81,7 +87,6 @@ CREATE TABLE IF NOT EXISTS channel_imposition (
 
 -- ALTER TABLE server_count ADD COLUMN ignore_failure_weekend BOOLEAN NOT NULL DEFAULT false;
 -- ALTER TABLE server_count ADD COLUMN ignore_failure BOOLEAN NOT NULL DEFAULT false;
-
 CREATE TABLE IF NOT EXISTS server_count (
     server_id TEXT NOT NULL,
     channel_id TEXT NOT NULL,
