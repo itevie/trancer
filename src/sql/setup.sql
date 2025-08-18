@@ -339,6 +339,10 @@ CREATE TABLE IF NOT EXISTS ranks (
     description TEXT DEFAULT NULL
 );
 
+
+ALTER TABLE economy ADD from_mc INT NOT NULL DEFAULT 0;
+ALTER TABLE economy ADD from_mc_lost INT NOT NULL DEFAULT 0;
+
 CREATE TABLE IF NOT EXISTS economy (
     -- Basic
     user_id TEXT NOT NULL UNIQUE,
@@ -354,6 +358,8 @@ CREATE TABLE IF NOT EXISTS economy (
     from_commands INT NOT NULL DEFAULT 0,
     from_helping INT NOT NULL DEFAULT 0,
     from_gambling INT NOT NULL DEFAULT 0,
+    from_mc INT NOT NULL DEFAULT 0,
+    from_mc_lost INT NOT NULL DEFAULT 0,
     -- Levelling
     work_xp INT NOT NULL DEFAULT 0,
     fish_xp INT NOT NULL DEFAULT 0,

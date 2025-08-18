@@ -11,6 +11,8 @@ interface Economy {
   from_gambling: number;
   from_gambling_lost: number;
   from_helping: number;
+  from_mc: number;
+  from_mc_lost: number;
   work_xp: number;
   mine_xp: number;
   fish_xp: number;

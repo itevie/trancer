@@ -8,7 +8,7 @@ export const categoryEmojis: Record<HypnoCommandType, string> = {
   help: "📖",
   admin: "🛠️",
   fun: "🎮",
-  counting: "🔢",
+  counting: ,
   economy: "🌀",
   hypnosis: "😵‍💫",
   leaderboards: "🏆",
@@ -27,5 +27,5 @@ export const categoryEmojis: Record<HypnoCommandType, string> = {
   confessions: "🤫",
   "file-directory": "📁",
   booster: ":pink_heart:",
-  minecraft: ":green_heart:",
+  minecraft: ,
 };

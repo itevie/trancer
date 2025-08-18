@@ -6,7 +6,8 @@ export type moneyAddReasons =
   | "commands"
   | "messaging"
   | "vc"
-  | "helping";
+  | "helping"
+  | "mc";
 
 const _actions = {
   existsFor: async (userId: string): Promise<boolean> => {

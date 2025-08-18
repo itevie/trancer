@@ -3,7 +3,7 @@ import { generateCode } from "../../../util/other";
 import MinecraftUserData from "../../../models/MinecraftUserData";
 import { client } from "../../..";
 import config from "../../../config";
-import { actions } from "../../../util/database";
+import { actions, database } from "../../../util/database";
 
 export interface McAuthBody {
   uuid: string;
@@ -42,6 +42,7 @@ export default function MakeMinecraftRoutes() {
     await actions.eco.addMoneyFor(
       user.data.user_id,
       parseInt(req.params.amount),
+      "mc",
     );
     return res.status(200).send({});
   });
@@ -51,9 +52,12 @@ export default function MakeMinecraftRoutes() {
     async (req, res) => {
       const user = await MinecraftUserData.getByUuid(req.params.id);
       if (!user) return res.status(404).send({ message: "Player not found " });
-      await actions.eco.removeMoneyFor(
+      let amount = parseInt(req.params.amount);
+      await actions.eco.removeMoneyFor(user.data.user_id, amount);
+      await database.run(
+        `UPDATE economy SET from_mc_lost = from_mc_lost + ? WHERE user_id = ?`,
+        amount,
         user.data.user_id,
-        parseInt(req.params.amount),
       );
       return res.status(200).send({});
     },

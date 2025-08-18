@@ -198,6 +198,8 @@ const command: HypnoCommand<{ user: User }> = {
                 ["Helping", currency(economy.from_helping, true)],
                 ["Gambling", currency(economy.from_gambling, true)],
                 ["Gambling (lost)", currency(economy.from_gambling_lost, true)],
+                ["Minecraft", currency(economy.from_mc, true)],
+                ["Minecraft (lost)", currency(economy.from_mc_lost, true)],
               ]),
               inline: true,
             },
