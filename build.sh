@@ -2,7 +2,7 @@
 git pull
 
 # Build the project
-tsc --build --verbose
+pnpx tsc --build --verbose
 
 # Remove some old build files
 rm -rf ./build/website/app
