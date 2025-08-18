@@ -17,6 +17,8 @@ const command: HypnoCommand = {
       from_helping: 0,
       from_messaging: 0,
       from_gambling_lost: 0,
+      from_mc: 0,
+      from_mc_lost: 0,
       last_dawn_care: 0,
       last_dawn_care_all_100: 0,
       from_vc: 0,
