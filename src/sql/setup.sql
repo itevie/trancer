@@ -328,7 +328,7 @@ CREATE TABLE IF NOT EXISTS quotes (
     channel_id TEXT DEFAULT NULL,
     server_id TEXT NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    created_by TEXT DEFAULT NLL,
+    created_by TEXT DEFAULT NULL,
     last_guessed DATETIME NOT NULL DEFAULT 0
 );
 
