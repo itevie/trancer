@@ -340,8 +340,8 @@ CREATE TABLE IF NOT EXISTS ranks (
 );
 
 
-ALTER TABLE economy ADD from_mc INT NOT NULL DEFAULT 0;
-ALTER TABLE economy ADD from_mc_lost INT NOT NULL DEFAULT 0;
+-- ALTER TABLE economy ADD from_mc INT NOT NULL DEFAULT 0;
+-- ALTER TABLE economy ADD from_mc_lost INT NOT NULL DEFAULT 0;
 
 CREATE TABLE IF NOT EXISTS economy (
     -- Basic
