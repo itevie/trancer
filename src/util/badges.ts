@@ -19,7 +19,7 @@ export interface Badge {
 
 async function handleEcoPositionalBadges() {
   let economy = (await actions.eco.getAll()).sort(
-    (a, b) => b.balance - a.balance,
+    (a, b) => b.balance - a.balance
   );
   let badges = await actions.badges.aquired.getAll();
 
@@ -164,7 +164,7 @@ export const badges: { [key: string]: Badge } = {
     scan: async (user) => {
       if (
         (await actions.badges.aquired.getAllFor(user.user_id)).find(
-          (x) => x.badge_name === "birthday",
+          (x) => x.badge_name === "birthday"
         )
       ) {
         const member = await (
@@ -175,6 +175,14 @@ export const badges: { [key: string]: Badge } = {
       return false;
     },
   },
+  "2026": {
+    name: "New Years 2026",
+    description: "Survived 2025 (was in server on 2026/01/01)",
+    emoji: ":calendar_spiral:",
+    scan: async () => {
+      return false;
+    },
+  },
   mythiccard: {
     name: "Mythic Card",
     description: "Got a mythic card at some point",
@@ -182,7 +190,7 @@ export const badges: { [key: string]: Badge } = {
     scan: async (user) => {
       const cards = (await database.all(
         `SELECT * FROM aquired_cards WHERE user_id = ? AND card_id IN (SELECT id FROM cards WHERE rarity = 'mythic');`,
-        user.user_id,
+        user.user_id
       )) as AquiredCard[];
 
       return cards.length > 0;
@@ -195,7 +203,7 @@ export const badges: { [key: string]: Badge } = {
     scan: async (user) => {
       const amount = await actions.relationships.getFor(
         user.user_id,
-        "worships",
+        "worships"
       );
       return amount.length >= 5;
     },
@@ -264,11 +272,11 @@ export const badges: { [key: string]: Badge } = {
         WHERE LOWER(w.word) IN ('french', 'france', 'français', 'francais')
           AND wb.author_id = ? AND server_id = ?`,
         user.user_id,
-        "1257416273520758814",
+        "1257416273520758814"
       );
 
       const filtered = words.filter(
-        (x) => new Date(x.created_at) > new Date("2025-04-30T00:00:00Z"),
+        (x) => new Date(x.created_at) > new Date("2025-04-30T00:00:00Z")
       );
 
       const amount = filtered.reduce((p, c) => p + c.amount, 0);
@@ -291,7 +299,7 @@ export default badges;
 
 export async function checkBadges(
   message?: Message<true>,
-  data?: UserData & Economy,
+  data?: UserData & Economy
 ) {
   // TODO: Make this better, or make badges have a "twilightOnly" property.
   if (!message) return;
@@ -312,7 +320,7 @@ export async function checkBadges(
      user_data.user_id = economy.user_id
    WHERE
      user_data.guild_id = ?;`,
-        config.botServer.id,
+        config.botServer.id
       );
 
   const given: Badge[] = [];
@@ -335,7 +343,7 @@ export async function checkBadges(
           .setDescription(
             given
               .map((x) => `${x?.emoji} **${x.name}**: ${x.description}`)
-              .join("\n"),
+              .join("\n")
           ),
       ],
     });
@@ -345,14 +353,14 @@ export async function checkBadges(
 }
 
 export function formatBadges(
-  badges: Badge[] | { [key: string]: Badge },
+  badges: Badge[] | { [key: string]: Badge }
 ): string[] {
   let result = [];
 
   for (let i in badges) {
     if (!badges[i]?.name) continue;
     result.push(
-      `${badges[i]?.emoji} \`${badges[i]?.name}\`: ${badges[i]?.description}`,
+      `${badges[i]?.emoji} \`${badges[i]?.name}\`: ${badges[i]?.description}`
     );
   }
 
